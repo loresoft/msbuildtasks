@@ -1,0 +1,27 @@
+<Project DefaultTargets="Checkout" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnVersion" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnClient" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCheckout" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCommit" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnExport" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnUpdate" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
+  
+  <Target Name="Version">
+    <SvnVersion LocalPath="$(MSBuildProjectDirectory)">
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </SvnVersion>
+    <Message Text="Revision: $(Revision)"/>
+  </Target>
+
+  <Target Name="Checkout">
+    <Delete Files="$(MSBuildProjectDirectory)\Test\Loader" />
+    <SvnCheckout 
+      RepositoryPath="http://svn.loresoft.com/svn/Loader/trunk/" 
+      LocalPath="$(MSBuildProjectDirectory)\Test\Loader" 
+      Username="pwelter" 
+      Password="pw@home34">
+      
+    </SvnCheckout>
+  </Target>
+  
+</Project>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnClient" AssemblyFile="$(MSBuildExtensionsPath)\MSBuildTasks\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnVersion" AssemblyFile="$(MSBuildExtensionsPath)\MSBuildTasks\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCheckout" AssemblyFile="$(MSBuildExtensionsPath)\MSBuildTasks\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCommit" AssemblyFile="$(MSBuildExtensionsPath)\MSBuildTasks\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnExport" AssemblyFile="$(MSBuildExtensionsPath)\MSBuildTasks\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnUpdate" AssemblyFile="$(MSBuildExtensionsPath)\MSBuildTasks\MSBuild.Community.Tasks.dll" />
+</Project>
