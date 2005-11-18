@@ -1,4 +1,4 @@
-<Project DefaultTargets="Checkout" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Version" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnVersion" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnClient" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCheckout" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
@@ -13,15 +13,44 @@
     <Message Text="Revision: $(Revision)"/>
   </Target>
 
-  <Target Name="Checkout">
-    <Delete Files="$(MSBuildProjectDirectory)\Test\Loader" />
-    <SvnCheckout 
-      RepositoryPath="http://svn.loresoft.com/svn/Loader/trunk/" 
-      LocalPath="$(MSBuildProjectDirectory)\Test\Loader" 
-      Username="pwelter" 
-      Password="pw@home34">
+  <Target Name="Export">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\Test" />
+    <RemoveDir Directories="$(MSBuildProjectDirectory)\Test\Export" />
+    <SvnExport
+      RepositoryPath="file:///d:/svn/repo/Test/trunk" 
+      LocalPath="$(MSBuildProjectDirectory)\Test\Export" >
       
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </SvnExport>
+    <Message Text="Revision: $(Revision)"/>
+  </Target>
+
+  <Target Name="Checkout">
+    <RemoveDir Directories="$(MSBuildProjectDirectory)\Test\Checkout" />
+    <SvnCheckout 
+      RepositoryPath="file:///d:/svn/repo/Test/trunk" 
+      LocalPath="$(MSBuildProjectDirectory)\Test\Checkout" >      
+      <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnCheckout>
+    <Message Text="Revision: $(Revision)"/>
+  </Target>
+
+  <Target Name="Update" DependsOnTargets="Checkout">
+    <SvnUpdate 
+      LocalPath="$(MSBuildProjectDirectory)\Test\Checkout" >
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </SvnUpdate>
+    <Message Text="Revision: $(Revision)"/>
+  </Target>
+
+  <Target Name="Commit" DependsOnTargets="Checkout">
+    <WriteLinesToFile File="$(MSBuildProjectDirectory)\Test\Checkout\test.txt" Lines="This is a test" />
+    <SvnCommit 
+      LocalPath="$(MSBuildProjectDirectory)\Test\Checkout" 
+      Message="Auto commit from MSBuild.">
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </SvnCommit>
+    <Message Text="Revision: $(Revision)"/>
   </Target>
   
 </Project>
