@@ -13,5 +13,15 @@ namespace MSBuild.Community.Tasks.Subversion
             base.Command = "update";
             base.CommandSwitchs &= ~SvnSwitches.RepositoryPath;
         }
+        
+        protected override bool ValidateParameters()
+        {
+            if (string.IsNullOrEmpty(base.LocalPath))
+            {
+                Log.LogError(MSBuild.Community.Tasks.Properties.Resources.ParameterRequired, "SvnUpdate", "LocalPath");
+                return false;
+            }
+            return base.ValidateParameters();
+        }
     }
 }

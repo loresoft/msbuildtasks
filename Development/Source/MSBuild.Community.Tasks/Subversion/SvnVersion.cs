@@ -2,12 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
-using System.Diagnostics;
 
 
 

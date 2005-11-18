@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="MSBuild.Community.Tasks.AssemblyInfo" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
+
+  <Target Name="AssemblyInfo">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\Test" />
+    
+    <AssemblyInfo CodeLanguage="CS"  
+      OutputFile="$(MSBuildProjectDirectory)\Test\VersionInfo.cs" 
+      AssemblyVersion="1.0.0.0" 
+      AssemblyFileVersion="1.0.0.0" />
+    
+    <AssemblyInfo CodeLanguage="VB"  
+      OutputFile="$(MSBuildProjectDirectory)\Test\VersionInfo.vb" 
+      AssemblyVersion="1.0.0.0" 
+      AssemblyFileVersion="1.0.0.0"/>
+
+    <AssemblyInfo CodeLanguage="CS"  
+      OutputFile="$(MSBuildProjectDirectory)\Test\GlobalInfo.cs" 
+      AssemblyTitle="AssemblyInfoTask" 
+      AssemblyDescription="AssemblyInfo Description"
+      AssemblyConfiguration=""
+      AssemblyCompany="Company Name, LLC"
+      AssemblyProduct="AssemblyInfoTask"
+      AssemblyCopyright="Copyright (c) Company Name, LLC 2005"
+      AssemblyTrademark=""
+      ComVisible="false"
+      CLSCompliant="true"
+      Guid="d038566a-1937-478a-b5c5-b79c4afb253d"
+      AssemblyVersion="1.0.0.0" 
+      AssemblyFileVersion="1.0.0.0" />
+
+  </Target>
+</Project>

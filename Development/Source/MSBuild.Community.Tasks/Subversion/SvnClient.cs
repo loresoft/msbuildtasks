@@ -3,9 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+using System.Text.RegularExpressions;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
-using System.IO;
 
 namespace MSBuild.Community.Tasks.Subversion
 {
@@ -16,15 +17,17 @@ namespace MSBuild.Community.Tasks.Subversion
         private const string _switchStringFormat = " --{0} \"{1}\"";
         private const string _switchValueFormat = " --{0} {1}";
 
+        private static readonly Regex _revisionParse = new Regex(@"revision (?<Rev>\d+)", RegexOptions.Compiled);
+
         [Flags]
         internal enum SvnSwitches
         {
             RepositoryPath,
             LocalPath,
-            Files,
+            Targets,
             Revision,
             Default = SvnSwitches.RepositoryPath | SvnSwitches.LocalPath | SvnSwitches.Revision,
-            All = SvnSwitches.Default | SvnSwitches.Files 
+            All = SvnSwitches.Default | SvnSwitches.Targets 
         }
 
         public SvnClient()
@@ -114,7 +117,14 @@ namespace MSBuild.Community.Tasks.Subversion
             set { _revision = value; }
         }
 
+        private ITaskItem[] _targets;
 
+        public ITaskItem[] Targets
+        {
+            get { return _targets; }
+            set { _targets = value; }
+        }
+        
         private SvnSwitches _commandSwitchs = SvnSwitches.Default;
 
         internal SvnSwitches CommandSwitchs
@@ -145,8 +155,18 @@ namespace MSBuild.Community.Tasks.Subversion
             if (_revision > 0 && (CommandSwitchs & SvnSwitches.Revision) == SvnSwitches.Revision)
                 builder.AppendFormat(_switchValueFormat, "revision", _revision);
 
+            if (_targets != null && (CommandSwitchs & SvnSwitches.Targets) == SvnSwitches.Targets)
+            {
+                foreach (ITaskItem fileTarget in _targets)
+                {
+                    builder.AppendFormat(" \"{0}\"", fileTarget.ItemSpec);
+                }                
+            }
+
             return builder.ToString();
         }
+
+        
 
         protected virtual string GenerateSvnArguments()
         {
@@ -171,10 +191,11 @@ namespace MSBuild.Community.Tasks.Subversion
             if (!string.IsNullOrEmpty(_arguments))
                 builder.AppendFormat(" {0}", _arguments);
 
-            builder.Append(" --non-interactive --no-auth-cache"); // all commands should be non interactive
-
-            return builder.ToString();
-           
+            // all commands should be non interactive
+            builder.AppendFormat(_switchBooleanFormat, "non-interactive");
+            builder.AppendFormat(_switchBooleanFormat, "no-auth-cache"); 
+            
+            return builder.ToString();           
         }
 
         protected override bool ValidateParameters()
@@ -185,6 +206,18 @@ namespace MSBuild.Community.Tasks.Subversion
                 return false;
             }
             return base.ValidateParameters();
+        }
+
+        protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
+        {
+            base.LogEventsFromTextOutput(singleLine, messageImportance);
+
+            Match revMatch = _revisionParse.Match(singleLine);
+            if (revMatch.Success)
+            {
+                string tempRev = revMatch.Groups["Rev"].Value;
+                int.TryParse(tempRev, out _revision);
+            }
         }
 
         protected override string GenerateFullPathToTool()
