@@ -46,7 +46,7 @@
   <Target Name="Commit" DependsOnTargets="Checkout">
     <WriteLinesToFile File="$(MSBuildProjectDirectory)\Test\Checkout\test.txt" Lines="This is a test" />
     <SvnCommit 
-      LocalPath="$(MSBuildProjectDirectory)\Test\Checkout" 
+      LocalPath="$(MSBuildProjectDirectory)\Test\Checkout\*.*" 
       Message="Auto commit from MSBuild.">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnCommit>
