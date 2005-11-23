@@ -2,6 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <UsingTask TaskName="MSBuild.Community.Tasks.AssemblyInfo" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Mail" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
 
   <Target Name="AssemblyInfo">
     <MakeDir Directories="$(MSBuildProjectDirectory)\Test" />
@@ -41,4 +42,19 @@
       Body="This is a test of the mail task." />
   </Target>
 
+  <ItemGroup>
+    <ZipFiles Include="**\*.*" Exclude="**\.svn\**;**\bin\**;**\obj\**;**\Test\**;*.user;*.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <RepoFiles Include="D:\svn\repo\**\*.*" />
+  </ItemGroup>
+  
+  <Target Name="Zip">
+    <!--<Zip Files="@(ZipFiles)" 
+      ZipFile="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks.zip" />-->
+
+    <Zip Files="@(RepoFiles)"
+         ZipFile="D:\svn\repo.zip" />
+  </Target>
 </Project>

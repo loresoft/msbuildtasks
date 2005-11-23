@@ -24,7 +24,8 @@
 
   <Target Name="Checkout">
     <RemoveDir Directories="$(MSBuildProjectDirectory)\Test\Checkout" />
-    <SvnCheckout RepositoryPath="file:///d:/svn/repo/Test/trunk" LocalPath="$(MSBuildProjectDirectory)\Test\Checkout" >      
+    <SvnCheckout RepositoryPath="file:///d:/svn/repo/Test/trunk" 
+                 LocalPath="$(MSBuildProjectDirectory)\Test\Checkout" >      
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnCheckout>
     <Message Text="Revision: $(Revision)"/>

@@ -36,7 +36,10 @@ namespace MSBuild.Community.Tasks.Subversion
         {
             _numberRegex = new Regex(@"\d+", RegexOptions.Compiled);
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:SvnVersion"/> class.
+        /// </summary>
         public SvnVersion()
         {
             _outputBuffer = new StringBuilder();
@@ -117,7 +120,13 @@ namespace MSBuild.Community.Tasks.Subversion
 
 
         #endregion
-        
+
+        /// <summary>
+        /// Returns the fully qualified path to the executable file.
+        /// </summary>
+        /// <returns>
+        /// The fully qualified path to the executable file.
+        /// </returns>
         protected override string GenerateFullPathToTool()
         {
             return Path.Combine(
@@ -125,27 +134,53 @@ namespace MSBuild.Community.Tasks.Subversion
                 @"Subversion\bin"); ;
         }
 
+        /// <summary>
+        /// Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
+        /// </summary>
+        /// <value></value>
+        /// <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
         protected override MessageImportance StandardOutputLoggingImportance
         {
             get { return MessageImportance.Normal; }
         }
 
+        /// <summary>
+        /// Logs the starting point of the run to all registered loggers.
+        /// </summary>
+        /// <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
         protected override void LogToolCommand(string message)
         {
             Log.LogCommandLine(MessageImportance.Low, message);
         }
 
+        /// <summary>
+        /// Gets the name of the executable file to run.
+        /// </summary>
+        /// <value></value>
+        /// <returns>The name of the executable file to run.</returns>
         protected override string ToolName
         {
             get { return "svnversion.exe"; }
         }
 
+        /// <summary>
+        /// Returns a string value containing the command line arguments to pass directly to the executable file.
+        /// </summary>
+        /// <returns>
+        /// A string value containing the command line arguments to pass directly to the executable file.
+        /// </returns>
         protected override string GenerateCommandLineCommands()
         {
             DirectoryInfo localPath = new DirectoryInfo(_localPath);
             return string.Format("--no-newline {0}", localPath.FullName);
         }
 
+        /// <summary>
+        /// Runs the exectuable file with the specified task parameters.
+        /// </summary>
+        /// <returns>
+        /// true if the task runs successfully; otherwise, false.
+        /// </returns>
         public override bool Execute()
         {
             bool result = base.Execute();
@@ -179,6 +214,11 @@ namespace MSBuild.Community.Tasks.Subversion
                 _highRevision, _modifications, _exported));
         }
 
+        /// <summary>
+        /// Logs the events from text output.
+        /// </summary>
+        /// <param name="singleLine">The single line.</param>
+        /// <param name="messageImportance">The message importance.</param>
         protected override void LogEventsFromTextOutput(string singleLine, Microsoft.Build.Framework.MessageImportance messageImportance)
         {
             base.LogEventsFromTextOutput(singleLine, messageImportance);

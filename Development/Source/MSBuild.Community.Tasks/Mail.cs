@@ -26,6 +26,9 @@ namespace MSBuild.Community.Tasks
     /// </example>
     public class Mail : Task
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Mail"/> class.
+        /// </summary>
         public Mail()
         {
             _isBodyHtml = false;

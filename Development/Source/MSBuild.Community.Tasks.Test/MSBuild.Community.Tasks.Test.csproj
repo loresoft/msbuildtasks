@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5AC1D006-CA56-4BE1-8250-DBEABBEA0725}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MSBuild.Community.Tasks.Test</RootNamespace>
+    <AssemblyName>MSBuild.Community.Tasks.Test</AssemblyName>
+    <WarningLevel>4</WarningLevel>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Tasks" />
+    <Reference Include="Microsoft.Build.Utilities" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\WINDOWS\assembly\GAC_MSIL\Microsoft.VisualStudio.QualityTools.UnitTestFramework\8.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfoTest.cs" />
+    <Compile Include="FtpTest.cs" />
+    <Compile Include="MailTest.cs" />
+    <Compile Include="MockBuild.cs" />
+    <Compile Include="MoveTest.cs" />
+    <Compile Include="NDocTest.cs" />
+    <Compile Include="NUnitTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subversion\SvnCheckoutTest.cs" />
+    <Compile Include="Subversion\SvnClientTest.cs" />
+    <Compile Include="Subversion\SvnCommitTest.cs" />
+    <Compile Include="Subversion\SvnExportTest.cs" />
+    <Compile Include="Subversion\SvnUpdateTest.cs" />
+    <Compile Include="Subversion\SvnVersionTest.cs" />
+    <Compile Include="TaskUtility.cs" />
+    <Compile Include="UnzipTest.cs" />
+    <Compile Include="VersionTest.cs" />
+    <Compile Include="ZipTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.csproj">
+      <Project>{F88A60A8-564C-4E70-92DC-E92DBB897641}</Project>
+      <Name>MSBuild.Community.Tasks</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+</Project>

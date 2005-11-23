@@ -10,6 +10,12 @@ namespace MSBuild.Community.Tasks
 {
     public class Unzip : Task
     {
+        /// <summary>
+        /// When overridden in a derived class, executes the task.
+        /// </summary>
+        /// <returns>
+        /// true if the task successfully executed; otherwise, false.
+        /// </returns>
         public override bool Execute()
         {
             throw new Exception("The method or operation is not implemented.");
