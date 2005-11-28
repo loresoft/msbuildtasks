@@ -41,6 +41,10 @@
     <Compile Include="AssemblyInfoTest.cs" />
     <Compile Include="FtpTest.cs" />
     <Compile Include="MailTest.cs" />
+    <Compile Include="Math\AddTest.cs" />
+    <Compile Include="Math\DivideTest.cs" />
+    <Compile Include="Math\MultipleTest.cs" />
+    <Compile Include="Math\SubtractTest.cs" />
     <Compile Include="MockBuild.cs" />
     <Compile Include="MoveTest.cs" />
     <Compile Include="NDocTest.cs" />
