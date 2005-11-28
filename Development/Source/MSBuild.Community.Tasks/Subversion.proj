@@ -1,10 +1,9 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnVersion" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnClient" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCheckout" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCommit" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnExport" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnUpdate" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <Import Project="MSBuild.Community.Tasks.Targets"/>
   
   <Target Name="Version">
     <SvnVersion LocalPath="$(MSBuildProjectDirectory)">

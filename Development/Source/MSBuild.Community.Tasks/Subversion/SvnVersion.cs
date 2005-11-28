@@ -9,7 +9,7 @@ using System.IO;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 
-
+using Math = System.Math;
 
 namespace MSBuild.Community.Tasks.Subversion
 {
@@ -200,8 +200,8 @@ namespace MSBuild.Community.Tasks.Subversion
                 int revision;
                 if (int.TryParse(rm.Value, out revision))
                 {
-                    _lowRevision = Math.Min(revision, _lowRevision);
-                    _highRevision = Math.Max(revision, _highRevision);
+                    _lowRevision = System.Math.Min(revision, _lowRevision);
+                    _highRevision = System.Math.Max(revision, _highRevision);
                 }
             }
 

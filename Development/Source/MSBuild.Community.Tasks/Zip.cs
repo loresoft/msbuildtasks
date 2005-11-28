@@ -10,6 +10,8 @@ using ICSharpCode.SharpZipLib.Checksums;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Globalization;
 
+using Math = System.Math;
+
 namespace MSBuild.Community.Tasks
 {
     public class Zip : Task
@@ -151,8 +153,8 @@ namespace MSBuild.Community.Tasks
                 zs = new ZipOutputStream(File.Create(_zipFile));
 
                 // make sure level in range
-                _zipLevel = Math.Max(0, _zipLevel);
-                _zipLevel = Math.Min(9, _zipLevel);
+                _zipLevel = System.Math.Max(0, _zipLevel);
+                _zipLevel = System.Math.Min(9, _zipLevel);
 
                 zs.SetLevel(_zipLevel);
                 if (!string.IsNullOrEmpty(_comment))

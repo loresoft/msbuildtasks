@@ -47,6 +47,11 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Ftp.cs" />
     <Compile Include="Mail.cs" />
+    <Compile Include="Math\Add.cs" />
+    <Compile Include="Math\Divide.cs" />
+    <Compile Include="Math\MathBase.cs" />
+    <Compile Include="Math\Multiple.cs" />
+    <Compile Include="Math\Subtract.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="NDoc.cs" />
     <Compile Include="NUnit.cs" />
@@ -69,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MSBuild.Community.Tasks.snk" />
+    <Content Include="MSBuild.Community.Tasks.Targets" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

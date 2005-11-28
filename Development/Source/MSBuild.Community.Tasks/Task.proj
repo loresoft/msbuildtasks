@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <UsingTask TaskName="MSBuild.Community.Tasks.AssemblyInfo" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Mail" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="$(MSBuildProjectDirectory)\bin\Debug\MSBuild.Community.Tasks.dll" />
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <Import Project="MSBuild.Community.Tasks.Targets"/>
 
   <Target Name="AssemblyInfo">
     <MakeDir Directories="$(MSBuildProjectDirectory)\Test" />
@@ -49,12 +51,35 @@
   <ItemGroup>
     <RepoFiles Include="D:\svn\repo\**\*.*" />
   </ItemGroup>
-  
+
   <Target Name="Zip">
-    <!--<Zip Files="@(ZipFiles)" 
-      ZipFile="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks.zip" />-->
+    <Zip Files="@(ZipFiles)" 
+      ZipFile="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks.zip" />
 
     <Zip Files="@(RepoFiles)"
          ZipFile="D:\svn\repo.zip" />
+  </Target>
+
+  <Target Name="Math">
+    <Math.Add Numbers="4;3">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Add>
+    <Message Text="Add 4+3= $(Result)"/>
+
+    <Math.Subtract Numbers="10;3">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Subtract>
+    <Message Text="Subtract 10-3= $(Result)"/>
+
+    <Math.Multiple Numbers="10;3">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Multiple>
+    <Message Text="Multiple 10*3= $(Result)"/>
+
+    <Math.Divide Numbers="1;2">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Divide>
+    <Message Text="Divide 1/2= $(Result)"/>
+
   </Target>
 </Project>
