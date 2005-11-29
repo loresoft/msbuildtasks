@@ -9,6 +9,21 @@ using System.IO;
 
 namespace MSBuild.Community.Tasks
 {
+    /// <summary>
+    /// Get Version information from file.
+    /// </summary>
+    /// <example>Get version information and increment revision.
+    /// <code><![CDATA[
+    /// <Version VersionFile="number.txt" RevisionType="Increment">
+    ///     <Output TaskParameter="Major" PropertyName="Major" />
+    ///     <Output TaskParameter="Minor" PropertyName="Minor" />
+    ///     <Output TaskParameter="Build" PropertyName="Build" />
+    ///     <Output TaskParameter="Revision" PropertyName="Revision" />
+    /// </Version>
+    /// <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+    /// ]]>
+    /// </code>
+    /// </example>
     public class Version : Task
     {
         public Version()
@@ -22,6 +37,10 @@ namespace MSBuild.Community.Tasks
 #region Properties
         private int _major;
 
+        /// <summary>
+        /// Gets or sets the major version number.
+        /// </summary>
+        /// <value>The major version number.</value>
         [Output]
         public int Major
         {
@@ -31,6 +50,10 @@ namespace MSBuild.Community.Tasks
 
         private int _minor;
 
+        /// <summary>
+        /// Gets or sets the minor version number.
+        /// </summary>
+        /// <value>The minor version number.</value>
         [Output]
         public int Minor
         {
@@ -40,6 +63,10 @@ namespace MSBuild.Community.Tasks
 
         private int _build;
 
+        /// <summary>
+        /// Gets or sets the build version number.
+        /// </summary>
+        /// <value>The build version number.</value>
         [Output]
         public int Build
         {
@@ -49,6 +76,10 @@ namespace MSBuild.Community.Tasks
 
         private int _revision;
 
+        /// <summary>
+        /// Gets or sets the revision version number.
+        /// </summary>
+        /// <value>The revision version number.</value>
         [Output]
         public int Revision
         {
@@ -56,17 +87,28 @@ namespace MSBuild.Community.Tasks
             set { _revision = value; }
         }
 
-        private string _file;
+        private string _versionFile;
 
+        /// <summary>
+        /// Gets or sets the version file.
+        /// </summary>
+        /// <value>The version file.</value>
         [Required]
-        public string File
+        public string VersionFile
         {
-            get { return _file; }
-            set { _file = value; }
+            get { return _versionFile; }
+            set { _versionFile = value; }
         }
 
         private string _buildType;
 
+        /// <summary>
+        /// Gets or sets the type of the build.
+        /// </summary>
+        /// <value>The type of the build.</value>
+        /// <remarks>
+        /// Possible values include Automatic, Increment, NonIncrement.
+        /// </remarks>
         public string BuildType
         {
             get { return _buildType; }
@@ -75,13 +117,26 @@ namespace MSBuild.Community.Tasks
 
         private string _revisionType;
 
+        /// <summary>
+        /// Gets or sets the type of the revision.
+        /// </summary>
+        /// <value>The type of the revision.</value>
+        /// <remarks>
+        /// Possible values include Automatic, Increment, NonIncrement.
+        /// </remarks>
         public string RevisionType
         {
             get { return _revisionType; }
             set { _revisionType = value; }
         } 
 #endregion
-        
+
+        /// <summary>
+        /// When overridden in a derived class, executes the task.
+        /// </summary>
+        /// <returns>
+        /// true if the task successfully executed; otherwise, false.
+        /// </returns>
         public override bool Execute()
         {
             ReadVersionFromFile();
@@ -95,16 +150,15 @@ namespace MSBuild.Community.Tasks
             string textVersion = null;
             System.Version version = null;
 
-            if (!System.IO.File.Exists(_file))
+            if (!System.IO.File.Exists(_versionFile))
             {
-                Log.LogWarning("Version file \"{0}\" not found .", _file);
+                Log.LogWarning("Version file \"{0}\" not found .", _versionFile);
                 return;
             }
 
-            // read the version string
             try
             {
-                using (StreamReader reader = new StreamReader(_file))
+                using (StreamReader reader = new StreamReader(_versionFile))
                 {
                     textVersion = reader.ReadToEnd();
                 }
@@ -112,12 +166,12 @@ namespace MSBuild.Community.Tasks
             catch (Exception ex)
             {
                 Log.LogError("Unable to read version number from \"{0}\". {1}", 
-                    _file, ex.Message);
+                    _versionFile, ex.Message);
                 return;
             }
 
             Log.LogMessage("Version \"{0}\" read from file \"{1}\".", 
-                textVersion, _file);
+                textVersion, _versionFile);
 
             try
             {
@@ -126,7 +180,7 @@ namespace MSBuild.Community.Tasks
             catch (Exception ex)
             {
                 Log.LogError("Invalid version string \"{0}\" in file \"{1}\". {2}",
-                    version, _file, ex.Message);
+                    version, _versionFile, ex.Message);
                 return;                
             }
 
@@ -145,7 +199,7 @@ namespace MSBuild.Community.Tasks
 
             try
             {
-                using (StreamWriter writer = System.IO.File.CreateText(_file))
+                using (StreamWriter writer = System.IO.File.CreateText(_versionFile))
                 {
                     writer.Write(version.ToString());
                     writer.Flush();
@@ -155,12 +209,12 @@ namespace MSBuild.Community.Tasks
             catch (Exception ex)
             {
                 Log.LogError("Unable to write version number to \"{0}\". {1}",
-                    _file, ex.Message);
+                    _versionFile, ex.Message);
                 return false;
             }
 
             Log.LogMessage("Version \"{0}\" wrote to file \"{1}\".", 
-                version.ToString(), _file);
+                version.ToString(), _versionFile);
 
             return true;
         }

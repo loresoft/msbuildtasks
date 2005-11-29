@@ -82,4 +82,16 @@
     <Message Text="Divide 1/2= $(Result)"/>
 
   </Target>
+
+  <Target Name="Version">
+    <Version VersionFile="number.txt" RevisionType="Increment">
+      <Output TaskParameter="Major" PropertyName="Major" />
+      <Output TaskParameter="Minor" PropertyName="Minor" />
+      <Output TaskParameter="Build" PropertyName="Build" />
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </Version>
+  
+    <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+  </Target>
+  
 </Project>

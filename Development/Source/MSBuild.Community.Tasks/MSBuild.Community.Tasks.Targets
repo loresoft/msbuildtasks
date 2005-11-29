@@ -8,6 +8,7 @@
   <UsingTask TaskName="MSBuild.Community.Tasks.Mail" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Unzip" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Version" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
 
   <UsingTask TaskName="MSBuild.Community.Tasks.Math.Add" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Math.Divide" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
