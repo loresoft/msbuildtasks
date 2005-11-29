@@ -11,171 +11,141 @@ namespace MSBuild.Community.Tasks
 {
     public class Version : Task
     {
-        /// <summary>
-        /// Defines possible algorithms to generate the build number.
-        /// </summary>
-        public enum BuildNumberAlgorithm
+        public Version()
         {
-            /// <summary>
-            /// Use the number of months since start of project * 100 + current 
-            /// day in month as build number.
-            /// </summary>
-            MonthDay,
-
-            /// <summary>
-            /// Increment an existing build number.
-            /// </summary>
-            Increment,
-
-            /// <summary>
-            /// Use an existing build number (and do not increment it).
-            /// </summary>
-            NoIncrement
+            _major = 1;
+            _minor = 0;
+            _build = 0;
+            _revision = 0;
         }
-
-        /// <summary>
-        /// Defines possible algorithms to generate the revision number.
-        /// </summary>
-        public enum RevisionNumberAlgorithm
-        {
-            /// <summary>
-            /// Use the number of seconds since the start of today / 10.
-            /// </summary>
-            Automatic,
-
-            /// <summary>
-            /// Increment an existing revision number.
-            /// </summary>
-            Increment
-        }
-
-        private int _Major;
+        
+#region Properties
+        private int _major;
 
         [Output]
         public int Major
         {
-            get { return _Major; }
-            set { _Major = value; }
+            get { return _major; }
+            set { _major = value; }
         }
 
-        private int _Minor;
+        private int _minor;
 
         [Output]
         public int Minor
         {
-            get { return _Minor; }
-            set { _Minor = value; }
+            get { return _minor; }
+            set { _minor = value; }
         }
 
-        private int _Build;
+        private int _build;
 
         [Output]
         public int Build
         {
-            get { return _Build; }
-            set { _Build = value; }
+            get { return _build; }
+            set { _build = value; }
         }
 
-        private int _Revision;
+        private int _revision;
 
         [Output]
         public int Revision
         {
-            get { return _Revision; }
-            set { _Revision = value; }
+            get { return _revision; }
+            set { _revision = value; }
         }
 
-        private string _File;
+        private string _file;
 
         [Required]
         public string File
         {
-            get { return _File; }
-            set { _File = value; }
+            get { return _file; }
+            set { _file = value; }
         }
 
-        private BuildNumberAlgorithm _BuildType = BuildNumberAlgorithm.MonthDay;
+        private string _buildType;
 
-        public BuildNumberAlgorithm BuildType
+        public string BuildType
         {
-            get { return _BuildType; }
-            set { _BuildType = value; }
+            get { return _buildType; }
+            set { _buildType = value; }
         }
 
-        private RevisionNumberAlgorithm _RevisionType = RevisionNumberAlgorithm.Automatic;
+        private string _revisionType;
 
-        public RevisionNumberAlgorithm RevisionType
+        public string RevisionType
         {
-            get { return _RevisionType; }
-            set { _RevisionType = value; }
-        }
-
-        private DateTime _StartDate;
-
-        public DateTime StartDate
-        {
-            get { return _StartDate; }
-            set { _StartDate = value; }
-        }
+            get { return _revisionType; }
+            set { _revisionType = value; }
+        } 
+#endregion
         
-                
         public override bool Execute()
         {
-            System.Version version = ReadVersionFromFile();
-            if (version == null)
-                return false;
-
-            int newBuildNumber = CalculateBuildNumber(version.Build);
-            int newRevisionNumber = CalculateRevisionNumber(version, newBuildNumber);
-
-            version = new System.Version(version.Major, version.Minor, newBuildNumber, newRevisionNumber);
-            _Major = version.Major;
-            _Minor = version.Minor;
-            _Build = version.Build;
-            _Revision = version.Revision;
-
-            return WriteVersionToFile(version);
-
+            ReadVersionFromFile();
+            CalculateBuildNumber();
+            CalculateRevisionNumber();
+            return WriteVersionToFile();
         }
 
-        private System.Version ReadVersionFromFile()
+        private void ReadVersionFromFile()
         {
-            string version = null;
+            string textVersion = null;
+            System.Version version = null;
+
+            if (!System.IO.File.Exists(_file))
+            {
+                Log.LogWarning("Version file \"{0}\" not found .", _file);
+                return;
+            }
 
             // read the version string
             try
             {
-                using (StreamReader reader = new StreamReader(_File))
+                using (StreamReader reader = new StreamReader(_file))
                 {
-                    version = reader.ReadToEnd();
+                    textVersion = reader.ReadToEnd();
                 }
             }
             catch (Exception ex)
             {
                 Log.LogError("Unable to read version number from \"{0}\". {1}", 
-                    _File, ex.Message);
+                    _file, ex.Message);
+                return;
             }
 
-            // instantiate a Version instance from the version string
+            Log.LogMessage("Version \"{0}\" read from file \"{1}\".", 
+                textVersion, _file);
+
             try
             {
-                return new System.Version(version);
+                version = new System.Version(textVersion);
             }
             catch (Exception ex)
             {
                 Log.LogError("Invalid version string \"{0}\" in file \"{1}\". {2}",
-                    version, _File, ex.Message);
-                
+                    version, _file, ex.Message);
+                return;                
             }
 
-            return null;
+            if (version != null)
+            {
+                _major = version.Major;
+                _minor = version.Minor;
+                _build = version.Build;
+                _revision = version.Revision;
+            }
         }
 
-        private bool WriteVersionToFile(System.Version version)
+        private bool WriteVersionToFile()
         {
+            System.Version version = new System.Version(_major, _minor, _build, _revision);
+
             try
             {
-                using (StreamWriter writer = new StreamWriter(_File))
+                using (StreamWriter writer = System.IO.File.CreateText(_file))
                 {
                     writer.Write(version.ToString());
                     writer.Flush();
@@ -185,100 +155,46 @@ namespace MSBuild.Community.Tasks
             catch (Exception ex)
             {
                 Log.LogError("Unable to write version number to \"{0}\". {1}",
-                    _File, ex.Message);
+                    _file, ex.Message);
                 return false;
             }
+
+            Log.LogMessage("Version \"{0}\" wrote to file \"{1}\".", 
+                version.ToString(), _file);
 
             return true;
         }
 
-        private int CalculateMonthDayBuildNumber()
-        {
-            // we need to have a start date defined!
-            if (StartDate == DateTime.MinValue)
-            {
-                StartDate = DateTime.Now;
-            }
-
-            DateTime today = DateTime.Now;
-            if (StartDate > today)
-            {
-                StartDate = today;
-            }
-
-            // Calculate difference in years
-            int years = today.Year - StartDate.Year;
-
-            // Calculate difference in months
-            int months;
-            if (today.Month < StartDate.Month)
-            {
-                --years;  // borrow from years
-                months = (today.Month + 12) - StartDate.Month;
-            }
-            else
-            {
-                months = today.Month - StartDate.Month;
-            }
-
-            months += years * 12;
-
-            // The days is simply today's day
-            int days = today.Day;
-
-            return months * 100 + days;
-        }
-
-        private int CalculateSecondsSinceMidnight()
+        private int CalculateDaysSinceMilenium()
         {
             DateTime today = DateTime.Now;
-            return (today.Hour * 3600 + today.Minute * 60 + today.Second) / 10;
+            DateTime startDate = new DateTime(2000, 1, 1);
+            TimeSpan span = today.Subtract(startDate);
+            return (int)span.TotalDays;
         }
 
-        private int CalculateBuildNumber(int currentBuildNumber)
+        private void CalculateBuildNumber()
         {
-            switch (BuildType)
+            if (string.Compare(_buildType, "Automatic", true) == 0)
             {
-                case BuildNumberAlgorithm.MonthDay:
-                    return CalculateMonthDayBuildNumber();
-                case BuildNumberAlgorithm.Increment:
-                    return currentBuildNumber + 1;
-                case BuildNumberAlgorithm.NoIncrement:
-                    return currentBuildNumber;
-                default:
-                    return currentBuildNumber;
+                _build = CalculateDaysSinceMilenium();
+            }
+            else if (string.Compare(_buildType, "Increment", true) == 0)
+            {
+                _build++;
             }
         }
 
-        private int CalculateRevisionNumber(System.Version version, int newBuildNumber)
+        private void CalculateRevisionNumber()
         {
-            int newRevsionNumber;
-
-            // modify revision number according to revision type setting
-            switch (RevisionType)
+            if (string.Compare(_revisionType, "Automatic", true) == 0)
             {
-                case RevisionNumberAlgorithm.Automatic:
-                    newRevsionNumber = CalculateSecondsSinceMidnight();
-                    break;
-                case RevisionNumberAlgorithm.Increment:
-                    if (newBuildNumber != version.Build)
-                    {
-                        // reset revision number to zero if the build number has changed
-                        newRevsionNumber = 0;
-                    }
-                    else
-                    {
-                        // increment the revision number if this is a revision of the same build
-                        newRevsionNumber = version.Revision + 1;
-                    }
-                    break;
-                default:
-                    newRevsionNumber = CalculateSecondsSinceMidnight();
-                    break;
-
+                _revision = (int)DateTime.Now.TimeOfDay.TotalSeconds;
             }
-
-            return newRevsionNumber;
+            else if (string.Compare(_revisionType, "Increment", true) == 0)
+            {
+                _revision++;
+            }
         }
 
     }
