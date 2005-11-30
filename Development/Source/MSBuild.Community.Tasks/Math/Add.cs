@@ -15,8 +15,7 @@ namespace MSBuild.Community.Tasks.Math
     ///     <Output TaskParameter="Result" PropertyName="Result" />
     /// </Math.Add>
     /// <Message Text="Add 4+3= $(Result)"/>
-    /// ]]>
-    /// </code>
+    /// ]]></code>
     /// </example>
     public class Add : MathBase
     {

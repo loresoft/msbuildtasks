@@ -15,8 +15,7 @@ namespace MSBuild.Community.Tasks.Math
     ///     <Output TaskParameter="Result" PropertyName="Result" />
     /// </Math.Multiple>
     /// <Message Text="Multiple 10*3= $(Result)"/>
-    /// ]]>
-    /// </code>
+    /// ]]></code>
     /// </example>
     public class Multiple : MathBase
     {

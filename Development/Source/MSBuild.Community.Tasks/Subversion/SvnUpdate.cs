@@ -6,6 +6,9 @@ using System.Text;
 
 namespace MSBuild.Community.Tasks.Subversion
 {
+    /// <summary>
+    /// Subversion Update command
+    /// </summary>
     public class SvnUpdate : SvnClient
     {
         /// <summary>

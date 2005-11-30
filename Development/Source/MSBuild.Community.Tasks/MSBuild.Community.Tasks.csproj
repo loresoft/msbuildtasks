@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\MSBuild.Community.Tasks.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\MSBuild.Community.Tasks.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,7 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\MSBuild.Community.Tasks.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\MSBuild.Community.Tasks.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Ftp.cs" />
+    <Compile Include="FtpUpload.cs" />
     <Compile Include="Mail.cs" />
     <Compile Include="Math\Add.cs" />
     <Compile Include="Math\Divide.cs" />
@@ -61,6 +61,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RegistryRead.cs" />
+    <Compile Include="RegistryWrite.cs" />
     <Compile Include="Subversion\SvnCheckout.cs" />
     <Compile Include="Subversion\SvnCommit.cs" />
     <Compile Include="Subversion\SvnExport.cs" />
@@ -68,7 +70,6 @@
     <Compile Include="Subversion\SvnVersion.cs" />
     <Compile Include="Subversion\SvnUpdate.cs" />
     <Compile Include="Unzip.cs" />
-    <Compile Include="Vault\VaultClient.cs" />
     <Compile Include="Version.cs" />
     <Compile Include="Zip.cs" />
   </ItemGroup>

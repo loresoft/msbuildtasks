@@ -10,8 +10,7 @@ namespace MSBuild.Community.Tasks.Subversion
     /// Export a folder from a Subversion repository
     /// </summary>
     /// <example> Export from repository
-    /// <code>
-    /// <![CDATA[
+    /// <code><![CDATA[
     /// <Target Name="Export">
     ///   <MakeDir Directories="$(MSBuildProjectDirectory)\Test" />
     ///   <RemoveDir Directories="$(MSBuildProjectDirectory)\Test\Export" />
@@ -21,8 +20,7 @@ namespace MSBuild.Community.Tasks.Subversion
     ///   </SvnExport>
     ///   <Message Text="Revision: $(Revision)"/>
     /// </Target>
-    /// ]]>
-    /// </code>
+    /// ]]></code>
     /// </example>
     public class SvnExport : SvnClient
     {

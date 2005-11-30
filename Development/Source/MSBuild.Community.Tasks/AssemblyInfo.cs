@@ -12,6 +12,17 @@ using Microsoft.Build.Framework;
 
 namespace MSBuild.Community.Tasks
 {
+    /// <summary>
+    /// Generates an AssemblyInfo files
+    /// </summary>
+    /// <example>Generates a common version file.
+    /// <code><![CDATA[
+    /// <AssemblyInfo CodeLanguage="CS"  
+    ///     OutputFile="VersionInfo.cs" 
+    ///     AssemblyVersion="1.0.0.0" 
+    ///     AssemblyFileVersion="1.0.0.0" />
+    /// ]]></code>
+    /// </example>
     public class AssemblyInfo : Task
     {
         private Dictionary<string, string> _attributes;
@@ -226,8 +237,6 @@ namespace MSBuild.Community.Tasks
             if (provider == null)
                 throw new NotSupportedException("The specified code language is not supported.");
 
-            ICodeGenerator _generator = provider.CreateGenerator();
-
             CodeCompileUnit codeCompileUnit = new CodeCompileUnit();
             CodeNamespace codeNamespace = new CodeNamespace();
 
@@ -258,7 +267,7 @@ namespace MSBuild.Community.Tasks
                 // add assembly-level argument to code compile unit
                 codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
             }
-            _generator.GenerateCodeFromCompileUnit(codeCompileUnit, writer, new CodeGeneratorOptions());
+            provider.GenerateCodeFromCompileUnit(codeCompileUnit, writer, new CodeGeneratorOptions());            
         }
 
         private string ReadAttribute(string key)

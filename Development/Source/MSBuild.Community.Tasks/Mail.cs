@@ -21,8 +21,7 @@ namespace MSBuild.Community.Tasks
     ///         Subject="Test Mail Task"
     ///         Body="This is a test of the mail task." />
     /// </Target>
-    /// ]]>
-    /// </code>
+    /// ]]></code>
     /// </example>
     public class Mail : Task
     {

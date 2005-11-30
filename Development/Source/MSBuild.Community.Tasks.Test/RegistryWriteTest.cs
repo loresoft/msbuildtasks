@@ -8,12 +8,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MSBuild.Community.Tasks.Test
 {
     /// <summary>
-    /// Summary description for NDocTest
+    /// Summary description for RegistryWriteTest
     /// </summary>
     [TestClass]
-    public class NDocTest
+    public class RegistryWriteTest
     {
-        public NDocTest()
+        public RegistryWriteTest()
         {
             //
             // TODO: Add constructor logic here
@@ -43,13 +43,15 @@ namespace MSBuild.Community.Tasks.Test
         #endregion
 
         [TestMethod]
-        public void NDocExecute()
+        public void RegistryWriteExecute()
         {
-            NDoc task = new NDoc();
+            RegistryWrite task = new RegistryWrite();
             task.BuildEngine = new MockBuild();
-            task.ProjectFilePath = @"..\..\..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.ndoc";
-            task.Documenter = "MSDN";
+            task.KeyName = @"HKEY_CURRENT_USER\SOFTWARE\MSBuildTasks";
+            task.ValueName = "RegistryWrite";
+            task.Value = "Test Write";
             task.Execute();
+            
         }
     }
 }

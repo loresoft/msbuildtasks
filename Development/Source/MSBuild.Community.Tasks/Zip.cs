@@ -14,6 +14,19 @@ using Math = System.Math;
 
 namespace MSBuild.Community.Tasks
 {
+    /// <summary>
+    /// Create a zip file with the files specified.
+    /// </summary>
+    /// <example>Create a zip file
+    /// <code><![CDATA[
+    /// <ItemGroup>
+    ///     <ZipFiles Include="**\*.*" Exclude="*.zip" />
+    /// </ItemGroup>
+    /// <Target Name="Zip">
+    ///     <Zip Files="@(ZipFiles)" ZipFileName="MSBuild.Community.Tasks.zip" />
+    /// </Target>
+    /// ]]></code>
+    /// </example>
     public class Zip : Task
     {
         /// <summary>
@@ -25,17 +38,17 @@ namespace MSBuild.Community.Tasks
             _flatten = false;
         }
 
-        private string _zipFile;
+        private string _zipFileName;
 
         /// <summary>
-        /// Gets or sets the zip file name.
+        /// Gets or sets the name of the zip file.
         /// </summary>
-        /// <value>The zip file name.</value>
+        /// <value>The name of the zip file.</value>
         [Required]
-        public string ZipFile
+        public string ZipFileName
         {
-            get { return _zipFile; }
-            set { _zipFile = value; }
+            get { return _zipFileName; }
+            set { _zipFileName = value; }
         }
 
         private int _zipLevel;
@@ -148,9 +161,9 @@ namespace MSBuild.Community.Tasks
 
             try
             {
-                Log.LogMessage("Creating zip file \"{0}\".", _zipFile); 
+                Log.LogMessage("Creating zip file \"{0}\".", _zipFileName); 
 
-                zs = new ZipOutputStream(File.Create(_zipFile));
+                zs = new ZipOutputStream(File.Create(_zipFileName));
 
                 // make sure level in range
                 _zipLevel = System.Math.Max(0, _zipLevel);
@@ -202,9 +215,11 @@ namespace MSBuild.Community.Tasks
                     zs.PutNextEntry(entry);
                     zs.Write(buffer, 0, buffer.Length);
 
-                    Log.LogMessage("File \"{0}\" added to zip file \"{1}\".", fileItem.ItemSpec, _zipFile);
+                    Log.LogMessage("  added \"{0}\"", name);
                 } // foreach file
                 zs.Finish();
+                Log.LogMessage("Created zip file \"{0}\" successfully.\n", _zipFileName); 
+
                 return true;
             }
             finally

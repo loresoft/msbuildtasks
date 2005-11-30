@@ -39,7 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfoTest.cs" />
-    <Compile Include="FtpTest.cs" />
+    <Compile Include="FtpUploadTest.cs" />
     <Compile Include="MailTest.cs" />
     <Compile Include="Math\AddTest.cs" />
     <Compile Include="Math\DivideTest.cs" />
@@ -50,6 +50,8 @@
     <Compile Include="NDocTest.cs" />
     <Compile Include="NUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistryReadTest.cs" />
+    <Compile Include="RegistryWriteTest.cs" />
     <Compile Include="Subversion\SvnCheckoutTest.cs" />
     <Compile Include="Subversion\SvnClientTest.cs" />
     <Compile Include="Subversion\SvnCommitTest.cs" />

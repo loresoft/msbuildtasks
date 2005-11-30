@@ -56,7 +56,7 @@ namespace MSBuild.Community.Tasks.Test
             TaskItem[] items = TaskUtility.StringArrayToItemArray(files);
 
             task.Files = items;
-            task.ZipFile = @"D:\svn\repo.zip";
+            task.ZipFileName = @"D:\svn\repo.zip";
 
             bool result = task.Execute();
 

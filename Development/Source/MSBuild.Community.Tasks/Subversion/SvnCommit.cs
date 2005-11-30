@@ -6,6 +6,9 @@ using System.Text;
 
 namespace MSBuild.Community.Tasks.Subversion
 {
+    /// <summary>
+    /// Subversion Commit command
+    /// </summary>
     public class SvnCommit : SvnClient
     {
         /// <summary>

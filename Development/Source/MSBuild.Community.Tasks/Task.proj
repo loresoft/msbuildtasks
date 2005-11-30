@@ -45,7 +45,18 @@
   </Target>
 
   <ItemGroup>
-    <ZipFiles Include="**\*.*" Exclude="**\.svn\**;**\bin\**;**\obj\**;**\Test\**;*.user;*.zip" />
+    <DefaultExclude Include="**\.svn\**" />
+    <DefaultExclude Include="**\bin\**" />
+    <DefaultExclude Include="**\obj\**" />
+    <DefaultExclude Include="**\Test\**" />
+    <DefaultExclude Include="**\doc\**" />
+    <DefaultExclude Include="**\Backup\**" />
+    <DefaultExclude Include="*.user" />
+    <DefaultExclude Include="*.zip" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ZipFiles Include="**\*.*" Exclude="@(DefaultExclude)" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,10 +65,15 @@
 
   <Target Name="Zip">
     <Zip Files="@(ZipFiles)" 
-      ZipFile="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks.zip" />
+         ZipFileName="MSBuild.Community.Tasks.zip" />
 
     <Zip Files="@(RepoFiles)"
-         ZipFile="D:\svn\repo.zip" />
+         ZipFileName="D:\svn\repo.zip" />
+  </Target>
+
+  <Target Name="Unzip">
+    <Unzip ZipFileName="MSBuild.Community.Tasks.zip" 
+           TargetDirectory="Backup"/>
   </Target>
 
   <Target Name="Math">
@@ -90,8 +106,33 @@
       <Output TaskParameter="Build" PropertyName="Build" />
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </Version>
-  
+
     <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
   </Target>
-  
+
+  <Target Name="NDoc">
+    <NDoc Documenter="MSDN" ProjectFilePath="MSBuild.Community.Tasks.ndoc" />
+  </Target>
+
+  <Target Name="Registry">
+    <RegistryRead 
+      KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework" 
+      ValueName="InstallRoot">
+      <Output TaskParameter="Value" PropertyName="InstallRoot" />
+    </RegistryRead>
+    <Message Text="InstallRoot: $(InstallRoot)"/>
+
+    <RegistryWrite 
+      KeyName="HKEY_CURRENT_USER\SOFTWARE\MSBuildTasks"
+      ValueName="RegistryWrite"
+      Value="Test Write" />
+
+  </Target>
+
+  <Target Name="FTP">
+    <FtpUpload 
+      LocalFile="MSBuild.Community.Tasks.zip" 
+      RemoteUri="ftp://localhost/MSBuild.Community.Tasks.zip" />
+
+  </Target>
 </Project>

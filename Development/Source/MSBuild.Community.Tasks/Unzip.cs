@@ -11,6 +11,14 @@ using ICSharpCode.SharpZipLib.Core;
 
 namespace MSBuild.Community.Tasks
 {
+    /// <summary>
+    /// Unzip a file to a target directory.
+    /// </summary>
+    /// <example>Unzip file tasks
+    /// <code><![CDATA[
+    /// <Unzip ZipFileName="D:\svn\repo.zip" TargetDirectory="D:\svn\backup"/>
+    /// ]]></code>
+    /// </example>
     public class Unzip : Task
     {
         /// <summary>
@@ -74,22 +82,24 @@ namespace MSBuild.Community.Tasks
             FastZip zip = new FastZip(events);
             zip.CreateEmptyDirectories = false;
 
-            Log.LogMessage("Extracting Zip File \"{0}\"", _zipFileName);
+            Log.LogMessage("Unzip File \"{0}\"", _zipFileName);
+            Log.LogMessage("  to Directory \"{0}\"\n", _targetDirectory);
             zip.ExtractZip(_zipFileName, _targetDirectory, null);
+            Log.LogMessage("Unzipped file \"{0}\" successfully.\n", _zipFileName); 
 
             return true;
         }
 
         private void ProcessFile(object sender, ScanEventArgs e)
         {
-            Log.LogMessage("Extracted File \"{0}\"", e.Name);            
+            Log.LogMessage("  extracted \"{0}\"", e.Name);            
         }
 
         private void ProcessDirectory(object sender, DirectoryEventArgs e)
         {
             if (!e.HasMatchingFiles)
             {
-                Log.LogMessage("Extracted Directory \"{0}\"", e.Name);
+                Log.LogMessage("  extracted \"{0}\"", e.Name);
             }
         }
     }

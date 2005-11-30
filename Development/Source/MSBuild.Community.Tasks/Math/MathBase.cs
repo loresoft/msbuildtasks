@@ -63,6 +63,11 @@ namespace MSBuild.Community.Tasks.Math
             throw new Exception("The method or operation is not implemented.");
         }
 
+        /// <summary>
+        /// Strings array to decimal array.
+        /// </summary>
+        /// <param name="numbers">The numbers.</param>
+        /// <returns></returns>
         protected decimal[] StringArrayToDecimalArray(string[] numbers)
         {
             decimal[] result = new decimal[numbers.Length];

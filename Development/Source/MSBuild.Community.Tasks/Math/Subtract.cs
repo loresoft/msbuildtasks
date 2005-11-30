@@ -15,8 +15,7 @@ namespace MSBuild.Community.Tasks.Math
     ///     <Output TaskParameter="Result" PropertyName="Result" />
     /// </Math.Subtract>
     /// <Message Text="Subtract 10-3= $(Result)"/>
-    /// ]]>
-    /// </code>
+    /// ]]></code>
     /// </example>
     public class Subtract : MathBase
     {

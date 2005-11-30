@@ -8,12 +8,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MSBuild.Community.Tasks.Test
 {
     /// <summary>
-    /// Summary description for NDocTest
+    /// Summary description for FtpTest
     /// </summary>
     [TestClass]
-    public class NDocTest
+    public class FtpUploadTest
     {
-        public NDocTest()
+        public FtpUploadTest()
         {
             //
             // TODO: Add constructor logic here
@@ -43,13 +43,14 @@ namespace MSBuild.Community.Tasks.Test
         #endregion
 
         [TestMethod]
-        public void NDocExecute()
+        public void FtpExecute()
         {
-            NDoc task = new NDoc();
+            FtpUpload task = new FtpUpload();
             task.BuildEngine = new MockBuild();
-            task.ProjectFilePath = @"..\..\..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.ndoc";
-            task.Documenter = "MSDN";
+            task.LocalFile = @"D:\svn\repo.zip";
+            task.RemoteUri = "ftp://localhost/repo.zip";
             task.Execute();
+
         }
     }
 }

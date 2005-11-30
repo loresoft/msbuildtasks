@@ -21,11 +21,13 @@ namespace MSBuild.Community.Tasks
     ///     <Output TaskParameter="Revision" PropertyName="Revision" />
     /// </Version>
     /// <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
-    /// ]]>
-    /// </code>
+    /// ]]></code>
     /// </example>
     public class Version : Task
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Version"/> class.
+        /// </summary>
         public Version()
         {
             _major = 1;

@@ -8,12 +8,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MSBuild.Community.Tasks.Test
 {
     /// <summary>
-    /// Summary description for FtpTest
+    /// Summary description for RegistryReadTest
     /// </summary>
     [TestClass]
-    public class FtpTest
+    public class RegistryReadTest
     {
-        public FtpTest()
+        public RegistryReadTest()
         {
             //
             // TODO: Add constructor logic here
@@ -43,10 +43,17 @@ namespace MSBuild.Community.Tasks.Test
         #endregion
 
         [TestMethod]
-        public void FtpExecute()
+        public void RegistryReadExecute()
         {
-            Ftp task = new Ftp();
+            RegistryRead task = new RegistryRead();
             task.BuildEngine = new MockBuild();
+            task.KeyName = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework";
+            task.ValueName = "InstallRoot";
+            task.Execute();
+
+            string expected = "C:\\WINDOWS\\Microsoft.NET\\Framework\\";
+            Assert.AreEqual(expected, task.Value);
+
         }
     }
 }

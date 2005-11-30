@@ -10,8 +10,7 @@ namespace MSBuild.Community.Tasks.Subversion
     /// Checkout a local working copy of a Subversion repository.
     /// </summary>
     /// <example>Checkout a working copy
-    /// <code>
-    /// <![CDATA[
+    /// <code><![CDATA[
     /// <Target Name="Checkout">
     ///   <RemoveDir Directories="$(MSBuildProjectDirectory)\Test\Checkout" />
     ///   <SvnCheckout RepositoryPath="file:///d:/svn/repo/Test/trunk" 
@@ -20,8 +19,7 @@ namespace MSBuild.Community.Tasks.Subversion
     ///   </SvnCheckout>
     ///   <Message Text="Revision: $(Revision)"/>
     /// </Target>
-    /// ]]>
-    /// </code>
+    /// ]]></code>
     /// </example>
     public class SvnCheckout : SvnClient
     {

@@ -24,8 +24,7 @@ namespace MSBuild.Community.Tasks.Subversion
     ///   </SvnVersion>
     ///   <Message Text="Revision: $(Revision)"/>
     /// </Target>
-    /// ]]>
-    /// </code>
+    /// ]]></code>
     /// </example>
     public class SvnVersion : ToolTask
     {

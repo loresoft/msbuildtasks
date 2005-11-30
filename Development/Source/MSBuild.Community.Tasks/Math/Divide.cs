@@ -15,8 +15,7 @@ namespace MSBuild.Community.Tasks.Math
     ///     <Output TaskParameter="Result" PropertyName="Result" />
     /// </Math.Divide>
     /// <Message Text="Divide 1/2= $(Result)"/>
-    /// ]]>
-    /// </code>
+    /// ]]></code>
     /// </example>
     public class Divide : MathBase
     {

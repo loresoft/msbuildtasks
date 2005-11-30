@@ -11,6 +11,9 @@ using Microsoft.Build.Framework;
 namespace MSBuild.Community.Tasks.Subversion
 {
 
+    /// <summary>
+    /// Subversion client base class
+    /// </summary>
     public class SvnClient : ToolTask
     {
         private const string _switchBooleanFormat = " --{0}";
