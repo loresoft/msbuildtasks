@@ -10,8 +10,6 @@ using ICSharpCode.SharpZipLib.Checksums;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Globalization;
 
-using Math = System.Math;
-
 namespace MSBuild.Community.Tasks
 {
     /// <summary>
@@ -23,7 +21,8 @@ namespace MSBuild.Community.Tasks
     ///     <ZipFiles Include="**\*.*" Exclude="*.zip" />
     /// </ItemGroup>
     /// <Target Name="Zip">
-    ///     <Zip Files="@(ZipFiles)" ZipFileName="MSBuild.Community.Tasks.zip" />
+    ///     <Zip Files="@(ZipFiles)" 
+    ///         ZipFileName="MSBuild.Community.Tasks.zip" />
     /// </Target>
     /// ]]></code>
     /// </example>

@@ -4,17 +4,16 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MSBuild.Community.Tasks.Math;
 
-namespace MSBuild.Community.Tasks.Test.Math
+namespace MSBuild.Community.Tasks.Test
 {
     /// <summary>
-    /// Summary description for MultipleTest
+    /// Summary description for XmlReadTest
     /// </summary>
     [TestClass]
-    public class MultipleTest
+    public class XmlReadTest
     {
-        public MultipleTest()
+        public XmlReadTest()
         {
             //
             // TODO: Add constructor logic here
@@ -44,28 +43,21 @@ namespace MSBuild.Community.Tasks.Test.Math
         #endregion
 
         [TestMethod]
-        public void MultipleExecute()
+        public void XmlReadExecute()
         {
-            Multiple task = new Multiple();
+            XmlRead task = new XmlRead();
             task.BuildEngine = new MockBuild();
-            task.Numbers = new string[] { "3", "4" };
+            task.XmlFileName = @"..\..\..\MSBuild.Community.Tasks\Subversion.proj";
+            task.XPath = "string(/n:Project/n:PropertyGroup/n:MSBuildCommunityTasksPath/text())";
+            task.Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
+            task.Prefix = "n";
             Assert.IsTrue(task.Execute(), "Execute Failed");
 
-            Assert.AreEqual("12", task.Result);
-
-            task = new Multiple();
-            task.BuildEngine = new MockBuild();
-            task.Numbers = new string[] { "1.1", "2.1" };
+            task.XPath = "/n:Project/n:Target/@Name";
             Assert.IsTrue(task.Execute(), "Execute Failed");
 
-            Assert.AreEqual("2.31", task.Result);
 
-            task = new Multiple();
-            task.BuildEngine = new MockBuild();
-            task.Numbers = new string[] { "5", "6", "4" };
-            Assert.IsTrue(task.Execute(), "Execute Failed");
 
-            Assert.AreEqual("120", task.Result);
         }
     }
 }

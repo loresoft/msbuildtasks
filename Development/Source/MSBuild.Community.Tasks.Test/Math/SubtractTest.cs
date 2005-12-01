@@ -49,14 +49,14 @@ namespace MSBuild.Community.Tasks.Test.Math
             Subtract task = new Subtract();
             task.BuildEngine = new MockBuild();
             task.Numbers = new string[] { "5", "3" };
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.AreEqual("2", task.Result);
 
             task = new Subtract();
             task.BuildEngine = new MockBuild();
             task.Numbers = new string[] { "1.1", "2.2" };
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.AreEqual("-1.1", task.Result);
         }

@@ -81,25 +81,25 @@ namespace MSBuild.Community.Tasks.Test
         public void LogCustomEvent(CustomBuildEventArgs e)
         {
             _customCount++;
-            Console.WriteLine("Build Custom: {0}", e.Message);            
+            Console.WriteLine("Custom: {0}", e.Message);            
         }
 
         public void LogErrorEvent(BuildErrorEventArgs e)
         {
             _errorCount++;
-            Console.WriteLine("Build Error: {0}", e.Message);
+            Console.WriteLine("Error: {0}", e.Message);
         }
 
         public void LogMessageEvent(BuildMessageEventArgs e)
         {
             _messageCount++;
-            Console.WriteLine("Build Message: {0}", e.Message);
+            Console.WriteLine("Message: {0}", e.Message);
         }
 
         public void LogWarningEvent(BuildWarningEventArgs e)
         {
             _warningCount++;
-            Console.WriteLine("Build Warning: {0}", e.Message);
+            Console.WriteLine("Warning: {0}", e.Message);
         }
 
         public string ProjectFileOfTaskNode

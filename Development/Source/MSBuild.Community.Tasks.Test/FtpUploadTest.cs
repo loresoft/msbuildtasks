@@ -49,7 +49,7 @@ namespace MSBuild.Community.Tasks.Test
             task.BuildEngine = new MockBuild();
             task.LocalFile = @"D:\svn\repo.zip";
             task.RemoteUri = "ftp://localhost/repo.zip";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
         }
     }

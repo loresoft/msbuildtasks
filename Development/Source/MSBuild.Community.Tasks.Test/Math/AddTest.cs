@@ -49,14 +49,14 @@ namespace MSBuild.Community.Tasks.Test.Math
             Add task = new Add();
             task.BuildEngine = new MockBuild();
             task.Numbers = new string[] { "1", "1" };
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.AreEqual("2", task.Result);
 
             task = new Add();
             task.BuildEngine = new MockBuild();
             task.Numbers = new string[] { "1.1", "2.1" };
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.AreEqual("3.2", task.Result);
 
@@ -64,7 +64,7 @@ namespace MSBuild.Community.Tasks.Test.Math
             task = new Add();
             task.BuildEngine = new MockBuild();
             task.Numbers = new string[] { "5", "6", "4" };
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.AreEqual("15", task.Result);
 

@@ -49,14 +49,14 @@ namespace MSBuild.Community.Tasks.Test.Math
             Divide task = new Divide();
             task.BuildEngine = new MockBuild();
             task.Numbers = new string[] { "12", "4" };
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.AreEqual("3", task.Result);
 
             task = new Divide();
             task.BuildEngine = new MockBuild();
             task.Numbers = new string[] { "1", "2" };
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.AreEqual("0.5", task.Result);
 

@@ -50,7 +50,7 @@ namespace MSBuild.Community.Tasks.Test
             task.ZipFileName = @"D:\svn\repo.zip";
             task.TargetDirectory = @"D:\svn\back";
 
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
         }
     }

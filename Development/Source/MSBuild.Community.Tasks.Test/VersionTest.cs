@@ -48,7 +48,7 @@ namespace MSBuild.Community.Tasks.Test
             Version task = new Version();
             task.BuildEngine = new MockBuild();
             task.VersionFile = "number.txt";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.AreEqual(1, task.Major);
             Assert.AreEqual(0, task.Minor); 
@@ -60,7 +60,7 @@ namespace MSBuild.Community.Tasks.Test
             task.VersionFile = @"..\..\..\version.txt";
             task.BuildType = "Increment";
             task.RevisionType = "Increment";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.AreEqual(1, task.Major);
             Assert.AreEqual(0, task.Minor);
@@ -71,7 +71,7 @@ namespace MSBuild.Community.Tasks.Test
             task.VersionFile = @"..\..\..\version.txt";
             task.BuildType = "Automatic";
             task.RevisionType = "Automatic";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.AreEqual(1, task.Major);
             Assert.AreEqual(0, task.Minor); 

@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfoTest.cs" />
+    <Compile Include="XmlUpdateTest.cs" />
     <Compile Include="FtpUploadTest.cs" />
     <Compile Include="MailTest.cs" />
     <Compile Include="Math\AddTest.cs" />
@@ -46,7 +47,6 @@
     <Compile Include="Math\MultipleTest.cs" />
     <Compile Include="Math\SubtractTest.cs" />
     <Compile Include="MockBuild.cs" />
-    <Compile Include="MoveTest.cs" />
     <Compile Include="NDocTest.cs" />
     <Compile Include="NUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="TaskUtility.cs" />
     <Compile Include="UnzipTest.cs" />
     <Compile Include="VersionTest.cs" />
+    <Compile Include="XmlReadTest.cs" />
     <Compile Include="ZipTest.cs" />
   </ItemGroup>
   <ItemGroup>

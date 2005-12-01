@@ -49,7 +49,7 @@ namespace MSBuild.Community.Tasks.Test
             task.BuildEngine = new MockBuild();
             task.KeyName = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework";
             task.ValueName = "InstallRoot";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             string expected = "C:\\WINDOWS\\Microsoft.NET\\Framework\\";
             Assert.AreEqual(expected, task.Value);

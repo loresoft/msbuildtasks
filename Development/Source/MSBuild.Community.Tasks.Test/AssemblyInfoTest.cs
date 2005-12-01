@@ -52,7 +52,7 @@ namespace MSBuild.Community.Tasks.Test
             task.OutputFile = "VersionInfo.cs";
             task.AssemblyVersion = "1.2.3.4";
             task.AssemblyFileVersion = "1.2.3.4";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.IsTrue(File.Exists("VersionInfo.cs"));
 
@@ -62,7 +62,7 @@ namespace MSBuild.Community.Tasks.Test
             task.OutputFile = "VersionInfo.vb";
             task.AssemblyVersion = "1.2.3.4";
             task.AssemblyFileVersion = "1.2.3.4";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.IsTrue(File.Exists("VersionInfo.vb"));
 
@@ -82,7 +82,7 @@ namespace MSBuild.Community.Tasks.Test
             task.Guid = "d038566a-1937-478a-b5c5-b79c4afb253d";
             task.AssemblyVersion = "1.2.3.4";
             task.AssemblyFileVersion = "1.2.3.4";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.IsTrue(File.Exists("AssemblyInfo.cs"));
 

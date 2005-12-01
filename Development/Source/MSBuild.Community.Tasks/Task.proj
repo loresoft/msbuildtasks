@@ -111,7 +111,13 @@
   </Target>
 
   <Target Name="NDoc">
-    <NDoc Documenter="MSDN" ProjectFilePath="MSBuild.Community.Tasks.ndoc" />
+    <NDoc Documenter="MSDN" 
+          ProjectFilePath="MSBuild.Community.Tasks.ndoc" />
+    <Copy SourceFiles="doc\MSBuild.Community.Tasks.chm" 
+          DestinationFolder="$(MSBuildProjectDirectory)" />
+    <Copy SourceFiles="doc\MSBuild.Community.Tasks.chm" 
+          DestinationFolder="$(MSBuildProjectDirectory)\..\..\..\Documentation\" />
+
   </Target>
 
   <Target Name="Registry">
@@ -135,4 +141,30 @@
       RemoteUri="ftp://localhost/MSBuild.Community.Tasks.zip" />
 
   </Target>
+
+  <Target Name="XML">
+    <XmlRead Prefix="n"
+      Namespace="http://schemas.microsoft.com/developer/msbuild/2003" 
+      XPath="/n:Project/n:Target/@Name"
+      XmlFileName="Subversion.proj">
+      <Output TaskParameter="Value" PropertyName="BuildTargets" />
+    </XmlRead>
+    <Message Text="Build Targets: $(BuildTargets)"/>
+
+    <XmlUpdate Prefix="n"
+      Namespace="http://schemas.microsoft.com/developer/msbuild/2003" 
+      XPath="/n:Project/n:PropertyGroup/n:TestUpdate"
+      XmlFileName="Subversion.proj"
+      Value="Test from $(MSBuildProjectFile)"/>
+    
+  </Target>
+
+  <ItemGroup>
+    <TestAssembly Include="C:\Program Files\NUnit 2.2.3\bin\nunit.mocks.tests.dll" />
+    <TestAssembly Include="C:\Program Files\NUnit 2.2.3\bin\nunit-console.tests.dll" />
+  </ItemGroup>
+  <Target Name="NUnit">
+    <NUnit Assemblies="@(TestAssembly)" />
+  </Target>
+          
 </Project>

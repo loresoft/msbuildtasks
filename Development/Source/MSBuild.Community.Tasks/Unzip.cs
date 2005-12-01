@@ -16,7 +16,8 @@ namespace MSBuild.Community.Tasks
     /// </summary>
     /// <example>Unzip file tasks
     /// <code><![CDATA[
-    /// <Unzip ZipFileName="D:\svn\repo.zip" TargetDirectory="D:\svn\backup"/>
+    /// <Unzip ZipFileName="MSBuild.Community.Tasks.zip" 
+    ///     TargetDirectory="Backup"/>
     /// ]]></code>
     /// </example>
     public class Unzip : Task

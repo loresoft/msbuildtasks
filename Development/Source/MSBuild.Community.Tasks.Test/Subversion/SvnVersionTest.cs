@@ -49,7 +49,7 @@ namespace MSBuild.Community.Tasks.Test.Subversion
             SvnVersion task = new SvnVersion();
             task.BuildEngine = new MockBuild();
             task.LocalPath = @"..\..\..\";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.IsTrue(task.Revision > 0, "Invalid Revision Number");
         }

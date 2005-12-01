@@ -49,7 +49,7 @@ namespace MSBuild.Community.Tasks.Test
             task.BuildEngine = new MockBuild();
             task.ProjectFilePath = @"..\..\..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.ndoc";
             task.Documenter = "MSDN";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
         }
     }
 }

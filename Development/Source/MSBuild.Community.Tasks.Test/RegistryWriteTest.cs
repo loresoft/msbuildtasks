@@ -50,7 +50,7 @@ namespace MSBuild.Community.Tasks.Test
             task.KeyName = @"HKEY_CURRENT_USER\SOFTWARE\MSBuildTasks";
             task.ValueName = "RegistryWrite";
             task.Value = "Test Write";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
             
         }
     }

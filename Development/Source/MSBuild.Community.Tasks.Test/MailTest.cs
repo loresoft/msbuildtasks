@@ -52,7 +52,7 @@ namespace MSBuild.Community.Tasks.Test
             task.To = new string[] { "info@loreosft.com" };
             task.Subject = "This is a test of Mail Task";
             task.Body = "This is a test email from the Mail Task";
-            task.Execute();
+            Assert.IsTrue(task.Execute(), "Execute Failed");
         }
     }
 }

@@ -42,7 +42,6 @@ namespace MSBuild.Community.Tasks.Subversion
         public SvnVersion()
         {
             _outputBuffer = new StringBuilder();
-            base.ToolPath = GenerateFullPathToTool();           
         }
 
         #region Properties
@@ -128,9 +127,10 @@ namespace MSBuild.Community.Tasks.Subversion
         /// </returns>
         protected override string GenerateFullPathToTool()
         {
-            return Path.Combine(
+            base.ToolPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                @"Subversion\bin"); ;
+                @"Subversion\bin");
+            return Path.Combine(ToolPath, ToolName);
         }
 
         /// <summary>

@@ -52,7 +52,6 @@
     <Compile Include="Math\MathBase.cs" />
     <Compile Include="Math\Multiple.cs" />
     <Compile Include="Math\Subtract.cs" />
-    <Compile Include="Move.cs" />
     <Compile Include="NDoc.cs" />
     <Compile Include="NUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,6 +70,8 @@
     <Compile Include="Subversion\SvnUpdate.cs" />
     <Compile Include="Unzip.cs" />
     <Compile Include="Version.cs" />
+    <Compile Include="XmlRead.cs" />
+    <Compile Include="XmlUpdate.cs" />
     <Compile Include="Zip.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,8 @@ namespace MSBuild.Community.Tasks
     /// </summary>
     /// <example>Generated html help file.
     /// <code><![CDATA[
-    /// <NDoc Documenter="MSDN" ProjectFilePath="MSBuild.Community.Tasks.ndoc" />
+    /// <NDoc Documenter="MSDN" 
+    ///     ProjectFilePath="MSBuild.Community.Tasks.ndoc" />
     /// ]]></code>
     /// </example>
     public class NDoc : ToolTask
@@ -26,7 +27,7 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public NDoc()
         {
-            base.ToolPath = GenerateFullPathToTool();
+            
         }
 
         #region Properties
@@ -122,8 +123,9 @@ namespace MSBuild.Community.Tasks
             {
                 Log.LogErrorFromException(ex);
             }
-
-            return ndocPath;
+            
+            base.ToolPath = ndocPath;
+            return Path.Combine(ToolPath, ToolName);
         }
 
         /// <summary>

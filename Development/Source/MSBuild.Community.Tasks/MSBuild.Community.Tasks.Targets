@@ -1,29 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(MSBuildCommunityTasksPath)' == ''">
-    <MSBuildCommunityTasksPath>$(MSBuildExtensionsPath)\MSBuildTasks</MSBuildCommunityTasksPath>
+    <MSBuildCommunityTasksPath>$(MSBuildExtensionsPath)\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
   </PropertyGroup>
   
   <UsingTask TaskName="MSBuild.Community.Tasks.AssemblyInfo" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Mail" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.FtpUpload" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Mail" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.NDoc" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Unzip" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Version" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.NUnit" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.RegistryRead" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.RegistryWrite" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Unzip" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Version" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.XmlRead" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.XmlUpdate" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
 
   <UsingTask TaskName="MSBuild.Community.Tasks.Math.Add" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Math.Divide" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Math.Multiple" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Math.Subtract" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
 
-  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnClient" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnVersion" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCheckout" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnClient" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCommit" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnExport" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnUpdate" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
-  
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnVersion" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+
 </Project>

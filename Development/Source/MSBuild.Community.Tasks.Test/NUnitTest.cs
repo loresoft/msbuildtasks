@@ -4,6 +4,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Build.Utilities;
 
 namespace MSBuild.Community.Tasks.Test
 {
@@ -45,8 +46,13 @@ namespace MSBuild.Community.Tasks.Test
         [TestMethod]
         public void NUnitExecute()
         {
+            string[] assemblies = new string[] { @"C:\Program Files\NUnit 2.2.3\bin\nunit.framework.tests.dll" };
+            TaskItem[] items = TaskUtility.StringArrayToItemArray(assemblies);
+
             NUnit task = new NUnit();
-            task.BuildEngine = new MockBuild();
+            task.BuildEngine = new MockBuild();            
+            task.Assemblies = items;
+            Assert.IsTrue(task.Execute(), "Execute Failed");
         }
     }
 }
