@@ -75,8 +75,13 @@
     <Compile Include="Zip.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\..\Documentation\MSBuild.Community.Tasks.chm">
+      <Link>MSBuild.Community.Tasks.chm</Link>
+    </Content>
     <None Include="MSBuild.Community.Tasks.snk" />
-    <Content Include="MSBuild.Community.Tasks.Targets" />
+    <Content Include="MSBuild.Community.Tasks.Targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
