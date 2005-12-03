@@ -103,6 +103,21 @@ namespace MSBuild.Community.Tasks
             set { _comment = value; }
         }
 
+        private string _workingDirectory;
+
+        /// <summary>
+        /// Gets or sets the working directory for the zip file.
+        /// </summary>
+        /// <value>The working directory.</value>
+        /// <remarks>
+        /// The working directory is the base of the zip file.  
+        /// All files will be made relative from the working directory.
+        /// </remarks>
+        public string WorkingDirectory
+        {
+            get { return _workingDirectory; }
+            set { _workingDirectory = value; }
+        }
 
         /// <summary>
         /// When overridden in a derived class, executes the task.
@@ -115,47 +130,10 @@ namespace MSBuild.Community.Tasks
             return ZipFiles();
         }
 
-        /// <summary>
-        /// Searchs the files for a common base directory to start zip file
-        /// </summary>
-        /// <returns>A common directory</returns>
-        private string FindBasePath()
-        {
-            string basePath = Path.GetDirectoryName(_files[0].ItemSpec);
-            string[] folders = basePath.Split(Path.DirectorySeparatorChar);
-
-            foreach (ITaskItem fileName in _files)
-            {
-                if (basePath.Length == 0)
-                    break;
-
-                string tempPath = Path.GetDirectoryName(fileName.ItemSpec);
-
-                if (tempPath.StartsWith(basePath, true, CultureInfo.InvariantCulture))
-                    continue;
-
-                for (int i = folders.Length - 1; i > 0; i--)
-                {
-                    string baseTempPath = string.Join(Path.DirectorySeparatorChar.ToString(), folders, 0, i);
-                    if (tempPath.StartsWith(baseTempPath, true, CultureInfo.InvariantCulture))
-                    {
-                        basePath = baseTempPath;
-                        folders = baseTempPath.Split(Path.DirectorySeparatorChar);
-                        break;
-                    }
-                }
-            }
-
-            return basePath + Path.DirectorySeparatorChar;
-        }
-
         private bool ZipFiles()
         {
             Crc32 crc = new Crc32();
             ZipOutputStream zs = null;
-
-
-            string basePath = FindBasePath();
 
             try
             {
@@ -195,9 +173,10 @@ namespace MSBuild.Community.Tasks
                     {
                         name = file.Name;
                     }
-                    else if (name.StartsWith(basePath, true, CultureInfo.InvariantCulture))
+                    else if (!string.IsNullOrEmpty(_workingDirectory) 
+                        && name.StartsWith(_workingDirectory, true, CultureInfo.InvariantCulture))
                     {
-                        name = name.Remove(0, basePath.Length);
+                        name = name.Remove(0, _workingDirectory.Length);
                     }
                     name = ZipEntry.CleanName(name, true);
 

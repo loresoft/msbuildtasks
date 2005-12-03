@@ -67,7 +67,7 @@
     <Zip Files="@(ZipFiles)" 
          ZipFileName="MSBuild.Community.Tasks.zip" />
 
-    <Zip Files="@(RepoFiles)"
+    <Zip Files="@(RepoFiles)" WorkingDirectory="D:\svn\repo" 
          ZipFileName="D:\svn\repo.zip" />
   </Target>
 
