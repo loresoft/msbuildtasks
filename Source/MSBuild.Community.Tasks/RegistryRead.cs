@@ -97,7 +97,7 @@ namespace MSBuild.Community.Tasks
             _value = Registry.GetValue(_keyName, _valueName, _defaultValue).ToString();
             _value = _value ?? string.Empty;
 
-            Log.LogMessage("Read Windows Registry");
+            Log.LogMessage(Properties.Resources.RegistryRead);
             Log.LogMessage("[{0}]", _keyName);
             if(string.IsNullOrEmpty(_valueName))
                 Log.LogMessage("@=\"{0}\"", _value);

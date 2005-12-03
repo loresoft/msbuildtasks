@@ -47,7 +47,7 @@ namespace MSBuild.Community.Tasks.Test
         {
             NDoc task = new NDoc();
             task.BuildEngine = new MockBuild();
-            task.ProjectFilePath = @"..\..\..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.ndoc";
+            task.ProjectFilePath = @"..\..\..\..\Documentation\MSBuild.Community.Tasks.ndoc";
             task.Documenter = "MSDN";
             Assert.IsTrue(task.Execute(), "Execute Failed");
         }

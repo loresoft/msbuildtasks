@@ -50,18 +50,18 @@ namespace MSBuild.Community.Tasks.Test
             Zip task = new Zip();
             task.BuildEngine = new MockBuild();
 
-            string[] files = Directory.GetFiles(@"D:\svn\repo", "*.*", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(@"..\..\..\MSBuild.Community.Tasks", "*.*", SearchOption.TopDirectoryOnly);
             Array.Reverse(files, 0, files.Length);
 
             TaskItem[] items = TaskUtility.StringArrayToItemArray(files);
 
             task.Files = items;
-            task.ZipFileName = @"D:\svn\repo.zip";
+            task.ZipFileName = @"..\..\..\MSBuild.Community.Tasks.zip";
 
             bool result = task.Execute();
 
             Assert.IsTrue(result, "Execute Failed");
-            Assert.IsTrue(File.Exists(@"D:\svn\repo.zip"), "Zip file not found");
+            Assert.IsTrue(File.Exists(@"..\..\..\MSBuild.Community.Tasks.zip"), "Zip file not found");
         }
     }
 }

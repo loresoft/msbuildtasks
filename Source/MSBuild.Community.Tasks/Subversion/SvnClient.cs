@@ -276,7 +276,7 @@ namespace MSBuild.Community.Tasks.Subversion
         {
             if (string.IsNullOrEmpty(_command))
             {
-                Log.LogError(MSBuild.Community.Tasks.Properties.Resources.ParameterRequired, "SvnClient", "Command");
+                Log.LogError(Properties.Resources.ParameterRequired, "SvnClient", "Command");
                 return false;
             }
             return base.ValidateParameters();

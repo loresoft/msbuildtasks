@@ -29,7 +29,6 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public FtpUpload()
         {
-            _usePassive = false;
             _username = "anonymous";
             _password = string.Empty;
         }
@@ -107,14 +106,20 @@ namespace MSBuild.Community.Tasks
             FileInfo localFile = new FileInfo(_localFile);
             if (!localFile.Exists)
             {
-                Log.LogError("Local File Not Found: {0}", _localFile);
+                Log.LogError(Properties.Resources.FtpLocalNotFound, _localFile);
                 return false;
             }
 
-            Log.LogMessage("Uploading \"{0}\"", _localFile);
-            Log.LogMessage("  to \"{0}\"\n", _remoteUri);
+            Log.LogMessage(Properties.Resources.FtpUploading, _localFile, _remoteUri);
 
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(_remoteUri);
+            Uri ftpUri;
+            if (!Uri.TryCreate(_remoteUri, UriKind.Absolute, out ftpUri))
+            {
+                Log.LogError(Properties.Resources.FtpUriInvalid, _remoteUri);
+                return false;
+            }
+
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUri);
             request.Method = WebRequestMethods.Ftp.UploadFile;
             request.UseBinary = true;
             request.ContentLength = localFile.Length;
@@ -146,22 +151,19 @@ namespace MSBuild.Community.Tasks
                         if (watch.ElapsedMilliseconds - progressUpdated > 5000)
                         {
                             progressUpdated = watch.ElapsedMilliseconds;
-                            Log.LogMessage("  {0}% Complete ({1})",
+                            Log.LogMessage(Properties.Resources.FtpPercentComplete,
                                 wroteBytes * 100 / totalBytes,
                                 FormatBytesPerSecond(wroteBytes, watch.Elapsed.TotalSeconds, 1));
                         }
                     }
                     while (readBytes != 0);
-
-                    requestStream.Close();
-                    fileStream.Close();
                 }
                 watch.Stop();
 
                 using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
                 {
-                    Log.LogMessage("Upload File Complete, {0}", response.StatusDescription);
-                    Log.LogMessage("Transfered {0} ({1}) in {2}",
+                    Log.LogMessage(Properties.Resources.FtpUploadComplete, response.StatusDescription);
+                    Log.LogMessage(Properties.Resources.FtpTransfered,
                         FormatByte(totalBytes, 1),
                         FormatBytesPerSecond(totalBytes, watch.Elapsed.TotalSeconds, 1),
                         watch.Elapsed.ToString());

@@ -60,7 +60,7 @@ namespace MSBuild.Community.Tasks.Math
         /// </returns>
         public override bool Execute()
         {
-            throw new Exception("The method or operation is not implemented.");
+            return true;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace MSBuild.Community.Tasks.Math
                 bool isParsed = decimal.TryParse(numbers[x], out converted);
                 if (!isParsed)
                 {
-                    Log.LogError("\"{0}\" is not a number.", numbers[x]);
+                    Log.LogError(Properties.Resources.MathNotNumber, numbers[x]);
                     result[x] = 0;
                 }
                 else

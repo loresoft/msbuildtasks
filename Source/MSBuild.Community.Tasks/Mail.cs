@@ -30,7 +30,6 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public Mail()
         {
-            _isBodyHtml = false;
             _priority = "Normal";
         }
 
@@ -161,57 +160,72 @@ namespace MSBuild.Community.Tasks
         /// <returns>Returns true if successful</returns>
         public override bool Execute()
         {
-            Log.LogMessage("Emailing \"{0}\".", _to);
+            Log.LogMessage(Properties.Resources.MailEmailing, _to);
+            SmtpClient smtp = null;
+            MailMessage message = null;
 
-            SmtpClient smtp = new SmtpClient();
-            smtp.Host = _smtpServer;
-            smtp.UseDefaultCredentials = true;
-
-            MailMessage message = new MailMessage();
-
-            message.From = new MailAddress(_from);
-            message.Subject = _subject;
-            message.IsBodyHtml = _isBodyHtml;
-            message.Body = _body;
-
-            foreach (string to in _to)
+            try
             {
-                message.To.Add(new MailAddress(to));
-            }
+                smtp = new SmtpClient();
+                smtp.Host = _smtpServer;
+                smtp.UseDefaultCredentials = true;
 
-            if (_cc != null && _cc.Length > 0)
-            {
-                foreach (string cc in _cc)
+                message = new MailMessage();
+
+                message.From = new MailAddress(_from);
+                message.Subject = _subject;
+                message.IsBodyHtml = _isBodyHtml;
+                message.Body = _body;
+
+                foreach (string to in _to)
                 {
-                    message.CC.Add(new MailAddress(cc));
+                    message.To.Add(new MailAddress(to));
                 }
-            }
 
-            if (_bcc != null && _bcc.Length > 0)
-            {
-                foreach (string bcc in _bcc)
+                if (_cc != null && _cc.Length > 0)
                 {
-                    message.Bcc.Add(new MailAddress(bcc));
+                    foreach (string cc in _cc)
+                    {
+                        message.CC.Add(new MailAddress(cc));
+                    }
                 }
-            }
 
-            if (_attachments != null && _attachments.Length > 0)
-            {
-                foreach (string attachment in _attachments)
+                if (_bcc != null && _bcc.Length > 0)
                 {
-                    message.Attachments.Add(new Attachment(attachment));
+                    foreach (string bcc in _bcc)
+                    {
+                        message.Bcc.Add(new MailAddress(bcc));
+                    }
                 }
+
+                if (_attachments != null && _attachments.Length > 0)
+                {
+                    foreach (string attachment in _attachments)
+                    {
+                        message.Attachments.Add(new Attachment(attachment));
+                    }
+                }
+
+                if (string.Compare(_priority, "High", true) == 0)
+                    message.Priority = MailPriority.High;
+                else if (string.Compare(_priority, "Low", true) == 0)
+                    message.Priority = MailPriority.Low;
+                else
+                    message.Priority = MailPriority.Normal;
+
+                smtp.Send(message);
             }
-
-            if (string.Compare(_priority, "High", true) == 0)
-                message.Priority = MailPriority.High;
-            else if (string.Compare(_priority, "Low", true) == 0)
-                message.Priority = MailPriority.Low;
-            else
-                message.Priority = MailPriority.Normal;
-
-            smtp.Send(message);
-
+            catch (Exception ex)
+            {
+                Log.LogErrorFromException(ex);
+                return false;
+            }
+            finally
+            {
+                if(message == null)
+                    message.Dispose();
+            }
+            
             return true;
         }
     }

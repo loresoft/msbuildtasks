@@ -67,7 +67,7 @@ namespace MSBuild.Community.Tasks
         {
             if (!File.Exists(_zipFileName))
             {
-                Log.LogError("Zip File Not Found: {0}", _zipFileName);
+                Log.LogError(Properties.Resources.ZipFileNotFound, _zipFileName);
                 return false;
             }
 
@@ -83,24 +83,23 @@ namespace MSBuild.Community.Tasks
             FastZip zip = new FastZip(events);
             zip.CreateEmptyDirectories = false;
 
-            Log.LogMessage("Unzip File \"{0}\"", _zipFileName);
-            Log.LogMessage("  to Directory \"{0}\"\n", _targetDirectory);
+            Log.LogMessage(Properties.Resources.UnzipFileToDirectory, _zipFileName, _targetDirectory);
             zip.ExtractZip(_zipFileName, _targetDirectory, null);
-            Log.LogMessage("Unzipped file \"{0}\" successfully.\n", _zipFileName); 
+            Log.LogMessage(Properties.Resources.UnzipSuccessfully, _zipFileName); 
 
             return true;
         }
 
         private void ProcessFile(object sender, ScanEventArgs e)
         {
-            Log.LogMessage("  extracted \"{0}\"", e.Name);            
+            Log.LogMessage(Properties.Resources.UnzipExtracted, e.Name);            
         }
 
         private void ProcessDirectory(object sender, DirectoryEventArgs e)
         {
             if (!e.HasMatchingFiles)
             {
-                Log.LogMessage("  extracted \"{0}\"", e.Name);
+                Log.LogMessage(Properties.Resources.UnzipExtracted, e.Name);
             }
         }
     }

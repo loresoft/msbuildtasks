@@ -30,7 +30,7 @@ namespace MSBuild.Community.Tasks.Subversion
         {
             if (string.IsNullOrEmpty(base.LocalPath))
             {
-                Log.LogError(MSBuild.Community.Tasks.Properties.Resources.ParameterRequired, "SvnUpdate", "LocalPath");
+                Log.LogError(Properties.Resources.ParameterRequired, "SvnUpdate", "LocalPath");
                 return false;
             }
             return base.ValidateParameters();

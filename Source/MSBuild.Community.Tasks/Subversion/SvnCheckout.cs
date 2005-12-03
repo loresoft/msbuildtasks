@@ -41,7 +41,7 @@ namespace MSBuild.Community.Tasks.Subversion
         {
             if (string.IsNullOrEmpty(base.RepositoryPath))
             {
-                Log.LogError(MSBuild.Community.Tasks.Properties.Resources.ParameterRequired, "SvnCheckout", "RepositoryPath");
+                Log.LogError(Properties.Resources.ParameterRequired, "SvnCheckout", "RepositoryPath");
                 return false;
             }
             return base.ValidateParameters();

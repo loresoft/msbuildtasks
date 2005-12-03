@@ -117,7 +117,101 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FileNotFound" xml:space="preserve">
+    <value>File Not Found: {0}</value>
+  </data>
+  <data name="FtpLocalNotFound" xml:space="preserve">
+    <value>Local File Not Found: {0}</value>
+  </data>
+  <data name="FtpPercentComplete" xml:space="preserve">
+    <value>  {0}% Complete ({1})</value>
+  </data>
+  <data name="FtpTransfered" xml:space="preserve">
+    <value>Transfered {0} ({1}) in {2}</value>
+  </data>
+  <data name="FtpUploadComplete" xml:space="preserve">
+    <value>Upload File Complete, {0}</value>
+  </data>
+  <data name="FtpUploading" xml:space="preserve">
+    <value>Uploading "{0}"
+   to "{1}"
+</value>
+  </data>
+  <data name="FtpUriInvalid" xml:space="preserve">
+    <value>The URI "{0}" scheme is not valid.</value>
+  </data>
+  <data name="MailEmailing" xml:space="preserve">
+    <value>Emailing "{0}".</value>
+  </data>
+  <data name="MathNotNumber" xml:space="preserve">
+    <value>"{0}" is not a number.</value>
+  </data>
   <data name="ParameterRequired" xml:space="preserve">
     <value>The "{0}" task was not given a value for the required parameter "{1}".</value>
+  </data>
+  <data name="RegistryRead" xml:space="preserve">
+    <value>Read Windows Registry</value>
+  </data>
+  <data name="RegistryWrite" xml:space="preserve">
+    <value>Write Windows Registry</value>
+  </data>
+  <data name="SvnLocalPathNotWorkCopy" xml:space="preserve">
+    <value>LocalPath is not a working subversion copy.</value>
+  </data>
+  <data name="UnzipExtracted" xml:space="preserve">
+    <value>  extracted "{0}"</value>
+  </data>
+  <data name="UnzipFileToDirectory" xml:space="preserve">
+    <value>Unzip File "{0}"
+    to Directory "{1}"
+</value>
+  </data>
+  <data name="UnzipSuccessfully" xml:space="preserve">
+    <value>Unzipped file "{0}" successfully.</value>
+  </data>
+  <data name="VersionFileNotFound" xml:space="preserve">
+    <value>Version file "{0}" not found .</value>
+  </data>
+  <data name="VersionRead" xml:space="preserve">
+    <value>Version "{0}" read from file "{1}".</value>
+  </data>
+  <data name="VersionReadException" xml:space="preserve">
+    <value>Unable to read version number from "{0}". {1}</value>
+  </data>
+  <data name="VersionWriteException" xml:space="preserve">
+    <value>Unable to write version number to "{0}". {1}"</value>
+  </data>
+  <data name="VersionWrote" xml:space="preserve">
+    <value>Version "{0}" wrote to file "{1}".</value>
+  </data>
+  <data name="XmlReadDocument" xml:space="preserve">
+    <value>Reading Xml Document "{0}".</value>
+  </data>
+  <data name="XmlReadNodes" xml:space="preserve">
+    <value>  {0} node(s) selected for read.</value>
+  </data>
+  <data name="XmlReadResult" xml:space="preserve">
+    <value>XmlRead Result: "{0}"</value>
+  </data>
+  <data name="XmlUpdateDocument" xml:space="preserve">
+    <value>Updating Xml Document "{0}".</value>
+  </data>
+  <data name="XmlUpdateNodes" xml:space="preserve">
+    <value>  {0} node(s) selected for update.</value>
+  </data>
+  <data name="XmlUpdateResult" xml:space="preserve">
+    <value>XmlUpdate Wrote: "{0}"</value>
+  </data>
+  <data name="ZipAdded" xml:space="preserve">
+    <value>  added "{0}"</value>
+  </data>
+  <data name="ZipCreating" xml:space="preserve">
+    <value>Creating zip file "{0}".</value>
+  </data>
+  <data name="ZipFileNotFound" xml:space="preserve">
+    <value>Zip File Not Found: {0}</value>
+  </data>
+  <data name="ZipSuccessfully" xml:space="preserve">
+    <value>Created zip file "{0}" successfully.</value>
   </data>
 </root>

@@ -21,15 +21,17 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\MSBuild.Community.Tasks.xml</DocumentationFile>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\..\Build\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\MSBuild.Community.Tasks.xml</DocumentationFile>
+    <DocumentationFile>..\..\Build\MSBuild.Community.Tasks.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
@@ -75,7 +77,7 @@
     <Compile Include="Zip.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\Documentation\MSBuild.Community.Tasks.chm">
+    <Content Include="..\..\Documentation\MSBuild.Community.Tasks.chm">
       <Link>MSBuild.Community.Tasks.chm</Link>
     </Content>
     <None Include="MSBuild.Community.Tasks.snk" />

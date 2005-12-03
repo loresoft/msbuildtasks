@@ -34,7 +34,6 @@ namespace MSBuild.Community.Tasks
         public Zip()
         {
             _zipLevel = 6;
-            _flatten = false;
         }
 
         private string _zipFileName;
@@ -160,7 +159,7 @@ namespace MSBuild.Community.Tasks
 
             try
             {
-                Log.LogMessage("Creating zip file \"{0}\".", _zipFileName); 
+                Log.LogMessage(Properties.Resources.ZipCreating, _zipFileName); 
 
                 zs = new ZipOutputStream(File.Create(_zipFileName));
 
@@ -179,7 +178,7 @@ namespace MSBuild.Community.Tasks
                     FileInfo file = new FileInfo(name);
                     if (!file.Exists)
                     {
-                        Log.LogWarning("File not found: '{0}'", file.FullName);
+                        Log.LogWarning(Properties.Resources.FileNotFound, file.FullName);
                         continue;
                     }
 
@@ -189,7 +188,6 @@ namespace MSBuild.Community.Tasks
                     {
                         buffer = new byte[fs.Length];
                         fs.Read(buffer, 0, buffer.Length);
-                        fs.Close();
                     }
 
                     // clean up name
@@ -214,10 +212,10 @@ namespace MSBuild.Community.Tasks
                     zs.PutNextEntry(entry);
                     zs.Write(buffer, 0, buffer.Length);
 
-                    Log.LogMessage("  added \"{0}\"", name);
+                    Log.LogMessage(Properties.Resources.ZipAdded, name);
                 } // foreach file
                 zs.Finish();
-                Log.LogMessage("Created zip file \"{0}\" successfully.\n", _zipFileName); 
+                Log.LogMessage(Properties.Resources.ZipSuccessfully, _zipFileName); 
 
                 return true;
             }

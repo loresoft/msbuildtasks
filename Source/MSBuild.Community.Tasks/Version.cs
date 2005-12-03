@@ -30,14 +30,10 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public Version()
         {
-            _major = 1;
-            _minor = 0;
-            _build = 0;
-            _revision = 0;
         }
         
 #region Properties
-        private int _major;
+        private int _major = 1;
 
         /// <summary>
         /// Gets or sets the major version number.
@@ -154,7 +150,7 @@ namespace MSBuild.Community.Tasks
 
             if (!System.IO.File.Exists(_versionFile))
             {
-                Log.LogWarning("Version file \"{0}\" not found .", _versionFile);
+                Log.LogWarning(Properties.Resources.VersionFileNotFound, _versionFile);
                 return;
             }
 
@@ -167,12 +163,12 @@ namespace MSBuild.Community.Tasks
             }
             catch (Exception ex)
             {
-                Log.LogError("Unable to read version number from \"{0}\". {1}", 
+                Log.LogError(Properties.Resources.VersionReadException, 
                     _versionFile, ex.Message);
                 return;
             }
 
-            Log.LogMessage("Version \"{0}\" read from file \"{1}\".", 
+            Log.LogMessage(Properties.Resources.VersionRead, 
                 textVersion, _versionFile);
 
             try
@@ -181,8 +177,7 @@ namespace MSBuild.Community.Tasks
             }
             catch (Exception ex)
             {
-                Log.LogError("Invalid version string \"{0}\" in file \"{1}\". {2}",
-                    version, _versionFile, ex.Message);
+                Log.LogErrorFromException(ex);
                 return;                
             }
 
@@ -205,17 +200,16 @@ namespace MSBuild.Community.Tasks
                 {
                     writer.Write(version.ToString());
                     writer.Flush();
-                    writer.Close();
                 }
             }
             catch (Exception ex)
             {
-                Log.LogError("Unable to write version number to \"{0}\". {1}",
+                Log.LogError(Properties.Resources.VersionWriteException,
                     _versionFile, ex.Message);
                 return false;
             }
 
-            Log.LogMessage("Version \"{0}\" wrote to file \"{1}\".", 
+            Log.LogMessage(Properties.Resources.VersionWrote, 
                 version.ToString(), _versionFile);
 
             return true;

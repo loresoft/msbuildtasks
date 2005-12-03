@@ -1,9 +1,9 @@
 <project SchemaVersion="1.3">
     <assemblies>
-        <assembly location=".\bin\Debug\MSBuild.Community.Tasks.dll" documentation=".\bin\Debug\MSBuild.Community.Tasks.xml" />
+        <assembly location="..\Build\MSBuild.Community.Tasks.dll" documentation="..\Build\MSBuild.Community.Tasks.xml" />
     </assemblies>
     <referencePaths>
-        <referencePath path="..\..\Libraries" />
+        <referencePath path="..\Libraries" />
     </referencePaths>
     <namespaces>
         <namespace name="MSBuild.Community.Tasks">Tasks for MSBuild</namespace>
@@ -31,7 +31,7 @@
             <property name="Title" value="MSBuild Community Tasks" />
             <property name="ShowVisualBasic" value="True" />
             <property name="SdkLinksOnWeb" value="True" />
-            <property name="CopyrightText" value="MSBuild Community Tasks" />
+            <property name="CopyrightText" value="http://msbuildtasks.tigris.org/" />
             <property name="CopyrightHref" value="http://msbuildtasks.tigris.org/" />
             <property name="DocumentAttributes" value="True" />
             <property name="DocumentedAttributes" value="Output|Required" />

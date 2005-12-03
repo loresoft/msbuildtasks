@@ -116,7 +116,7 @@ namespace MSBuild.Community.Tasks
         {
             try
             {
-                Log.LogMessage("Reading Xml Document \"{0}\".", _xmlFileName);
+                Log.LogMessage(Properties.Resources.XmlReadDocument, _xmlFileName);
                 XPathDocument document = new XPathDocument(_xmlFileName);
                 XPathNavigator navigator = document.CreateNavigator();
                 XmlNamespaceManager manager = new XmlNamespaceManager(navigator.NameTable);
@@ -137,7 +137,7 @@ namespace MSBuild.Community.Tasks
                     case XPathResultType.NodeSet:
                         XPathNodeIterator nodes = navigator.Select(expression);
                         
-                        Log.LogMessage("  {0} node(s) selected for read.", nodes.Count);
+                        Log.LogMessage(Properties.Resources.XmlReadNodes, nodes.Count);
 
                         StringBuilder builder = new StringBuilder();
                         while (nodes.MoveNext())
@@ -157,7 +157,7 @@ namespace MSBuild.Community.Tasks
                 return false;                
             }
 
-            Log.LogMessage("XmlRead Output: \"{0}\"", _value);
+            Log.LogMessage(Properties.Resources.XmlReadResult, _value);
 
             return true;
         }

@@ -57,7 +57,7 @@ namespace MSBuild.Community.Tasks.Test
 
             task = new Version();
             task.BuildEngine = new MockBuild();
-            task.VersionFile = @"..\..\..\version.txt";
+            task.VersionFile = @"version.txt";
             task.BuildType = "Increment";
             task.RevisionType = "Increment";
             Assert.IsTrue(task.Execute(), "Execute Failed");
@@ -68,7 +68,7 @@ namespace MSBuild.Community.Tasks.Test
 
             task = new Version();
             task.BuildEngine = new MockBuild();
-            task.VersionFile = @"..\..\..\version.txt";
+            task.VersionFile = @"version.txt";
             task.BuildType = "Automatic";
             task.RevisionType = "Automatic";
             Assert.IsTrue(task.Execute(), "Execute Failed");

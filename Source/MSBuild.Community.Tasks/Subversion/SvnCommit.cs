@@ -32,7 +32,7 @@ namespace MSBuild.Community.Tasks.Subversion
         {
             if (base.Targets == null || base.Targets.Length == 0)
             {
-                Log.LogError(MSBuild.Community.Tasks.Properties.Resources.ParameterRequired, "SvnCommit", "Targets");
+                Log.LogError(Properties.Resources.ParameterRequired, "SvnCommit", "Targets");
                 return false;
             }
             return base.ValidateParameters();

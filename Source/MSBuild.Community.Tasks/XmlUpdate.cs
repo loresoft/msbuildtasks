@@ -111,7 +111,7 @@ namespace MSBuild.Community.Tasks
         {
             try
             {
-                Log.LogMessage("Updating Xml Document \"{0}\".", _xmlFileName);
+                Log.LogMessage(Properties.Resources.XmlUpdateDocument, _xmlFileName);
                 
                 XmlDocument document = new XmlDocument();
                 document.Load(_xmlFileName);
@@ -127,7 +127,7 @@ namespace MSBuild.Community.Tasks
                 XPathExpression expression = XPathExpression.Compile(_xpath, manager);                
                 XPathNodeIterator nodes = navigator.Select(expression);
 
-                Log.LogMessage("  {0} node(s) selected for update.", nodes.Count);
+                Log.LogMessage(Properties.Resources.XmlUpdateNodes, nodes.Count);
 
                 while (nodes.MoveNext())
                     nodes.Current.SetValue(_value);
@@ -145,7 +145,7 @@ namespace MSBuild.Community.Tasks
                 return false;
             }
 
-            Log.LogMessage("XmlUpdate Wrote: \"{0}\"", _value);
+            Log.LogMessage(Properties.Resources.XmlUpdateResult, _value);
             return true;
         }
     }

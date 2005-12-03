@@ -47,8 +47,8 @@ namespace MSBuild.Community.Tasks.Test
         {
             Unzip task = new Unzip();
             task.BuildEngine = new MockBuild();
-            task.ZipFileName = @"D:\svn\repo.zip";
-            task.TargetDirectory = @"D:\svn\back";
+            task.ZipFileName = @"..\..\..\MSBuild.Community.Tasks.zip";
+            task.TargetDirectory = @"Backup";
 
             Assert.IsTrue(task.Execute(), "Execute Failed");
 

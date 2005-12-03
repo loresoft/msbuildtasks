@@ -82,7 +82,7 @@ namespace MSBuild.Community.Tasks
         {
             Registry.SetValue(_keyName, _valueName, _value);
 
-            Log.LogMessage("Write Windows Registry");
+            Log.LogMessage(Properties.Resources.RegistryWrite);
             Log.LogMessage("[{0}]", _keyName);
             if (string.IsNullOrEmpty(_valueName))
                 Log.LogMessage("@=\"{0}\"", _value);

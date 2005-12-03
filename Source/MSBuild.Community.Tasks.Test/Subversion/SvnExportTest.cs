@@ -51,7 +51,7 @@ namespace MSBuild.Community.Tasks.Test.Subversion
 
             Assert.IsNotNull(export);
 
-            export.LocalPath = @"Test";
+            export.LocalPath = @"Export";
             export.RepositoryPath = "file:///d:/svn/repo/Test/trunk";
             bool result = export.Execute();
 

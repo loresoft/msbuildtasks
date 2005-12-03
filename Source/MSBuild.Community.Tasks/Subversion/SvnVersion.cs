@@ -28,13 +28,8 @@ namespace MSBuild.Community.Tasks.Subversion
     /// </example>
     public class SvnVersion : ToolTask
     {
-        private static readonly Regex _numberRegex;
+        private static readonly Regex _numberRegex = new Regex(@"\d+", RegexOptions.Compiled);
         private StringBuilder _outputBuffer;
-
-        static SvnVersion()
-        {
-            _numberRegex = new Regex(@"\d+", RegexOptions.Compiled);
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:SvnVersion"/> class.
@@ -83,7 +78,7 @@ namespace MSBuild.Community.Tasks.Subversion
             set { _lowRevision = value; }
         }
 
-        private bool _modifications = false;
+        private bool _modifications;
 
         /// <summary>True if working copy contains modifications.</summary>
         [Output]
@@ -93,7 +88,7 @@ namespace MSBuild.Community.Tasks.Subversion
             set { _modifications = value; }
         }
 
-        private bool _switched = false;
+        private bool _switched;
 
         /// <summary>True if working copy is switched.</summary>
         [Output]
@@ -103,7 +98,7 @@ namespace MSBuild.Community.Tasks.Subversion
             set { _switched = value; }
         }
 
-        private bool _exported = false;
+        private bool _exported;
 
         /// <summary>
         /// True if invoked on a directory that is not a working copy, 
@@ -207,10 +202,9 @@ namespace MSBuild.Community.Tasks.Subversion
             _modifications = buffer.Contains("M");
             _switched = buffer.Contains("S");
             _exported = buffer.Contains("exported");
-            if (_exported) Log.LogWarning("LocalPath is not a working subversion copy.");
+            if (_exported) 
+                Log.LogWarning(Properties.Resources.SvnLocalPathNotWorkCopy);
 
-            Debug.WriteLine(string.Format("Revision: {0}; Modifications: {1}; Exported: {2};", 
-                _highRevision, _modifications, _exported));
         }
 
         /// <summary>
