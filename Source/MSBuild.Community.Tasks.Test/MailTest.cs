@@ -48,8 +48,8 @@ namespace MSBuild.Community.Tasks.Test
             Mail task = new Mail();
             task.BuildEngine = new MockBuild();
             task.SmtpServer = "localhost";
-            task.From = "info@loresoft.com";
-            task.To = new string[] { "info@loreosft.com" };
+            task.From = "from@email.com";
+            task.To = new string[] { "user@email.com" };
             task.Subject = "This is a test of Mail Task";
             task.Body = "This is a test email from the Mail Task";
             Assert.IsTrue(task.Execute(), "Execute Failed");

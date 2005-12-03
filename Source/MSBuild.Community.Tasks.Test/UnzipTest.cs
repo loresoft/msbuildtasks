@@ -45,9 +45,12 @@ namespace MSBuild.Community.Tasks.Test
         [TestMethod]
         public void UnzipExecute()
         {
+            ZipTest zip = new ZipTest();
+            zip.ZipExecute();
+
             Unzip task = new Unzip();
             task.BuildEngine = new MockBuild();
-            task.ZipFileName = @"..\..\..\MSBuild.Community.Tasks.zip";
+            task.ZipFileName = @"MSBuild.Community.Tasks.zip";
             task.TargetDirectory = @"Backup";
 
             Assert.IsTrue(task.Execute(), "Execute Failed");

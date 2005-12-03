@@ -17,7 +17,7 @@ namespace MSBuild.Community.Tasks
     /// <Target Name="Mail">
     ///     <Mail SmtpServer="localhost"
     ///         To="user@email.com"
-    ///         From="user@email.com"
+    ///         From="from@email.com"
     ///         Subject="Test Mail Task"
     ///         Body="This is a test of the mail task." />
     /// </Target>

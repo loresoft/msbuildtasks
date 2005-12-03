@@ -39,7 +39,7 @@
   <Target Name="Mail">
     <Mail SmtpServer="localhost"
       To="user@email.com"
-      From="user@email.com"
+      From="from@email.com"
       Subject="Test Mail Task"
       Body="This is a test of the mail task." />
   </Target>
@@ -64,16 +64,18 @@
   </ItemGroup>
 
   <Target Name="Zip">
+    <MakeDir Directories="Test" />
+
     <Zip Files="@(ZipFiles)" 
-         ZipFileName="MSBuild.Community.Tasks.zip" />
+         ZipFileName="Test\MSBuild.Community.Tasks.zip" />
 
     <Zip Files="@(RepoFiles)" WorkingDirectory="D:\svn\repo" 
          ZipFileName="D:\svn\repo.zip" />
   </Target>
 
-  <Target Name="Unzip">
-    <Unzip ZipFileName="MSBuild.Community.Tasks.zip" 
-           TargetDirectory="Backup"/>
+  <Target Name="Unzip" DependsOnTargets="Zip">
+    <Unzip ZipFileName="Test\MSBuild.Community.Tasks.zip" 
+           TargetDirectory="Test\Backup"/>
   </Target>
 
   <Target Name="Math">
@@ -82,6 +84,11 @@
     </Math.Add>
     <Message Text="Add 4+3= $(Result)"/>
 
+    <Math.Add Numbers="4;3;7">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Add>
+    <Message Text="Add 4+3+7= $(Result)"/>
+    
     <Math.Subtract Numbers="10;3">
       <Output TaskParameter="Result" PropertyName="Result" />
     </Math.Subtract>
@@ -100,7 +107,8 @@
   </Target>
 
   <Target Name="Version">
-    <Version VersionFile="number.txt" RevisionType="Increment">
+    <MakeDir Directories="Test" />
+    <Version VersionFile="Test\version.txt" RevisionType="Increment">
       <Output TaskParameter="Major" PropertyName="Major" />
       <Output TaskParameter="Minor" PropertyName="Minor" />
       <Output TaskParameter="Build" PropertyName="Build" />
@@ -112,12 +120,10 @@
 
   <Target Name="NDoc">
     <NDoc Documenter="MSDN" 
-          ProjectFilePath="MSBuild.Community.Tasks.ndoc" />
+          ProjectFilePath="..\..\Documentation\MSBuild.Community.Tasks.ndoc" />
     <Copy SourceFiles="doc\MSBuild.Community.Tasks.chm" 
-          DestinationFolder="$(MSBuildProjectDirectory)" />
-    <Copy SourceFiles="doc\MSBuild.Community.Tasks.chm" 
-          DestinationFolder="$(MSBuildProjectDirectory)\..\..\..\Documentation\" />
-
+          DestinationFolder="$(MSBuildProjectDirectory)\..\..\Documentation\" />
+    <RemoveDir Directories="doc" />
   </Target>
 
   <Target Name="Registry">
@@ -135,9 +141,9 @@
 
   </Target>
 
-  <Target Name="FTP">
+  <Target Name="FTP" DependsOnTargets="Zip">
     <FtpUpload 
-      LocalFile="MSBuild.Community.Tasks.zip" 
+      LocalFile="Test\MSBuild.Community.Tasks.zip" 
       RemoteUri="ftp://localhost/MSBuild.Community.Tasks.zip" />
 
   </Target>

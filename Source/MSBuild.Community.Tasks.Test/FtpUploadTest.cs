@@ -45,10 +45,13 @@ namespace MSBuild.Community.Tasks.Test
         [TestMethod]
         public void FtpExecute()
         {
+            ZipTest zip = new ZipTest();
+            zip.ZipExecute(); 
+            
             FtpUpload task = new FtpUpload();
             task.BuildEngine = new MockBuild();
-            task.LocalFile = @"D:\svn\repo.zip";
-            task.RemoteUri = "ftp://localhost/repo.zip";
+            task.LocalFile = @"MSBuild.Community.Tasks.zip";
+            task.RemoteUri = "ftp://localhost/MSBuild.Community.Tasks.zip";
             Assert.IsTrue(task.Execute(), "Execute Failed");
 
         }

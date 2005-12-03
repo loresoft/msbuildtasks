@@ -25,6 +25,17 @@ namespace MSBuild.Community.Tasks
     ///         ZipFileName="MSBuild.Community.Tasks.zip" />
     /// </Target>
     /// ]]></code>
+    /// Create a zip file using a working directory.
+    /// <code><![CDATA[
+    /// <ItemGroup>
+    ///     <RepoFiles Include="D:\svn\repo\**\*.*" />
+    /// </ItemGroup>
+    /// <Target Name="Zip">
+    ///     <Zip Files="@(RepoFiles)" 
+    ///         WorkingDirectory="D:\svn\repo" 
+    ///         ZipFileName="D:\svn\repo.zip" />
+    /// </Target>
+    /// ]]></code>
     /// </example>
     public class Zip : Task
     {
