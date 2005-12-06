@@ -70,6 +70,7 @@
     <Compile Include="SourceSafe\VssCheckout.cs" />
     <Compile Include="SourceSafe\VssAdd.cs" />
     <Compile Include="SourceSafe\VssGet.cs" />
+    <Compile Include="SourceSafe\VssHistory.cs" />
     <Compile Include="SourceSafe\VssLabel.cs" />
     <Compile Include="Subversion\SvnCheckout.cs" />
     <Compile Include="Subversion\SvnCommit.cs" />
