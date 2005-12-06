@@ -54,6 +54,7 @@
     <Compile Include="Math\MathBase.cs" />
     <Compile Include="Math\Multiple.cs" />
     <Compile Include="Math\Subtract.cs" />
+    <Compile Include="Move.cs" />
     <Compile Include="NDoc.cs" />
     <Compile Include="NUnit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,6 +65,12 @@
     </Compile>
     <Compile Include="RegistryRead.cs" />
     <Compile Include="RegistryWrite.cs" />
+    <Compile Include="SourceSafe\VssBase.cs" />
+    <Compile Include="SourceSafe\VssCheckin.cs" />
+    <Compile Include="SourceSafe\VssCheckout.cs" />
+    <Compile Include="SourceSafe\VssAdd.cs" />
+    <Compile Include="SourceSafe\VssGet.cs" />
+    <Compile Include="SourceSafe\VssLabel.cs" />
     <Compile Include="Subversion\SvnCheckout.cs" />
     <Compile Include="Subversion\SvnCommit.cs" />
     <Compile Include="Subversion\SvnExport.cs" />
@@ -71,6 +78,7 @@
     <Compile Include="Subversion\SvnVersion.cs" />
     <Compile Include="Subversion\SvnUpdate.cs" />
     <Compile Include="Unzip.cs" />
+    <Compile Include="Vault\VaultClient.cs" />
     <Compile Include="Version.cs" />
     <Compile Include="XmlRead.cs" />
     <Compile Include="XmlUpdate.cs" />

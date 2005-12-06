@@ -35,22 +35,14 @@ using Microsoft.Build.Framework;
 
 // $Id$
 
-namespace MSBuild.Community.Tasks
+namespace MSBuild.Community.Tasks.SourceSafe
 {
-    /// <summary>
-    /// TODO ...
-    /// </summary>
-    public class Move : Task
+    public class VssGet : VssBase
     {
-        /// <summary>
-        /// When overridden in a derived class, executes the task.
-        /// </summary>
-        /// <returns>
-        /// true if the task successfully executed; otherwise, false.
-        /// </returns>
         public override bool Execute()
         {
             throw new Exception("The method or operation is not implemented.");
         }
+
     }
 }
