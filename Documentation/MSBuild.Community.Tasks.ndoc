@@ -23,7 +23,7 @@
         </documenter>
         <documenter name="LinearHtml">
             <property name="OutputDirectory" value=".\doc\" />
-            <property name="Title" value="An NDoc Documented Class Library" />
+            <property name="Title" value="MSBuild Community Tasks" />
         </documenter>
         <documenter name="MSDN">
             <property name="OutputDirectory" value=".\doc\" />
