@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Build.Framework;
 
-namespace MSBuild.Community.Tasks.Test
+namespace MSBuild.Community.Tasks.Tests
 {
     /// <summary>
     /// Build Engine Used for Testing Tasks

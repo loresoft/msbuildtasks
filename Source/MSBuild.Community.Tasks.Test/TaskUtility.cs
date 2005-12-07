@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Build.Utilities;
 
-namespace MSBuild.Community.Tasks.Test
+namespace MSBuild.Community.Tasks.Tests
 {
     public class TaskUtility
     {
