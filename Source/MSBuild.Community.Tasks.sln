@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		MSBuild.Community.Tasks\Task.proj = MSBuild.Community.Tasks\Task.proj
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Community.Tasks.Test", "MSBuild.Community.Tasks.Test\MSBuild.Community.Tasks.Test.csproj", "{5AC1D006-CA56-4BE1-8250-DBEABBEA0725}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Community.Tasks.Tests", "MSBuild.Community.Tasks.Tests\MSBuild.Community.Tasks.Tests.csproj", "{5AC1D006-CA56-4BE1-8250-DBEABBEA0725}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MSBuild.Community.Tasks.Setup", "MSBuild.Community.Tasks.Setup\MSBuild.Community.Tasks.Setup.vdproj", "{716F9DA1-3990-4F25-A8BF-1C35AEC0BDD0}"
 EndProject
