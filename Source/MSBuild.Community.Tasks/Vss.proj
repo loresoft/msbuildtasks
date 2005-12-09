@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <Import Project="MSBuild.Community.Tasks.Targets"/>
+
+  <Target Name="Default">
+    <!--<CallTarget Targets="Get" />-->
+    <CallTarget Targets="CheckOut" />
+    <CallTarget Targets="UndoCheckOut" />
+    <CallTarget Targets="Label" />
+    <CallTarget Targets="Add" />
+    <!--<CallTarget Targets="CheckOutRecursive" />
+    <CallTarget Targets="UndoCheckOutRecursive" />-->
+  </Target>
+
+  <Target Name="Add">
+    <VssAdd UserName="ccnet_build"
+      Password="build"
+      Files="File1.cs;File2.cs"
+      DatabasePath="\\ir-cmsutil\VSS2\srcsafe.ini"
+      Path="$/IrUtil.3.1"
+    />
+  </Target>
+  
+  <Target Name="Get">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\Test\Vss" />
+    <VssGet UserName="ccnet_build"
+      Password="build"
+      LocalPath="$(MSBuildProjectDirectory)\Test\Vss"
+      Recursive="False"
+      DatabasePath="\\ir-cmsutil\VSS2\srcsafe.ini"
+      Path="$/IrUtil.3.1"
+    />
+  </Target>
+  
+  <Target Name="CheckOut">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\Test\Vss"/>
+    <VssCheckout UserName="ccnet_build"
+       Password="build"
+       LocalPath="$(MSBuildProjectDirectory)\Test\Vss"
+       Recursive="False"
+       DatabasePath="\\ir-cmsutil\VSS2\srcsafe.ini"
+       Path="$/Test/TestFile.cs"
+     />
+  </Target>
+
+  <Target Name="Label">
+    <VssLabel UserName="ccnet_build"
+       Password="build"
+       Recursive="True"
+       DatabasePath="\\ir-cmsutil\VSS2\srcsafe.ini"
+       Path="$/Test"
+       Label="Test Label"
+       Comment="Test Comment"
+     />
+  </Target>
+
+  <Target Name="UndoCheckOut">
+    <VssUndoCheckout UserName="ccnet_build"
+       Password="build"
+       LocalPath="$(MSBuildProjectDirectory)\Test\Vss\TestFile.cs"
+       Recursive="False"
+       DatabasePath="\\ir-cmsutil\VSS2\srcsafe.ini"
+       Path="$/Test/TestFile.cs"
+     />
+  </Target>
+
+  <Target Name="CheckOutRecursive">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\Test\Vss"/>
+    <VssCheckout UserName="ccnet_build"
+       Password="build"
+       LocalPath="$(MSBuildProjectDirectory)\Test\Vss"
+       Recursive="True"
+       DatabasePath="\\ir-cmsutil\VSS2\srcsafe.ini"
+       Path="$/Test"
+     />
+  </Target>
+
+  <Target Name="UndoCheckOutRecursive">
+    <VssUndoCheckout UserName="ccnet_build"
+       Password="build"
+       LocalPath="$(MSBuildProjectDirectory)\Test\Vss"
+       Recursive="True"
+       DatabasePath="\\ir-cmsutil\VSS2\srcsafe.ini"
+       Path="$/Test/TestFile.cs"
+     />
+  </Target>
+</Project>

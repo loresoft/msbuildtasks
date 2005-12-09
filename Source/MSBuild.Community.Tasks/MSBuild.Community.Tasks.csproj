@@ -38,6 +38,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.SourceSafeTypeLib, Version=5.1.0.0, Culture=neutral, PublicKeyToken=e8bf2261941c3948, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\Interop.SourceSafeTypeLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks" />
     <Reference Include="Microsoft.Build.Utilities" />
@@ -69,9 +73,12 @@
     <Compile Include="SourceSafe\VssCheckin.cs" />
     <Compile Include="SourceSafe\VssCheckout.cs" />
     <Compile Include="SourceSafe\VssAdd.cs" />
+    <Compile Include="SourceSafe\VssDiff.cs" />
     <Compile Include="SourceSafe\VssGet.cs" />
     <Compile Include="SourceSafe\VssHistory.cs" />
     <Compile Include="SourceSafe\VssLabel.cs" />
+    <Compile Include="SourceSafe\VssRecursiveBase.cs" />
+    <Compile Include="SourceSafe\VssUndoCheckout.cs" />
     <Compile Include="SQL.cs" />
     <Compile Include="Subversion\SvnCheckout.cs" />
     <Compile Include="Subversion\SvnCommit.cs" />

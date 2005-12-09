@@ -26,7 +26,6 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 */
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,17 +34,15 @@ using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 using SourceSafeTypeLib;
 
-// $Id$
-
 namespace MSBuild.Community.Tasks.SourceSafe
 {
     /// <summary>
-    /// Task that executes a checkout of files or projects
+    /// Task that undoes a checkout of files or projects
     /// against a Visual SourceSafe database.
     /// </summary>
     /// <example>
     /// <para></para>
-    /// <code><![CDATA[<VssCheckout UserName="ccnet_build"
+    /// <code><![CDATA[<VssUndoCheckout UserName="ccnet_build"
     ///   Password="build"
     ///   LocalPath="C:\Dev\MyProjects\Project"
     ///   Recursive="False"
@@ -54,10 +51,9 @@ namespace MSBuild.Community.Tasks.SourceSafe
     /// />
     /// ]]></code>
     /// </example>
-    public class VssCheckout : VssRecursiveBase
+    public class VssUndoCheckout : VssRecursiveBase
     {
         private string _localPath;
-        private bool _writable = false;
 
         /// <summary>
         /// The path to the local working directory.
@@ -67,16 +63,6 @@ namespace MSBuild.Community.Tasks.SourceSafe
         {
             get { return _localPath; }
             set { _localPath = value; }
-        }
-
-        /// <summary>
-        /// Determines whether files will be writable once retrieved from
-        /// the repository. The default is <see langword="false"/>.
-        /// </summary>
-        public bool Writable
-        {
-            get { return _writable; }
-            set { _writable = value; }
         }
 
         /// <summary>
@@ -91,26 +77,11 @@ namespace MSBuild.Community.Tasks.SourceSafe
                 FileInfo localPath = new FileInfo(_localPath);
                 ConnectToDatabase();
 
-                int flags = (Recursive ? Convert.ToInt32(RecursiveFlag) : 0) |
-                    (Writable ? Convert.ToInt32(VSSFlags.VSSFLAG_USERRONO) : Convert.ToInt32(VSSFlags.VSSFLAG_USERROYES));
-                
-                //TODO: timestamp stuff
+                int flags = (Recursive ? Convert.ToInt32(RecursiveFlag) : 0);
+                                
+                Item.UndoCheckout(localPath.FullName, flags);
 
-                switch (Item.Type)
-                {
-                    case (int)VSSItemType.VSSITEM_PROJECT:
-                        Item.Checkout("", localPath.FullName, flags);
-                        break;
-                    case (int)VSSItemType.VSSITEM_FILE:
-                        string filePath = System.IO.Path.Combine(
-                            localPath.FullName,
-                            Item.Name
-                        );
-                        Item.Checkout("", filePath, flags);
-                        break;
-                }
-
-                Log.LogMessage(MessageImportance.Normal, "Checked out '{0}'.", Path);
+                Log.LogMessage(MessageImportance.Normal, "Undo of checkout completed for '{0}'.", Path);
                 return true;
             }
             catch (Exception e)

@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\Master.proj = ..\Master.proj
 		MSBuild.Community.Tasks\Subversion.proj = MSBuild.Community.Tasks\Subversion.proj
 		MSBuild.Community.Tasks\Task.proj = MSBuild.Community.Tasks\Task.proj
+		MSBuild.Community.Tasks\Vss.proj = MSBuild.Community.Tasks\Vss.proj
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Community.Tasks.Tests", "MSBuild.Community.Tasks.Tests\MSBuild.Community.Tasks.Tests.csproj", "{5AC1D006-CA56-4BE1-8250-DBEABBEA0725}"
@@ -33,5 +34,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = MSBuild.Community.Tasks.vsmdi
 	EndGlobalSection
 EndGlobal

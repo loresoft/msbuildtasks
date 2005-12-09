@@ -37,8 +37,17 @@ using Microsoft.Build.Framework;
 
 namespace MSBuild.Community.Tasks.SourceSafe
 {
+    /// <summary>
+    /// Generates an XML file containing details of all changes made
+    /// to a Visual SourceSafe project or file between specified labels or dates.
+    /// </summary>
     public class VssHistory : VssBase
     {
+        /// <summary>
+        /// Executes the task.
+        /// </summary>
+        /// <returns><see langword="true"/> if the task ran successfully; 
+        /// otherwise <see langword="false"/>.</returns>
         public override bool Execute()
         {
             throw new NotImplementedException();

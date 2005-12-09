@@ -29,19 +29,90 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
+using SourceSafeTypeLib;
 
 // $Id$
 
 namespace MSBuild.Community.Tasks.SourceSafe
 {
-    public class VssCheckin : VssBase
+    /// <summary>
+    /// Task that executes a checkin against a VSS Database.
+    /// </summary>
+    /// <example>
+    /// <para></para>
+    /// <code><![CDATA[<VssCheckin UserName="ccnet_build"
+    ///   Password="build"
+    ///   LocalPath="C:\Dev\MyProjects\Project\TestFile.cs"
+    ///   Recursive="False"
+    ///   DatabasePath="\\VSSServer\VSS\srcsafe.ini"
+    ///   Path="$/Test/TestFile.cs"
+    /// />
+    /// ]]></code>
+    /// </example>
+    public class VssCheckin : VssRecursiveBase
     {
+        private string _comment = string.Empty;
+        private string _localPath;
+        private bool _writable = false;
+
+        /// <summary>
+        /// The path to the local working directory.
+        /// </summary>
+        [Required]
+        public string LocalPath
+        {
+            get { return _localPath; }
+            set { _localPath = value; }
+        }
+
+        /// <summary>
+        /// Determines whether to leave the file(s) as writable once the
+        /// checkin is complete. The default is <see langword="false"/>.
+        /// </summary>
+        public bool Writable
+        {
+            get { return _writable; }
+            set { _writable = value; }
+        }
+
+        /// <summary>
+        /// The checkin comment.
+        /// </summary>
+        public string Comment
+        {
+            get { return _comment; }
+            set { _comment = value; }
+        }
+
+        /// <summary>
+        /// Executes the task.
+        /// </summary>
+        /// <returns><see langword="true"/> if the task ran successfully; 
+        /// otherwise <see langword="false"/>.</returns>
         public override bool Execute()
         {
-            throw new Exception("The method or operation is not implemented.");
+            try
+            {
+                FileInfo localPath = new FileInfo(_localPath);
+                ConnectToDatabase();
+
+                int flags = (Recursive ? Convert.ToInt32(RecursiveFlag) : 0) |
+                    (Writable ? Convert.ToInt32(VSSFlags.VSSFLAG_USERRONO) : Convert.ToInt32(VSSFlags.VSSFLAG_USERROYES));
+
+                Item.Checkin(Comment, localPath.FullName, flags);
+
+                Log.LogMessage(MessageImportance.Normal, "Checked in '{0}'.", Path);
+                return true;
+            }
+            catch (Exception e)
+            {
+                LogErrorFromException(e);
+                return false;
+            }
         }
     }
 }

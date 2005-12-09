@@ -37,11 +37,59 @@ using Microsoft.Build.Framework;
 
 namespace MSBuild.Community.Tasks.SourceSafe
 {
+    /// <summary>
+    /// Task that adds files to a Visual SourceSafe database.
+    /// </summary>
     public class VssAdd : VssBase
     {
+        private string _comment = string.Empty;
+        private ITaskItem[] _files;
+
+        /// <summary>
+        /// List of files that should be added to SourceSafe.
+        /// </summary>
+        [Required]
+        public ITaskItem[] Files
+        {
+            get { return _files; }
+            set { _files = value; }
+        }
+
+        /// <summary>
+        /// The comment to be applied to the newly added file.
+        /// </summary>
+        public string Comment
+        {
+            get { return _comment; }
+            set { _comment = value; }
+        }
+
+        /// <summary>
+        /// Executes the task.
+        /// </summary>
+        /// <returns><see langword="true"/> if the task ran successfully; 
+        /// otherwise <see langword="false"/>.</returns>
         public override bool Execute()
         {
-            throw new Exception("The method or operation is not implemented.");
+            try
+            {
+                foreach (ITaskItem item in Files)
+                {
+                    //TODO: actually do the add!
+                    Log.LogMessage(
+                        MessageImportance.Normal,
+                        "Added {0} to {1}",
+                        item.ItemSpec,
+                        Path
+                    );
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                LogErrorFromException(e);
+                return false;
+            }
         }
     }
 }

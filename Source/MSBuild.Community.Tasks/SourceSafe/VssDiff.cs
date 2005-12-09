@@ -26,46 +26,21 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 */
 #endregion
-
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
-using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
-using SourceSafeTypeLib;
-
-// $Id$
+using Microsoft.Build.Utilities;
 
 namespace MSBuild.Community.Tasks.SourceSafe
 {
     /// <summary>
-    /// Task that applies a label to a Visual SourceSafe item.
+    /// Task that records differences between the latest version
+    /// or a Visual SourceSafe item and another version or label
+    /// to a file.
     /// </summary>
-    public class VssLabel : VssRecursiveBase
+    public class VssDiff : VssBase
     {
-        string _label;
-        string _comment;
-
-        /// <summary>
-        /// The text of the label.
-        /// </summary>
-        [Required]
-        public string Label
-        {
-            get { return _label; }
-            set { _label = value; }
-        }
-
-        /// <summary>
-        /// An optional comment.
-        /// </summary>
-        public string Comment
-        {
-            get { return _comment; }
-            set { _comment = value; }
-        }
-
         /// <summary>
         /// Executes the task.
         /// </summary>
@@ -73,18 +48,7 @@ namespace MSBuild.Community.Tasks.SourceSafe
         /// otherwise <see langword="false"/>.</returns>
         public override bool Execute()
         {
-            try
-            {
-                ConnectToDatabase();
-                Item.Label(Label, Comment);
-                Log.LogMessage(MessageImportance.Normal, "Applied label '{0}' to '{1}'", Label, Path);
-                return true;
-            }
-            catch (Exception e)
-            {
-                LogErrorFromException(e);
-                return false;
-            }
+            throw new NotImplementedException();
         }
     }
 }
