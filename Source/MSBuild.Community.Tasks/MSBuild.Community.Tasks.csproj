@@ -80,6 +80,7 @@
     <Compile Include="SourceSafe\VssRecursiveBase.cs" />
     <Compile Include="SourceSafe\VssUndoCheckout.cs" />
     <Compile Include="SQL.cs" />
+    <Compile Include="SqlExecute.cs" />
     <Compile Include="Subversion\SvnCheckout.cs" />
     <Compile Include="Subversion\SvnCommit.cs" />
     <Compile Include="Subversion\SvnExport.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Unzip.cs" />
     <Compile Include="Vault\VaultClient.cs" />
     <Compile Include="Version.cs" />
+    <Compile Include="WebDownload.cs" />
     <Compile Include="XmlRead.cs" />
     <Compile Include="XmlUpdate.cs" />
     <Compile Include="Zip.cs" />
