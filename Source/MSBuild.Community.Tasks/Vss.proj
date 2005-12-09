@@ -7,11 +7,15 @@
   <Import Project="MSBuild.Community.Tasks.Targets"/>
 
   <Target Name="Default">
-    <!--<CallTarget Targets="Get" />-->
+
+    <!--
     <CallTarget Targets="CheckOut" />
     <CallTarget Targets="UndoCheckOut" />
     <CallTarget Targets="Label" />
     <CallTarget Targets="Add" />
+    <CallTarget Targets="History" />-->
+    <CallTarget Targets="Diff" />
+    <!--<CallTarget Targets="Get" />-->
     <!--<CallTarget Targets="CheckOutRecursive" />
     <CallTarget Targets="UndoCheckOutRecursive" />-->
   </Target>
@@ -24,13 +28,38 @@
       Path="$/IrUtil.3.1"
     />
   </Target>
+
+  <Target Name="History">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\Test\Vss" />
+    <VssHistory UserName="ccnet_build"
+      Password="build"
+      DatabasePath="\\ir-cmsutil\VSS2\srcsafe.ini"
+      Path="$/Test"
+      FromDate="2005-12-01 00:00" 
+      ToDate="2005-12-10 00:00" 
+      OutputFile="History.xml"
+      Recursive="True"
+    />
+  </Target>
+
+  <Target Name="Diff">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\Test\Vss" />
+    <VssDiff UserName="ccnet_build"
+      Password="build"
+      DatabasePath="\\ir-cmsutil\VSS2\srcsafe.ini"
+      Path="$/Test"
+      OutputFile="Diff.xml"
+      Label="Test Label"
+    />
+  </Target>
   
   <Target Name="Get">
     <MakeDir Directories="$(MSBuildProjectDirectory)\Test\Vss" />
+    <RemoveDir Directories="$(MSBuildProjectDirectory)\Test\Vss\NET" />
     <VssGet UserName="ccnet_build"
       Password="build"
       LocalPath="$(MSBuildProjectDirectory)\Test\Vss"
-      Recursive="False"
+      Recursive="True"
       DatabasePath="\\ir-cmsutil\VSS2\srcsafe.ini"
       Path="$/IrUtil.3.1"
     />

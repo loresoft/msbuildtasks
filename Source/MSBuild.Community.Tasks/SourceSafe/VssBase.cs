@@ -75,8 +75,6 @@ namespace MSBuild.Community.Tasks.SourceSafe
 
         /// <summary>
         /// The name of the user accessing the SourceSafe database.
-        /// TODO: we need to support using the NT login name too.
-        /// at that point, the property will not be required.
         /// </summary>
         [Required]
         public string UserName
