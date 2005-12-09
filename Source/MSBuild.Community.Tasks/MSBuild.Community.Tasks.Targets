@@ -36,4 +36,7 @@
   <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssLabel" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssHistory" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
 
+  <!-- Tasks by Jonesie -->
+  <UsingTask TaskName="MSBuild.Community.Tasks.ExecuteSQL" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+
 </Project>
