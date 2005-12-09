@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="CleanSolution.cs" />
     <Compile Include="FtpUpload.cs" />
     <Compile Include="Mail.cs" />
     <Compile Include="Math\Add.cs" />
@@ -67,8 +68,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="QueryServiceExists.cs" />
+    <Compile Include="QueryServiceStatus.cs" />
     <Compile Include="RegistryRead.cs" />
     <Compile Include="RegistryWrite.cs" />
+    <Compile Include="Script.cs" />
+    <Compile Include="ServiceController.cs" />
+    <Compile Include="Sleep.cs" />
     <Compile Include="SourceSafe\VssBase.cs" />
     <Compile Include="SourceSafe\VssCheckin.cs" />
     <Compile Include="SourceSafe\VssCheckout.cs" />

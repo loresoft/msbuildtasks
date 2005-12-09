@@ -6,7 +6,7 @@ using Microsoft.Build.Utilities;
 namespace MSBuild.Community.Tasks
 {
     /// <summary>
-    /// Task that removes source control binding information amd status
+    /// Task that removes source control binding information and status
     /// files from a solution tree.
     /// </summary>
     /// <remarks>At the moment, this task can only clean solutions with
