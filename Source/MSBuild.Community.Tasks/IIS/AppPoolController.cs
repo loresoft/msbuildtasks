@@ -37,7 +37,7 @@ using Microsoft.Build.Framework;
 
 namespace MSBuild.Community.Tasks.IIS
 {
-    public class CreateAppPool : Task
+    public class AppPoolController : Task
     {
         public override bool Execute()
         {

@@ -35,9 +35,9 @@ using Microsoft.Build.Framework;
 
 // $Id$
 
-namespace MSBuild.Community.Tasks.IIS
+namespace MSBuild.Community.Tasks
 {
-    public class DeleteVirtualDirectory : Task
+    public class FileUpdate :Task
     {
         public override bool Execute()
         {

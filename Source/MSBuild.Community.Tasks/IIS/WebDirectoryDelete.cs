@@ -37,7 +37,7 @@ using Microsoft.Build.Framework;
 
 namespace MSBuild.Community.Tasks.IIS
 {
-    public class CreateVirtualDirectory : Task
+    public class WebDirectoryDelete : Task
     {
         public override bool Execute()
         {

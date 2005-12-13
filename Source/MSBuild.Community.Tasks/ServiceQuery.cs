@@ -8,7 +8,7 @@ namespace MSBuild.Community.Tasks
     /// Task that can determine the status of a specified service
     /// on a target server.
     /// </summary>
-    public class QueryServiceStatus : Task
+    public class ServiceQuery : Task
     {
         /// <summary>
         /// Executes the task.

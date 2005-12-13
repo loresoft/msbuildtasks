@@ -38,21 +38,24 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Interop.SourceSafeTypeLib, Version=5.1.0.0, Culture=neutral, PublicKeyToken=e8bf2261941c3948, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\Interop.SourceSafeTypeLib.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks" />
     <Reference Include="Microsoft.Build.Utilities" />
+    <Reference Include="Microsoft.VisualStudio.SourceSafe.Interop, Version=5.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="CleanSolution.cs" />
+    <Compile Include="FileUpdate.cs" />
+    <Compile Include="SourceSafe\VssClean.cs" />
     <Compile Include="FtpUpload.cs" />
+    <Compile Include="IIS\AppPoolCreate.cs" />
+    <Compile Include="IIS\WebDirectoryCreate.cs" />
+    <Compile Include="IIS\AppPoolDelete.cs" />
+    <Compile Include="IIS\WebDirectoryDelete.cs" />
+    <Compile Include="IIS\AppPoolController.cs" />
     <Compile Include="Mail.cs" />
     <Compile Include="Math\Add.cs" />
     <Compile Include="Math\Divide.cs" />
@@ -68,8 +71,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="QueryServiceExists.cs" />
-    <Compile Include="QueryServiceStatus.cs" />
+    <Compile Include="ServiceQuery.cs" />
     <Compile Include="RegistryRead.cs" />
     <Compile Include="RegistryWrite.cs" />
     <Compile Include="Script.cs" />
@@ -85,7 +87,6 @@
     <Compile Include="SourceSafe\VssLabel.cs" />
     <Compile Include="SourceSafe\VssRecursiveBase.cs" />
     <Compile Include="SourceSafe\VssUndoCheckout.cs" />
-    <Compile Include="SQL.cs" />
     <Compile Include="SqlExecute.cs" />
     <Compile Include="Subversion\SvnCheckout.cs" />
     <Compile Include="Subversion\SvnCommit.cs" />

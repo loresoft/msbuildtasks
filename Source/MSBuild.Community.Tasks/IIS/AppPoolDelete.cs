@@ -37,7 +37,7 @@ using Microsoft.Build.Framework;
 
 namespace MSBuild.Community.Tasks.IIS
 {
-    public class StopIIS : Task
+    public class AppPoolDelete : Task
     {
         public override bool Execute()
         {

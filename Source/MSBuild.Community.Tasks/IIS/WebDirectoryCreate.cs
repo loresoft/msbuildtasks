@@ -37,7 +37,7 @@ using Microsoft.Build.Framework;
 
 namespace MSBuild.Community.Tasks.IIS
 {
-    public class StartAppPool : Task
+    public class WebDirectoryCreate : Task
     {
         public override bool Execute()
         {

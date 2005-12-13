@@ -177,9 +177,10 @@ namespace MSBuild.Community.Tasks
 
             try
             {
-                Log.LogMessage(Properties.Resources.ZipCreating, _zipFileName); 
-
-                zs = new ZipOutputStream(File.Create(_zipFileName));
+                Log.LogMessage(Properties.Resources.ZipCreating, _zipFileName);
+                
+                FileInfo zipFile = new FileInfo(_zipFileName);
+                zs = new ZipOutputStream(zipFile.Create());
 
                 // make sure level in range
                 _zipLevel = System.Math.Max(0, _zipLevel);
@@ -194,6 +195,11 @@ namespace MSBuild.Community.Tasks
                 {
                     string name = fileItem.ItemSpec;
                     FileInfo file = new FileInfo(name);
+
+                    if (string.Compare(file.FullName, zipFile.FullName, true) == 0)
+                    {
+                        continue; //skip self
+                    }
                     if (!file.Exists)
                     {
                         Log.LogWarning(Properties.Resources.FileNotFound, file.FullName);

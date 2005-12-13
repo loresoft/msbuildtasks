@@ -1,6 +1,6 @@
-#region Copyright © 2005 Paul Welter. All rights reserved.
+#region Copyright © 2005 Peter G Jones. All rights reserved.
 /*
-Copyright © 2005 Paul Welter. All rights reserved.
+Copyright © 2005 Peter G Jones. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
+using System.Data.SqlClient;
 
 // $Id$
 
@@ -41,7 +42,69 @@ namespace MSBuild.Community.Tasks
     {
         public override bool Execute()
         {
-            throw new NotImplementedException();
+            SqlConnection con = null;
+            SqlCommand cmd = null;
+            _result = -1;
+
+            try
+            {
+                con = new SqlConnection(ConnectionString);
+                cmd = new SqlCommand(Command, con);
+                con.Open();
+
+                _result = cmd.ExecuteNonQuery();
+
+                Log.LogMessage("Successfully executed SQL command with result = : " + _result.ToString());
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.LogError("Error executing SQL command: {0}\n{1}", Command, ex.Message);
+                return false;
+            }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        #region private decls
+        private string _conStr;
+        private string _cmd;
+        private int _result;
+        #endregion
+
+        /// <summary>
+        /// The connection string
+        /// </summary>
+        [Required]
+        public string ConnectionString
+        {
+            get { return _conStr; }
+            set { _conStr = value; }
+        }
+
+        /// <summary>
+        /// The command to execute
+        /// </summary>
+        [Required]
+        public string Command
+        {
+            get { return _cmd; }
+            set { _cmd = value; }
+        }
+
+        /// <summary>
+        /// Output the return count/value
+        /// </summary>
+        [Output]
+        public int Result
+        {
+            get
+            {
+                return _result;
+            }
         }
     }
 }
