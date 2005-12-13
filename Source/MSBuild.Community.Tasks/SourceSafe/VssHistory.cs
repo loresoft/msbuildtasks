@@ -34,7 +34,7 @@ using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 using System.Xml;
-using SourceSafeTypeLib;
+using Microsoft.VisualStudio.SourceSafe.Interop;
 
 // $Id: $
 

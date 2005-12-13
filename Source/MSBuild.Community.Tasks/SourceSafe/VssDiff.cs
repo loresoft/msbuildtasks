@@ -33,7 +33,7 @@ using System.Text;
 using System.Xml;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using SourceSafeTypeLib;
+using Microsoft.VisualStudio.SourceSafe.Interop;
 
 namespace MSBuild.Community.Tasks.SourceSafe
 {
