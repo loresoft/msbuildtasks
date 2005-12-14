@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="FileUpdate.cs" />
+    <Compile Include="ServiceController.cs" />
     <Compile Include="SourceSafe\VssClean.cs" />
     <Compile Include="FtpUpload.cs" />
     <Compile Include="IIS\AppPoolCreate.cs" />
@@ -76,8 +77,6 @@
     <Compile Include="RegistryRead.cs" />
     <Compile Include="RegistryWrite.cs" />
     <Compile Include="Script.cs" />
-    <Compile Include="ServiceController.cs">
-    </Compile>
     <Compile Include="Sleep.cs" />
     <Compile Include="SourceSafe\VssBase.cs" />
     <Compile Include="SourceSafe\VssCheckin.cs" />

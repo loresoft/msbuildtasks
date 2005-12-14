@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+  
+  <Import Project="MSBuild.Community.Tasks.Targets"/>
+
+  <Target Name="Test">
+    <CallTarget Targets="DoesServiceExist" />
+    <CallTarget Targets="GetServiceStatus" />
+    <CallTarget Targets="ServiceControllerStuff" />
+  </Target>
+
+  <Target Name="DoesServiceExist">
+    <ServiceQuery ServiceName="MSSQLServer123">
+      <Output TaskParameter="Exists" PropertyName="Exists" />
+      <Output TaskParameter="Status" PropertyName="ServiceStatus" />
+    </ServiceQuery>
+    <Message Text="MSSQLServer Service Exists: $(Exists) - Status: $(ServiceStatus)"/>
+  </Target>
+
+  <Target Name="GetServiceStatus">
+    <ServiceQuery ServiceName="MSSQLServer">
+      <Output TaskParameter="Status" PropertyName="ResultStatus" />
+    </ServiceQuery>
+    <Message Text="MSSQLServer Service Status: $(ResultStatus)"/>
+  </Target>
+
+  <Target Name="ServiceControllerStuff">
+    <ServiceController ServiceName="aspnet_state" Action="Start" />
+    <ServiceController ServiceName="aspnet_state" Action="Stop" />
+  </Target>
+</Project>
