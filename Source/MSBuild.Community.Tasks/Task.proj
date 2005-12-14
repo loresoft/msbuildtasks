@@ -175,5 +175,20 @@
   <Target Name="NUnit">
     <NUnit Assemblies="@(TestAssembly)" />
   </Target>
-          
+
+  <Target Name="FileUpdate" DependsOnTargets="Version">
+    <FileUpdate FileName="Test\version.txt"
+                Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
+                ReplacementText="$1.$2.$3.123" />
+  </Target>
+
+  <Target Name="Service">
+    <ServiceQuery ServiceName="w3svc">
+      <Output TaskParameter="Status" PropertyName="Status" />
+    </ServiceQuery>
+    <Message Text="Web Server: $(Status)"/>
+
+    <ServiceController ServiceName="w3svc" Action="Restart" />
+
+  </Target>
 </Project>

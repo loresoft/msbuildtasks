@@ -76,7 +76,8 @@
     <Compile Include="RegistryRead.cs" />
     <Compile Include="RegistryWrite.cs" />
     <Compile Include="Script.cs" />
-    <Compile Include="ServiceController.cs" />
+    <Compile Include="ServiceController.cs">
+    </Compile>
     <Compile Include="Sleep.cs" />
     <Compile Include="SourceSafe\VssBase.cs" />
     <Compile Include="SourceSafe\VssCheckin.cs" />

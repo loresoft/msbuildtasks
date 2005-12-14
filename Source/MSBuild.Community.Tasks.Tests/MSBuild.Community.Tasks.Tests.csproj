@@ -38,7 +38,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfoTest.cs" />
+    <Compile Include="FileUpdateTest.cs" />
     <Compile Include="MoveTest.cs" />
+    <Compile Include="ServiceQueryTest.cs" />
+    <Compile Include="ServiceControllerTest.cs" />
     <Compile Include="XmlUpdateTest.cs" />
     <Compile Include="FtpUploadTest.cs" />
     <Compile Include="MailTest.cs" />
