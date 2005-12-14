@@ -134,7 +134,7 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         /// <value>The type of the build.</value>
         /// <remarks>
-        /// Possible values include Automatic, Increment, NonIncrement.
+        /// Possible values include Automatic, Increment, NonIncrement, or Date.
         /// </remarks>
         public string BuildType
         {
@@ -252,6 +252,16 @@ namespace MSBuild.Community.Tasks
             return (int)span.TotalDays;
         }
 
+		private int CalculateBuildDate()
+		{
+			DateTime dDate = DateTime.Now;
+			int _month = dDate.Month * 100;
+			int _day = dDate.Day;
+			int _year = (dDate.Year % 2000) * 10000;
+
+			return (_year + _month + _day);
+		}
+
         private void CalculateBuildNumber()
         {
             if (string.Compare(_buildType, "Automatic", true) == 0)
@@ -262,6 +272,10 @@ namespace MSBuild.Community.Tasks
             {
                 _build++;
             }
+			else if (string.Compare(_buildType, "Date", true) == 0)
+			{
+				_build = CalculateBuildDate();
+			}
         }
 
         private void CalculateRevisionNumber()
