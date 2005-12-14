@@ -91,11 +91,7 @@ namespace MSBuild.Community.Tasks
         public override bool Execute()
         {
             int sleepTime = GetSleepTime();
-            if (sleepTime < 0)
-            {
-                Log.LogError("Sleep time cannot be negative.");
-                return false;
-            }
+            sleepTime = System.Math.Max(sleepTime, 0);
 
             Log.LogMessage(MessageImportance.Normal, "Sleeping for {0} milliseconds.", sleepTime);
             Thread.Sleep(sleepTime);
@@ -104,7 +100,8 @@ namespace MSBuild.Community.Tasks
 
         private int GetSleepTime()
         {
-            return ((((int)Hours * 60) + Minutes) * 60 + Seconds) * 1000 + Milliseconds;
+            TimeSpan sleepTime = new TimeSpan(0, 0, _minutes, _seconds, _milliseconds);
+            return sleepTime.TotalMilliseconds;
         }
     }
 }
