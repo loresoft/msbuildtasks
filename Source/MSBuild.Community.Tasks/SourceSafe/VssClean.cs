@@ -6,11 +6,13 @@ using Microsoft.Build.Utilities;
 namespace MSBuild.Community.Tasks.SourceSafe
 {
     /// <summary>
-    /// Task that removes source control binding information and status
-    /// files from a solution tree.
+    /// Task that can strip the source control information from a
+    /// Visual Studio Solution and subprojects.
     /// </summary>
-    /// <remarks>At the moment, this task can only clean solutions with
-    /// that contain C# projects.</remarks>
+    /// <remarks>This task is useful if you keep an archive of the
+    /// source tree at each build milestone, because it's irritating to have
+    /// to remove source control binding manually once you've copied a
+    /// version of the code from your archive.</remarks>
     public class VssClean : Task
     {
         /// <summary>
