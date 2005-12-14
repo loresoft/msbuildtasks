@@ -38,8 +38,17 @@ using System.Data.SqlClient;
 
 namespace MSBuild.Community.Tasks
 {
+    /// <summary>
+    /// Executes a SQL command.
+    /// </summary>
     public class SqlExecute : Task
     {
+        /// <summary>
+        /// When overridden in a derived class, executes the task.
+        /// </summary>
+        /// <returns>
+        /// true if the task successfully executed; otherwise, false.
+        /// </returns>
         public override bool Execute()
         {
             SqlConnection con = null;
