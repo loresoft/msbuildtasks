@@ -101,7 +101,7 @@ namespace MSBuild.Community.Tasks
         private int GetSleepTime()
         {
             TimeSpan sleepTime = new TimeSpan(0, 0, _minutes, _seconds, _milliseconds);
-            return sleepTime.TotalMilliseconds;
+            return (int)sleepTime.TotalMilliseconds;
         }
     }
 }
