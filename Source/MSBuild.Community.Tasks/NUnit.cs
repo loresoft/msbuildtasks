@@ -137,6 +137,21 @@ namespace MSBuild.Community.Tasks
             set { _outputXmlFile = value; }
         }
 
+        private string _workingDirectory;
+
+        /// <summary>
+        /// Gets or sets the working directory.
+        /// </summary>
+        /// <value>The working directory.</value>
+        /// <returns>
+        /// The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
+        /// </returns>
+        public string WorkingDirectory
+        {
+            get { return _workingDirectory; }
+            set { _workingDirectory = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -229,6 +244,17 @@ namespace MSBuild.Community.Tasks
             {
                 return MessageImportance.Normal;
             }
+        }
+        
+        /// <summary>
+        /// Returns the directory in which to run the executable file.
+        /// </summary>
+        /// <returns>
+        /// The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
+        /// </returns>
+        protected override string GetWorkingDirectory()
+        {
+            return string.IsNullOrEmpty(_workingDirectory) ? base.GetWorkingDirectory() : _workingDirectory;
         }
 
     }

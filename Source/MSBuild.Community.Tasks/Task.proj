@@ -120,10 +120,13 @@
 
   <Target Name="NDoc">
     <NDoc Documenter="MSDN" 
-          ProjectFilePath="..\..\Documentation\MSBuild.Community.Tasks.ndoc" />
-    <Copy SourceFiles="doc\MSBuild Community Tasks.chm" 
+          ProjectFilePath="MSBuild.Community.Tasks.ndoc" 
+          WorkingDirectory="..\..\Documentation"/>
+    
+    <Copy SourceFiles="..\..\Documentation\doc\MSBuild Community Tasks.chm" 
           DestinationFiles="..\..\Documentation\MSBuild.Community.Tasks.chm" />
-    <RemoveDir Directories="doc" />
+    
+    <RemoveDir Directories="..\..\Documentation\doc" />
   </Target>
 
   <Target Name="Registry">
