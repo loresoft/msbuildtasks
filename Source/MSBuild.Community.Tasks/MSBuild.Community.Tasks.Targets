@@ -17,9 +17,10 @@
   <UsingTask TaskName="MSBuild.Community.Tasks.Sleep" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Unzip" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Version" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
-  <UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.WebDownload" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.XmlRead" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.XmlUpdate" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
 
   <UsingTask TaskName="MSBuild.Community.Tasks.Math.Add" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Math.Divide" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
