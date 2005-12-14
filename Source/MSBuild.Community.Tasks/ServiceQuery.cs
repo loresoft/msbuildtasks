@@ -146,6 +146,18 @@ namespace MSBuild.Community.Tasks
             get { return _displayName; }
         }
 
+        private bool _exists;
+
+        /// <summary>
+        /// Gets a value indicating whether the service exists.
+        /// </summary>
+        /// <value><c>true</c> if the service exists; otherwise, <c>false</c>.</value>
+        [Output]
+        public bool Exists
+        {
+            get { return _exists; }
+        }
+
         #endregion
 
         
@@ -160,8 +172,16 @@ namespace MSBuild.Community.Tasks
             try
             {
                 controller = GetServiceController();
-                Log.LogMessage("The {0} service on '{1}' is {2}.",
-                      _displayName, _machineName, _status);
+                if (controller != null)
+                {
+                    Log.LogMessage("The {0} service on '{1}' is {2}.",
+                          _displayName, _machineName, _status);
+                }
+                else
+                {
+                    Log.LogMessage("Couldn't find the {0} service on '{1}'",
+                        _serviceName, _machineName);
+                }
             }
             catch (Exception ex)
             {
@@ -187,14 +207,24 @@ namespace MSBuild.Community.Tasks
                 _machineName = Environment.MachineName;
             
             // get handle to service            
-            Service controller = new Service(_serviceName, _machineName);
-            _status = controller.Status.ToString();
-            _canPauseAndContinue = controller.CanPauseAndContinue;
-            _canShutdown = controller.CanShutdown;
-            _canStop = controller.CanStop;
-            _displayName = controller.DisplayName;
+            try
+            {
+                Service controller = new Service(_serviceName, _machineName);
+                _status = controller.Status.ToString();
+                _canPauseAndContinue = controller.CanPauseAndContinue;
+                _canShutdown = controller.CanShutdown;
+                _canStop = controller.CanStop;
+                _displayName = controller.DisplayName;
+                _exists = true;
 
-            return controller;
+                return controller;
+            }
+            catch
+            {
+                _status = "Unknown";
+                _exists = false;
+                return null;
+            }
         }
     }
 }
