@@ -100,10 +100,11 @@ namespace MSBuild.Community.Tasks
             set { _action = (ActionType)Enum.Parse(typeof(ActionType), value); }
         }
 
-        private double _timeout;
+        private double _timeout = TimeSpan.FromSeconds(60).TotalMilliseconds;
 
         /// <summary>
-        /// Gets or sets the timeout for the command.
+        /// Gets or sets the timeout for the command. The default is
+        /// one minute.
         /// </summary>
         /// <value>The timeout for the command.</value>
         public double Timeout
