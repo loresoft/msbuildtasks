@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="FileUpdate.cs" />
+    <Compile Include="FxCop.cs" />
     <Compile Include="ServiceController.cs" />
     <Compile Include="SourceSafe\VssClean.cs" />
     <Compile Include="FtpUpload.cs" />
