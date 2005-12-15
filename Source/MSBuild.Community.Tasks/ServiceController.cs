@@ -273,11 +273,6 @@ namespace MSBuild.Community.Tasks
             return true;
         }
 
-        /// <summary>
-        /// Continues the service identified by <see cref="ServiceName" /> and
-        /// <see cref="MachineName" />.
-        /// </summary>
-        /// <param name="serviceController"><see cref="ServiceController" /> instance for controlling the service identified by <see cref="ServiceName" /> and <see cref="MachineName" />.</param>
         private bool ContinueService(Service serviceController)
         {
             

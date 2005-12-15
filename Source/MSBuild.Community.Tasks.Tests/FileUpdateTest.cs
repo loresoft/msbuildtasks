@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using Microsoft.Build.Utilities;
 
 namespace MSBuild.Community.Tasks.Tests
 {
@@ -16,7 +17,11 @@ namespace MSBuild.Community.Tasks.Tests
 
             FileUpdate task = new FileUpdate();
             task.BuildEngine = new MockBuild();
-            task.FileName = "version.txt";
+
+            string[] files = new string[] {"version.txt", "number.txt"};
+            TaskItem[] items = TaskUtility.StringArrayToItemArray(files);
+
+            task.Files = items;
             task.Regex = @"(\d+)\.(\d+)\.(\d+)\.(\d+)";
             task.ReplacementText = "$1.$2.$3.123";
             

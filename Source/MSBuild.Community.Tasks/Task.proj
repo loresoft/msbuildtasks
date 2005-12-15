@@ -177,7 +177,7 @@
   </Target>
 
   <Target Name="FileUpdate" DependsOnTargets="Version">
-    <FileUpdate FileName="Test\version.txt"
+    <FileUpdate Files="Test\version.txt"
                 Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
                 ReplacementText="$1.$2.$3.123" />
   </Target>

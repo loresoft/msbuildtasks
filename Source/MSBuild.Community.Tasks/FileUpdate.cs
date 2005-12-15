@@ -40,11 +40,11 @@ using Microsoft.Build.Framework;
 namespace MSBuild.Community.Tasks
 {
     /// <summary>
-    /// Replace text in a file using a Regular Expression.
+    /// Replace text in file(s) using a Regular Expression.
     /// </summary>
     /// <example>Search for a version number and update the revision.
     /// <code><![CDATA[
-    /// <FileUpdate FileName="version.txt"
+    /// <FileUpdate Files="version.txt"
     ///     Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
     ///     ReplacementText="$1.$2.$3.123" />
     /// ]]></code>
@@ -60,16 +60,17 @@ namespace MSBuild.Community.Tasks
         }
 
         #region Properties
-        private string _fileName;
+
+        private ITaskItem[] _files;
 
         /// <summary>
-        /// Gets or sets the name of the file.
+        /// Gets or sets the files to update.
         /// </summary>
-        /// <value>The name of the file.</value>
-        public string FileName
+        /// <value>The files.</value>
+        public ITaskItem[] Files
         {
-            get { return _fileName; }
-            set { _fileName = value; }
+            get { return _files; }
+            set { _files = value; }
         }
 
         private string _regex;
@@ -157,26 +158,31 @@ namespace MSBuild.Community.Tasks
         {
             try
             {
-                Log.LogMessage("Updating File \"{0}\".", _fileName);
+                foreach (ITaskItem item in _files)
+                {
+                    string fileName = item.ItemSpec;
 
-                RegexOptions options = RegexOptions.None;
-                if (_ignoreCase)
-                    options |= RegexOptions.IgnoreCase;
-                if (_multiline)
-                    options |= RegexOptions.Multiline;
-                if (_singleline)
-                    options |= RegexOptions.Singleline;
+                    Log.LogMessage("Updating File \"{0}\".", fileName);
 
-                Regex replaceRegex = new Regex(_regex, options);
+                    RegexOptions options = RegexOptions.None;
+                    if (_ignoreCase)
+                        options |= RegexOptions.IgnoreCase;
+                    if (_multiline)
+                        options |= RegexOptions.Multiline;
+                    if (_singleline)
+                        options |= RegexOptions.Singleline;
 
-                if (_replacementCount == 0)
-                    _replacementCount = -1;
+                    Regex replaceRegex = new Regex(_regex, options);
 
-                string buffer = File.ReadAllText(_fileName);
-                buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);
-                File.WriteAllText(_fileName, buffer);
+                    if (_replacementCount == 0)
+                        _replacementCount = -1;
 
-                Log.LogMessage("  Replaced \"{0}\" with \"{1}\"", _regex, _replacementText);
+                    string buffer = File.ReadAllText(fileName);
+                    buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);
+                    File.WriteAllText(fileName, buffer);
+
+                    Log.LogMessage("  Replaced \"{0}\" with \"{1}\"", _regex, _replacementText);
+                }
             }
             catch (Exception ex)
             {
