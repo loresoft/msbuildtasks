@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+  
+  <Import Project="MSBuild.Community.Tasks.Targets"/>
+   
+  <Target Name="DoFxCop">
+
+    <FxCop 
+      TargetAssemblies="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll"
+      RuleLibraries="@(FxCopRuleAssemblies)" 
+      AnalysisReportFileName="Test.html"
+      DependencyDirectories="$(MSBuildCommunityTasksPath)"
+      FailOnError="True"
+      ApplyOutXsl="True"
+      OutputXslFileName="C:\Program Files\Microsoft FxCop 1.32\Xml\FxCopReport.xsl"
+    />
+  </Target>
+  
+</Project>

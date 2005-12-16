@@ -5,6 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Community.Tasks", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E57396C8-69C1-45A3-B30A-3EFD0AE03EF6}"
 	ProjectSection(SolutionItems) = preProject
+		MSBuild.Community.Tasks\FxCop.proj = MSBuild.Community.Tasks\FxCop.proj
 		..\Master.proj = ..\Master.proj
 		MSBuild.Community.Tasks\Services.proj = MSBuild.Community.Tasks\Services.proj
 		MSBuild.Community.Tasks\Sleep.proj = MSBuild.Community.Tasks\Sleep.proj

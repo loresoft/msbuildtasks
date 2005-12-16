@@ -48,4 +48,14 @@
   <!-- Tasks by Jonesie -->
   <UsingTask TaskName="MSBuild.Community.Tasks.ExecuteSQL" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
 
+  <ItemGroup>
+    <FxCopRuleAssemblies Include="UsageRules.dll"/>
+    <FxCopRuleAssemblies Include="SecurityRules.dll"/>
+    <FxCopRuleAssemblies Include="PortabilityRules.dll"/>
+    <FxCopRuleAssemblies Include="PerformanceRules.dll"/>
+    <FxCopRuleAssemblies Include="MobilityRules.dll"/>
+    <FxCopRuleAssemblies Include="InteroperabilityRules.dll"/>
+    <FxCopRuleAssemblies Include="GlobalizationRules.dll"/>
+    <FxCopRuleAssemblies Include="DesignRules.dll"/>
+  </ItemGroup>
 </Project>
