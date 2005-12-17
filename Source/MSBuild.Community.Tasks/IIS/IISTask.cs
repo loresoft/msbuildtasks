@@ -65,11 +65,16 @@ namespace MSBuild.Community.Tasks.IIS
 
 		#region Fields
 
+		/// <summary>
+		/// IIS version.
+		/// </summary>
+		protected IISVersion mIISVersion;
 		private string mServerName = "localhost";
 		private int mServerPort = 80;
 		private string mServerInstance;
-		private string mServerPath;
-		private string mApplicationPath;
+		private string mIISServerPath;
+		private string mIISApplicationPath;
+		private string mIISAppPoolPath;
 		private string mVirtualDirectoryName; // Required
 		private string mVirtualDirectoryPhysicalPath; // Required
 		private string mUsername;
@@ -112,36 +117,53 @@ namespace MSBuild.Community.Tasks.IIS
 		}
 
 		/// <summary>
-		/// Gets or sets the server path.
+		/// Gets or sets the IIS server path.
 		/// </summary>
 		/// <remarks>Is in the form 'IIS://localhost/W3SVC/1/Root'.</remarks>
-		/// <value>The server path.</value>
-		protected string ServerPath
+		/// <value>The IIS server path.</value>
+		protected string IISServerPath
 		{
 			get
 			{
-				return mServerPath;
+				return mIISServerPath;
 			}
 			set
 			{
-				mServerPath = value;
+				mIISServerPath = value;
 			}
 		}
 
 		/// <summary>
 		/// Gets or sets the application path.
 		/// </summary>
-		/// <remarks>Is in the form '/LM/W3SVC/1/Root'</remarks>
+		/// <remarks>Is in the form '/LM/W3SVC/1/Root'.</remarks>
 		/// <value>The application path.</value>
-		protected string ApplicationPath
+		protected string IISApplicationPath
 		{
 			get
 			{
-				return mApplicationPath;
+				return mIISApplicationPath;
 			}
 			set
 			{
-				mApplicationPath = value;
+				mIISApplicationPath = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the IIS application pool path.
+		/// </summary>
+		/// <remarks>Is in the form 'IIS://localhost/W3SVC/AppPools'.</remarks>
+		/// <value>The IIS application pool path.</value>
+		protected string IISAppPoolPath
+		{
+			get
+			{
+				return mIISAppPoolPath;
+			}
+			set
+			{
+				mIISAppPoolPath = value;
 			}
 		}
 
@@ -348,8 +370,9 @@ namespace MSBuild.Community.Tasks.IIS
 			if (mServerPort == Convert.ToInt32(serverBindingsArray[1]))
 			{
 				mServerInstance = site.Name;
-				mServerPath = string.Format("IIS://{0}/W3SVC/{1}/Root", mServerName, mServerInstance);
-				mApplicationPath = string.Format("/LM/W3SVC/{0}/Root", mServerInstance);
+				mIISServerPath = string.Format("IIS://{0}/W3SVC/{1}/Root", mServerName, mServerInstance);
+				mIISApplicationPath = string.Format("/LM/W3SVC/{0}/Root", mServerInstance);
+				mIISAppPoolPath = string.Format("IIS://{0}/W3SVC/AppPools", mServerName);
 				return true;
 			}
 			return false;
