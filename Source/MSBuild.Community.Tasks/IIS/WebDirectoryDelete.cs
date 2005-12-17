@@ -67,21 +67,23 @@ namespace MSBuild.Community.Tasks.IIS
 			}
 		}
 
+		#region Private Methods
+
 		private bool DeleteVirtualDirectory()
 		{
 			bool bSuccess = false;
 
 			try
 			{
-				Log.LogMessage(MessageImportance.Normal, "Deleting virtual directory '{0}' on '{1}:{2}'.", this.VirtualDirectoryName, this.ServerName, this.ServerPort);
+				Log.LogMessage(MessageImportance.Normal, "Deleting virtual directory '{0}' on '{1}:{2}'.", VirtualDirectoryName, ServerName, ServerPort);
 
 				VerifyIISRoot();
 
-				DirectoryEntry iisRoot = new DirectoryEntry(this.ServerPath);
+				DirectoryEntry iisRoot = new DirectoryEntry(ServerPath);
 				DirectoryEntries childEntries = iisRoot.Children;
 				iisRoot.RefreshCache();
 				
-				DirectoryEntry childVDir = iisRoot.Children.Find(this.VirtualDirectoryName, iisRoot.SchemaClassName);
+				DirectoryEntry childVDir = iisRoot.Children.Find(VirtualDirectoryName, iisRoot.SchemaClassName);
 				childEntries.Remove(childVDir);
 
 				childVDir.Close();
@@ -95,5 +97,7 @@ namespace MSBuild.Community.Tasks.IIS
 
 			return bSuccess;
 		}
-    }
+
+		#endregion
+	}
 }
