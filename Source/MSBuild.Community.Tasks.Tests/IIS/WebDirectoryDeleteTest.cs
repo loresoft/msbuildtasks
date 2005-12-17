@@ -11,7 +11,7 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	public class WebDirectoryDeleteTest
 	{
 		[Test]
-		public void Test()
+		public void WebDirectoryDeleteExecute()
 		{
 			// Local machine test
 			WebDirectoryDelete task = new WebDirectoryDelete();
