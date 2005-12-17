@@ -32,16 +32,108 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
-
-// $Id$
+using System.DirectoryServices;
 
 namespace MSBuild.Community.Tasks.IIS
 {
-    public class AppPoolDelete : Task
-    {
+	/// <summary>
+	/// Deletes an existing application pool on a local or remote machine with IIS installed.  The default is 
+	/// to delete an existing application pool on the local machine.  If connecting to a remote machine, you can
+	/// specify the <see cref="IISTask.Username"/> and <see cref="IISTask.Password"/> for the task
+	/// to run under.
+	/// </summary>
+	/// <example>Delete an existing application pool on the local machine.
+	/// <code><![CDATA[
+	/// <AppPoolDelete AppPoolName="MyAppPool" />
+	/// ]]></code>
+	/// </example>
+    public class AppPoolDelete : IISTask
+	{
+		#region Fields
+
+		private string mAppPoolName;
+
+		#endregion
+
+		#region Properties
+
+		/// <summary>
+		/// Gets or sets the name of the application pool.
+		/// </summary>
+		/// <value>The name of the application pool.</value>
+		[Required]
+		public string AppPoolName
+		{
+			get
+			{
+				return mAppPoolName;
+			}
+			set
+			{
+				mAppPoolName = value;
+			}
+		}
+
+		#endregion
+
+		/// <summary>
+		/// When overridden in a derived class, executes the task.
+		/// </summary>
+		/// <returns>
+		/// True if the task successfully executed; otherwise, false.
+		/// </returns>
         public override bool Execute()
         {
-            throw new NotImplementedException();
-        }
-    }
+			mIISVersion = GetIISVersion();
+
+			if (DeleteAppPool())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		#region Private Methods
+
+		private bool DeleteAppPool()
+		{
+			bool bSuccess = false;
+			Log.LogMessage(MessageImportance.Normal, "Deleting application pool named {0}/{1}:", IISAppPoolPath, AppPoolName);
+
+			try
+			{
+				VerifyIISRoot();
+
+				if (mIISVersion == IISVersion.Six)
+				{
+					DirectoryEntry appPools = new DirectoryEntry(IISAppPoolPath);
+					appPools.RefreshCache();
+
+					// Find the application pool
+					DirectoryEntry existingPool = appPools.Children.Find(AppPoolName, "IIsApplicationPool");
+					appPools.Children.Remove(existingPool);
+					appPools.CommitChanges();
+					appPools.Close();
+
+					bSuccess = true;
+					Log.LogMessage(MessageImportance.Normal, "Done.");
+				}
+				else
+				{
+					Log.LogError("Application Pools are only available in IIS 6.");
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.LogErrorFromException(ex);
+			}
+
+			return bSuccess;
+		}
+
+		#endregion
+	}
 }
