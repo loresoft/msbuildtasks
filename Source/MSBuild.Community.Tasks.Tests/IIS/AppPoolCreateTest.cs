@@ -12,13 +12,13 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 		[Test]
 		public void AppPoolCreateExecute()
 		{
-			// Local machine test
+			// Local machine test on Win XP Pro - IIS 5 (should fail)
 			AppPoolCreate task = new AppPoolCreate();
 			task.BuildEngine = new MockBuild();
 			task.AppPoolName = "AppPoolTest";
 			Assert.IsFalse(task.Execute(), "Execute Failed!");
 
-			// Remote machine test
+			// Remote machine test - Windows Server 2003 - IIS 6 (should pass)
 			task = new AppPoolCreate();
 			task.BuildEngine = new MockBuild();
 			task.ServerName = "fenway";
