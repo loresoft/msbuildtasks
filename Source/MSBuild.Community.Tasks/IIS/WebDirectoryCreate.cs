@@ -52,7 +52,6 @@ namespace MSBuild.Community.Tasks.IIS
 	{
 		#region Fields
 
-		private IISVersion mIISVersion;
 		private bool mAccessExecute = false;
 		private bool mAccessNoRemoteExecute = false;
 		private bool mAccessNoRemoteRead = false;
@@ -1129,9 +1128,10 @@ namespace MSBuild.Community.Tasks.IIS
 
 			try
 			{
+				Log.LogMessage(MessageImportance.Normal, "Creating virtual directory named {0} on {1}:", VirtualDirectoryName, ServerName);
 				VerifyIISRoot();
 				
-				DirectoryEntry siteRoot = new DirectoryEntry(ServerPath);
+				DirectoryEntry siteRoot = new DirectoryEntry(IISServerPath);
 				siteRoot.RefreshCache();
 				DirectoryEntry newVirDir;
 
@@ -1151,7 +1151,7 @@ namespace MSBuild.Community.Tasks.IIS
 				// Set Required Properties
 				newVirDir.Properties["Path"].Value = VirtualDirectoryPhysicalPath;
 				newVirDir.Properties["AppFriendlyName"].Value = VirtualDirectoryName;
-				newVirDir.Properties["AppRoot"].Value = string.Format("{0}/{1}", ApplicationPath, VirtualDirectoryName);
+				newVirDir.Properties["AppRoot"].Value = string.Format("{0}/{1}", IISApplicationPath, VirtualDirectoryName);
 				newVirDir.Properties["AppIsolated"][0] = 2;
 
 				// Set Optional Properties
@@ -1224,7 +1224,9 @@ namespace MSBuild.Community.Tasks.IIS
 				siteRoot.CommitChanges();
 				newVirDir.Close();
 				siteRoot.Close();
+
 				bSuccess = true;
+				Log.LogMessage(MessageImportance.Normal, "Done.");
 			}
 			catch (Exception ex)
 			{

@@ -79,7 +79,7 @@ namespace MSBuild.Community.Tasks.IIS
 
 				VerifyIISRoot();
 
-				DirectoryEntry iisRoot = new DirectoryEntry(ServerPath);
+				DirectoryEntry iisRoot = new DirectoryEntry(IISServerPath);
 				DirectoryEntries childEntries = iisRoot.Children;
 				iisRoot.RefreshCache();
 				
@@ -88,7 +88,9 @@ namespace MSBuild.Community.Tasks.IIS
 
 				childVDir.Close();
 				iisRoot.Close();
+
 				bSuccess = true;
+				Log.LogMessage(MessageImportance.Normal, "Done.");
 			}
 			catch (Exception ex)
 			{
