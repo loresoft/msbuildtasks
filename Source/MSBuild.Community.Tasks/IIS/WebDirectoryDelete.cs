@@ -32,16 +32,68 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
-
-// $Id$
+using System.DirectoryServices;
 
 namespace MSBuild.Community.Tasks.IIS
 {
-    public class WebDirectoryDelete : Task
+	/// <summary>
+	/// Deletes a web directory on a local or remote machine with IIS installed.  The default is 
+	/// to delete the web directory on the local machine.  If connecting to a remote machine, you
+	/// can specify the <see cref="IISTask.Username"/> and <see cref="IISTask.Password"/> for the
+	/// task to run under.
+	/// </summary>
+	/// <example>Deletes a web directory on the local machine.
+	/// <code><![CDATA[
+	/// <WebDirectoryDelete VirtualDirectoryName="MyVirDir" />
+	/// ]]></code>
+	/// </example>
+	public class WebDirectoryDelete : IISTask
     {
+		/// <summary>
+		/// When overridden in a derived class, executes the task.
+		/// </summary>
+		/// <returns>
+		/// True if the task successfully executed; otherwise, false.
+		/// </returns>
         public override bool Execute()
         {
-            throw new NotImplementedException();
-        }
+			if (DeleteVirtualDirectory())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		private bool DeleteVirtualDirectory()
+		{
+			bool bSuccess = false;
+
+			try
+			{
+				Log.LogMessage(MessageImportance.Normal, "Deleting virtual directory '{0}' on '{1}:{2}'.", this.VirtualDirectoryName, this.ServerName, this.ServerPort);
+
+				VerifyIISRoot();
+
+				DirectoryEntry iisRoot = new DirectoryEntry(this.ServerPath);
+				DirectoryEntries childEntries = iisRoot.Children;
+				iisRoot.RefreshCache();
+				
+				DirectoryEntry childVDir = iisRoot.Children.Find(this.VirtualDirectoryName, iisRoot.SchemaClassName);
+				childEntries.Remove(childVDir);
+
+				childVDir.Close();
+				iisRoot.Close();
+				bSuccess = true;
+			}
+			catch (Exception ex)
+			{
+				Log.LogErrorFromException(ex);
+			}
+
+			return bSuccess;
+		}
     }
 }
