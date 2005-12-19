@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+  
+  <Import Project="MSBuild.Community.Tasks.Targets"/>
+  <PropertyGroup>
+    <Code>
+      <![CDATA[
+      public static void ScriptMain() {
+        List<string> list = new List<string>();
+        list.Add("Happy");
+        list.Add("Christmas");
+        Console.WriteLine("Hello MSBuild Community Scripting World.");
+        foreach(string s in list)
+        {
+           Console.WriteLine(s);
+        }
+      }
+      ]]>
+    </Code>
+  </PropertyGroup>
+
+  <Target Name="DoScript">
+    <Script Language="C#" Code="$(Code)" />
+  </Target>
+  
+</Project>
