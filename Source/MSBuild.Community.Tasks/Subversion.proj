@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
-    <LastUpdate>Friday, December 02, 2005</LastUpdate>
+    <LastUpdate>Monday, December 19, 2005</LastUpdate>
     <TestUpdate>Test from Task.proj</TestUpdate>
   </PropertyGroup>
   <Import Project="MSBuild.Community.Tasks.Targets" />
