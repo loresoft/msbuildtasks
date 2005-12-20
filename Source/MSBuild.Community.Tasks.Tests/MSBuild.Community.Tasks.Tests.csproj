@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfoTest.cs" />
     <Compile Include="FileUpdateTest.cs" />
+    <Compile Include="IIS\AppPoolControllerTest.cs" />
     <Compile Include="IIS\AppPoolCreateTest.cs" />
     <Compile Include="IIS\AppPoolDeleteTest.cs" />
     <Compile Include="IIS\WebDirectoryCreateTest.cs" />
