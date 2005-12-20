@@ -5,10 +5,10 @@
   <PropertyGroup>
     <Major>1</Major>
     <Minor>0</Minor>
-    <Build>0</Build>
+    <Build>1</Build>
     <Revision>0</Revision>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <DefaultExclude Include="**\.svn\**" />
     <DefaultExclude Include="**\bin\**" />
@@ -21,18 +21,12 @@
     <DefaultExclude Include="**\www\**" />
     <DefaultExclude Include="**\*.user" />
     <DefaultExclude Include="**\*.suo" />
-    <DefaultExclude Include="**\*.zip" />
-    <DefaultExclude Include="**\*.txt" />    
+    <DefaultExclude Include="**\*.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <ZipFiles Include="**\*.*" Exclude="@(DefaultExclude)" />
   </ItemGroup>
-
-  <Target Name="Zip" DependsOnTargets="Documentation">
-    <Zip Files="@(ZipFiles)" 
-         ZipFileName="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).zip" />
-  </Target>
 
   <Target Name="Version">
     <SvnVersion LocalPath="$(MSBuildProjectDirectory)">
@@ -40,7 +34,7 @@
     </SvnVersion>
 
     <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
-    
+
     <AssemblyInfo CodeLanguage="CS"  
       OutputFile="Source\MSBuild.Community.Tasks\Properties\AssemblyInfo.cs" 
       AssemblyTitle="MSBuild Community Tasks"
@@ -54,18 +48,7 @@
       AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)" 
       AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)" 
       Condition="$(Revision) != '0' "/>
-    
-  </Target>
 
-  <Target Name="Documentation" DependsOnTargets="Compile">
-    <NDoc Documenter="MSDN" 
-          ProjectFilePath="Documentation\MSBuild.Community.Tasks.ndoc" />
-    
-    <Copy SourceFiles="doc\MSBuild Community Tasks.chm" 
-          DestinationFiles="Documentation\MSBuild.Community.Tasks.chm" />
-    
-    <RemoveDir Directories="doc" />
-    
   </Target>
 
   <Target Name="Compile" DependsOnTargets="Version">
@@ -73,8 +56,25 @@
              Properties="Configuration=Release" />
   </Target>
 
+  <Target Name="Documentation" DependsOnTargets="Compile">
+    <NDoc Documenter="MSDN" 
+          ProjectFilePath="MSBuild.Community.Tasks.ndoc" 
+          WorkingDirectory="Documentation"/>
+
+    <Copy SourceFiles="Documentation\doc\MSBuild Community Tasks.chm" 
+          DestinationFiles="Documentation\MSBuild.Community.Tasks.chm" />
+
+    <RemoveDir Directories="Documentation\doc" />
+
+  </Target>
+
+  <Target Name="Zip" DependsOnTargets="Documentation">
+    <Zip Files="@(ZipFiles)" 
+         ZipFileName="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).zip" />
+  </Target>
+
   <Target Name="Build" DependsOnTargets="Zip">
     <Message Text="CodeSmith Build Complete"/>
   </Target>
-  
+
 </Project>

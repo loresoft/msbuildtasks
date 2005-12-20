@@ -120,6 +120,561 @@
             </summary>
             <value>The assembly file version.</value>
         </member>
+        <member name="T:MSBuild.Community.Tasks.FileUpdate">
+            <summary>
+            Replace text in file(s) using a Regular Expression.
+            </summary>
+            <example>Search for a version number and update the revision.
+            <code><![CDATA[
+            <FileUpdate Files="version.txt"
+                Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
+                ReplacementText="$1.$2.$3.123" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.FileUpdate.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileUpdate"/> class.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.FileUpdate.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FileUpdate.Files">
+            <summary>
+            Gets or sets the files to update.
+            </summary>
+            <value>The files.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FileUpdate.Regex">
+            <summary>
+            Gets or sets the regex.
+            </summary>
+            <value>The regex.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FileUpdate.IgnoreCase">
+            <summary>
+            Gets or sets a value specifies case-insensitive matching. .
+            </summary>
+            <value><c>true</c> if [ignore case]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FileUpdate.Multiline">
+            <summary>
+            Gets or sets a value changing the meaning of ^ and $ so they match at the beginning and end, 
+            respectively, of any line, and not just the beginning and end of the entire string.
+            </summary>
+            <value><c>true</c> if multiline; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FileUpdate.Singleline">
+            <summary>
+            Gets or sets a value changing the meaning of the dot (.) so it matches 
+            every character (instead of every character except \n). 
+            </summary>
+            <value><c>true</c> if singleline; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FileUpdate.ReplacementCount">
+            <summary>
+            Gets or sets the maximum number of times the replacement can occur.
+            </summary>
+            <value>The replacement count.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FileUpdate.ReplacementText">
+            <summary>
+            Gets or sets the replacement text.
+            </summary>
+            <value>The replacement text.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.FxCop">
+            <summary>
+            Uses FxCop to analyse managed code assemblies and reports on
+            their design best-practice compliance.
+            </summary>
+            <example>
+            <para>Shows how to analyse an assembly and use an XSLT stylesheet 
+            to present the report as an HTML file. If the static anlysis fails,
+            the build does not stop - this is controlled with the <c>FailOnError</c>
+            parameter.</para>
+            <code><![CDATA[<FxCop 
+              TargetAssemblies="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll"
+              RuleLibraries="@(FxCopRuleAssemblies)" 
+              AnalysisReportFileName="Test.html"
+              DependencyDirectories="$(MSBuildCommunityTasksPath)"
+              FailOnError="False"
+              ApplyOutXsl="True"
+              OutputXslFileName="C:\Program Files\Microsoft FxCop 1.32\Xml\FxCopReport.xsl"
+            />
+            ]]></code>
+            </example>
+            <remarks>If you include the <c>MSBuild.Community.Tasks.Targets</c> file 
+            in you build project, the ItemGroup <c>@(FxCopRuleAssemblies)</c> is defined
+            with the standard FxCop Rules Assemblies.</remarks>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.FxCop.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.FxCop.GenerateFullPathToTool">
+            <summary>
+            Returns the fully qualified path to the executable file.
+            </summary>
+            <returns>
+            The fully qualified path to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.FxCop.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments 
+            to pass directly to the executable file.
+            </summary>
+            <returns>
+            A string value containing the command line arguments to pass 
+            directly to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.FxCop.GetWorkingDirectory">
+            <summary>
+            Returns the directory in which to run the executable file.
+            </summary>
+            <returns>
+            The directory in which to run the executable file, 
+            or a null reference (Nothing in Visual Basic) if the executable file 
+            should be run in the current directory.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.ApplyOutXsl">
+            <summary>
+            Applies the XSL transformation specified in /outXsl to the 
+            analysis report before saving the file.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.DirectOutputToConsole">
+            <summary>
+            Directs analysis output to the console or to the 
+            Output window in Visual Studio .NET. By default, 
+            the XSL file FxCopConsoleOutput.xsl is applied to the 
+            output before it is displayed.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.DependencyDirectories">
+            <summary>
+            Specifies additional directories to search for assembly dependencies. 
+            FxCopCmd always searches the target assembly directory and the current 
+            working directory.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.TargetAssemblies">
+            <summary>
+            Specifies the target assembly to analyze.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.ConsoleXslFileName">
+            <summary>
+            Specifies the XSL or XSLT file that contains a transformation to 
+            be applied to the analysis output before it is displayed in the console.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.ImportFiles">
+            <summary>
+            Specifies the name of an analysis report or project file to import. 
+            Any messages in the imported file that are marked as excluded are not 
+            included in the analysis results.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.RuleLibraries">
+            <summary>
+            Specifies the filename(s) of FxCop project file(s).
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.AnalysisReportFileName">
+            <summary>
+            Specifies the file name for the analysis report.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.OutputXslFileName">
+            <summary>
+            Specifies the XSL or XSLT file that is referenced by the 
+            xml-stylesheet processing instruction in the analysis report.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.PlatformDirectory">
+            <summary>
+            Specifies the location of the version of Mscorlib.dll 
+            that was used when building the target assemblies if this 
+            version is not installed on the computer running FxCopCmd.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.ProjectFile">
+            <summary>
+            Specifies the filename of FxCop project file.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.IncludeSummaryReport">
+            <summary>
+            Includes a summary report with the informational 
+            messages returned by FxCopCmd.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.TypeList">
+            <summary>
+            Comma-separated list of type names to analyze.  This option disables 
+            analysis of assemblies, namespaces, and resources; only the specified 
+            types and their members are included in the analysis.  
+            Use the wildcard character '*' at the end of the name to select multiple types.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.SaveResults">
+            <summary>
+            Saves the results of the analysis in the project file.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.WorkingDirectory">
+            <summary>
+            Gets or sets the working directory.
+            </summary>
+            <value>The working directory.</value>
+            <returns>
+            The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.Verbose">
+            <summary>
+            Gets or sets a value indicating whether the output is verbose.
+            </summary>
+            <value><c>true</c> if verbose; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.FailOnError">
+            <summary>
+            Gets or sets a value indicating whether the build should
+            fail if static code analysis reports errors. Defaults to 
+            <c>true</c>.
+            </summary>
+            <value><c>true</c> if verbose; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.ToolName">
+            <summary>
+            Gets the name of the executable file to run.
+            </summary>
+            <value></value>
+            <returns>The name of the executable file to run.</returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase">
+            <summary>
+            Base task for any IIS-related task.
+            </summary>
+            <remarks>Stores the base logic for gathering the IIS version and server and port checking.  This
+            base task also stores common properties for other related tasks.</remarks>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.mIISVersion">
+            <summary>
+            IIS version.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.GetIISVersion">
+            <summary>
+            Gets the IIS version.
+            </summary>
+            <returns>The <see cref="T:MSBuild.Community.Tasks.IIS.WebBase.IISVersion"/> for IIS.</returns>
+            <exclude/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.GetRemoteOSVersion">
+            <summary>
+            Gets the remote machine OS version.
+            </summary>
+            <returns>Returns a <see cref="T:System.Version"/> of the operating system.</returns>
+            <exclude/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyIISRoot">
+            <summary>
+            Verifies that the IIS root exists based on the <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> and <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerPort"/>.
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyServerPortExists(System.DirectoryServices.DirectoryEntry)">
+            <summary>
+            Helper method for <see cref="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyIISRoot"/> that verifies the server port exists.
+            </summary>
+            <param name="site">The site to verify the port.</param>
+            <returns>Boolean value indicating the status of the port check.</returns>
+            <exclude/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName">
+            <summary>
+            Gets or sets the name of the server.  The default value is 'localhost'.
+            </summary>
+            <value>The name of the server.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.ServerPort">
+            <summary>
+            Gets or sets the server port.
+            </summary>
+            <value>The server port.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISServerPath">
+            <summary>
+            Gets or sets the IIS server path.
+            </summary>
+            <remarks>Is in the form 'IIS://localhost/W3SVC/1/Root'.</remarks>
+            <value>The IIS server path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISApplicationPath">
+            <summary>
+            Gets or sets the application path.
+            </summary>
+            <remarks>Is in the form '/LM/W3SVC/1/Root'.</remarks>
+            <value>The application path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISAppPoolPath">
+            <summary>
+            Gets or sets the IIS application pool path.
+            </summary>
+            <remarks>Is in the form 'IIS://localhost/W3SVC/AppPools'.</remarks>
+            <value>The IIS application pool path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.Username">
+            <summary>
+            Gets or sets the username for the account the task will run under.  This property
+            is needed if you specified a <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> for a remote machine.
+            </summary>
+            <value>The username of the account.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.Password">
+            <summary>
+            Gets or sets the password for the account the task will run under.  This property
+            is needed if you specified a <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> for a remote machine.
+            </summary>
+            <value>The password of the account.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.IISVersion">
+            <summary>
+            Defines the possible IIS versions supported by the task.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Four">
+            <summary>
+            IIS version 4.x
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Five">
+            <summary>
+            IIS version 5.x
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Six">
+            <summary>
+            IIS version 6.x
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction">
+            <summary>
+            Defines the possible application pool actions to be performed.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Recycle">
+            <summary>
+            Recycles an application pool.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Restart">
+            <summary>
+            Stops and restarts the application pool.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Start">
+            <summary>
+            Starts the application pool.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Stop">
+            <summary>
+            Stops the application pool.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState">
+            <summary>
+            Defines the current application pool state.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Starting">
+            <summary>
+            The application pool is starting.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Started">
+            <summary>
+            The application pool has started.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Stopping">
+            <summary>
+            The application pool is stopping.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Stopped">
+            <summary>
+            The application pool has stopped.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.ServiceController">
+            <summary>
+            Task that can control a Windows service.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.ServiceQuery">
+            <summary>
+            Task that can determine the status of a specified service
+            on a target server.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.ServiceQuery.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ServiceQuery"/> class.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.ServiceQuery.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.ServiceQuery.GetServiceController">
+            <summary>
+            Gets the service controller.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ServiceQuery.ServiceName">
+            <summary>
+            Gets or sets the name of the service.
+            </summary>
+            <value>The name of the service.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ServiceQuery.MachineName">
+            <summary>
+            Gets or sets the name of the machine.
+            </summary>
+            <value>The name of the machine.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ServiceQuery.Status">
+            <summary>
+            Gets or sets the status.
+            </summary>
+            <value>The status.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ServiceQuery.CanPauseAndContinue">
+            <summary>
+            Gets a value indicating whether the service can be paused and resumed.
+            </summary>
+            <value>
+            	<c>true</c> if this instance can pause and continue; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ServiceQuery.CanShutdown">
+            <summary>
+            Gets a value indicating whether the service should be notified when the system is shutting down. 
+            </summary>
+            <value>
+            	<c>true</c> if this instance can shutdown; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ServiceQuery.CanStop">
+            <summary>
+            Gets a value indicating whether the service can be stopped after it has started. 
+            </summary>
+            <value><c>true</c> if this instance can stop; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ServiceQuery.DisplayName">
+            <summary>
+            Gets a friendly name for the service. 
+            </summary>
+            <value>The name of the display.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ServiceQuery.Exists">
+            <summary>
+            Gets a value indicating whether the service exists.
+            </summary>
+            <value><c>true</c> if the service exists; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.ServiceController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ServiceController"/> class.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.ServiceController.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ServiceController.Action">
+            <summary>
+            Gets or sets the <see cref="T:ActionType"/> to perform on the service.
+            </summary>
+            <value>The action to perform on the service.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ServiceController.Timeout">
+            <summary>
+            Gets or sets the timeout for the command. The default is
+            one minute.
+            </summary>
+            <value>The timeout for the command.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.ServiceController.ActionType">
+            <summary>
+            Defines the actions that can be performed on a service.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceController.ActionType.Start">
+            <summary>
+            Starts a service.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceController.ActionType.Stop">
+            <summary>
+            Stops a service.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceController.ActionType.Restart">
+            <summary>
+            Restarts a service.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceController.ActionType.Pause">
+            <summary>
+            Pauses a running service.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceController.ActionType.Continue">
+            <summary>
+            Continues a paused service.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssClean">
+            <summary>
+            Task that can strip the source control information from a
+            Visual Studio Solution and subprojects.
+            </summary>
+            <remarks>This task is useful if you keep an archive of the
+            source tree at each build milestone, because it's irritating to have
+            to remove source control binding manually once you've copied a
+            version of the code from your archive.</remarks>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssClean.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
         <member name="T:MSBuild.Community.Tasks.FtpUpload">
             <summary>
             Uploads a file using File Transfer Protocol (FTP).
@@ -174,6 +729,908 @@
             Gets or sets the behavior of a client application's data transfer process.
             </summary>
             <value><c>true</c> if [use passive]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.AppPoolCreate">
+            <summary>
+            Creates a new application pool on a local or remote machine with IIS installed.  The default is 
+            to create the new application pool on the local machine.  If connecting to a remote machine, you can
+            specify the <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.Username"/> and <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.Password"/> for the task
+            to run under.
+            </summary>
+            <example>Create a new application pool on the local machine.
+            <code><![CDATA[
+            <AppPoolCreate AppPoolName="MyAppPool" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.AppPoolCreate.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.ApplicationPoolName">
+            <summary>
+            Gets or sets the name of the application pool.
+            </summary>
+            <value>The name of the application pool.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.AppPoolAutoStart">
+            <summary>
+            The AppPoolAutoStart property indicates to the World Wide Web Publishing Service (WWW service)
+            to automatically start an application pool when the application pool is created or when IIS
+            is started, if the value of this property is set to true.
+            </summary>
+            <value>Value indicating if AppPoolAutoStart is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.AppPoolIdentityType">
+            <summary>
+            The AppPoolIdentityType property allows application pools to run as a specific user account:
+            
+            0 - The application pool runs as NT AUTHORITY\SYSTEM.
+            1 - The application pool runs as NT AUTHORITY\LOCAL SERVICE.
+            2 - The application pool runs as NT AUTHORITY\NETWORK SERVICE.
+            3 - The application pool runs as a specific user account, defined by the <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.WAMUserName"/> property.
+            </summary>
+            <value>Value indicating the application pool identity type.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.AppPoolQueueLength">
+            <summary>
+            The AppPoolQueueLength property indicates to the Universal Listener how many requests
+            to queue up for an application pool before rejecting future requests. When the limit
+            for this property is exceeded, IIS rejects the additional requests with a 503 error.
+            </summary>
+            <value>Value indicating the application pool queue length.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.AutoShutdownAppPoolExe">
+            <summary>
+            The AutoShutdownAppPoolExe property specifies an executable to run when the World Wide Web
+            Publishing Service (WWW service) shuts down an application pool for rapid fail protection. You
+            can use the <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.AutoShutdownAppPoolParams"/> property to send parameters to the executable.
+            </summary>
+            <value>Value indicating the application pool auto shutdown executable.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.AutoShutdownAppPoolParams">
+            <summary>
+            The AutoShutdownAppPoolParams property specifies any command-line parameters for the executable that
+            is specified in the AutoShutdownAppPoolExe property. You can use these two properties in the following
+            way to send e-mail, for example, when the World Wide Web Publishing Service (WWW service) shuts down
+            an application pool for rapid fail protection:
+            
+            AutoShutdownAppPoolExe = "C:\LogAndSendMail.bat"
+            AutoShutdownAppPoolParams = "-AppPoolName %1%"
+            
+            where %1% represents the application pool name.
+            </summary>
+            <value>Value indicating the parameters for the application pool auto shutdown executable.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.CPUAction">
+            <summary>
+            The CPUAction property configures the action(s) that IIS takes when Microsoft Windows NT ® job objects
+            run. Only one Windows NT job object exists per application pool, therefore the CPUAction property
+            is configured on a per application pool basis.
+            
+            Possible values:
+            0 - No action is taken except that a warning is written to the event log when the CPU limit is exceeded.
+            1 - Application pool worker processes that exceed their CPU limit will be forced to shut down.
+            </summary>
+            <value>Value indicating the CPU action.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.CPULimit">
+            <summary>
+            The CPULimit property configures the maximum percentage of CPU resources that worker processes
+            in an application pool are allowed to consume over a period of time, as indicated by the
+            <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.CPUResetInterval"/> property. Set this property by specifying a percentage of CPU
+            usage, multiplied by 1000. For example, if you want the CPU usage limit to be 50%, set CPULimit to 50,000.
+            </summary>
+            <value>Value indicating the CPU limit.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.CPUResetInterval">
+            <summary>
+            The CPUResetInterval property specifies the reset period (in minutes) for CPU monitoring and
+            throttling limits on the application pool. When the number of minutes elapsed since the last
+            process accounting reset equals the number specified by this property, IIS will reset the CPU
+            timers for both the logging and limit intervals. Setting the value of this property to 0
+            disables CPU monitoring.
+            </summary>
+            <value>Value indicating the CPU reset interval.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.DisallowOverlappingRotation">
+            <summary>
+            The DisallowOverlappingRotation property specifies whether or not the World Wide Web Publishing
+            Service (WWW Service) should start up another worker process to replace the existing worker
+            process while it is shutting down.
+            </summary>
+            <value>Value indicating the DisallowOverlappingRotation.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.DisallowRotationOnConfigChange">
+            <summary>
+            The DisallowRotationOnConfigChange property specifies whether or not the World Wide Web Publishing
+            Service (WWW Service) should rotate worker processes in an application pool when the configuration
+            has changed. This means that the worker processes will not pick up application pool changes to
+            values passed to the worker process, such as <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.IdleTimeout"/> and <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.PeriodicRestartRequests"/>.
+            </summary>
+            <value>Value indicating the DisallowRotationOnConfigChange.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.IdleTimeout">
+            <summary>
+            The IdleTimeout property specifies how long (in minutes) a worker process should run idle if no new
+            requests are received and the worker process is not processing requests. After the allotted time
+            passes, the worker process should request to be shut down by the World Wide Web Publishing Service (WWW Service).
+            </summary>
+            <value>Value indicating the idle timeout.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.LoadBalancerCapabilities">
+            <summary>
+            The LoadBalancerCapabilities property specifies behavior when a service is unavailable. A setting of 1
+            terminates the connection. A setting of 2 sends error code 503.
+            </summary>
+            <value>Value indicating the load balancer capabilities.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.LogEventOnRecycle">
+            <summary>
+            The LogEventOnRecycle property specifies that IIS should log an event when an application pool is
+            recycled. Application pools recycle for a variety of reasons. In order for IIS to log the event, the
+            LogEventOnRecycle property must have a bit set corresponding to the reason for the recycle.
+            </summary>
+            <value>Value indicating which recycle events to log.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.LogonMethod">
+            <summary>
+            The LogonMethod property contains an integer that specifies the logon method for cleartext 
+            logons. Valid settings are:
+            
+            0 for interactive logon.
+            1 for batch logon.
+            2 for network logon.
+            3 for cleartext logon.
+            </summary>
+            <value>Value indicating the logon method.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.MaxProcesses">
+            <summary>
+            The MaxProcesses property determines the maximum number of worker processes an application pool
+            allows to service requests for an application pool. This property cannot be set to 0 because there
+            are no unmanaged pools.
+            </summary>
+            <value>Value indicating the maximum number of worker processes allowed by the application pool.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.OrphanActionExe">
+            <summary>
+            The OrphanActionExe property specifies an executable to run when the World Wide Web Publishing
+            Service (WWW service) orphans a worker process. You can use the <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.OrphanActionParams"/> property
+            to send parameters to the executable.
+            </summary>
+            <value>The value for the orphan action executable.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.OrphanActionParams">
+            <summary>
+            The OrphanActionParams property specifies command-line parameters for the executable
+            specified by the <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.OrphanActionExe"/> property.
+            </summary>
+            <value>Value indicating the orphan action parameters.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.OrphanWorkerProcess">
+            <summary>
+            The OrphanWorkerProcess property, when set to true, notifies the World Wide Web Publishing
+            Service (WWW Service) not to terminate a worker process that fails to respond to pings, but
+            to instead orphan the worker process in the application pool if the worker process suffers
+            fatal errors.
+            </summary>
+            <value>Value indicating the orphan worker process.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.PeriodicRestartMemory">
+            <summary>
+            The PeriodicRestartMemory property specifies the amount of virtual memory (in KB) that a
+            worker process can use before the worker process recycles. The maximum value supported
+            for this property is 4,294,967 KB.
+            </summary>
+            <value>Value indicating the amount of memory.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.PeriodicRestartPrivateMemory">
+            <summary>
+            The PeriodicRestartPrivateMemory property specifies the amount of private memory (in KB) that a
+            worker process can use before the worker process recycles. The maximum value supported
+            for this property is 4,294,967 KB.
+            </summary>
+            <value>Value indicating the amount of memory.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.PeriodicRestartRequests">
+            <summary>
+            The PeriodicRestartRequests property indicates the number of requests the OOP application
+            should process, after which it is recycled.
+            </summary>
+            <value>Value indicating the number of requests.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.PeriodicRestartSchedule">
+            <summary>
+            The PeriodicRestartSchedule property specifies the time (in 24 hour format) that the application
+            will be rotated. Each time is in local time and is specified in the following format:
+            
+            PeriodicRestartSchedule="hh:mm,hh:mm,hh:mm"
+            </summary>
+            <value>Value indicating the restart schedule.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.PeriodicRestartTime">
+            <summary>
+            The PeriodicRestartTime property specifies the period of time, in minutes, after which IIS
+            rotates an isolated OOP application. Setting the value of this property to 0 disables the
+            property. The maximum supported value for this property is 71,582.
+            </summary>
+            <value>Value indicating the restart time period.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.PingingEnabled">
+            <summary>
+            The PingingEnabled property specifies whether the World Wide Web Publishing Service
+            (WWW Service) should periodically monitor the health of a worker process. Setting the
+            value of this property to true indicates to the WWW service to monitor the worker
+            processes to ensure that the they are running and healthy.
+            </summary>
+            <value>Value indicating if pinging is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.PingInterval">
+            <summary>
+            The PingInterval property specifies the period of time (in seconds) between health-monitoring
+            pings that the World Wide Web Publishing Service (WWW Service) sends to a worker process.
+            </summary>
+            <value>Value indicating the ping interval.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.PingResponseTime">
+            <summary>
+            The PingResponseTime property specifies the amount of time (in seconds) that a worker process
+            is given to respond to a health monitoring ping. After the time limit is exceeded, the World
+            Wide Web Publishing Service (WWW Service) terminates the worker process.
+            </summary>
+            <value>Value indicating the ping response time.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.RapidFailProtection">
+            <summary>
+            Setting the RapidFailProtection property to true instructs the World Wide Web Publishing
+            Service (WWW service) to put all applications in an application pool out of service if the
+            number of worker process crashes has reached the maximum specified by the
+            <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.RapidFailProtectionMaxCrashes"/> property, within the number of minutes specified
+            by the <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.RapidFailProtectionInterval"/> property.
+            </summary>
+            <value>Value indicating if rapid fail protection is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.RapidFailProtectionInterval">
+            <summary>
+            The RapidFailProtectionInterval property specifies the number of minutes before the failure
+            count for a process is reset. See <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.RapidFailProtection"/>.
+            </summary>
+            <value>Value indicating the rapid fail protection interval.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.RapidFailProtectionMaxCrashes">
+            <summary>
+            The RapidFailProtectionMaxCrashes property specifies the maximum number of failures
+            allowed within the number of minutes specified by the <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.RapidFailProtectionInterval"/> 
+            property. See <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.RapidFailProtection"/>.
+            </summary>
+            <value>Value indicating the maximum number of crashes.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.ShutdownTimeLimit">
+            <summary>
+            The ShutdownTimeLimit property specifies the amount of time (in seconds) after a recycle
+            threshold has been reached that IIS waits for all old requests to finish running in a worker
+            process before terminating the worker process.
+            </summary>
+            <value>Value indicating the shutdown time limit.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.SMPAffinitized">
+            <summary>
+            Setting the SMPAffinitized property to true indicates that a particular worker process
+            assigned to an application pool should be assigned to a given CPU. This property is used
+            in conjunction with the <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.SMPProcessorAffinityMask"/> property to configure a
+            particular processor a worker process will be assigned to.
+            </summary>
+            <value>Value indicating if SMPAffinitized is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.SMPProcessorAffinityMask">
+            <summary>
+            The SMPProcessorAffinityMask property configures the hexadecimal processor mask. The hexadecimal
+            processor mask indicates to which CPU the worker processes in an application pool should be
+            bound. Before this property takes affect, the <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.SMPAffinitized"/> property must be set
+            to true for the application pool. These properties cannot be set through IIS Manager.
+            
+            Do not set this property to zero. Doing so causes no SMP affinity to be configured, creating an
+            error condition. The default DWORD value is 4294967295 (or -1), which is represented in hexadecimal
+            as 0xFFFFFFFF. A value of 0xFFFFFFFF in SMPProcessorAffinityMask indicates that all processors are enabled.
+            </summary>
+            <value>Value indicating the SMP processor affinity bit mask.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.StartupTimeLimit">
+            <summary>
+            The value of the StartupTimeLimit property specifies the amount of time (in seconds) that the World Wide
+            Web Publishing Service (WWW Service) should wait for a worker process to finish starting up and
+            reporting to the WWW Service.
+            </summary>
+            <value>Value indicating the startup time limit.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.WAMUserName">
+            <summary>
+            The WAMUserName property specifies the account user name that IIS uses by default as the COM+
+            application identity for newly created IIS out-of-process applications. The values of this
+            property and its companion property, <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.WAMUserPass"/>, are set when IIS is installed, and
+            match the user name and password values in the Microsoft Windows user account, which is established
+            at the same time. Changing the value of this property is not recommended. If you do, change
+            it to a valid Windows user account, and change WAMUserPass to the corresponding password
+            for the new account.
+            
+            Important:
+            Changes to WAMUserName and WAMUserPass may disrupt the operation of existing IIS out-of-process
+            applications. You can synchronize application identities using Component Services to edit the
+            user name and password values, found on the Identity tab of the property sheet for each package.
+            
+            In-process applications are not affected by these property values.
+            </summary>
+            <value>Value indicating the username.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.WAMUserPass">
+            <summary>
+            The WAMUserPass property specifies the password for the account that IIS uses by default as the COM+
+            application identity for newly created IIS out-of-process applications. The values of this property
+            and its companion property, <see cref="P:MSBuild.Community.Tasks.IIS.AppPoolCreate.WAMUserName"/>, are set when IIS is installed, and match the
+            password and user name values in the Microsoft Windows user account (IWAM_ MachineName, where MachineName
+            is the name of the machine on which IIS is installed) established at the same time.
+            
+            Important:
+            Changing the value of this property is not recommended. If you do, you must change the Windows account
+            password to the identical value. You must also synchronize existing IIS out-of-process application
+            identities, using Component Services to edit the user name and password values, which are found on the
+            Identity tab of the property sheet for each package.
+            
+            In-process applications are not affected by these property values.
+            </summary>
+            <value>Value indicating the password.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebDirectoryCreate">
+            <summary>
+            Creates a new web directory on a local or remote machine with IIS installed.  The default is 
+            to create the new web directory on the local machine.  The physical path is required to already exist
+            on the target machine.  If connecting to a remote machine, you can specify the <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.Username"/>
+            and <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.Password"/> for the task to run under.
+            </summary>
+            <example>Create a new web directory on the local machine.
+            <code><![CDATA[
+            <WebDirectoryCreate VirtualDirectoryName="MyVirDir"
+                VirtualDirectoryPhysicalPath="C:\Inetpub\MyWebDir" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.VirtualDirectoryName">
+            <summary>
+            Gets or sets the name of the virtual directory.
+            </summary>
+            <value>The name of the virtual directory.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.VirtualDirectoryPhysicalPath">
+            <summary>
+            Gets or sets the virtual directory physical path.  The physical directory must
+            exist before this task executes.
+            </summary>
+            <value>The virtual directory physical path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessExecute">
+            <summary>
+            Gets or sets a value that indicates if the file
+            or the contents of the folder may be executed, regardless of file type.
+            </summary>
+            <value>A value indicating if AccessExecute is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessNoRemoteExecute">
+            <summary>
+            A value of true indicates that remote requests to execute applications
+            are denied; only requests from the same computer as the IIS server succeed
+            if the AccessExecute property is set to true. You cannot set 
+            AccessNoRemoteExecute to false to enable remote requests, and set
+            <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessExecute"/> to false to disable local requests.
+            </summary>
+            <value>Value indicating if AccessNoRemoteExecute is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessNoRemoteRead">
+            <summary>
+            A value of true indicates that remote requests to view files are denied; only
+            requests from the same computer as the IIS server succeed if the <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessRead"/>
+            property is set to true. You cannot set <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessNoRemoteRead"/> to false to enable
+            remote requests, and set <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessRead"/> to false to disable local requests.
+            </summary>
+            <value>Value indicating if AccessNoRemoteRead is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessNoRemoteScript">
+            <summary>
+            A value of true indicates that remote requests to view dynamic content are denied; only
+            requests from the same computer as the IIS server succeed if the <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessScript"/> property
+            is set to true. You cannot set AccessNoRemoteScript to false to enable remote requests, 
+            and set <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessScript"/> to false to disable local requests.
+            </summary>
+            <value>Value indicating if AccessNoRemoteScript is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessNoRemoteWrite">
+            <summary>
+            A value of true indicates that remote requests to create or change files are denied; only
+            requests from the same computer as the IIS server succeed if the <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessWrite"/> property
+            is set to true. You cannot set AccessNoRemoteWrite to false to enable remote requests, 
+            and set <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessWrite"/> to false to disable local requests.
+            </summary>
+            <value>Value indicating if AccessNoRemoteWrite is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessRead">
+            <summary>
+            A value of true indicates that the file or the contents of the folder may be read
+            through Microsoft Internet Explorer.
+            </summary>
+            <value>Value indicating if AccessRead is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessSource">
+            <summary>
+            A value of true indicates that users are allowed to access source code if either
+            Read or Write permissions are set. Source code includes scripts in Microsoft ® Active
+            Server Pages (ASP) applications.
+            </summary>
+            <value>Value indicating if AccessSource is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessScript">
+            <summary>
+            A value of true indicates that the file or the contents of the folder may be executed
+            if they are script files or static content. A value of false only allows static files, 
+            such as HTML files, to be served.
+            </summary>
+            <value>Value indicating if AccessScript is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessSsl">
+            <summary>
+            A value of true indicates that file access requires SSL file permission processing, with
+            or without a client certificate.
+            </summary>
+            <value>Value indicating if AccessSsl is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessSsl128">
+            <summary>
+            A value of true indicates that file access requires SSL file permission processing
+            with a minimum key size of 128 bits, with or without a client certificate.
+            </summary>
+            <value>Value indicating if AccessSsl128 is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessSslMapCert">
+            <summary>
+            A value of true indicates that SSL file permission processing maps a client certificate
+            to a Microsoft Windows ® operating system user-account. The <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessSslNegotiateCert"/> property
+            must also be set to true for the mapping to occur.
+            </summary>
+            <value>Value indicating if AccessSslMapCert is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessSslNegotiateCert">
+            <summary>
+            A value of true indicates that SSL file access processing requests a certificate from
+            the client. A value of false indicates that access continues if the client does not have
+            a certificate. Some versions of Internet Explorer will close the connection if the server
+            requests a certificate and a certificate is not available (even if <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessSslRequireCert"/> 
+            is also set to true).
+            </summary>
+            <value>Value indicating if AccessSslNegotiateCert is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessSslRequireCert">
+            <summary>
+            A value of true indicates that SSL file access processing requests a certificate from the
+            client. If the client provides no certificate, the connection is closed. <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessSslNegotiateCert"/> 
+            must also be set to true when using AccessSSLRequireCert.
+            </summary>
+            <value>Value indicating if AccessSslRequireCert is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AccessWrite">
+            <summary>
+            A value of true indicates that users are allowed to upload files and their associated
+            properties to the enabled directory on your server or to change content in a Write-enabled
+            file. Write can be implemented only with a browser that supports the PUT feature of
+            the HTTP 1.1 protocol standard.
+            </summary>
+            <value>Value indicating if AccessWrite is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AnonymousPasswordSync">
+            <summary>
+            The AnonymousPasswordSync property indicates whether IIS should handle the user password
+            for anonymous users attempting to access resources.
+            </summary>
+            <value>Value indicating if AnonymousPasswordSync is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AppAllowClientDebug">
+            <summary>
+            The AppAllowClientDebug property specifies whether ASP client-side debugging
+            is enabled. This property is independent of <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AppAllowDebugging"/>, which
+            applies to server-side debugging.
+            </summary>
+            <value>Value indicating if AppAllowClientDebug is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AppAllowDebugging">
+            <summary>
+            The AppAllowDebugging property specifies whether ASP debugging is enabled on
+            the server. This property is independent of the <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AppAllowClientDebug"/> property, 
+            which applies to client-side debugging.
+            </summary>
+            <value>Value indicating if AppAllowDebugging is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspAllowSessionState">
+            <summary>
+            The AspAllowSessionState property enables session state persistence for the ASP application.
+            </summary>
+            <value>Value indicating if the AspAllowSessionState is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspBufferingOn">
+            <summary>
+            The AspBufferingOn property specifies whether output from an ASP application will be buffered.
+            </summary>
+            <value>Value indicating if the AspBufferingOn is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspEnableApplicationRestart">
+            <summary>
+            The AspEnableApplicationRestart determines whether an ASP application can be
+            automatically restarted. When changes are made to Global.asa or metabase properties
+            that affect an application, the application will not restart unless the
+            AspEnableApplicationRestart property is set to true.
+            </summary>
+            <value>Value indicating if AspEnableApplicationRestart is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspEnableAspHtmlFallback">
+            <summary>
+            The AspEnableAspHtmlFallback property controls the behavior of ASP when a
+            new request is to be rejected due to a full request queue.
+            </summary>
+            <value>Value indicating if AspEnableAspHtmlFallback is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspEnableChunkedEncoding">
+            <summary>
+            The AspEnableChunkedEncoding property specifies whether HTTP 1.1 chunked
+            transfer encoding is enabled for the World Wide Web Publishing Service (WWW service).
+            </summary>
+            <value>Value indicating if AspEnableChunkedEncoding is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspErrorsToNTLog">
+            <summary>
+            The AspErrorsToNTLog property specifies which ASP errors are written to the
+            Windows event log. ASP errors are written to the client browser and to the IIS
+            log files by default.
+            </summary>
+            <value>Value indicating if AspErrorsToNTLog is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspEnableParentPaths">
+            <summary>
+            The AspEnableParentPaths property specifies whether an ASP page allows paths
+            relative to the current directory (using the ..\ notation) or above the current directory.
+            </summary>
+            <value>Value indicating if AspEnableParentPaths is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspEnableTypelibCache">
+            <summary>
+            The AspEnableTypelibCache property specifies whether type libraries are cached
+            on the server. The World Wide Web Publishing Service (WWW service) setting for
+            this property is applicable to all in-process and pooled out-of-process application
+            nodes, at all levels. Metabase settings at the Web server level or lower are ignored
+            for in-process and pooled out-of-process applications. However, settings at the Web
+            server level or lower are used if that node is an isolated out-of-process application.
+            </summary>
+            <value>Value indicating if AspEnableTypelibCache is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspExceptionCatchEnable">
+            <summary>
+            The AspExceptionCatchEnable property specifies whether ASP pages trap exceptions
+            thrown by components.
+            </summary>
+            <value>Value indicating if AspExceptionCatchEnable is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspLogErrorRequests">
+            <summary>
+            The AspLogErrorRequests property controls whether the Web server writes ASP errors
+            to the application section of the Windows event log. ASP errors are written to the
+            client browser and to the IIS log files by default.
+            </summary>
+            <value>Value indicating if AspLogErrorRequests is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspScriptErrorSentToBrowser">
+            <summary>
+            The AspScriptErrorSentToBrowser property specifies whether the Web server writes
+            debugging specifics (file name, error, line number, description) to the client
+            browser, in addition to logging them to the Windows Event Log. The <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspScriptErrorMessage"/> 
+            property provides the error message to be sent if this property is set to false.
+            </summary>
+            <value>Value indicating if AspScriptErrorSentToBrowser is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspTrackThreadingModel">
+            <summary>
+            The AspTrackThreadingModel property specifies whether IIS checks the threading model
+            of any components (COM objects) that your application creates. The preferred setting
+            of this metabase property is false.
+            </summary>
+            <value>Value indicating if AspTrackThreadingModel is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AuthAnonymous">
+            <summary>
+            Specifies Anonymous authentication as one of the possible Windows authentication
+            schemes returned to clients as being available.
+            </summary>
+            <value>Value indicating if AuthAnonymous is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AuthBasic">
+            <summary>
+            Specifies Basic authentication as one of the possible Windows authentication
+            schemes returned to clients as being available.
+            </summary>
+            <value>Value indicating if AuthBasic is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AuthNtlm">
+            <summary>
+            Specifies Integrated Windows authentication (also known as Challenge/Response or
+            NTLM authentication) as one of the possible Windows authentication schemes
+            returned to clients as being available.
+            </summary>
+            <value>Value indicating if AuthNtlm is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AuthPersistSingleRequest">
+            <summary>
+            Setting this flag to true specifies that authentication persists only for a single
+            request on a connection. IIS resets the authentication at the end of each request, and
+            forces re-authentication on the next request of the session.
+            </summary>
+            <value>Value indicating if AuthPersistSingleRequest is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AuthPersistSingleRequestIfProxy">
+            <summary>
+            Setting this flag to true specifies authentication will persist only across single
+            requests on a connection if the connection is by proxy. IIS will reset the authentication
+            at the end of the request if the current authenticated request is by proxy and it is
+            not the special case where IIS is running MSPROXY.
+            </summary>
+            <value>Value indicating if AuthPersistSingleRequestIfProxy is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AuthPersistSingleRequestAlwaysIfProxy">
+            <summary>
+            Setting this flag to true specifies that authentication is valid for a single request if
+            by proxy. IIS will reset the authentication at the end of the request and force
+            re-authentication on the next request if the current authenticated request is by
+            proxy of any type.
+            </summary>
+            <value>Value indicating if AuthPersistSingleRequestAlwaysIfProxy is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.CacheControlNoCache">
+            <summary>
+            The CacheControlNoCache property specifies the HTTP 1.1 directive to prevent caching of content.
+            </summary>
+            <value>Value indicating if CacheControlNoCache is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.CacheIsapi">
+            <summary>
+            The CacheISAPI property indicates whether ISAPI extensions are cached in memory after first use.
+            </summary>
+            <value>Value indicating if CacheIsapi is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.ContentIndexed">
+            <summary>
+            The ContentIndexed property specifies whether the installed content indexer should
+            index content under this directory tree.
+            </summary>
+            <value>Value indicating if ContentIndexed is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.CpuAppEnabled">
+            <summary>
+            This property specifies whether process accounting and throttling should be performed
+            for ISAPI extensions and ASP applications. To perform process accounting on CGI
+            applications, use the property <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.CpuCgiEnabled"/>.
+            </summary>
+            <value>Value indicating if CpuAppEnabled is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.CpuCgiEnabled">
+            <summary>
+            This property indicates whether IIS should perform process accounting for CGI
+            applications. To effectively throttle CGI applications, use the CgiTimeout
+            property. To use process accounting for ISAPI and ASP applications, use <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.CpuAppEnabled"/>.
+            </summary>
+            <value>Value indicating if CpuCgiEnabled is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.CreateCgiWithNewConsole">
+            <summary>
+            The CreateCGIWithNewConsole property indicates whether a CGI application runs in its own console.
+            </summary>
+            <value>Value indicating if CreateCgiWithNewConsole is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.CreateProcessAsUser">
+            <summary>
+            The CreateProcessAsUser property specifies whether a CGI process is created in the system context or in the context of the requesting user.
+            </summary>
+            <value>Value indicating if CreateProcessAsUser is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.DirBrowseShowDate">
+            <summary>
+            When set to true, date information is displayed when browsing directories.
+            </summary>
+            <value>Value indicating if DirBrowseShowDate is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.DirBrowseShowExtension">
+            <summary>
+            When set to true, file name extensions are displayed when browsing directories.
+            </summary>
+            <value>Value indicating if DirBrowseShowExtension is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.DirBrowseShowLongDate">
+            <summary>
+            When set to true, date information is displayed in extended format when displaying directories.
+            </summary>
+            <value>Value indicating if DirBrowseShowLongDate is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.DirBrowseShowSize">
+            <summary>
+            When set to true, file size information is displayed when browsing directories.
+            </summary>
+            <value>Value indicating if DirBrowseShowSize is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.DirBrowseShowTime">
+            <summary>
+            When set to true, file time information is displayed when displaying directories.
+            </summary>
+            <value>Value indicating if DirBrowseShowTime is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.DontLog">
+            <summary>
+            The DontLog property specifies whether client requests are written to the IIS log files.
+            </summary>
+            <value>Value indicating if DontLog is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.EnableDefaultDoc">
+            <summary>
+            When set to true, the default document (specified by the <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.DefaultDoc"/> property) for
+            a directory is loaded when the directory is browsed.
+            </summary>
+            <value>Value indicating if EnableDefaultDoc is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.EnableDirBrowsing">
+            <summary>
+            When set to true, directory browsing is enabled.
+            </summary>
+            <value>Value indicating if EnableDirBrowsing is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.EnableDocFooter">
+            <summary>
+            The EnableDocFooter property enables or disables custom footers specified by
+            the DefaultDocFooter property.
+            </summary>
+            <value>Value indicating if EnableDocFooter is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.EnableReverseDns">
+            <summary>
+            The EnableReverseDns property enables or disables reverse Domain Name Server (DNS) lookups
+            for the World Wide Web Publishing Service (WWW service). Reverse lookups involve looking
+            up the domain name when the IP address is known. Reverse DNS lookups can use significant
+            resources and time.
+            </summary>
+            <value>Value indicating if EnableReverseDns is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.SsiExecDisable">
+            <summary>
+            The SSIExecDisable property specifies whether server-side include (SSI) #exec directives
+            are disabled under this path.
+            </summary>
+            <value>Value indicating if SsiExecDisable is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.UncAuthenticationPassthrough">
+            <summary>
+            The UNCAuthenticationPassthrough property enables user authentication passthrough
+            for Universal Naming Convention (UNC) virtual root access (for authentication schemes
+            that support delegation).
+            </summary>
+            <value>Value indicating if UncAuthenticationPassthrough is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspScriptErrorMessage">
+            <summary>
+            The AspScriptErrorMessage property specifies the error message to send to the browser
+            if specific debugging errors are not sent to the client (if <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.AspScriptErrorSentToBrowser"/> 
+            is set to false).
+            </summary>
+            <value>Value indicating if AspScriptErrorMessage is enabled or disabled.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.DefaultDoc">
+            <summary>
+            The DefaultDoc contains one or more file names of default documents that will be returned
+            to the client if no file name is included in the client's request. The default document
+            will be returned if the <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectoryCreate.EnableDefaultDoc"/> flag of the DirBrowseFlags property
+            is set to true for the directory. This property can contain a list of default document
+            file names separated by a comma and a space, for example Default.htm, Default.asp.
+            </summary>
+            <value>Listing of the default documents for the web application.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.AppPoolDelete">
+            <summary>
+            Deletes an existing application pool on a local or remote machine with IIS installed.  The default is 
+            to delete an existing application pool on the local machine.  If connecting to a remote machine, you can
+            specify the <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.Username"/> and <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.Password"/> for the task
+            to run under.
+            </summary>
+            <example>Delete an existing application pool on the local machine.
+            <code><![CDATA[
+            <AppPoolDelete AppPoolName="MyAppPool" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.AppPoolDelete.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolDelete.ApplicationPoolName">
+            <summary>
+            Gets or sets the name of the application pool.
+            </summary>
+            <value>The name of the application pool.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebDirectoryDelete">
+            <summary>
+            Deletes a web directory on a local or remote machine with IIS installed.  The default is 
+            to delete the web directory on the local machine.  If connecting to a remote machine, you
+            can specify the <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.Username"/> and <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.Password"/> for the
+            task to run under.
+            </summary>
+            <example>Deletes a web directory on the local machine.
+            <code><![CDATA[
+            <WebDirectoryDelete VirtualDirectoryName="MyVirDir" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebDirectoryDelete.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectoryDelete.VirtualDirectoryName">
+            <summary>
+            Gets or sets the name of the virtual directory.
+            </summary>
+            <value>The name of the virtual directory.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.AppPoolController">
+            <summary>
+            Allows control for an application pool on a local or remote machine with IIS installed.  The default is 
+            to control the application pool on the local machine.  If connecting to a remote machine, you can
+            specify the <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.Username"/> and <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.Password"/> for the task
+            to run under.
+            </summary>
+            <example>Restart an application pool on the local machine.
+            <code><![CDATA[
+            <AppPoolController AppPoolName="MyAppPool" Action="Restart" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.AppPoolController.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolController.ApplicationPoolName">
+            <summary>
+            Gets or sets the name of the app pool.
+            </summary>
+            <value>The name of the app pool.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.AppPoolController.Action">
+            <summary>
+            Gets or sets the application pool action.
+            </summary>
+            <value>The application pool action.</value>
         </member>
         <member name="T:MSBuild.Community.Tasks.Mail">
             <summary>
@@ -387,6 +1844,19 @@
             true if the task successfully executed; otherwise, false.
             </returns>
         </member>
+        <member name="T:MSBuild.Community.Tasks.Move">
+            <summary>
+            TODO ...
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Move.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
         <member name="T:MSBuild.Community.Tasks.NDoc">
             <summary>
             Runs the NDoc application.
@@ -419,6 +1889,14 @@
             The fully qualified path to the executable file.
             </returns>
         </member>
+        <member name="M:MSBuild.Community.Tasks.NDoc.GetWorkingDirectory">
+            <summary>
+            Returns the directory in which to run the executable file.
+            </summary>
+            <returns>
+            The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
+            </returns>
+        </member>
         <member name="P:MSBuild.Community.Tasks.NDoc.Documenter">
             <summary>
             Gets or sets the documenter.
@@ -437,6 +1915,15 @@
             Gets or sets a value indicating whether the output is verbose.
             </summary>
             <value><c>true</c> if verbose; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.NDoc.WorkingDirectory">
+            <summary>
+            Gets or sets the working directory.
+            </summary>
+            <value>The working directory.</value>
+            <returns>
+            The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
+            </returns>
         </member>
         <member name="P:MSBuild.Community.Tasks.NDoc.ToolName">
             <summary>
@@ -488,6 +1975,14 @@
             The fully qualified path to the executable file.
             </returns>
         </member>
+        <member name="M:MSBuild.Community.Tasks.NUnit.GetWorkingDirectory">
+            <summary>
+            Returns the directory in which to run the executable file.
+            </summary>
+            <returns>
+            The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
+            </returns>
+        </member>
         <member name="P:MSBuild.Community.Tasks.NUnit.Assemblies">
             <summary>
             Gets or sets the assemblies.
@@ -523,6 +2018,15 @@
             Gets or sets the output XML file.
             </summary>
             <value>The output XML file.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.NUnit.WorkingDirectory">
+            <summary>
+            Gets or sets the working directory.
+            </summary>
+            <value>The working directory.</value>
+            <returns>
+            The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
+            </returns>
         </member>
         <member name="P:MSBuild.Community.Tasks.NUnit.ToolName">
             <summary>
@@ -808,6 +2312,497 @@
             Gets or sets the value to be stored.
             </summary>
             <value>The value.</value>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:MSBuild.Community.Tasks.Script" -->
+        <member name="M:MSBuild.Community.Tasks.Script.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Script.References">
+            <summary>
+            The required references
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Script.Imports">
+            <summary>
+            The namespaces to import.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Script.Language">
+            <summary>
+            The language of the script block (defaults to C#).
+            </summary>
+            <remarks><para>The supported languages are:</para>
+            <list type="bullet">
+            <item><description>Visual Basic.NET (VB, vb, VISUALBASIC)</description></item>
+            <item><description>C# (C#, c#, CSHARP)</description></item>
+            <item><description>JavaScript (JS, js, JSCRIPT)</description></item>
+            <item><description>J# (VJS, vjs, JSHARP)</description></item>
+            </list> or, proviude the fully-qualified name for a class implementing 
+            <see cref="T:System.CodeDom.Compiler.CodeDomProvider"/>.</remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Script.MainClass">
+            <summary>
+            The name of the main class containing the static <c>ScriptMain</c> 
+            entry point. 
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Script.Code">
+            <summary>
+            THe code to compile and execute
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Sleep">
+            <summary>
+            A task for sleeping for a specified period of time.
+            </summary>
+            <example>Causes the build to sleep for 300 milliseconds.
+            <code><![CDATA[
+            <Sleep Milliseconds="200" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Sleep.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Sleep.Milliseconds">
+            <summary>
+            The number of milliseconds to add to the time to sleep.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Sleep.Seconds">
+            <summary>
+            The number of seconds to add to the time to sleep.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Sleep.Minutes">
+            <summary>
+            The number of minutes to add to the time to sleep.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Sleep.Hours">
+            <summary>
+            The number of hours to add to the time to sleep.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssBase">
+            <summary>
+            Base class for all of the Visual SourceSafe tasks.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssBase.ConnectToDatabase">
+            <summary>
+            Attempts to connect to the SourceSafe Database and
+            load the specified item, or version of the item, if specified.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssBase.Execute">
+            <summary>
+            Reserved.
+            </summary>
+            <returns>Reserved.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssBase.LogErrorFromException(System.Exception)">
+            <summary>
+            Logs an exception using the MSBuild logging framework.
+            </summary>
+            <param name="e">The <see cref="T:System.Exception"/> to log.</param>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssBase.DatabasePath">
+            <summary>
+            The path to the folder that contains the srcsafe.ini file.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssBase.Path">
+            <summary>
+            The Visual SourceSafe project or file to perform the action
+            on (starts with "$/").
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssBase.UserName">
+            <summary>
+            The name of the user accessing the SourceSafe database.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssBase.Version">
+            <summary>
+            A version of the <see cref="P:MSBuild.Community.Tasks.SourceSafe.VssBase.Path"/> to reference.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssBase.Password">
+            <summary>
+            The password to use to log in to SourceSafe.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssBase.Database">
+            <summary>
+            Represents the VSS Database
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssBase.Item">
+            <summary>
+            Represents the VSS item selected (file or project).
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssCheckin">
+            <summary>
+            Task that executes a checkin against a VSS Database.
+            </summary>
+            <example>
+            <para></para>
+            <code><![CDATA[<VssCheckin UserName="ccnet_build"
+              Password="build"
+              LocalPath="C:\Dev\MyProjects\Project\TestFile.cs"
+              Recursive="False"
+              DatabasePath="\\VSSServer\VSS\srcsafe.ini"
+              Path="$/Test/TestFile.cs"
+            />
+            ]]></code>
+            </example>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssRecursiveBase">
+            <summary>
+            Base class for VSS tasks that can act recursively.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssRecursiveBase.Execute">
+            <summary>
+            Reserved.
+            </summary>
+            <returns>Reserved.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssRecursiveBase.Recursive">
+            <summary>
+            Determines whether to perform the SourceSafe operation
+            recursively. The default is <see langword="true"/>.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssCheckin.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssCheckin.LocalPath">
+            <summary>
+            The path to the local working directory.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssCheckin.Writable">
+            <summary>
+            Determines whether to leave the file(s) as writable once the
+            checkin is complete. The default is <see langword="false"/>.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssCheckin.Comment">
+            <summary>
+            The checkin comment.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssCheckout">
+            <summary>
+            Task that executes a checkout of files or projects
+            against a Visual SourceSafe database.
+            </summary>
+            <example>
+            <para></para>
+            <code><![CDATA[<VssCheckout UserName="ccnet_build"
+              Password="build"
+              LocalPath="C:\Dev\MyProjects\Project"
+              Recursive="False"
+              DatabasePath="\\VSSServer\VSS\srcsafe.ini"
+              Path="$/Test/TestFile.cs"
+            />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssCheckout.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssCheckout.LocalPath">
+            <summary>
+            The path to the local working directory.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssCheckout.Writable">
+            <summary>
+            Determines whether files will be writable once retrieved from
+            the repository. The default is <see langword="false"/>.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssAdd">
+            <summary>
+            Task that adds files to a Visual SourceSafe database.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssAdd.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssAdd.Files">
+            <summary>
+            List of files that should be added to SourceSafe.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssAdd.Comment">
+            <summary>
+            The comment to be applied to the newly added file.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssDiff">
+            <summary>
+            Task that records differences between the latest version
+            of all the items in a Visual SourceSafe project and another version or label
+            to a file.
+            </summary>
+            <example>
+            <para>Generates a file containing all of the differences between the 
+            current version and the label &quot;Test Label&quot;</para>
+            <code><![CDATA[<VssDiff UserName="uid"
+             Password="pwd"
+             DatabasePath="\\VSSServer\VSS2\srcsafe.ini"
+             Path="$/Test"
+             OutputFile="Diff.xml"
+             Label="Test Label"
+            />]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssDiff.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssDiff.Label">
+            <summary>
+            The value of the label to compare to.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssDiff.OutputFile">
+            <summary>
+            The name of the file to send the output to.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssGet">
+            <summary>
+            Task that retireves an item or project from a Visual SourceSafe database.
+            </summary>
+            <example>
+            <para>Get the latest version (recursive) of a file from a VSS database and place
+            in the specified local folder.</para>
+            <code><![CDATA[
+            <VssGet UserName="user"
+                Password="password"
+                LocalPath="C:\Dev\MyProjects\Project"
+                Recursive="True"
+                DatabasePath="\\VSSServer\VSS\srcsafe.ini"
+                Path="$/Project"
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssGet.Execute">
+            <summary>
+            Runs the task using the specified parameters.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssGet.LocalPath">
+            <summary>
+            The path to the local working directory.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssGet.Replace">
+            <summary>
+            Determines whether to replace writable files.
+            The default is <see langword="false"/>.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssGet.Writable">
+            <summary>
+            Determines whether files will be writable once retrieved from
+            the repository. The default is <see langword="false"/>.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssHistory">
+            <summary>
+            Generates an XML file containing details of all changes made
+            to a Visual SourceSafe project or file between specified labels or dates.
+            </summary>
+            <example>
+            <para>Generates a file containing details of all the changes made to the <c>$/Test</c>
+            project by a user called joe.bloggs</para>
+            <code><![CDATA[<VssHistory UserName="uid"
+             Password="pwd"
+             DatabasePath="\\VSSServer\VSS\srcsafe.ini"
+             Path="$/Test"
+             User="joe.bloggs" 
+             OutputFile="History.xml"
+             Recursive="True"
+            />
+            ]]></code>
+            </example>
+            <example>
+            <para>Generates a file containing details of all the changes made between the
+            labels Build1 and Build2 in the <c>$/Test</c> project.</para>
+            <code><![CDATA[<VssHistory UserName="uid"
+             Password="pwd"
+             DatabasePath="\\VSSServer\VSS\srcsafe.ini"
+             Path="$/Test"
+             FromLabel="Build1"
+             ToLabel="Build2"
+             OutputFile="History.xml"
+             Recursive="True"
+            />
+            ]]></code>
+            </example>
+            <example>
+            <para>Generates a file containing details of all the changes made between the
+            1st December 2005 and 10th December 2005in the <c>$/Test</c> project.</para>
+            <code><![CDATA[<VssHistory UserName="uid"
+             Password="pwd"
+             DatabasePath="\\VSSServer\VSS\srcsafe.ini"
+             Path="$/Test"
+             FromDate="2005-12-01 00:00"
+             ToDate="2005-12-10 00:00"
+             OutputFile="History.xml"
+             Recursive="True"
+            />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssHistory.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssHistory.ToLabel">
+            <summary>
+            The label to start comparing to.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssHistory.FromLabel">
+            <summary>
+            The label to compare up to.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssHistory.ToDate">
+            <summary>
+            The Start Date for the history.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssHistory.FromDate">
+            <summary>
+            The End Date for the history.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssHistory.OutputFile">
+            <summary>
+            The name and path of the XML output file.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssHistory.User">
+            <summary>
+            The name of the user whose changes should be listed in 
+            the history.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssLabel">
+            <summary>
+            Task that applies a label to a Visual SourceSafe item.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssLabel.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssLabel.Label">
+            <summary>
+            The text of the label.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssLabel.Comment">
+            <summary>
+            An optional comment.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceSafe.VssUndoCheckout">
+            <summary>
+            Task that undoes a checkout of files or projects
+            against a Visual SourceSafe database.
+            </summary>
+            <example>
+            <para></para>
+            <code><![CDATA[<VssUndoCheckout UserName="ccnet_build"
+              Password="build"
+              LocalPath="C:\Dev\MyProjects\Project"
+              Recursive="False"
+              DatabasePath="\\VSSServer\VSS\srcsafe.ini"
+              Path="$/Test/TestFile.cs"
+            />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceSafe.VssUndoCheckout.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceSafe.VssUndoCheckout.LocalPath">
+            <summary>
+            The path to the local working directory.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SqlExecute">
+            <summary>
+            Executes a SQL command.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SqlExecute.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SqlExecute.ConnectionString">
+            <summary>
+            The connection string
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SqlExecute.Command">
+            <summary>
+            The command to execute
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SqlExecute.Result">
+            <summary>
+            Output the return count/value
+            </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.Subversion.SvnCheckout">
             <summary>
@@ -1176,6 +3171,11 @@
             </summary>
             <value>The target directory.</value>
         </member>
+        <member name="T:MSBuild.Community.Tasks.Vault.VaultClient">
+            <summary>
+            TODO ...
+            </summary>
+        </member>
         <member name="T:MSBuild.Community.Tasks.Version">
             <summary>
             Get Version information from file.
@@ -1241,7 +3241,7 @@
             </summary>
             <value>The type of the build.</value>
             <remarks>
-            Possible values include Automatic, Increment, NonIncrement.
+            Possible values include Automatic, Increment, NonIncrement, or Date.
             </remarks>
         </member>
         <member name="P:MSBuild.Community.Tasks.Version.RevisionType">
@@ -1252,6 +3252,42 @@
             <remarks>
             Possible values include Automatic, Increment, NonIncrement.
             </remarks>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.WebDownload">
+            <summary>
+            Downloads a resource with the specified URI to a local file. 
+            </summary>
+            <example>Download the Microsoft.com home page.
+            <code><![CDATA[
+            <WebDownload FileUri="http://www.microsoft.com/default.aspx" 
+                FileName="microsoft.html" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.WebDownload.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WebDownload"/> class.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.WebDownload.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.WebDownload.FileName">
+            <summary>
+            Gets or sets the name of the local file that is to receive the data.
+            </summary>
+            <value>The name of the file.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.WebDownload.FileUri">
+            <summary>
+            Gets or sets the URI from which to download data.
+            </summary>
+            <value>The file URI.</value>
         </member>
         <member name="T:MSBuild.Community.Tasks.XmlRead">
             <summary>

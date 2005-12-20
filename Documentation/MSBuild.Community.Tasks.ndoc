@@ -31,7 +31,7 @@
             <property name="Title" value="MSBuild Community Tasks" />
             <property name="ShowVisualBasic" value="True" />
             <property name="SdkLinksOnWeb" value="True" />
-            <property name="RootPageFileName" value="D:\Projects\Tigris\MSBuildTasks\Documentation\Overview.html" />
+            <property name="RootPageFileName" value="Overview.html" />
             <property name="CopyrightText" value="http://msbuildtasks.tigris.org/" />
             <property name="CopyrightHref" value="http://msbuildtasks.tigris.org/" />
             <property name="DocumentAttributes" value="True" />
