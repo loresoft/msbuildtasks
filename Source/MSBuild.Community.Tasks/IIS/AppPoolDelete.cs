@@ -39,7 +39,7 @@ namespace MSBuild.Community.Tasks.IIS
 	/// <summary>
 	/// Deletes an existing application pool on a local or remote machine with IIS installed.  The default is 
 	/// to delete an existing application pool on the local machine.  If connecting to a remote machine, you can
-	/// specify the <see cref="IISTask.Username"/> and <see cref="IISTask.Password"/> for the task
+	/// specify the <see cref="WebBase.Username"/> and <see cref="WebBase.Password"/> for the task
 	/// to run under.
 	/// </summary>
 	/// <example>Delete an existing application pool on the local machine.
@@ -47,7 +47,7 @@ namespace MSBuild.Community.Tasks.IIS
 	/// <AppPoolDelete AppPoolName="MyAppPool" />
 	/// ]]></code>
 	/// </example>
-    public class AppPoolDelete : IISTask
+    public class AppPoolDelete : WebBase
 	{
 		#region Fields
 
@@ -62,7 +62,7 @@ namespace MSBuild.Community.Tasks.IIS
 		/// </summary>
 		/// <value>The name of the application pool.</value>
 		[Required]
-		public string AppPoolName
+		public string ApplicationPoolName
 		{
 			get
 			{
@@ -101,7 +101,7 @@ namespace MSBuild.Community.Tasks.IIS
 		private bool DeleteAppPool()
 		{
 			bool bSuccess = false;
-			Log.LogMessage(MessageImportance.Normal, "Deleting application pool named {0}/{1}:", IISAppPoolPath, AppPoolName);
+			Log.LogMessage(MessageImportance.Normal, "Deleting application pool named {0}/{1}:", IISAppPoolPath, ApplicationPoolName);
 
 			try
 			{
@@ -113,7 +113,7 @@ namespace MSBuild.Community.Tasks.IIS
 					appPools.RefreshCache();
 
 					// Find the application pool
-					DirectoryEntry existingPool = appPools.Children.Find(AppPoolName, "IIsApplicationPool");
+					DirectoryEntry existingPool = appPools.Children.Find(ApplicationPoolName, "IIsApplicationPool");
 					appPools.Children.Remove(existingPool);
 					appPools.CommitChanges();
 					appPools.Close();

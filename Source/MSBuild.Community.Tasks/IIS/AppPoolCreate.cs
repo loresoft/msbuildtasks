@@ -39,7 +39,7 @@ namespace MSBuild.Community.Tasks.IIS
 	/// <summary>
 	/// Creates a new application pool on a local or remote machine with IIS installed.  The default is 
 	/// to create the new application pool on the local machine.  If connecting to a remote machine, you can
-	/// specify the <see cref="IISTask.Username"/> and <see cref="IISTask.Password"/> for the task
+	/// specify the <see cref="WebBase.Username"/> and <see cref="WebBase.Password"/> for the task
 	/// to run under.
 	/// </summary>
 	/// <example>Create a new application pool on the local machine.
@@ -47,7 +47,7 @@ namespace MSBuild.Community.Tasks.IIS
 	/// <AppPoolCreate AppPoolName="MyAppPool" />
 	/// ]]></code>
 	/// </example>
-    public class AppPoolCreate : IISTask
+    public class AppPoolCreate : WebBase
 	{
 		#region Fields
 
@@ -98,7 +98,7 @@ namespace MSBuild.Community.Tasks.IIS
 		/// </summary>
 		/// <value>The name of the application pool.</value>
 		[Required]
-		public string AppPoolName
+		public string ApplicationPoolName
 		{
 			get
 			{
@@ -824,7 +824,7 @@ namespace MSBuild.Community.Tasks.IIS
 		private bool CreateAppPool()
 		{
 			bool bSuccess = false;
-			Log.LogMessage(MessageImportance.Normal, "Creating application pool named {0}/{1}:", IISAppPoolPath, AppPoolName);
+			Log.LogMessage(MessageImportance.Normal, "Creating application pool named {0}/{1}:", IISAppPoolPath, ApplicationPoolName);
 
 			try
 			{
@@ -839,13 +839,13 @@ namespace MSBuild.Community.Tasks.IIS
 					try
 					{
 						// Determine if the application pool already exists
-						DirectoryEntry existingPool = appPools.Children.Find(AppPoolName, "IIsApplicationPool");
+						DirectoryEntry existingPool = appPools.Children.Find(ApplicationPoolName, "IIsApplicationPool");
 						newPool = existingPool;
 					}
 					catch
 					{
 						// Create the application pool
-						newPool = appPools.Children.Add(AppPoolName, "IIsApplicationPool");
+						newPool = appPools.Children.Add(ApplicationPoolName, "IIsApplicationPool");
 						newPool.CommitChanges();
 					}
 

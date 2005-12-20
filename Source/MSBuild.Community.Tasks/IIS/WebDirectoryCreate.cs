@@ -39,8 +39,8 @@ namespace MSBuild.Community.Tasks.IIS
 	/// <summary>
 	/// Creates a new web directory on a local or remote machine with IIS installed.  The default is 
 	/// to create the new web directory on the local machine.  The physical path is required to already exist
-	/// on the target machine.  If connecting to a remote machine, you can specify the <see cref="IISTask.Username"/>
-	/// and <see cref="IISTask.Password"/> for the task to run under.
+	/// on the target machine.  If connecting to a remote machine, you can specify the <see cref="WebBase.Username"/>
+	/// and <see cref="WebBase.Password"/> for the task to run under.
 	/// </summary>
 	/// <example>Create a new web directory on the local machine.
 	/// <code><![CDATA[
@@ -48,10 +48,12 @@ namespace MSBuild.Community.Tasks.IIS
 	///     VirtualDirectoryPhysicalPath="C:\Inetpub\MyWebDir" />
 	/// ]]></code>
 	/// </example>
-	public class WebDirectoryCreate : IISTask
+	public class WebDirectoryCreate : WebBase
 	{
 		#region Fields
 
+		private string mVirtualDirectoryName;
+		private string mVirtualDirectoryPhysicalPath;
 		private bool mAccessExecute = false;
 		private bool mAccessNoRemoteExecute = false;
 		private bool mAccessNoRemoteRead = false;
@@ -112,6 +114,41 @@ namespace MSBuild.Community.Tasks.IIS
 		#endregion
 
 		#region Properties
+
+		/// <summary>
+		/// Gets or sets the name of the virtual directory.
+		/// </summary>
+		/// <value>The name of the virtual directory.</value>
+		[Required]
+		public string VirtualDirectoryName
+		{
+			get
+			{
+				return mVirtualDirectoryName;
+			}
+			set
+			{
+				mVirtualDirectoryName = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the virtual directory physical path.  The physical directory must
+		/// exist before this task executes.
+		/// </summary>
+		/// <value>The virtual directory physical path.</value>
+		[Required]
+		public string VirtualDirectoryPhysicalPath
+		{
+			get
+			{
+				return mVirtualDirectoryPhysicalPath;
+			}
+			set
+			{
+				mVirtualDirectoryPhysicalPath = value;
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets a value that indicates if the file

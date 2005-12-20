@@ -53,7 +53,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="FileUpdate.cs" />
     <Compile Include="FxCop.cs" />
-    <Compile Include="IIS\IISTask.cs" />
+    <Compile Include="IIS\WebBase.cs" />
     <Compile Include="ServiceController.cs" />
     <Compile Include="SourceSafe\VssClean.cs" />
     <Compile Include="FtpUpload.cs" />

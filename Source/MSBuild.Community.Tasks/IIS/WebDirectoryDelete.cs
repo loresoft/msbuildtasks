@@ -39,7 +39,7 @@ namespace MSBuild.Community.Tasks.IIS
 	/// <summary>
 	/// Deletes a web directory on a local or remote machine with IIS installed.  The default is 
 	/// to delete the web directory on the local machine.  If connecting to a remote machine, you
-	/// can specify the <see cref="IISTask.Username"/> and <see cref="IISTask.Password"/> for the
+	/// can specify the <see cref="WebBase.Username"/> and <see cref="WebBase.Password"/> for the
 	/// task to run under.
 	/// </summary>
 	/// <example>Deletes a web directory on the local machine.
@@ -47,8 +47,35 @@ namespace MSBuild.Community.Tasks.IIS
 	/// <WebDirectoryDelete VirtualDirectoryName="MyVirDir" />
 	/// ]]></code>
 	/// </example>
-	public class WebDirectoryDelete : IISTask
-    {
+	public class WebDirectoryDelete : WebBase
+	{
+		#region Fields
+
+		private string mVirtualDirectoryName;
+
+		#endregion
+
+		#region Properties
+
+		/// <summary>
+		/// Gets or sets the name of the virtual directory.
+		/// </summary>
+		/// <value>The name of the virtual directory.</value>
+		[Required]
+		public string VirtualDirectoryName
+		{
+			get
+			{
+				return mVirtualDirectoryName;
+			}
+			set
+			{
+				mVirtualDirectoryName = value;
+			}
+		}
+
+		#endregion
+
 		/// <summary>
 		/// When overridden in a derived class, executes the task.
 		/// </summary>
