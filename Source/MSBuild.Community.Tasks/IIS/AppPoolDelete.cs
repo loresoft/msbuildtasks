@@ -54,7 +54,7 @@ namespace MSBuild.Community.Tasks.IIS
 		private string mAppPoolName;
 
 		#endregion
-
+		
 		#region Properties
 
 		/// <summary>
