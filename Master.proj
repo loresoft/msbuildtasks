@@ -59,7 +59,8 @@
   <Target Name="Documentation" DependsOnTargets="Compile">
     <NDoc Documenter="MSDN" 
           ProjectFilePath="MSBuild.Community.Tasks.ndoc" 
-          WorkingDirectory="Documentation"/>
+          WorkingDirectory="Documentation"
+          ToolPath="C:\Program Files\NDoc 1.3\bin\net\1.1"/>
 
     <Copy SourceFiles="Documentation\doc\MSBuild Community Tasks.chm" 
           DestinationFiles="Documentation\MSBuild.Community.Tasks.chm" />

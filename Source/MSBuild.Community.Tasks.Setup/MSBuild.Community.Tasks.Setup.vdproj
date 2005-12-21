@@ -15,8 +15,20 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_6D5A63FD8148D0F1C61D8394EA682056"
+        "OwnerKey" = "8:_9B21427000324CC4A9C34776139351A2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_9B21427000324CC4A9C34776139351A2"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A3A0604185D7EE2C07786F26E2CAA89D"
+        "OwnerKey" = "8:_F988F7EA43E68AB217AD89B64C281BB9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -27,20 +39,26 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EBD4C9AAECDA87E3C48ADAD3D98B1D87"
+        "MsmKey" = "8:_F988F7EA43E68AB217AD89B64C281BB9"
         "OwnerKey" = "8:_9B21427000324CC4A9C34776139351A2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_EBD4C9AAECDA87E3C48ADAD3D98B1D87"
+        "OwnerKey" = "8:_9B21427000324CC4A9C34776139351A2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9B21427000324CC4A9C34776139351A2"
+        "OwnerKey" = "8:_6D5A63FD8148D0F1C61D8394EA682056"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F988F7EA43E68AB217AD89B64C281BB9"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -61,6 +79,17 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                }
+            }
         }
         "Release"
         {
@@ -77,6 +106,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.2.0"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 2.0"
+                    "ProductCode" = "8:Microsoft.Net.Framework.2.0"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -106,20 +151,71 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EBD4C9AAECDA87E3C48ADAD3D98B1D87"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6D5A63FD8148D0F1C61D8394EA682056"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73"
                 "ScatterAssemblies"
                 {
-                    "_EBD4C9AAECDA87E3C48ADAD3D98B1D87"
+                    "_6D5A63FD8148D0F1C61D8394EA682056"
                     {
                     "Name" = "8:ICSharpCode.SharpZipLib.dll"
                     "Attributes" = "3:512"
                     }
                 }
             "SourcePath" = "8:ICSharpCode.SharpZipLib.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A3A0604185D7EE2C07786F26E2CAA89D"
+            {
+            "SourcePath" = "8:ssapi.dll"
+            "TargetName" = "8:ssapi.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:4"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F988F7EA43E68AB217AD89B64C281BB9"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.VisualStudio.SourceSafe.Interop, Version=5.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_F988F7EA43E68AB217AD89B64C281BB9"
+                    {
+                    "Name" = "8:Microsoft.VisualStudio.SourceSafe.Interop.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.VisualStudio.SourceSafe.Interop.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"
@@ -203,14 +299,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MSBuild Community Tasks"
-        "ProductCode" = "8:{20600A75-48B7-4244-90A5-D13FCD7E78ED}"
-        "PackageCode" = "8:{6F4655A8-4C6D-4568-9630-85684B0978D1}"
+        "ProductCode" = "8:{2474E106-59D0-45F5-AD19-6F3E2723C550}"
+        "PackageCode" = "8:{0800F0B1-EC46-4216-BF12-1CF638031DBB}"
         "UpgradeCode" = "8:{F289AA13-BBAF-4EA2-97C8-BAEC7E5B743E}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:MSBuild Community Tasks"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://msbuildtasks.tigris.org/"
@@ -620,41 +716,6 @@
                             }
                         }
                     }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_2E4A6BB86AA745BAA5D11CC2BFDAD55D"
-                    {
-                    "Sequence" = "3:200"
-                    "DisplayName" = "8:Installation Folder"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdFolderDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "InstallAllUsersVisible"
-                            {
-                            "Name" = "8:InstallAllUsersVisible"
-                            "DisplayName" = "8:#1059"
-                            "Description" = "8:#1159"
-                            "Type" = "3:5"
-                            "ContextData" = "8:1;True=1;False=0"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:1"
-                            "DefaultValue" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_69198E205C1F496BB7F8D1985C50EBF0"
                     {
                     "Sequence" = "3:300"
@@ -724,7 +785,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9B21427000324CC4A9C34776139351A2"
             {
-            "SourcePath" = "8:..\\MSBuild.Community.Tasks\\obj\\Debug\\MSBuild.Community.Tasks.dll"
+            "SourcePath" = "8:..\\MSBuild.Community.Tasks\\obj\\Release\\MSBuild.Community.Tasks.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"
@@ -752,7 +813,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B32032D78577442DB2D24B26D881D407"
             {
-            "SourcePath" = "8:..\\MSBuild.Community.Tasks\\bin\\Debug\\MSBuild.Community.Tasks.xml"
+            "SourcePath" = "8:..\\..\\Build\\MSBuild.Community.Tasks.xml"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"

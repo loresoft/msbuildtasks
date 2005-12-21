@@ -3050,12 +3050,6 @@
             The fully qualified path to the executable file.
             </returns>
         </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnVersion.LogToolCommand(System.String)">
-            <summary>
-            Logs the starting point of the run to all registered loggers.
-            </summary>
-            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
-        </member>
         <member name="M:MSBuild.Community.Tasks.Subversion.SvnVersion.GenerateCommandLineCommands">
             <summary>
             Returns a string value containing the command line arguments to pass directly to the executable file.

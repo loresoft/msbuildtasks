@@ -166,15 +166,6 @@ namespace MSBuild.Community.Tasks.Subversion
         }
 
         /// <summary>
-        /// Logs the starting point of the run to all registered loggers.
-        /// </summary>
-        /// <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
-        protected override void LogToolCommand(string message)
-        {
-            Log.LogCommandLine(MessageImportance.Low, message);
-        }
-
-        /// <summary>
         /// Gets the name of the executable file to run.
         /// </summary>
         /// <value></value>
@@ -193,7 +184,7 @@ namespace MSBuild.Community.Tasks.Subversion
         protected override string GenerateCommandLineCommands()
         {
             DirectoryInfo localPath = new DirectoryInfo(_localPath);
-            return string.Format("--no-newline {0}", localPath.FullName);
+            return string.Format("--no-newline \"{0}\"", localPath.FullName);
         }
 
         /// <summary>
