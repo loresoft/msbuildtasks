@@ -73,6 +73,55 @@ namespace MSBuild.Community.Tasks
             set { _files = value; }
         }
 
+		private string _path;
+
+		/// <summary>
+		/// Gets or sets the path of files to update.
+		/// </summary>
+		public string Path
+		{
+			get
+			{
+				return _path;
+			}
+			set
+			{
+				_path = value;
+			}
+		}
+
+		private string[] _exFileTypes;
+		private string _excludeFileTypes;
+
+		/// <summary>
+		/// Gets or sets the excluded file types. This is a comma delimited string
+		/// of the file extensions that will be excluded in the update.
+		/// <example>The format of this property is:</example>
+		/// <code>
+		/// ".exe, .pdb, .dll, .compiled, .jpg, .gif"
+		/// </code>
+		/// </summary>
+		public string ExcludeFileTypes
+		{
+			get
+			{
+				return _excludeFileTypes;
+			}
+			set
+			{
+				if (value.Length > 0)
+				{
+					_exFileTypes = value.Split(',');
+					for (int iCtr = 0; iCtr < _exFileTypes.Length; iCtr++)
+					{
+						_exFileTypes[iCtr] = _exFileTypes[iCtr].Trim();
+					}
+				}
+
+				_excludeFileTypes = value;
+			}
+		}
+
         private string _regex;
 
         /// <summary>
@@ -156,33 +205,55 @@ namespace MSBuild.Community.Tasks
         /// </returns>
         public override bool Execute()
         {
+			RegexOptions options = RegexOptions.None;
+			if (_ignoreCase)
+			{
+				options |= RegexOptions.IgnoreCase;
+			}
+			if (_multiline)
+			{
+				options |= RegexOptions.Multiline;
+			}
+			if (_singleline)
+			{
+				options |= RegexOptions.Singleline;
+			}
+			if (_replacementCount == 0)
+			{
+				_replacementCount = -1;
+			}
+			Regex replaceRegex = new Regex(_regex, options);
+
             try
             {
-                foreach (ITaskItem item in _files)
-                {
-                    string fileName = item.ItemSpec;
+				if (_path != null)
+				{
+					foreach (string dir in Directory.GetDirectories(_path))
+					{
+						DirectoryInfo dirInfo = new DirectoryInfo(dir);
+						foreach (FileInfo fileInfo in dirInfo.GetFiles())
+						{
+							ParseFileText(replaceRegex, fileInfo);
+						}
+					}
 
-                    Log.LogMessage("Updating File \"{0}\".", fileName);
-
-                    RegexOptions options = RegexOptions.None;
-                    if (_ignoreCase)
-                        options |= RegexOptions.IgnoreCase;
-                    if (_multiline)
-                        options |= RegexOptions.Multiline;
-                    if (_singleline)
-                        options |= RegexOptions.Singleline;
-
-                    Regex replaceRegex = new Regex(_regex, options);
-
-                    if (_replacementCount == 0)
-                        _replacementCount = -1;
-
-                    string buffer = File.ReadAllText(fileName);
-                    buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);
-                    File.WriteAllText(fileName, buffer);
-
-                    Log.LogMessage("  Replaced \"{0}\" with \"{1}\"", _regex, _replacementText);
-                }
+					foreach (FileInfo fileInfo in new DirectoryInfo(_path).GetFiles())
+					{
+						ParseFileText(replaceRegex, fileInfo);
+					}
+				}
+				else
+				{
+					foreach (ITaskItem item in _files)
+					{
+						string fileName = item.ItemSpec;
+						Log.LogMessage("Updating File \"{0}\".", fileName);
+						string buffer = File.ReadAllText(fileName);
+						buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);
+						File.WriteAllText(fileName, buffer);
+						Log.LogMessage("  Replaced matches with \"{0}\".", _replacementText);
+					}
+				}
             }
             catch (Exception ex)
             {
@@ -191,5 +262,32 @@ namespace MSBuild.Community.Tasks
             }
             return true;
         }
+
+		private void ParseFileText(Regex replaceRegex, FileInfo fileInfo)
+		{
+			if (IsGoodFileType(fileInfo.Extension))
+			{
+				Log.LogMessage("Updating File \"{0}\".", fileInfo.Name);
+				string buffer = File.ReadAllText(fileInfo.FullName);
+				buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);
+				File.WriteAllText(fileInfo.FullName, buffer);
+				Log.LogMessage("  Replaced matches with \"{0}\".", _replacementText);
+			}
+		}
+
+		private bool IsGoodFileType(string extension)
+		{
+			bool status = true;
+
+			foreach(string exFileType in _exFileTypes)
+			{
+				if (exFileType == extension)
+				{
+					status = false;
+				}
+			}
+
+			return status;
+		}
     }
 }
