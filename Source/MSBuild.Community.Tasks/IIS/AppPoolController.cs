@@ -52,7 +52,7 @@ namespace MSBuild.Community.Tasks.IIS
 		#region Fields
 
 		private string mAppPoolName;
-		private ApplicationPoolAction mAction;
+		private string mAction;
 
 		#endregion
 
@@ -80,7 +80,7 @@ namespace MSBuild.Community.Tasks.IIS
 		/// </summary>
 		/// <value>The application pool action.</value>
 		[Required]
-		public ApplicationPoolAction Action
+		public string Action
 		{
 			get
 			{
@@ -138,19 +138,19 @@ namespace MSBuild.Community.Tasks.IIS
 					ManagementPath path = new ManagementPath("IIsApplicationPool='W3SVC/AppPools/" + ApplicationPoolName + "'");
 					ManagementObject pool = new ManagementObject(scope, path, null);
 
-					if (Action == ApplicationPoolAction.Stop || Action == ApplicationPoolAction.Restart)
+					if (Action == "Stop" || Action == "Restart")
 					{
 						Log.LogMessage(MessageImportance.Normal, "Stopping \"{0}\" on \"{1}\"...", ApplicationPoolName, ServerName);
 						pool.InvokeMethod("Stop", new object[0]);
 					}
 
-					if (Action == ApplicationPoolAction.Start || Action == ApplicationPoolAction.Restart)
+					if (Action == "Start" || Action == "Restart")
 					{
 						Log.LogMessage(MessageImportance.Normal, "Starting \"{0}\" on \"{1}\"...", ApplicationPoolName, ServerName);
 						pool.InvokeMethod("Start", new object[0]);
 					}
 
-					if (Action == ApplicationPoolAction.Recycle)
+					if (Action == "Recycle")
 					{
 						Log.LogMessage(MessageImportance.Normal, "Recycling \"{0}\" on \"{1}\"...", ApplicationPoolName, ServerName);
 						pool.InvokeMethod("Recycle", new object[0]);
@@ -177,11 +177,11 @@ namespace MSBuild.Community.Tasks.IIS
 		{
 			switch (Action)
 			{
-				case ApplicationPoolAction.Restart:
+				case "Restart":
 					return "Restarted";
-				case ApplicationPoolAction.Start:
+				case "Start":
 					return "Started";
-				case ApplicationPoolAction.Stop:
+				case "Stop":
 					return "Stopped";
 				default:
 					return "Recycled";
@@ -192,11 +192,11 @@ namespace MSBuild.Community.Tasks.IIS
 		{
 			switch (Action)
 			{
-				case ApplicationPoolAction.Restart:
+				case "Restart":
 					return "restarting";
-				case ApplicationPoolAction.Start:
+				case "Start":
 					return "starting";
-				case ApplicationPoolAction.Stop:
+				case "Stop":
 					return "stopping";
 				default:
 					return "recycling";

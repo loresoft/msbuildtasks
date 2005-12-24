@@ -48,7 +48,7 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			task.BuildEngine = new MockBuild();
 			task.ServerName = mServer;
 			task.ApplicationPoolName = mAppPoolName;
-			task.Action = WebBase.ApplicationPoolAction.Recycle;
+			task.Action = "Recycle";
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 
@@ -60,7 +60,7 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			task.BuildEngine = new MockBuild();
 			task.ServerName = mServer;
 			task.ApplicationPoolName = mAppPoolName;
-			task.Action = WebBase.ApplicationPoolAction.Restart;
+			task.Action = "Restart";
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 
@@ -72,7 +72,7 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			task.BuildEngine = new MockBuild();
 			task.ServerName = mServer;
 			task.ApplicationPoolName = mAppPoolName;
-			task.Action = WebBase.ApplicationPoolAction.Start;
+			task.Action = "Start";
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 
@@ -84,7 +84,7 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			task.BuildEngine = new MockBuild();
 			task.ServerName = mServer;
 			task.ApplicationPoolName = mAppPoolName;
-			task.Action = WebBase.ApplicationPoolAction.Stop;
+			task.Action = "Stop";
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 	}
