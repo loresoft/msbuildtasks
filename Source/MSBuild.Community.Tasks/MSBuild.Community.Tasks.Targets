@@ -5,6 +5,7 @@
   </PropertyGroup>
   
   <UsingTask TaskName="MSBuild.Community.Tasks.AssemblyInfo" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Attrib" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.FileUpdate" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.FtpUpload" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.FxCop" AssemblyFile="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" />
