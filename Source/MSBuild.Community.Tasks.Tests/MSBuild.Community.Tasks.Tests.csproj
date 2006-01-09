@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfoTest.cs" />
+    <Compile Include="CurrentDateTimeTest.cs" />
     <Compile Include="FileUpdateTest.cs" />
     <Compile Include="IIS\AppPoolControllerTest.cs" />
     <Compile Include="IIS\AppPoolCreateTest.cs" />
