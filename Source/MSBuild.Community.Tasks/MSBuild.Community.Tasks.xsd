@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema targetNamespace="http://schemas.microsoft.com/developer/msbuild/2003" 
-xmlns:xs="http://www.w3.org/2001/XMLSchema"
-xmlns:msb="http://schemas.microsoft.com/developer/msbuild/2003"
-elementFormDefault="qualified">
-
+<xs:schema targetNamespace="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msb="http://schemas.microsoft.com/developer/msbuild/2003" elementFormDefault="qualified">
 	<!-- $Id$ -->
 	<!-- This file was contributed by http://msbuildtasks.tigris.org -->
-	
 	<!-- 
 	In order to provide this file to IntelliSense in Visual Studio, place it in 
 	<Program Files>\Microsoft Visual Studio 8\xml\Schemas\1033\MSBuild\
@@ -15,10 +10,8 @@ elementFormDefault="qualified">
 	into the file
 	<Program Files>\Microsoft Visual Studio 8\xml\Schemas\1033\Microsoft.Build.xsd
 	-->
-
 	<!-- =================== INCLUDE COMMON SCHEMA =========================== -->
-	<xs:include schemaLocation="Microsoft.Build.Core.xsd"/>
-
+	<xs:include schemaLocation="Microsoft.Build.Core.xsd" />
 	<!-- base type for ToolTasks -->
 	<xs:complexType name="ToolTaskType" abstract="true">
 		<xs:complexContent>
@@ -28,13 +21,10 @@ elementFormDefault="qualified">
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-
-
 	<!-- ========= ADD CUSTOM ITEMS, PROPERTIES, AND TASKS BELOW ======= -->
 	<!-- Note that these will be in the msbuild namespace. A future version of
 		msbuild may require that custom itemtypes, properties, and tasks be in a 
 		custom namespace, but currently msbuild only supports the msbuild namespace. -->
-
 	<!-- example custom itemtype with particular meta-data required-->
 	<!--<xs:element name="MyItem" substitutionGroup="msb:Item">
 		<xs:complexType>
@@ -49,16 +39,12 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>-->
-
 	<!-- Example custom itemtype with NO meta-data -->
 	<!--<xs:element name="MySimpleItem" type="msb:SimpleItemType" substitutionGroup="msb:Item"/>-->
-
 	<!-- Example custom itemtype with ANY meta-data -->
 	<!--<xs:element name="MyFlexibleItem" type="msb:GenericItemType" substitutionGroup="msb:Item"/>-->
-
 	<!-- example custom property that allows string content only-->
 	<!--<xs:element name="MySimpleProperty" type="msb:StringPropertyType" substitutionGroup="msb:Property"/>-->
-
 	<!-- example custom task with single required parameter-->
 	<!--<xs:element name="MyTask" substitutionGroup="msb:Task">
 		<xs:complexType>
@@ -69,7 +55,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>-->
-
 	<!-- example custom tool task with single required parameter-->
 	<!--<xs:element name="MyToolTask" substitutionGroup="msb:Task">
 		<xs:complexType>
@@ -80,7 +65,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>-->
-
 	<xs:element name="AssemblyInfo" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -104,7 +88,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:element name="NDoc" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -117,7 +100,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:element name="NUnit" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -133,7 +115,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:complexType name="SvnClientType">
 		<xs:complexContent>
 			<xs:extension base="msb:ToolTaskType">
@@ -150,7 +131,6 @@ elementFormDefault="qualified">
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-
 	<xs:element name="SvnCheckout" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -159,7 +139,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:element name="SvnClient" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -168,7 +147,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:element name="SvnCommit" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -177,7 +155,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:element name="SvnExport" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -186,7 +163,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:element name="SvnUpdate" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -195,7 +171,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:element name="SvnVersion" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -205,8 +180,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
-	
 	<xs:element name="Timestamp" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -216,7 +189,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:element name="Version" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -228,7 +200,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:element name="Xslt" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -242,7 +213,6 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
 	<xs:element name="Zip" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -257,5 +227,41 @@ elementFormDefault="qualified">
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-
+	<xs:element name="CurrentDateTime">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="DateTime" type="xs:string" />
+				<xs:element name="Day" type="xs:string" />
+				<xs:element name="DayOfWeek" type="xs:string" />
+				<xs:element name="DayOfYear" type="xs:string" />
+				<xs:element name="Hour" type="xs:string" />
+				<xs:element name="Kind" type="xs:string" />
+				<xs:element name="LongDate" type="xs:string" />
+				<xs:element name="LongTime" type="xs:string" />
+				<xs:element name="Millisecond" type="xs:string" />
+				<xs:element name="Minute" type="xs:string" />
+				<xs:element name="Month" type="xs:string" />
+				<xs:element name="Second" type="xs:string" />
+				<xs:element name="ShortDate" type="xs:string" />
+				<xs:element name="ShortTime" type="xs:string" />
+				<xs:element name="Ticks" type="xs:string" />
+				<xs:element name="TimeOfDay" type="xs:string" />
+				<xs:element name="Year" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FileUpdate">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Files" type="msb:Microsoft.Build.Framework.ITaskItem_x005B__x005D_">
+				</xs:element>
+				<xs:element name="IgnoreCase" type="xs:boolean" />
+				<xs:element name="Multiline" type="xs:boolean" />
+				<xs:element name="Regex" type="xs:string" />
+				<xs:element name="ReplacementCount" type="xs:int" />
+				<xs:element name="ReplacementText" type="xs:string" />
+				<xs:element name="Singleline" type="xs:boolean" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 </xs:schema>
