@@ -68,6 +68,7 @@ namespace MSBuild.Community.Tasks
     /// </example>
     public class Zip : Task
     {
+        #region Constructor
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Zip"/> class.
         /// </summary>
@@ -76,6 +77,9 @@ namespace MSBuild.Community.Tasks
             _zipLevel = 6;
         }
 
+        #endregion Constructor
+
+        #region Input Parameters
         private string _zipFileName;
 
         /// <summary>
@@ -159,6 +163,9 @@ namespace MSBuild.Community.Tasks
             set { _workingDirectory = value; }
         }
 
+        #endregion Input Parameters
+
+        #region Task Overrides
         /// <summary>
         /// When overridden in a derived class, executes the task.
         /// </summary>
@@ -166,10 +173,13 @@ namespace MSBuild.Community.Tasks
         /// true if the task successfully executed; otherwise, false.
         /// </returns>
         public override bool Execute()
-        {            
+        {
             return ZipFiles();
         }
 
+        #endregion Task Overrides
+
+        #region Private Methods
         private bool ZipFiles()
         {
             Crc32 crc = new Crc32();
@@ -178,7 +188,7 @@ namespace MSBuild.Community.Tasks
             try
             {
                 Log.LogMessage(Properties.Resources.ZipCreating, _zipFileName);
-                
+
                 FileInfo zipFile = new FileInfo(_zipFileName);
                 zs = new ZipOutputStream(zipFile.Create());
 
@@ -219,7 +229,7 @@ namespace MSBuild.Community.Tasks
                     {
                         name = file.Name;
                     }
-                    else if (!string.IsNullOrEmpty(_workingDirectory) 
+                    else if (!string.IsNullOrEmpty(_workingDirectory)
                         && name.StartsWith(_workingDirectory, true, CultureInfo.InvariantCulture))
                     {
                         name = name.Remove(0, _workingDirectory.Length);
@@ -240,7 +250,7 @@ namespace MSBuild.Community.Tasks
                     Log.LogMessage(Properties.Resources.ZipAdded, name);
                 } // foreach file
                 zs.Finish();
-                Log.LogMessage(Properties.Resources.ZipSuccessfully, _zipFileName); 
+                Log.LogMessage(Properties.Resources.ZipSuccessfully, _zipFileName);
 
                 return true;
             }
@@ -250,5 +260,7 @@ namespace MSBuild.Community.Tasks
                     zs.Close();
             }
         }
+
+        #endregion Private Methods
     }
 }

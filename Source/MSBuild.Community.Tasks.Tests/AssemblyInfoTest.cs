@@ -2,7 +2,6 @@
 
 using System;
 using System.Text;
-using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 
@@ -15,40 +14,53 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]    
     public class AssemblyInfoTest
     {
-        public AssemblyInfoTest()
+        private string testDirectory;
+
+        [TestFixtureSetUp]
+        public void FixtureInit() 
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            MockBuild buildEngine = new MockBuild();
+
+            testDirectory = TaskUtility.makeTestDirectory(buildEngine);
         }
 
-        [Test]
-        public void AssemblyInfoExecute()
-        {
+        [Test(Description = "Create VersionInfo in C#")]
+        public void AssemblyInfoCS() {
             AssemblyInfo task = new AssemblyInfo();
             task.BuildEngine = new MockBuild();
             task.CodeLanguage = "cs";
-            task.OutputFile = "VersionInfo.cs";
+            string outputFile = Path.Combine(testDirectory, "VersionInfo.cs");
+            task.OutputFile = outputFile;
             task.AssemblyVersion = "1.2.3.4";
             task.AssemblyFileVersion = "1.2.3.4";
             Assert.IsTrue(task.Execute(), "Execute Failed");
 
-            Assert.IsTrue(File.Exists("VersionInfo.cs"));
+            Assert.IsTrue(File.Exists(outputFile), "File missing: " + outputFile);
 
-            task = new AssemblyInfo();
+        }
+
+        [Test(Description = "Create VersionInfo in VB")]
+        public void AssemblyInfoVB() {
+            AssemblyInfo task = new AssemblyInfo();
             task.BuildEngine = new MockBuild();
             task.CodeLanguage = "vb";
-            task.OutputFile = "VersionInfo.vb";
+            string outputFile = Path.Combine(testDirectory, "VersionInfo.vb");
+            task.OutputFile = outputFile;
             task.AssemblyVersion = "1.2.3.4";
             task.AssemblyFileVersion = "1.2.3.4";
             Assert.IsTrue(task.Execute(), "Execute Failed");
 
-            Assert.IsTrue(File.Exists("VersionInfo.vb"));
+            Assert.IsTrue(File.Exists(outputFile), "File missing: " + outputFile);
 
-            task = new AssemblyInfo();
+        }
+
+        [Test(Description = "Create AssemblyInfo in C#")]
+        public void AssemblyInfoExecute() {
+            AssemblyInfo task = new AssemblyInfo();
             task.BuildEngine = new MockBuild();
             task.CodeLanguage = "cs";
-            task.OutputFile = "AssemblyInfo.cs";
+            string outputFile = Path.Combine(testDirectory, "AssemblyInfo.cs");
+            task.OutputFile = outputFile;
             task.AssemblyTitle = "AssemblyInfoTask";
             task.AssemblyDescription = "AssemblyInfo Description";
             task.AssemblyConfiguration = "";
@@ -63,7 +75,7 @@ namespace MSBuild.Community.Tasks.Tests
             task.AssemblyFileVersion = "1.2.3.4";
             Assert.IsTrue(task.Execute(), "Execute Failed");
 
-            Assert.IsTrue(File.Exists("AssemblyInfo.cs"));
+            Assert.IsTrue(File.Exists(outputFile), "File missing: " + outputFile);
 
         }
     }

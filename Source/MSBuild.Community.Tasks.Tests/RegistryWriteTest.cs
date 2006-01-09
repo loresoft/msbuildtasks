@@ -2,7 +2,6 @@
 
 using System;
 using System.Text;
-using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
@@ -13,14 +12,7 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]
     public class RegistryWriteTest
     {
-        public RegistryWriteTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        [Test]
+        [Test(Description="Write a value to the registry")]
         public void RegistryWriteExecute()
         {
             RegistryWrite task = new RegistryWrite();

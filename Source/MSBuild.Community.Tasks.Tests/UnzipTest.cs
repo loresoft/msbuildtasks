@@ -1,8 +1,8 @@
 // $Id$
 
 using System;
+using System.IO;
 using System.Text;
-using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
@@ -13,23 +13,24 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]
     public class UnzipTest
     {
-        public UnzipTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        [Test]
+        [Test(Description="Unzip a zip archive")]
         public void UnzipExecute()
         {
+            string testDir = TaskUtility.TestDirectory;
+            string zipFileName = Path.Combine(testDir, ZipTest.ZIP_FILE_NAME);
+
+            if (!File.Exists(zipFileName))
+            {
+                Assert.Ignore("Zip file \"{0}\" not found; first run test that creates it", zipFileName);
+            }
+
             ZipTest zip = new ZipTest();
             zip.ZipExecute();
 
             Unzip task = new Unzip();
             task.BuildEngine = new MockBuild();
-            task.ZipFileName = @"MSBuild.Community.Tasks.zip";
-            task.TargetDirectory = @"Backup";
+            task.ZipFileName = zipFileName;
+            task.TargetDirectory = Path.Combine(testDir, @"Backup");
 
             Assert.IsTrue(task.Execute(), "Execute Failed");
 

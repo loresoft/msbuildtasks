@@ -38,219 +38,230 @@ using System.IO;
 
 namespace MSBuild.Community.Tasks
 {
-    /// <summary>
-    /// Get Version information from file.
-    /// </summary>
-    /// <example>Get version information and increment revision.
-    /// <code><![CDATA[
-    /// <Version VersionFile="number.txt" RevisionType="Increment">
-    ///     <Output TaskParameter="Major" PropertyName="Major" />
-    ///     <Output TaskParameter="Minor" PropertyName="Minor" />
-    ///     <Output TaskParameter="Build" PropertyName="Build" />
-    ///     <Output TaskParameter="Revision" PropertyName="Revision" />
-    /// </Version>
-    /// <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
-    /// ]]></code>
-    /// </example>
-    public class Version : Task
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:Version"/> class.
-        /// </summary>
-        public Version()
-        {
-        }
-        
-#region Properties
-        private int _major = 1;
+	/// <summary>
+	/// Get Version information from file.
+	/// </summary>
+	/// <example>Get version information and increment revision.
+	/// <code><![CDATA[
+	/// <Version VersionFile="number.txt" RevisionType="Increment">
+	///     <Output TaskParameter="Major" PropertyName="Major" />
+	///     <Output TaskParameter="Minor" PropertyName="Minor" />
+	///     <Output TaskParameter="Build" PropertyName="Build" />
+	///     <Output TaskParameter="Revision" PropertyName="Revision" />
+	/// </Version>
+	/// <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+	/// ]]></code>
+	/// </example>
+	public class Version : Task
+	{
+		#region Constructor
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:Version"/> class.
+		/// </summary>
+		public Version()
+		{
+		}
 
-        /// <summary>
-        /// Gets or sets the major version number.
-        /// </summary>
-        /// <value>The major version number.</value>
-        [Output]
-        public int Major
-        {
-            get { return _major; }
-            set { _major = value; }
-        }
+		#endregion Constructor
+		
+		#region Output Parameters
+		private int _major = 1;
 
-        private int _minor;
+		/// <summary>
+		/// Gets or sets the major version number.
+		/// </summary>
+		/// <value>The major version number.</value>
+		[Output]
+		public int Major
+		{
+			get { return _major; }
+			set { _major = value; }
+		}
 
-        /// <summary>
-        /// Gets or sets the minor version number.
-        /// </summary>
-        /// <value>The minor version number.</value>
-        [Output]
-        public int Minor
-        {
-            get { return _minor; }
-            set { _minor = value; }
-        }
+		private int _minor;
 
-        private int _build;
+		/// <summary>
+		/// Gets or sets the minor version number.
+		/// </summary>
+		/// <value>The minor version number.</value>
+		[Output]
+		public int Minor
+		{
+			get { return _minor; }
+			set { _minor = value; }
+		}
 
-        /// <summary>
-        /// Gets or sets the build version number.
-        /// </summary>
-        /// <value>The build version number.</value>
-        [Output]
-        public int Build
-        {
-            get { return _build; }
-            set { _build = value; }
-        }
+		private int _build;
 
-        private int _revision;
+		/// <summary>
+		/// Gets or sets the build version number.
+		/// </summary>
+		/// <value>The build version number.</value>
+		[Output]
+		public int Build
+		{
+			get { return _build; }
+			set { _build = value; }
+		}
 
-        /// <summary>
-        /// Gets or sets the revision version number.
-        /// </summary>
-        /// <value>The revision version number.</value>
-        [Output]
-        public int Revision
-        {
-            get { return _revision; }
-            set { _revision = value; }
-        }
+		private int _revision;
 
-        private string _versionFile;
+		/// <summary>
+		/// Gets or sets the revision version number.
+		/// </summary>
+		/// <value>The revision version number.</value>
+		[Output]
+		public int Revision
+		{
+			get { return _revision; }
+			set { _revision = value; }
+		}
 
-        /// <summary>
-        /// Gets or sets the version file.
-        /// </summary>
-        /// <value>The version file.</value>
-        [Required]
-        public string VersionFile
-        {
-            get { return _versionFile; }
-            set { _versionFile = value; }
-        }
+		#endregion Output Parameters
 
-        private string _buildType;
+		#region Input Parameters
+		private string _versionFile;
 
-        /// <summary>
-        /// Gets or sets the type of the build.
-        /// </summary>
-        /// <value>The type of the build.</value>
-        /// <remarks>
-        /// Possible values include Automatic, Increment, NonIncrement, or Date.
-        /// </remarks>
-        public string BuildType
-        {
-            get { return _buildType; }
-            set { _buildType = value; }
-        }
+		/// <summary>
+		/// Gets or sets the version file.
+		/// </summary>
+		/// <value>The version file.</value>
+		[Required]
+		public string VersionFile
+		{
+			get { return _versionFile; }
+			set { _versionFile = value; }
+		}
 
-        private string _revisionType;
+		private string _buildType;
 
-        /// <summary>
-        /// Gets or sets the type of the revision.
-        /// </summary>
-        /// <value>The type of the revision.</value>
-        /// <remarks>
-        /// Possible values include Automatic, Increment, NonIncrement.
-        /// </remarks>
-        public string RevisionType
-        {
-            get { return _revisionType; }
-            set { _revisionType = value; }
-        } 
-#endregion
+		/// <summary>
+		/// Gets or sets the type of the build.
+		/// </summary>
+		/// <value>The type of the build.</value>
+		/// <remarks>
+		/// Possible values include Automatic, Increment, NonIncrement, or Date.
+		/// </remarks>
+		public string BuildType
+		{
+			get { return _buildType; }
+			set { _buildType = value; }
+		}
 
-        /// <summary>
-        /// When overridden in a derived class, executes the task.
-        /// </summary>
-        /// <returns>
-        /// true if the task successfully executed; otherwise, false.
-        /// </returns>
-        public override bool Execute()
-        {
-            ReadVersionFromFile();
-            CalculateBuildNumber();
-            CalculateRevisionNumber();
-            return WriteVersionToFile();
-        }
+		private string _revisionType;
 
-        private void ReadVersionFromFile()
-        {
-            string textVersion = null;
-            System.Version version = null;
+		/// <summary>
+		/// Gets or sets the type of the revision.
+		/// </summary>
+		/// <value>The type of the revision.</value>
+		/// <remarks>
+		/// Possible values include Automatic, Increment, NonIncrement.
+		/// </remarks>
+		public string RevisionType
+		{
+			get { return _revisionType; }
+			set { _revisionType = value; }
+		}
 
-            if (!System.IO.File.Exists(_versionFile))
-            {
-                Log.LogWarning(Properties.Resources.VersionFileNotFound, _versionFile);
-                return;
-            }
+		#endregion Input Parameters
 
-            try
-            {
-                using (StreamReader reader = new StreamReader(_versionFile))
-                {
-                    textVersion = reader.ReadToEnd();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.LogError(Properties.Resources.VersionReadException, 
-                    _versionFile, ex.Message);
-                return;
-            }
+		#region Task Overrides
+		/// <summary>
+		/// When overridden in a derived class, executes the task.
+		/// </summary>
+		/// <returns>
+		/// true if the task successfully executed; otherwise, false.
+		/// </returns>
+		public override bool Execute()
+		{
+			ReadVersionFromFile();
+			CalculateBuildNumber();
+			CalculateRevisionNumber();
+			return WriteVersionToFile();
+		}
 
-            Log.LogMessage(Properties.Resources.VersionRead, 
-                textVersion, _versionFile);
+		#endregion Task Overrides
 
-            try
-            {
-                version = new System.Version(textVersion);
-            }
-            catch (Exception ex)
-            {
-                Log.LogErrorFromException(ex);
-                return;                
-            }
+		#region Private Methods
+		private void ReadVersionFromFile()
+		{
+			string textVersion = null;
+			System.Version version = null;
 
-            if (version != null)
-            {
-                _major = version.Major;
-                _minor = version.Minor;
-                _build = version.Build;
-                _revision = version.Revision;
-            }
-        }
+			if (!System.IO.File.Exists(_versionFile))
+			{
+				Log.LogWarning(Properties.Resources.VersionFileNotFound, _versionFile);
+				return;
+			}
 
-        private bool WriteVersionToFile()
-        {
-            System.Version version = new System.Version(_major, _minor, _build, _revision);
+			try
+			{
+				using (StreamReader reader = new StreamReader(_versionFile))
+				{
+					textVersion = reader.ReadToEnd();
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.LogError(Properties.Resources.VersionReadException,
+					_versionFile, ex.Message);
+				return;
+			}
 
-            try
-            {
-                using (StreamWriter writer = System.IO.File.CreateText(_versionFile))
-                {
-                    writer.Write(version.ToString());
-                    writer.Flush();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.LogError(Properties.Resources.VersionWriteException,
-                    _versionFile, ex.Message);
-                return false;
-            }
+			Log.LogMessage(Properties.Resources.VersionRead,
+				textVersion, _versionFile);
 
-            Log.LogMessage(Properties.Resources.VersionWrote, 
-                version.ToString(), _versionFile);
+			try
+			{
+				version = new System.Version(textVersion);
+			}
+			catch (Exception ex)
+			{
+				Log.LogErrorFromException(ex);
+				return;
+			}
 
-            return true;
-        }
+			if (version != null)
+			{
+				_major = version.Major;
+				_minor = version.Minor;
+				_build = version.Build;
+				_revision = version.Revision;
+			}
+		}
 
-        private int CalculateDaysSinceMilenium()
-        {
-            DateTime today = DateTime.Now;
-            DateTime startDate = new DateTime(2000, 1, 1);
-            TimeSpan span = today.Subtract(startDate);
-            return (int)span.TotalDays;
-        }
+		private bool WriteVersionToFile()
+		{
+			System.Version version = new System.Version(_major, _minor, _build, _revision);
+
+			try
+			{
+				using (StreamWriter writer = System.IO.File.CreateText(_versionFile))
+				{
+					writer.Write(version.ToString());
+					writer.Flush();
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.LogError(Properties.Resources.VersionWriteException,
+					_versionFile, ex.Message);
+				return false;
+			}
+
+			Log.LogMessage(Properties.Resources.VersionWrote,
+				version.ToString(), _versionFile);
+
+			return true;
+		}
+
+		private int CalculateDaysSinceMilenium()
+		{
+			DateTime today = DateTime.Now;
+			DateTime startDate = new DateTime(2000, 1, 1);
+			TimeSpan span = today.Subtract(startDate);
+			return (int)span.TotalDays;
+		}
 
 		private int CalculateBuildDate()
 		{
@@ -262,33 +273,35 @@ namespace MSBuild.Community.Tasks
 			return (_year + _month + _day);
 		}
 
-        private void CalculateBuildNumber()
-        {
-            if (string.Compare(_buildType, "Automatic", true) == 0)
-            {
-                _build = CalculateDaysSinceMilenium();
-            }
-            else if (string.Compare(_buildType, "Increment", true) == 0)
-            {
-                _build++;
-            }
+		private void CalculateBuildNumber()
+		{
+			if (string.Compare(_buildType, "Automatic", true) == 0)
+			{
+				_build = CalculateDaysSinceMilenium();
+			}
+			else if (string.Compare(_buildType, "Increment", true) == 0)
+			{
+				_build++;
+			}
 			else if (string.Compare(_buildType, "Date", true) == 0)
 			{
 				_build = CalculateBuildDate();
 			}
-        }
+		}
 
-        private void CalculateRevisionNumber()
-        {
-            if (string.Compare(_revisionType, "Automatic", true) == 0)
-            {
-                _revision = (int)DateTime.Now.TimeOfDay.TotalSeconds;
-            }
-            else if (string.Compare(_revisionType, "Increment", true) == 0)
-            {
-                _revision++;
-            }
-        }
+		private void CalculateRevisionNumber()
+		{
+			if (string.Compare(_revisionType, "Automatic", true) == 0)
+			{
+				_revision = (int)DateTime.Now.TimeOfDay.TotalSeconds;
+			}
+			else if (string.Compare(_revisionType, "Increment", true) == 0)
+			{
+				_revision++;
+			}
+		}
 
-    }
+		#endregion Private Methods
+
+	}
 }

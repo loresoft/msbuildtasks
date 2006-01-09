@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- $Id$ -->
   <PropertyGroup>
     <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
-    <LastUpdate>Monday, December 19, 2005</LastUpdate>
+    <LastUpdate>Montag, 9. Januar 2006</LastUpdate>
     <TestUpdate>Test from Task.proj</TestUpdate>
   </PropertyGroup>
   <Import Project="MSBuild.Community.Tasks.Targets" />

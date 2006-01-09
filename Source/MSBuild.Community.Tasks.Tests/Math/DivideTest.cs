@@ -2,9 +2,8 @@
 
 using System;
 using System.Text;
-using System.Collections.Generic;
-using NUnit.Framework;
 using MSBuild.Community.Tasks.Math;
+using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests.Math
 {

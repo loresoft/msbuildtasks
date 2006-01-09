@@ -1,5 +1,7 @@
+// $Id$
+
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using NUnit.Framework;
 
@@ -8,26 +10,28 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture()]
     public class WebDownloadTest
     {
+        private string testDirectory;
+
         [SetUp()]
         public void Setup()
         {
-            //TODO: NUnit setup
+            MockBuild buildEngine = new MockBuild();
+
+            testDirectory = TaskUtility.makeTestDirectory(buildEngine);
+
         }
 
-        [TearDown()]
-        public void TearDown()
-        {
-            //TODO: NUnit TearDown
-        }
-
-        [Test()]
+        [Test(Description = "Download www.microsoft.com/default.aspx")]
         public void WebDownloadExecute()
         {
             WebDownload task = new WebDownload();
             task.BuildEngine = new MockBuild();
             task.FileUri = "http://www.microsoft.com/default.aspx";
-            task.FileName = "microsoft.html";
+            string downloadFile = Path.Combine(testDirectory, "microsoft.html");
+            task.FileName = downloadFile;
             Assert.IsTrue(task.Execute(), "Execute Failed");
+
+            Assert.IsTrue(File.Exists(downloadFile), "No download file");
 
         }
     }

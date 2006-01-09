@@ -53,20 +53,36 @@ namespace MSBuild.Community.Tasks
     /// </example>
     public class AssemblyInfo : Task
     {
-        private Dictionary<string, string> _attributes;
+        #region Constants
 
+        /// <summary>
+        /// The default value of <see cref="OutputFile"/>.
+        /// The value is <c>"AssemblyInfo.cs"</c>.
+        /// </summary>
+        public const string DEFAULT_OUTPUT_FILE = @"AssemblyInfo.cs";
+
+        #endregion Constants
+
+        #region Fields
+        private Dictionary<string, string> _attributes;
+        private string[] _Imports;
+
+        #endregion Fields
+
+        #region Constructor
         /// <summary>
         /// Initializes a new instance of the <see cref="T:AssemblyInfo"/> class.
         /// </summary>
         public AssemblyInfo()
         {
-            _attributes = new Dictionary<string, string>(); 
+            _attributes = new Dictionary<string, string>();
             _Imports = new string[] { "System", "System.Reflection", "System.Runtime.CompilerServices", "System.Runtime.InteropServices" };
-            _OutputFile = "AssemblyInfo.cs";
+            _OutputFile = DEFAULT_OUTPUT_FILE;
         }
 
-        private string[] _Imports;
+        #endregion Constructor
 
+        #region Input Parameters
         private string _CodeLanguage;
 
         /// <summary>
@@ -78,19 +94,6 @@ namespace MSBuild.Community.Tasks
         {
             get { return _CodeLanguage; }
             set { _CodeLanguage = value; }
-        }
-
-        private string _OutputFile;
-
-        /// <summary>
-        /// Gets or sets the output file.
-        /// </summary>
-        /// <value>The output file.</value>
-        [Output]
-        public string OutputFile
-        {
-            get { return _OutputFile; }
-            set { _OutputFile = value; }
         }
 
         /// <summary>
@@ -223,6 +226,25 @@ namespace MSBuild.Community.Tasks
             set { _attributes["AssemblyFileVersion"] = value; }
         }
 
+        #endregion Input Parameters
+
+        #region Input/Output Parameters
+        private string _OutputFile;
+
+        /// <summary>
+        /// Gets or sets the output file.
+        /// </summary>
+        /// <value>The output file.</value>
+        [Output]
+        public string OutputFile
+        {
+            get { return _OutputFile; }
+            set { _OutputFile = value; }
+        }
+
+        #endregion Input/Output Parameters
+
+        #region Task Overrides
         /// <summary>
         /// When overridden in a derived class, executes the task.
         /// </summary>
@@ -240,13 +262,16 @@ namespace MSBuild.Community.Tasks
             using (StreamWriter writer = File.CreateText(_OutputFile))
             {
                 GenerateFile(writer);
-                writer.Flush(); 
+                writer.Flush();
                 writer.Close();
                 Log.LogMessage("Created AssemblyInfo file \"{0}\".", _OutputFile);
             }
             return true;
         }
 
+        #endregion Task Overrides
+
+        #region Private Methods
         private void GenerateFile(TextWriter writer)
         {
             CodeDomProvider provider = null;
@@ -254,7 +279,7 @@ namespace MSBuild.Community.Tasks
             if (string.Compare(_CodeLanguage, "VB", true) == 0)
             {
                 provider = new Microsoft.VisualBasic.VBCodeProvider();
-                _OutputFile= Path.ChangeExtension(_OutputFile, ".vb");
+                _OutputFile = Path.ChangeExtension(_OutputFile, ".vb");
             }
             else
             {
@@ -295,7 +320,7 @@ namespace MSBuild.Community.Tasks
                 // add assembly-level argument to code compile unit
                 codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
             }
-            provider.GenerateCodeFromCompileUnit(codeCompileUnit, writer, new CodeGeneratorOptions());            
+            provider.GenerateCodeFromCompileUnit(codeCompileUnit, writer, new CodeGeneratorOptions());
         }
 
         private string ReadAttribute(string key)
@@ -317,6 +342,8 @@ namespace MSBuild.Community.Tasks
 
             return result;
         }
+
+        #endregion Private Methods
 
     }
 }

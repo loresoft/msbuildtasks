@@ -1,8 +1,8 @@
 // $Id$
 
 using System;
+using System.IO;
 using System.Text;
-using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
@@ -13,19 +13,16 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]
     public class NDocTest
     {
-        public NDocTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        [Test]
+        [Test(Description="Generate NDoc project")]
         public void NDocExecute()
         {
+            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string workingDir = Path.Combine(prjRootPath, @"Documentation");
+
             NDoc task = new NDoc();
             task.BuildEngine = new MockBuild();
-            task.ProjectFilePath = @"..\..\..\..\Documentation\MSBuild.Community.Tasks.ndoc";
+            task.ProjectFilePath = Path.Combine(workingDir, @"MSBuild.Community.Tasks.ndoc");
+            task.WorkingDirectory = workingDir;
             task.Documenter = "MSDN";
             Assert.IsTrue(task.Execute(), "Execute Failed");
         }

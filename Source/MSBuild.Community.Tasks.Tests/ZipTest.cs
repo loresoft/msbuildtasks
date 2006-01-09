@@ -1,11 +1,10 @@
 // $Id$
 
 using System;
-using System.Text;
-using System.Collections.Generic;
 using System.IO;
-using NUnit.Framework;
+using System.Text;
 using Microsoft.Build.Utilities;
+using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
 {
@@ -15,31 +14,30 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]
     public class ZipTest
     {
-        public ZipTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
+        public const string ZIP_FILE_NAME = @"MSBuild.Community.Tasks.zip";
 
-        [Test]
+        [Test(Description="Zip files into a zip archive")]
         public void ZipExecute()
         {
             Zip task = new Zip();
             task.BuildEngine = new MockBuild();
 
-            string[] files = Directory.GetFiles(@"..\..\", "*.*", SearchOption.TopDirectoryOnly);
+            string testDir = TaskUtility.TestDirectory;
+            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+
+            string workingDir = Path.Combine(prjRootPath, "Source/MSBuild.Community.Tasks.Tests");
+            string[] files = Directory.GetFiles(workingDir, "*.*", SearchOption.TopDirectoryOnly);
 
             TaskItem[] items = TaskUtility.StringArrayToItemArray(files);
 
             task.Files = items;
-            task.WorkingDirectory = @"..\..\";
-            task.ZipFileName = @"MSBuild.Community.Tasks.zip";
+            task.WorkingDirectory = workingDir;
+            task.ZipFileName = Path.Combine(testDir, ZIP_FILE_NAME);
 
-            bool result = task.Execute();
+            if (File.Exists(task.ZipFileName)) File.Delete(task.ZipFileName);
 
-            Assert.IsTrue(result, "Execute Failed");
-            Assert.IsTrue(File.Exists(@"MSBuild.Community.Tasks.zip"), "Zip file not found");
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+            Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");
         }
     }
 }

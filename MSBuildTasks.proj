@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<!-- $Id$ -->
+
+	<PropertyGroup>
+		<project>MSBuildCommunityTasks</project>
+
+		<!-- ===================================================== -->
+		<!-- Versioning -->
+		<!-- ===================================================== -->
+		<major>1</major>
+		<minor>0</minor>
+		<!-- automatic versioning "*" for build and revision numbers -->
+
+		<!-- ===================================================== -->
+		<!-- Configuration, build group -->
+		<!-- ===================================================== -->
+		<!-- default configuration is "Debug"; the other is "Release" -->
+		<configuration Condition="'$(configuration)'==''">Debug</configuration>
+		<!-- default build group is "build"; the other is "nunit"; see ItemGroup <vsprojects> -->
+		<buildgroup Condition="'$(buildgroup)'==''">build</buildgroup>
+
+		<!-- ===================================================== -->
+		<!-- Directories -->
+		<!-- ===================================================== -->
+		<!-- Everything in the project is relative to the root directory -->
+		<root>$(MSBuildProjectDirectory)</root>
+		<!-- The root of the source tree. -->
+		<!-- In general, msbuild does not write or delete in there. -->
+		<!-- Exceptions: Targets that generate source code, VS projects (subdirs "bin" and "obj") -->
+		<srcRoot>$(root)\Source</srcRoot>
+		<!-- Third party libraries that get referenced by the VS projects -->
+		<libRoot>$(root)\Libraries</libRoot>
+		<!-- Generated and manually edited project documentation -->
+		<docRoot>$(root)\Documentation</docRoot>
+
+		<!-- The working directory for msbuild targets -->
+		<buildDir>$(root)\build\$(configuration)</buildDir>
+		<!-- The directory where msbuild targets copy all build artefacts to -->
+		<binDir>$(buildDir)\bin</binDir>
+		<!-- The directory for input, output and result files of tests -->
+		<testDir>$(buildDir)\test</testDir>
+
+		<!-- filename postfix for NUnit result files -->
+		<nunitPostfix>-results.xml</nunitPostfix>
+		<!-- NUnit report xsl transformation file -->
+		<nunitReportXsl>NUnitReport.xsl</nunitReportXsl>
+
+
+		<!-- ===================================================== -->
+		<!-- Importing -->
+		<!-- ===================================================== -->
+		<!-- 
+		With the default value devel=false,
+		MSBuild community tasks will be loaded from the installation path 
+		[ProgramFilesFolder]MSBuild\MSBuildCommunityTasks.
+		Override with "msbuild MSBuildTasks.proj /p:devel=true" in order
+		to load from $(binDir),
+		which is convenient during development
+		-->
+		<devel Condition="'$(devel)'==''">false</devel>
+
+		<MSBuildCommunityTasksPath Condition="$(devel)">$(binDir)</MSBuildCommunityTasksPath>
+		<importTargets Condition="$(devel)">$(binDir)\MSBuild.Community.Tasks.Targets</importTargets>
+		<importTargets Condition="!$(devel)">$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets</importTargets>
+	</PropertyGroup>
+
+	<!-- ===================================================== -->
+	<!-- Importing -->
+	<!-- ===================================================== -->
+	<Import Condition="Exists($(importTargets))" Project="$(importTargets)"/>
+
+	<!-- ===================================================== -->
+	<!-- Item groups -->
+	<!-- ===================================================== -->
+	<ItemGroup>
+		<defaultexcludes Include="**\.svn\**" />
+		<defaultexcludes Include="**\bin\**" />
+		<defaultexcludes Include="**\obj\**" />
+		<defaultexcludes Include="**\Release\**" />
+		<defaultexcludes Include="**\Debug\**" />
+		<defaultexcludes Include="**\Test\**" />
+		<defaultexcludes Include="**\TestResults\**" />
+		<defaultexcludes Include="**\doc\**" />
+		<defaultexcludes Include="**\www\**" />
+		<defaultexcludes Include="**\*.user" />
+		<defaultexcludes Include="**\*.suo" />
+		<defaultexcludes Include="$(buildDir)\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<clean Include="$(buildDir)" />
+		<clean Include="$(docRoot)\doc" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- content files to copy to the build directory -->
+		<contents Include="$(libRoot)\ICSharpCode.SharpZipLib.dll" />
+		<contents Include="$(libRoot)\Interop.SourceSafeTypeLib.dll" />
+		<contents Include="$(libRoot)\NUnit\2.2.5\nunit.framework.dll" />
+		<contents Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
+		<contents Include="$(srcRoot)\MSBuild.Community.Tasks\$(nunitReportXsl)" />
+		<contents Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.xsd" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- set metadata <group>build</group> for task projects -->
+		<!-- set metadata <group>nunit</group> for NUnit projects -->
+
+		<vsprojects Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.csproj">
+			<group>build</group>
+		</vsprojects>
+
+		<vsprojects Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\MSBuild.Community.Tasks.Tests.csproj">
+			<group>nunit</group>
+		</vsprojects>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- content files to copy to the test directory -->
+		<!-- provide metadata <subDirectory> for relative destination directory -->
+		<nunitContents Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\Xslt\XsltTestInput.xml" >
+			<subDirectory>MSBuild.Community.Tasks.Tests</subDirectory>
+		</nunitContents>
+	</ItemGroup>
+
+	<ItemGroup>
+		<nunitFiles Include="$(binDir)\MSBuild.Community.Tasks.Tests.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<nunitReportXslFile Include="$(MSBuildCommunityTasksPath)\$(nunitReportXsl)">
+			<project>$(project)</project>
+			<configuration>$(configuration)</configuration>
+			<msbuildFilename>$(MSBuildProjectFullPath)</msbuildFilename>
+			<msbuildBinpath>$(MSBuildBinPath)</msbuildBinpath>
+			<xslFile>$(MSBuildCommunityTasksPath)\$(nunitReportXsl)</xslFile>
+		</nunitReportXslFile>
+	</ItemGroup>
+
+
+	<!-- ===================================================== -->
+	<!-- Targets -->
+	<!-- ===================================================== -->
+
+	<Target Name="clean">
+		<Message Text="=======================================================================================" />
+		<Message Text="Clean &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;"/>
+		<Message Text="=======================================================================================" />
+
+		<!-- Clean the entire build directory -->
+		<RemoveDir Directories="@(clean)" />
+
+		<!-- Call all VS projects to clean up -->
+		<MSBuild Projects="@(vsprojects)" Targets="Clean" Properties="Configuration=$(configuration)" />
+	</Target>
+
+	<Target Name="assemblyinfo" 
+		Condition="Exists($(importTargets))"
+		Inputs="@(vsprojects)"
+		Outputs="%(rootdir)%(directory)\Properties\AssemblyInfoCommon.cs">
+		<!-- For each VS project, create the AssemblyInfoCommon.cs file  -->
+
+		<AssemblyInfo CodeLanguage="CS"
+			OutputFile="%(vsprojects.rootdir)%(directory)Properties\AssemblyInfoCommon.cs"
+			AssemblyCompany="http://msbuildtasks.tigris.org/"
+			AssemblyProduct="MSBuild.Community.Tasks"
+			AssemblyCopyright="Copyright © 2005 Paul Welter"      
+			ComVisible="false"
+			CLSCompliant="false"
+			AssemblyVersion="$(major).$(minor).*" />
+
+	</Target>
+
+	<!-- Copy additional libraries and content files to the bin directory -->
+	<Target Name="contents" >
+		<MakeDir Directories="$(binDir)" />
+		<Copy SourceFiles="@(contents)" DestinationFolder="$(binDir)\%(contents.subDirectory)" SkipUnchangedFiles="true" />
+	</Target>
+
+	<!-- Build the VS projects of one build group, copy .dll, .pdb, .xml to the bin directory -->
+	<Target Name="build" DependsOnTargets="assemblyinfo;contents">
+		<Message Text="=======================================================================================" />
+		<Message Text="Build &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;, group &quot;$(buildgroup)&quot;"/>
+		<Message Text="=======================================================================================" />
+
+		<MSBuild Projects="@(vsprojects)" 
+		   Condition="'%(group)'=='$(buildgroup)'" 
+		   Properties="Configuration=$(configuration)" >
+			<Output TaskParameter="TargetOutputs" ItemName="targetOutputs"/>
+		</MSBuild>
+
+		<Copy SourceFiles="@(targetOutputs)" DestinationFolder="$(binDir)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(targetOutputs -> '%(rootdir)%(directory)%(filename).pdb')" DestinationFolder="$(binDir)" 
+			Condition="'$(configuration)'=='Debug'"
+			SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(targetOutputs -> '%(rootdir)%(directory)%(filename).xml')" DestinationFolder="$(binDir)" 
+			Condition="'$(buildgroup)'=='build'"
+			SkipUnchangedFiles="true" />
+	</Target>
+
+	<!-- Copy test files to the test directory -->
+	<Target Name="test-contents" >
+		<MakeDir Directories="$(testDir)" />
+		<Copy SourceFiles="@(nunitContents)" DestinationFolder="$(testDir)\%(nunitContents.subDirectory)" SkipUnchangedFiles="true" />
+	</Target>
+
+	<!-- Build the VS projects of the 'nunit' group -->
+	<Target Name="build-tests" DependsOnTargets="build;test-contents" >
+		<MSBuild Projects="$(MSBuildProjectFullPath)" Targets="build" Properties="buildgroup=nunit" />
+	</Target>
+
+	<!-- Execute and report the NUnit tests -->
+	<Target Name="test-nunit" DependsOnTargets="build-tests">
+		<Message Text="=======================================================================================" />
+		<Message Text="Test NUnit &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;" />
+		<Message Text="=======================================================================================" />
+
+		<Message Text="NUnit tests include: '@(nunitFiles)'" />
+		<MakeDir Directories="$(testDir)" />
+		<NUnit Assemblies="@(nunitFiles)"
+			WorkingDirectory="$(testDir)" 
+			OutputXmlFile="%(filename)$(nunitPostfix)"
+			ContinueOnError="true" />
+
+		<CallTarget Targets="test-report" />
+	</Target>
+
+	<!-- Create report from existing NUnit test results -->
+	<Target Name="test-report" >
+		<Xslt Inputs="@(nunitFiles -> '$(testDir)\%(filename)$(nunitPostfix)')"
+			Xsl="@(nunitReportXslFile)" 
+			Output="$(testDir)\TestReport.html" />
+	</Target>
+
+	<!-- Execute tests with msbuild .proj files -->
+	<Target Name="test-proj" DependsOnTargets="build">
+		<Message Text="=======================================================================================" />
+		<Message Text="Test Proj &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;" />
+		<Message Text="=======================================================================================" />
+
+		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Timestamp\TimestampTest.proj"
+		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
+	</Target>
+
+	<!-- Execute and report the NUnit and msbuild .proj tests -->
+	<Target Name="test" DependsOnTargets="test-nunit; test-proj">
+	</Target>
+
+	<Target Name="doc" DependsOnTargets="build">
+		<NDoc Documenter="MSDN" 
+			ProjectFilePath="MSBuild.Community.Tasks.ndoc" 
+			WorkingDirectory="$(docRoot)" />
+
+		<Copy SourceFiles="$(docRoot)\doc\MSBuild.Community.Tasks.chm" 
+			DestinationFolder="$(docRoot)" />
+
+		<RemoveDir Directories="$(docRoot)\doc" />
+
+	</Target>
+
+</Project>

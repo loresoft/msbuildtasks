@@ -1,8 +1,8 @@
 // $Id$
 
 using System;
+using System.IO;
 using System.Text;
-using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
@@ -13,19 +13,25 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]
     public class VersionTest
     {
-        public VersionTest()
+        private string testDirectory;
+
+        [TestFixtureSetUp]
+        public void FixtureInit()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            MockBuild buildEngine = new MockBuild();
+
+            testDirectory = TaskUtility.makeTestDirectory(buildEngine);
+        
         }
 
-		[Test]
+        [Test]
 		public void VersionExecute()
 		{
-			Version task = new Version();
+            string numberFile = Path.Combine(testDirectory, @"number.txt");
+            
+            Version task = new Version();
 			task.BuildEngine = new MockBuild();
-			task.VersionFile = "number.txt";
+			task.VersionFile = numberFile;
 			Assert.IsTrue(task.Execute(), "Execute Failed");
 
 			Assert.AreEqual(1, task.Major);
@@ -33,9 +39,11 @@ namespace MSBuild.Community.Tasks.Tests
 			Assert.AreEqual(0, task.Build);
 			Assert.AreEqual(0, task.Revision);
 
-			task = new Version();
+            string versionFile = Path.Combine(testDirectory, @"version.txt");
+            
+            task = new Version();
 			task.BuildEngine = new MockBuild();
-			task.VersionFile = @"version.txt";
+            task.VersionFile = versionFile;
 			task.BuildType = "Increment";
 			task.RevisionType = "Increment";
 			Assert.IsTrue(task.Execute(), "Execute Failed");
@@ -46,8 +54,8 @@ namespace MSBuild.Community.Tasks.Tests
 
 			task = new Version();
 			task.BuildEngine = new MockBuild();
-			task.VersionFile = @"version.txt";
-			task.BuildType = "Automatic";
+            task.VersionFile = versionFile;
+            task.BuildType = "Automatic";
 			task.RevisionType = "Automatic";
 			Assert.IsTrue(task.Execute(), "Execute Failed");
 
@@ -56,8 +64,8 @@ namespace MSBuild.Community.Tasks.Tests
 
 			task = new Version();
 			task.BuildEngine = new MockBuild();
-			task.VersionFile = @"version.txt";
-			task.BuildType = "Date";
+            task.VersionFile = versionFile;
+            task.BuildType = "Date";
 			task.RevisionType = "Increment";
 			Assert.IsTrue(task.Execute(), "Execute Failed");
 

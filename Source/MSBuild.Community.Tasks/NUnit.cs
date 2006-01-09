@@ -28,234 +28,249 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Build.Utilities;
-using Microsoft.Build.Framework;
 using System.IO;
-using Microsoft.Win32;
+using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
+using Microsoft.Win32;
 
 // $Id$
 
 namespace MSBuild.Community.Tasks
 {
-    /// <summary>
-    /// Run NUnit on a group of assemblies.
-    /// </summary>
-    /// <example>Run NUnit tests.
-    /// <code><![CDATA[
-    /// <ItemGroup>
-    ///     <TestAssembly Include="C:\Program Files\NUnit 2.2.3\bin\*.tests.dll" />
-    /// </ItemGroup>
-    /// <Target Name="NUnit">
-    ///     <NUnit Assemblies="@(TestAssembly)" />
-    /// </Target>
-    /// ]]></code>
-    /// </example>
-    public class NUnit : ToolTask
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:NUnit"/> class.
-        /// </summary>
-        public NUnit()
-        {
+	/// <summary>
+	/// Run NUnit on a group of assemblies.
+	/// </summary>
+	/// <example>Run NUnit tests.
+	/// <code><![CDATA[
+	/// <ItemGroup>
+	///     <TestAssembly Include="C:\Program Files\NUnit 2.2.3\bin\*.tests.dll" />
+	/// </ItemGroup>
+	/// <Target Name="NUnit">
+	///     <NUnit Assemblies="@(TestAssembly)" />
+	/// </Target>
+	/// ]]></code>
+	/// </example>
+	public class NUnit : ToolTask
+	{
+		#region Constants
 
-        }
+		/// <summary>
+		/// The default relative path of the NUnit installation.
+		/// The value is <c>@"NUnit-Net-2.0 2.2.5\bin"</c>.
+		/// </summary>
+		public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit-Net-2.0 2.2.5\bin";
 
-        #region Properties
-        private ITaskItem[] _assemblies;
+		#endregion Constants
 
-        /// <summary>
-        /// Gets or sets the assemblies.
-        /// </summary>
-        /// <value>The assemblies.</value>
-        [Required]
-        public ITaskItem[] Assemblies
-        {
-            get { return _assemblies; }
-            set { _assemblies = value; }
-        }
+		#region Constructor
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:NUnit"/> class.
+		/// </summary>
+		public NUnit()
+		{
 
-        private string _includeCategory;
+		}
 
-        /// <summary>
-        /// Gets or sets the include category.
-        /// </summary>
-        /// <value>The include category.</value>
-        public string IncludeCategory
-        {
-            get { return _includeCategory; }
-            set { _includeCategory = value; }
-        }
+		#endregion Constructor
 
-        private string _excludeCategory;
+		#region Properties
+		private ITaskItem[] _assemblies;
 
-        /// <summary>
-        /// Gets or sets the exclude category.
-        /// </summary>
-        /// <value>The exclude category.</value>
-        public string ExcludeCategory
-        {
-            get { return _excludeCategory; }
-            set { _excludeCategory = value; }
-        }
+		/// <summary>
+		/// Gets or sets the assemblies.
+		/// </summary>
+		/// <value>The assemblies.</value>
+		[Required]
+		public ITaskItem[] Assemblies
+		{
+			get { return _assemblies; }
+			set { _assemblies = value; }
+		}
 
-        private string _fixture;
+		private string _includeCategory;
 
-        /// <summary>
-        /// Gets or sets the fixture.
-        /// </summary>
-        /// <value>The fixture.</value>
-        public string Fixture
-        {
-            get { return _fixture; }
-            set { _fixture = value; }
-        }
+		/// <summary>
+		/// Gets or sets the include category.
+		/// </summary>
+		/// <value>The include category.</value>
+		public string IncludeCategory
+		{
+			get { return _includeCategory; }
+			set { _includeCategory = value; }
+		}
 
-        private string _xsltTransformFile;
+		private string _excludeCategory;
 
-        /// <summary>
-        /// Gets or sets the XSLT transform file.
-        /// </summary>
-        /// <value>The XSLT transform file.</value>
-        public string XsltTransformFile
-        {
-            get { return _xsltTransformFile; }
-            set { _xsltTransformFile = value; }
-        }
+		/// <summary>
+		/// Gets or sets the exclude category.
+		/// </summary>
+		/// <value>The exclude category.</value>
+		public string ExcludeCategory
+		{
+			get { return _excludeCategory; }
+			set { _excludeCategory = value; }
+		}
 
-        private string _outputXmlFile;
+		private string _fixture;
 
-        /// <summary>
-        /// Gets or sets the output XML file.
-        /// </summary>
-        /// <value>The output XML file.</value>
-        public string OutputXmlFile
-        {
-            get { return _outputXmlFile; }
-            set { _outputXmlFile = value; }
-        }
+		/// <summary>
+		/// Gets or sets the fixture.
+		/// </summary>
+		/// <value>The fixture.</value>
+		public string Fixture
+		{
+			get { return _fixture; }
+			set { _fixture = value; }
+		}
 
-        private string _workingDirectory;
+		private string _xsltTransformFile;
 
-        /// <summary>
-        /// Gets or sets the working directory.
-        /// </summary>
-        /// <value>The working directory.</value>
-        /// <returns>
-        /// The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
-        /// </returns>
-        public string WorkingDirectory
-        {
-            get { return _workingDirectory; }
-            set { _workingDirectory = value; }
-        }
+		/// <summary>
+		/// Gets or sets the XSLT transform file.
+		/// </summary>
+		/// <value>The XSLT transform file.</value>
+		public string XsltTransformFile
+		{
+			get { return _xsltTransformFile; }
+			set { _xsltTransformFile = value; }
+		}
 
-        #endregion
+		private string _outputXmlFile;
 
-        /// <summary>
-        /// Returns a string value containing the command line arguments to pass directly to the executable file.
-        /// </summary>
-        /// <returns>
-        /// A string value containing the command line arguments to pass directly to the executable file.
-        /// </returns>
-        protected override string GenerateCommandLineCommands()
-        {
-            StringBuilder builder = new StringBuilder();
-            foreach (ITaskItem item in _assemblies)
-            {
-                builder.AppendFormat(" \"{0}\"", item.ItemSpec);
-            }
+		/// <summary>
+		/// Gets or sets the output XML file.
+		/// </summary>
+		/// <value>The output XML file.</value>
+		public string OutputXmlFile
+		{
+			get { return _outputXmlFile; }
+			set { _outputXmlFile = value; }
+		}
 
-            if(!string.IsNullOrEmpty(_fixture))
-                builder.AppendFormat(" /fixture={0}", _fixture);
-            
-            if (!string.IsNullOrEmpty(_includeCategory))
-                builder.AppendFormat(" /include={0}", _includeCategory);
-            
-            if (!string.IsNullOrEmpty(_excludeCategory))
-                builder.AppendFormat(" /exclude={0}", _excludeCategory);
-            
-            if (!string.IsNullOrEmpty(_xsltTransformFile))
-                builder.AppendFormat(" /transform={0}", _xsltTransformFile);
+		private string _workingDirectory;
 
-            if (!string.IsNullOrEmpty(_outputXmlFile))
-                builder.AppendFormat(" /xml={0}", _outputXmlFile);
+		/// <summary>
+		/// Gets or sets the working directory.
+		/// </summary>
+		/// <value>The working directory.</value>
+		/// <returns>
+		/// The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
+		/// </returns>
+		public string WorkingDirectory
+		{
+			get { return _workingDirectory; }
+			set { _workingDirectory = value; }
+		}
 
-            return builder.ToString();
-        }
+		#endregion
 
-        /// <summary>
-        /// Returns the fully qualified path to the executable file.
-        /// </summary>
-        /// <returns>
-        /// The fully qualified path to the executable file.
-        /// </returns>
-        protected override string GenerateFullPathToTool()
-        {
-            string nunitPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            nunitPath = Path.Combine(nunitPath, @"NUnit 2.2.3\bin");
+		#region Task Overrides
+		/// <summary>
+		/// Returns a string value containing the command line arguments to pass directly to the executable file.
+		/// </summary>
+		/// <returns>
+		/// A string value containing the command line arguments to pass directly to the executable file.
+		/// </returns>
+		protected override string GenerateCommandLineCommands()
+		{
+			StringBuilder builder = new StringBuilder();
+			foreach (ITaskItem item in _assemblies)
+			{
+				builder.AppendFormat(" \"{0}\"", item.ItemSpec);
+			}
 
-            try
-            {
-                using (RegistryKey buildKey = Registry.ClassesRoot.OpenSubKey(@"NUnitTestProject\shell\open\command"))
-                {
-                    if (buildKey == null)
-                    {
-                        Log.LogError("Could not find the NUnit Project File open command. Please make sure NUnit is installed.");
-                    }
-                    else
-                    {
-                        nunitPath = buildKey.GetValue(null, nunitPath).ToString();
-                        Regex ndocRegex = new Regex("(.+)nunit-gui\\.exe", RegexOptions.IgnoreCase);
-                        Match pathMatch = ndocRegex.Match(nunitPath);
-                        nunitPath = pathMatch.Groups[1].Value.Replace("\"", "");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.LogErrorFromException(ex);
-            }
+			if (!string.IsNullOrEmpty(_fixture))
+				builder.AppendFormat(" /fixture={0}", _fixture);
 
-            base.ToolPath = nunitPath;
-            return Path.Combine(ToolPath, ToolName);
-        }
+			if (!string.IsNullOrEmpty(_includeCategory))
+				builder.AppendFormat(" /include={0}", _includeCategory);
 
-        /// <summary>
-        /// Gets the name of the executable file to run.
-        /// </summary>
-        /// <value></value>
-        /// <returns>The name of the executable file to run.</returns>
-        protected override string ToolName
-        {
-            get { return "nunit-console.exe"; }
-        }
+			if (!string.IsNullOrEmpty(_excludeCategory))
+				builder.AppendFormat(" /exclude={0}", _excludeCategory);
 
-        /// <summary>
-        /// Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
-        /// </summary>
-        /// <value></value>
-        /// <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
-        protected override MessageImportance StandardOutputLoggingImportance
-        {
-            get
-            {
-                return MessageImportance.Normal;
-            }
-        }
-        
-        /// <summary>
-        /// Returns the directory in which to run the executable file.
-        /// </summary>
-        /// <returns>
-        /// The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
-        /// </returns>
-        protected override string GetWorkingDirectory()
-        {
-            return string.IsNullOrEmpty(_workingDirectory) ? base.GetWorkingDirectory() : _workingDirectory;
-        }
+			if (!string.IsNullOrEmpty(_xsltTransformFile))
+				builder.AppendFormat(" /transform={0}", _xsltTransformFile);
 
-    }
+			if (!string.IsNullOrEmpty(_outputXmlFile))
+				builder.AppendFormat(" /xml={0}", _outputXmlFile);
+
+			return builder.ToString();
+		}
+
+		/// <summary>
+		/// Returns the fully qualified path to the executable file.
+		/// </summary>
+		/// <returns>
+		/// The fully qualified path to the executable file.
+		/// </returns>
+		protected override string GenerateFullPathToTool()
+		{
+			string nunitPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+			nunitPath = Path.Combine(nunitPath, DEFAULT_NUNIT_DIRECTORY);
+
+			try
+			{
+				using (RegistryKey buildKey = Registry.ClassesRoot.OpenSubKey(@"NUnitTestProject\shell\open\command"))
+				{
+					if (buildKey == null)
+					{
+						Log.LogError(Properties.Resources.NUnitNotFound);
+					}
+					else
+					{
+						nunitPath = buildKey.GetValue(null, nunitPath).ToString();
+						Regex nunitRegex = new Regex("(.+)nunit-gui\\.exe", RegexOptions.IgnoreCase);
+						Match pathMatch = nunitRegex.Match(nunitPath);
+						nunitPath = pathMatch.Groups[1].Value.Replace("\"", "");
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.LogErrorFromException(ex);
+			}
+
+			base.ToolPath = nunitPath;
+			return Path.Combine(ToolPath, ToolName);
+		}
+
+		/// <summary>
+		/// Gets the name of the executable file to run.
+		/// </summary>
+		/// <value></value>
+		/// <returns>The name of the executable file to run.</returns>
+		protected override string ToolName
+		{
+			get { return "nunit-console.exe"; }
+		}
+
+		/// <summary>
+		/// Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
+		/// </summary>
+		/// <value></value>
+		/// <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
+		protected override MessageImportance StandardOutputLoggingImportance
+		{
+			get
+			{
+				return MessageImportance.Normal;
+			}
+		}
+
+		/// <summary>
+		/// Returns the directory in which to run the executable file.
+		/// </summary>
+		/// <returns>
+		/// The directory in which to run the executable file, or a null reference (Nothing in Visual Basic) if the executable file should be run in the current directory.
+		/// </returns>
+		protected override string GetWorkingDirectory()
+		{
+			return string.IsNullOrEmpty(_workingDirectory) ? base.GetWorkingDirectory() : _workingDirectory;
+		}
+
+		#endregion Task Overrides
+
+	}
 }

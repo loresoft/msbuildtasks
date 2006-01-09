@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://schemas.microsoft.com/developer/msbuild/2003" 
+xmlns:xs="http://www.w3.org/2001/XMLSchema"
+xmlns:msb="http://schemas.microsoft.com/developer/msbuild/2003"
+elementFormDefault="qualified">
+
+	<!-- $Id$ -->
+	<!-- This file was contributed by http://msbuildtasks.tigris.org -->
+	
+	<!-- 
+	In order to provide this file to IntelliSense in Visual Studio, place it in 
+	<Program Files>\Microsoft Visual Studio 8\xml\Schemas\1033\MSBuild\
+	and insert the line
+	<xs:include schemaLocation="MSBuild\MSBuild.Community.Tasks.xsd"/>
+	into the file
+	<Program Files>\Microsoft Visual Studio 8\xml\Schemas\1033\Microsoft.Build.xsd
+	-->
+
+	<!-- =================== INCLUDE COMMON SCHEMA =========================== -->
+	<xs:include schemaLocation="Microsoft.Build.Core.xsd"/>
+
+	<!-- base type for ToolTasks -->
+	<xs:complexType name="ToolTaskType" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="msb:TaskType">
+				<xs:attribute name="Timeout" />
+				<xs:attribute name="ToolPath" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+
+	<!-- ========= ADD CUSTOM ITEMS, PROPERTIES, AND TASKS BELOW ======= -->
+	<!-- Note that these will be in the msbuild namespace. A future version of
+		msbuild may require that custom itemtypes, properties, and tasks be in a 
+		custom namespace, but currently msbuild only supports the msbuild namespace. -->
+
+	<!-- example custom itemtype with particular meta-data required-->
+	<!--<xs:element name="MyItem" substitutionGroup="msb:Item">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:SimpleItemType">
+					<xs:sequence maxOccurs="1">
+						<xs:choice>
+							<xs:element name="MyMetaData" type="xs:string"/>
+						</xs:choice>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>-->
+
+	<!-- Example custom itemtype with NO meta-data -->
+	<!--<xs:element name="MySimpleItem" type="msb:SimpleItemType" substitutionGroup="msb:Item"/>-->
+
+	<!-- Example custom itemtype with ANY meta-data -->
+	<!--<xs:element name="MyFlexibleItem" type="msb:GenericItemType" substitutionGroup="msb:Item"/>-->
+
+	<!-- example custom property that allows string content only-->
+	<!--<xs:element name="MySimpleProperty" type="msb:StringPropertyType" substitutionGroup="msb:Property"/>-->
+
+	<!-- example custom task with single required parameter-->
+	<!--<xs:element name="MyTask" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:TaskType">
+					<xs:attribute name="MyParameter" type="xs:boolean" use="required"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>-->
+
+	<!-- example custom tool task with single required parameter-->
+	<!--<xs:element name="MyToolTask" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:ToolTaskType">
+					<xs:attribute name="MyParameter" type="xs:boolean" use="required"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>-->
+
+	<xs:element name="AssemblyInfo" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:TaskType">
+					<xs:attribute name="CodeLanguage" use="required" />
+					<xs:attribute name="ComVisible" type="xs:boolean" />
+					<xs:attribute name="CLSCompliant" type="xs:boolean" />
+					<xs:attribute name="Guid" />
+					<xs:attribute name="AssemblyTitle" />
+					<xs:attribute name="AssemblyDescription" />
+					<xs:attribute name="AssemblyConfiguration" />
+					<xs:attribute name="AssemblyCompany" />
+					<xs:attribute name="AssemblyProduct" />
+					<xs:attribute name="AssemblyCopyright" />
+					<xs:attribute name="AssemblyTrademark" />
+					<xs:attribute name="AssemblyCulture" />
+					<xs:attribute name="AssemblyVersion" />
+					<xs:attribute name="AssemblyFileVersion" />
+					<xs:attribute name="OutputFile" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="NDoc" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:ToolTaskType">
+					<xs:attribute name="Documenter" use="required" />
+					<xs:attribute name="ProjectFilePath" use="required" />
+					<xs:attribute name="Verbose" type="xs:boolean" />
+					<xs:attribute name="WorkingDirectory" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="NUnit" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:ToolTaskType">
+					<xs:attribute name="Assemblies" use="required" />
+					<xs:attribute name="IncludeCategory" />
+					<xs:attribute name="ExcludeCategory" />
+					<xs:attribute name="Fixture" />
+					<xs:attribute name="XsltTransformFile" />
+					<xs:attribute name="OutputXmlFile" />
+					<xs:attribute name="WorkingDirectory" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="SvnClientType">
+		<xs:complexContent>
+			<xs:extension base="msb:ToolTaskType">
+				<xs:attribute name="Command" />
+				<xs:attribute name="Arguments" />
+				<xs:attribute name="Username" />
+				<xs:attribute name="Password" />
+				<xs:attribute name="Verbose" type="xs:boolean" />
+				<xs:attribute name="Force" type="xs:boolean" />
+				<xs:attribute name="Message" />
+				<xs:attribute name="RepositoryPath" />
+				<xs:attribute name="LocalPath" />
+				<xs:attribute name="Targets" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="SvnCheckout" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:SvnClientType">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="SvnClient" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:SvnClientType">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="SvnCommit" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:SvnClientType">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="SvnExport" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:SvnClientType">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="SvnUpdate" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:SvnClientType">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="SvnVersion" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:ToolTaskType">
+					<xs:attribute name="LocalPath" use="required" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	
+	<xs:element name="Timestamp" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:TaskType">
+					<xs:attribute name="Format" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="Version" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:TaskType">
+					<xs:attribute name="VersionFile" use="required" />
+					<xs:attribute name="BuildType" />
+					<xs:attribute name="RevisionType" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="Xslt" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:TaskType">
+					<xs:attribute name="Inputs" use="required" />
+					<xs:attribute name="RootTag" />
+					<xs:attribute name="RootAttributes" />
+					<xs:attribute name="Xsl" use="required" />
+					<xs:attribute name="Output" use="required" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="Zip" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:TaskType">
+					<xs:attribute name="ZipFileName" use="required" />
+					<xs:attribute name="ZipLevel" type="xs:int" />
+					<xs:attribute name="Files" use="required" />
+					<xs:attribute name="Flatten" type="xs:boolean" />
+					<xs:attribute name="Comment" />
+					<xs:attribute name="WorkingDirectory" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

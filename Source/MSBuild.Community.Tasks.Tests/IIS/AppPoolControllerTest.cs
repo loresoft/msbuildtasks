@@ -1,8 +1,9 @@
+// $Id$
+
 using System;
-using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
 using MSBuild.Community.Tasks.IIS;
+using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests.IIS
 {
@@ -11,6 +12,7 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	{
 		private string mAppPoolName = "TestAppPool";
 		private string mServer = "fenway";
+        private bool gotInitializationError = false;
 
 		[TestFixtureSetUp]
 		public void TestFixtureInitilize()
@@ -22,9 +24,18 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			task.ApplicationPoolName = mAppPoolName;
 			task.ServerName = mServer;
 			task.Execute();
+
+            gotInitializationError = task.Log.HasLoggedErrors;
 			
 			Console.WriteLine("TestFixture SetUp is complete.");
-		}
+        }
+
+        [SetUp]
+        public void TestSetUp() {
+            if (gotInitializationError) {
+                Assert.Ignore(@"AppPoolCreate failed. IIS server missing?");
+            }
+        }
 
 		[TestFixtureTearDown]
 		public void TestFixtureDispose()

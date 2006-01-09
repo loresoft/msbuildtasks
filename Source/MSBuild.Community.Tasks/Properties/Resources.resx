@@ -146,6 +146,9 @@
   <data name="MathNotNumber" xml:space="preserve">
     <value>"{0}" is not a number.</value>
   </data>
+  <data name="NUnitNotFound" xml:space="preserve">
+    <value>Could not find the NUnit Project File open command. Please make sure NUnit is installed.</value>
+  </data>
   <data name="ParameterRequired" xml:space="preserve">
     <value>The "{0}" task was not given a value for the required parameter "{1}".</value>
   </data>
@@ -154,6 +157,51 @@
   </data>
   <data name="RegistryWrite" xml:space="preserve">
     <value>Write Windows Registry</value>
+  </data>
+  <data name="ServiceCannotContinue" xml:space="preserve">
+    <value>Cannot continue service {0} on computer '{1}' as it does not support the pause and continue.</value>
+  </data>
+  <data name="ServiceCannotPause" xml:space="preserve">
+    <value>Cannot pause service {0} on computer '{1}' as it does not support the pause and continue.</value>
+  </data>
+  <data name="ServiceCannotStop" xml:space="preserve">
+    <value>Cannot stop service {0} on computer '{1}'.</value>
+  </data>
+  <data name="ServiceContinued" xml:space="preserve">
+    <value>{0} service was continued successfully.</value>
+  </data>
+  <data name="ServiceContinuing" xml:space="preserve">
+    <value>{0} service is continuing ...</value>
+  </data>
+  <data name="ServiceNotFound" xml:space="preserve">
+    <value>Couldn't find the '{0}' service on '{1}'</value>
+  </data>
+  <data name="ServiceNotPaused" xml:space="preserve">
+    <value>Cannot continue service {0} on computer '{1}' as its not currently paused.</value>
+  </data>
+  <data name="ServiceNotStarted" xml:space="preserve">
+    <value>Cannot pause service {0} on computer '{1}' as its not currently started.</value>
+  </data>
+  <data name="ServicePaused" xml:space="preserve">
+    <value>{0} service was paused successfully.</value>
+  </data>
+  <data name="ServicePausing" xml:space="preserve">
+    <value>{0} service is pausing ...</value>
+  </data>
+  <data name="ServiceStarted" xml:space="preserve">
+    <value>{0} service was started successfully.</value>
+  </data>
+  <data name="ServiceStarting" xml:space="preserve">
+    <value>{0} service is starting ...</value>
+  </data>
+  <data name="ServiceStatus" xml:space="preserve">
+    <value>The '{0}' service on '{1}' is '{2}'.</value>
+  </data>
+  <data name="ServiceStopped" xml:space="preserve">
+    <value>{0} service was stopped successfully.</value>
+  </data>
+  <data name="ServiceStopping" xml:space="preserve">
+    <value>{0} service is stopping ...</value>
   </data>
   <data name="SvnLocalPathNotWorkCopy" xml:space="preserve">
     <value>LocalPath is not a working subversion copy.</value>
@@ -201,6 +249,9 @@
   </data>
   <data name="XmlUpdateResult" xml:space="preserve">
     <value>XmlUpdate Wrote: "{0}"</value>
+  </data>
+  <data name="XsltNoInputFiles" xml:space="preserve">
+    <value>No input files</value>
   </data>
   <data name="ZipAdded" xml:space="preserve">
     <value>  added "{0}"</value>

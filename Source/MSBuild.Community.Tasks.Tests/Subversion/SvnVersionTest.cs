@@ -1,10 +1,10 @@
 // $Id$
 
 using System;
+using System.IO;
 using System.Text;
-using System.Collections.Generic;
-using NUnit.Framework;
 using MSBuild.Community.Tasks.Subversion;
+using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests.Subversion
 {
@@ -14,19 +14,15 @@ namespace MSBuild.Community.Tasks.Tests.Subversion
     [TestFixture]
     public class SvnVersionTest
     {
-        public SvnVersionTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        [Test]
+        [Test(Description="Test SVN Version of project source directory")]
         public void SvnVersionExecute()
         {
             SvnVersion task = new SvnVersion();
             task.BuildEngine = new MockBuild();
-            task.LocalPath = @"..\..\..\";
+
+            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            task.LocalPath = Path.Combine(prjRootPath, @"Source");
+
             Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.IsTrue(task.Revision > 0, "Invalid Revision Number");

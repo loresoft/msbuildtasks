@@ -1,6 +1,8 @@
+// $Id$
+
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.ServiceProcess;
 using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
@@ -20,13 +22,47 @@ namespace MSBuild.Community.Tasks.Tests
             //TODO: NUnit TearDown
         }
 
-        [Test()]
-        public void ServiceControllerExecute()
+        [Test(Description = "Start or restart service 'w3svc'")]
+        public void ServiceControllerW3SVC()
         {
+            ServiceControllerExecute(@"w3svc");
+        }
+
+        [Test(Description = "Start or restart service 'HTTPFilter'")]
+        public void ServiceControllerHTTPFilter()
+        {
+            ServiceControllerExecute(@"HTTPFilter");
+        }
+
+        private void ServiceControllerExecute(string serviceName)
+        {
+            ServiceQuery queryTask = new ServiceQuery();
+            queryTask.BuildEngine = new MockBuild();
+            queryTask.ServiceName = serviceName;
+            Assert.IsTrue(queryTask.Execute(), "Execute query failed");
+
             ServiceController task = new ServiceController();
             task.BuildEngine = new MockBuild();
-            task.ServiceName = "w3svc";
-            task.Action = "Restart";
+            task.ServiceName = serviceName;
+
+            if (ServiceQuery.UNKNOWN_STATUS.Equals(queryTask.Status)) 
+            {
+                Assert.Ignore("Couldn't find the '{0}' service on '{1}'",
+                        queryTask.ServiceName, queryTask.MachineName);
+            }
+            else if (ServiceControllerStatus.Stopped.ToString().Equals(queryTask.Status))
+            {
+                task.Action = "Start";
+            }
+            else if (ServiceControllerStatus.Running.ToString().Equals(queryTask.Status))
+            {
+                task.Action = "Restart";
+            }
+            else
+            {
+                Assert.Ignore("'{0}' service on '{1}' is '{2}'",
+                    queryTask.ServiceName, queryTask.MachineName, queryTask.Status);
+            }
 
             Assert.IsTrue(task.Execute(), "Execute Failed");
             Assert.IsNotNull(task.Status, "Status Null");

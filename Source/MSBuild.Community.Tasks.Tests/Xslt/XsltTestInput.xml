@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="D:\svnroot\msbuildtasks\build\Debug\bin\MSBuild.Community.Tasks.Tests.dll" total="35" failures="9" not-run="9" date="2006-01-06" time="04:08:16">
+  <environment nunit-version="2.2.5.0" clr-version="2.0.50727.42" os-version="Microsoft Windows NT 5.1.2600 Service Pack 2" platform="Win32NT" cwd="D:\svnroot\msbuildtasks\build\Debug\test" machine-name="TAKAMINE" user="iko" user-domain="TAKAMINE" />
+  <culture-info current-culture="de-CH" current-uiculture="en-US" />
+  <test-suite name="D:\svnroot\msbuildtasks\build\Debug\bin\MSBuild.Community.Tasks.Tests.dll" success="False" time="41.125" asserts="0">
+    <results>
+      <test-suite name="D:\svnroot\msbuildtasks\build\Debug\bin\MSBuild.Community.Tasks.Tests.dll" success="False" time="41.109" asserts="0">
+        <results>
+          <test-suite name="MSBuild" success="False" time="41.109" asserts="0">
+            <results>
+              <test-suite name="Community" success="False" time="41.094" asserts="0">
+                <results>
+                  <test-suite name="Tasks" success="False" time="41.094" asserts="0">
+                    <results>
+                      <test-suite name="Tests" success="False" time="41.078" asserts="0">
+                        <results>
+                          <test-suite name="AssemblyInfoTest" success="True" time="0.250" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.AssemblyInfoTest.AssemblyInfoCS" description="Create VersionInfo in C#" executed="True" success="True" time="0.078" asserts="0" />
+                              <test-case name="MSBuild.Community.Tasks.Tests.AssemblyInfoTest.AssemblyInfoVB" description="Create VersionInfo in VB" executed="True" success="True" time="0.031" asserts="0" />
+                              <test-case name="MSBuild.Community.Tasks.Tests.AssemblyInfoTest.AssemblyInfoExecute" description="Create AssemblyInfo in C#" executed="True" success="True" time="0.016" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="TimestampTest" success="True" time="1.016" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.TimestampTest.TimestampExecute" executed="True" success="True" time="1.016" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="FileUpdateTest" success="True" time="0.063" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.FileUpdateTest.TestFilesUpdate" executed="True" success="True" time="0.063" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="IIS" success="False" time="28.016" asserts="0">
+                            <results>
+                              <test-suite name="AppPoolControllerTest" success="True" time="14.281" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.IIS.AppPoolControllerTest.RecycleTest" executed="False">
+                                    <reason>
+                                      <message><![CDATA[AppPoolCreate failed. IIS server missing?]]></message>
+                                    </reason>
+                                  </test-case>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.IIS.AppPoolControllerTest.RestartTest" executed="False">
+                                    <reason>
+                                      <message><![CDATA[AppPoolCreate failed. IIS server missing?]]></message>
+                                    </reason>
+                                  </test-case>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.IIS.AppPoolControllerTest.StartTest" executed="False">
+                                    <reason>
+                                      <message><![CDATA[AppPoolCreate failed. IIS server missing?]]></message>
+                                    </reason>
+                                  </test-case>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.IIS.AppPoolControllerTest.StopTest" executed="False">
+                                    <reason>
+                                      <message><![CDATA[AppPoolCreate failed. IIS server missing?]]></message>
+                                    </reason>
+                                  </test-case>
+                                </results>
+                              </test-suite>
+                              <test-suite name="AppPoolCreateTest" success="False" time="6.844" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.IIS.AppPoolCreateTest.AppPoolCreateExecute" executed="True" success="False" time="6.844" asserts="0">
+                                    <failure>
+                                      <message><![CDATA[Execute Failed!]]></message>
+                                      <stack-trace><![CDATA[   at MSBuild.Community.Tasks.Tests.IIS.AppPoolCreateTest.AppPoolCreateExecute() in d:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\IIS\AppPoolCreateTest.cs:line 30
+]]></stack-trace>
+                                    </failure>
+                                  </test-case>
+                                </results>
+                              </test-suite>
+                              <test-suite name="AppPoolDeleteTest" success="False" time="6.875" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.IIS.AppPoolDeleteTest.AppPoolDeleteExecute" executed="True" success="False" time="6.875" asserts="0">
+                                    <failure>
+                                      <message><![CDATA[Execute Failed!]]></message>
+                                      <stack-trace><![CDATA[   at MSBuild.Community.Tasks.Tests.IIS.AppPoolDeleteTest.AppPoolDeleteExecute() in d:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\IIS\AppPoolDeleteTest.cs:line 28
+]]></stack-trace>
+                                    </failure>
+                                  </test-case>
+                                </results>
+                              </test-suite>
+                              <test-suite name="WebDirectoryCreateTest" success="False" time="0.000" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.IIS.WebDirectoryCreateTest.WebDirectoryCreateExecute" executed="True" success="False" time="0.000" asserts="0">
+                                    <failure>
+                                      <message><![CDATA[Execute Failed!]]></message>
+                                      <stack-trace><![CDATA[   at MSBuild.Community.Tasks.Tests.IIS.WebDirectoryCreateTest.WebDirectoryCreateExecute() in d:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\IIS\WebDirectoryCreateTest.cs:line 21
+]]></stack-trace>
+                                    </failure>
+                                  </test-case>
+                                </results>
+                              </test-suite>
+                              <test-suite name="WebDirectoryDeleteTest" success="False" time="0.000" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.IIS.WebDirectoryDeleteTest.WebDirectoryDeleteExecute" executed="True" success="False" time="0.000" asserts="0">
+                                    <failure>
+                                      <message><![CDATA[Execute Failed!]]></message>
+                                      <stack-trace><![CDATA[   at MSBuild.Community.Tasks.Tests.IIS.WebDirectoryDeleteTest.WebDirectoryDeleteExecute() in d:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\IIS\WebDirectoryDeleteTest.cs:line 20
+]]></stack-trace>
+                                    </failure>
+                                  </test-case>
+                                </results>
+                              </test-suite>
+                            </results>
+                          </test-suite>
+                          <test-suite name="MoveTest" success="True" time="0.000" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.MoveTest.MoveExecute" executed="True" success="True" time="0.000" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="ServiceQueryTest" success="True" time="0.094" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.ServiceQueryTest.ServiceQueryW3SVC" description="Query serice 'w3svc'" executed="True" success="True" time="0.094" asserts="0" />
+                              <test-case name="MSBuild.Community.Tasks.Tests.ServiceQueryTest.ServiceQueryHTTPFilter" description="Query serice 'HTTPFilter'" executed="True" success="True" time="0.000" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="ServiceControllerTest" success="True" time="1.531" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.ServiceControllerTest.ServiceControllerW3SVC" description="Start or restart service 'w3svc'" executed="False">
+                                <reason>
+                                  <message><![CDATA[Couldn't find the 'w3svc' service on 'TAKAMINE']]></message>
+                                </reason>
+                              </test-case>
+                              <test-case name="MSBuild.Community.Tasks.Tests.ServiceControllerTest.ServiceControllerHTTPFilter" description="Start or restart service 'HTTPFilter'" executed="True" success="True" time="1.516" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="WebDownloadTest" success="True" time="1.047" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.WebDownloadTest.WebDownloadExecute" executed="True" success="True" time="1.047" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="XmlUpdateTest" success="False" time="0.016" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.XmlUpdateTest.XmlUpdateExecute" executed="True" success="False" time="0.016" asserts="0">
+                                <failure>
+                                  <message><![CDATA[Execute Failed]]></message>
+                                  <stack-trace><![CDATA[   at MSBuild.Community.Tasks.Tests.XmlUpdateTest.XmlUpdateExecute() in d:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\XmlUpdateTest.cs:line 35
+]]></stack-trace>
+                                </failure>
+                              </test-case>
+                            </results>
+                          </test-suite>
+                          <test-suite name="FtpUploadTest" success="False" time="1.359" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.FtpUploadTest.FtpExecute" executed="True" success="False" time="1.359" asserts="0">
+                                <failure>
+                                  <message><![CDATA[Execute Failed]]></message>
+                                  <stack-trace><![CDATA[   at MSBuild.Community.Tasks.Tests.FtpUploadTest.FtpExecute() in d:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\FtpUploadTest.cs:line 33
+]]></stack-trace>
+                                </failure>
+                              </test-case>
+                            </results>
+                          </test-suite>
+                          <test-suite name="MailTest" success="False" time="1.094" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.MailTest.MailExecute" executed="True" success="False" time="1.094" asserts="0">
+                                <failure>
+                                  <message><![CDATA[Execute Failed]]></message>
+                                  <stack-trace><![CDATA[   at MSBuild.Community.Tasks.Tests.MailTest.MailExecute() in d:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\MailTest.cs:line 33
+]]></stack-trace>
+                                </failure>
+                              </test-case>
+                            </results>
+                          </test-suite>
+                          <test-suite name="Math" success="True" time="0.000" asserts="0">
+                            <results>
+                              <test-suite name="AddTest" success="True" time="0.000" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Math.AddTest.AddExecute" executed="True" success="True" time="0.000" asserts="0" />
+                                </results>
+                              </test-suite>
+                              <test-suite name="DivideTest" success="True" time="0.000" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Math.DivideTest.DivideExecute" executed="True" success="True" time="0.000" asserts="0" />
+                                </results>
+                              </test-suite>
+                              <test-suite name="MultipleTest" success="True" time="0.000" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Math.MultipleTest.MultipleExecute" executed="True" success="True" time="0.000" asserts="0" />
+                                </results>
+                              </test-suite>
+                              <test-suite name="SubtractTest" success="True" time="0.000" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Math.SubtractTest.SubtractExecute" executed="True" success="True" time="0.000" asserts="0" />
+                                </results>
+                              </test-suite>
+                            </results>
+                          </test-suite>
+                          <test-suite name="NDocTest" success="False" time="0.250" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.NDocTest.NDocExecute" executed="True" success="False" time="0.250" asserts="0">
+                                <failure>
+                                  <message><![CDATA[Execute Failed]]></message>
+                                  <stack-trace><![CDATA[   at MSBuild.Community.Tasks.Tests.NDocTest.NDocExecute() in d:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\NDocTest.cs:line 30
+]]></stack-trace>
+                                </failure>
+                              </test-case>
+                            </results>
+                          </test-suite>
+                          <test-suite name="NUnitTest" success="True" time="4.172" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.NUnitTest.NUnitExecute" executed="True" success="True" time="4.172" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="RegistryReadTest" success="True" time="0.016" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.RegistryReadTest.RegistryReadExecute" executed="True" success="True" time="0.016" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="RegistryWriteTest" success="True" time="0.000" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.RegistryWriteTest.RegistryWriteExecute" executed="True" success="True" time="0.000" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="Subversion" success="True" time="0.250" asserts="0">
+                            <results>
+                              <test-suite name="SvnCheckoutTest" success="True" time="0.000" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Subversion.SvnCheckoutTest.SvnCheckoutLocal" description="Checkout local repository" executed="False">
+                                    <reason>
+                                      <message><![CDATA[Repository path 'd:/svn/repo/Test' does not exist]]></message>
+                                    </reason>
+                                  </test-case>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Subversion.SvnCheckoutTest.SvnCheckoutRemote" description="Checkout remote repository" executed="False">
+                                    <reason>
+                                      <message><![CDATA[long running]]></message>
+                                    </reason>
+                                  </test-case>
+                                </results>
+                              </test-suite>
+                              <test-suite name="SvnClientTest" success="True" time="0.063" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Subversion.SvnClientTest.SvnClientExecute" executed="True" success="True" time="0.063" asserts="0" />
+                                </results>
+                              </test-suite>
+                              <test-suite name="SvnCommitTest" success="True" time="0.000" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Subversion.SvnCommitTest.SvnCommitExecute" executed="True" success="True" time="0.000" asserts="0" />
+                                </results>
+                              </test-suite>
+                              <test-suite name="SvnExportTest" success="True" time="0.000" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Subversion.SvnExportTest.SvnExportLocal" description="Export local repository" executed="False">
+                                    <reason>
+                                      <message><![CDATA[Repository path 'd:/svn/repo/Test' does not exist]]></message>
+                                    </reason>
+                                  </test-case>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Subversion.SvnExportTest.SvnExportRemote" description="Export remote repository" executed="False">
+                                    <reason>
+                                      <message><![CDATA[long running]]></message>
+                                    </reason>
+                                  </test-case>
+                                </results>
+                              </test-suite>
+                              <test-suite name="SvnUpdateTest" success="True" time="0.000" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Subversion.SvnUpdateTest.SvnUpdateExecute" executed="True" success="True" time="0.000" asserts="0" />
+                                </results>
+                              </test-suite>
+                              <test-suite name="SvnVersionTest" success="True" time="0.172" asserts="0">
+                                <results>
+                                  <test-case name="MSBuild.Community.Tasks.Tests.Subversion.SvnVersionTest.SvnVersionExecute" executed="True" success="True" time="0.172" asserts="0" />
+                                </results>
+                              </test-suite>
+                            </results>
+                          </test-suite>
+                          <test-suite name="UnzipTest" success="True" time="0.297" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.UnzipTest.UnzipExecute" executed="True" success="True" time="0.297" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="VersionTest" success="True" time="0.016" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.VersionTest.VersionExecute" executed="True" success="True" time="0.016" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="XmlReadTest" success="False" time="0.016" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.XmlReadTest.XmlReadExecute" executed="True" success="False" time="0.016" asserts="0">
+                                <failure>
+                                  <message><![CDATA[Execute Failed]]></message>
+                                  <stack-trace><![CDATA[   at MSBuild.Community.Tasks.Tests.XmlReadTest.XmlReadExecute() in d:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\XmlReadTest.cs:line 32
+]]></stack-trace>
+                                </failure>
+                              </test-case>
+                            </results>
+                          </test-suite>
+                          <test-suite name="XsltTest" success="True" time="1.391" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.XsltTest.XsltNoInput" description="Execute the Xslt task without input" executed="True" success="True" time="0.000" asserts="0" />
+                              <test-case name="MSBuild.Community.Tasks.Tests.XsltTest.XsltOneInput" description="Execute the Xslt task with one input file" executed="True" success="True" time="1.375" asserts="0" />
+                            </results>
+                          </test-suite>
+                          <test-suite name="ZipTest" success="True" time="0.172" asserts="0">
+                            <results>
+                              <test-case name="MSBuild.Community.Tasks.Tests.ZipTest.ZipExecute" executed="True" success="True" time="0.172" asserts="0" />
+                            </results>
+                          </test-suite>
+                        </results>
+                      </test-suite>
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

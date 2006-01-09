@@ -1,8 +1,9 @@
+// $Id$
+
 using System;
-using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
 using MSBuild.Community.Tasks.IIS;
+using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests.IIS
 {

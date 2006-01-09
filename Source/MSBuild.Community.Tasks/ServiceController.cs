@@ -27,6 +27,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #endregion
 
+// $Id$
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,276 +37,293 @@ using Microsoft.Build.Framework;
 using System.ServiceProcess;
 using Service = System.ServiceProcess.ServiceController;
 
-// $Id$
-
 namespace MSBuild.Community.Tasks
 {
-    /// <summary>
-    /// Task that can control a Windows service.
-    /// </summary>
-    public class ServiceController : ServiceQuery
-    {
+	/// <summary>
+	/// Task that can control a Windows service.
+	/// </summary>
+	public class ServiceController : ServiceQuery
+	{
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:ServiceController"/> class.
-        /// </summary>
-        public ServiceController()
-        {
+		#region Constructor
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:ServiceController"/> class.
+		/// </summary>
+		public ServiceController()
+		{
 
-        }
+		}
 
-        /// <summary>
-        /// Defines the actions that can be performed on a service.
-        /// </summary>
-        public enum ActionType
-        {
-            /// <summary>
-            /// Starts a service.
-            /// </summary>
-            Start,
+		#endregion Constructor
 
-            /// <summary>
-            /// Stops a service.
-            /// </summary>
-            Stop,
+		#region Enums
+		/// <summary>
+		/// Defines the actions that can be performed on a service.
+		/// </summary>
+		public enum ActionType
+		{
+			/// <summary>
+			/// Starts a service.
+			/// </summary>
+			Start,
 
-            /// <summary>
-            /// Restarts a service.
-            /// </summary>
-            Restart,
+			/// <summary>
+			/// Stops a service.
+			/// </summary>
+			Stop,
 
-            /// <summary>
-            /// Pauses a running service.
-            /// </summary>
-            Pause,
+			/// <summary>
+			/// Restarts a service.
+			/// </summary>
+			Restart,
 
-            /// <summary>
-            /// Continues a paused service.
-            /// </summary>
-            Continue
-        }
+			/// <summary>
+			/// Pauses a running service.
+			/// </summary>
+			Pause,
+
+			/// <summary>
+			/// Continues a paused service.
+			/// </summary>
+			Continue
+		}
+
+		#endregion Enums
 
 
 
-        #region Properties
-        private ActionType _action;
+		#region Properties
+		private ActionType _action;
 
-        /// <summary>
-        /// Gets or sets the <see cref="T:ActionType"/> to perform on the service.
-        /// </summary>
-        /// <value>The action to perform on the service.</value>
-        [Required]
-        public string Action
-        {
-            get { return _action.ToString(); }
-            set { _action = (ActionType)Enum.Parse(typeof(ActionType), value); }
-        }
+		/// <summary>
+		/// Gets or sets the <see cref="T:ActionType"/> to perform on the service.
+		/// </summary>
+		/// <value>The action to perform on the service.</value>
+		[Required]
+		public string Action
+		{
+			get { return _action.ToString(); }
+			set { _action = (ActionType)Enum.Parse(typeof(ActionType), value); }
+		}
 
-        private double _timeout = TimeSpan.FromSeconds(60).TotalMilliseconds;
+		private double _timeout = TimeSpan.FromSeconds(60).TotalMilliseconds;
 
-        /// <summary>
-        /// Gets or sets the timeout for the command. The default is
-        /// one minute.
-        /// </summary>
-        /// <value>The timeout for the command.</value>
-        public double Timeout
-        {
-            get { return _timeout; }
-            set { _timeout = value; }
-        }
-        #endregion
+		/// <summary>
+		/// Gets or sets the timeout for the command. The default is
+		/// one minute.
+		/// </summary>
+		/// <value>The timeout for the command.</value>
+		public double Timeout
+		{
+			get { return _timeout; }
+			set { _timeout = value; }
+		}
+		#endregion
 
-        /// <summary>
-        /// Executes the task.
-        /// </summary>
-        /// <returns><see langword="true"/> if the task ran successfully; 
-        /// otherwise <see langword="false"/>.</returns>
-        public override bool Execute()
-        {
-            bool result = true;
-            Service controller = null;
-            
-            try
-            {
-                controller = GetServiceController();
-                ServiceControllerStatus desiredStatus = DetermineDesiredStatus();
-                ServiceControllerStatus currentStatus = controller.Status;
+		#region Task overrides
+		/// <summary>
+		/// Executes the task.
+		/// </summary>
+		/// <returns><see langword="true"/> if the task ran successfully; 
+		/// otherwise <see langword="false"/>.</returns>
+		public override bool Execute()
+		{
+			bool result = true;
+			Service controller = null;
 
-                if (currentStatus == desiredStatus && _action != ActionType.Restart)
-                {
-                    Log.LogMessage("The {0} service on '{1}' is {2}.",
-                        DisplayName, MachineName, currentStatus);
+			try
+			{
+				controller = GetServiceController();
+				if (controller == null)
+				{
+					throw new Exception(string.Format(Properties.Resources.ServiceNotFound,
+						ServiceName, MachineName));
+				}
 
-                    return true;
-                }
 
-                switch (_action)
-                {
-                    case ActionType.Start:
-                        result = StartService(controller);
-                        break;
-                    case ActionType.Pause:
-                        result = PauseService(controller);
-                        break;
-                    case ActionType.Continue:
-                        result = ContinueService(controller);
-                        break;
-                    case ActionType.Stop:
-                        result = StopService(controller);
-                        break;
-                    case ActionType.Restart:
-                        result = RestartService(controller);
-                        break;
-                }
+				ServiceControllerStatus desiredStatus = DetermineDesiredStatus();
+				ServiceControllerStatus currentStatus = controller.Status;
 
-                // refresh current service status
-                controller.Refresh();
-                base.Status = controller.Status.ToString();
+				if (currentStatus == desiredStatus && _action != ActionType.Restart)
+				{
+					Log.LogMessage(Properties.Resources.ServiceStatus,
+						DisplayName, MachineName, currentStatus);
 
-                Log.LogMessage("The {0} service on '{1}' is {2}.",
-                    DisplayName, MachineName, Status);
+					return true;
+				}
 
-            }
-            catch (Exception ex)
-            {
-                Log.LogErrorFromException(ex);
-                return false;
-            }
-            finally
-            {
-                if (controller != null)
-                    controller.Dispose();
-            }
+				switch (_action)
+				{
+					case ActionType.Start:
+						result = StartService(controller);
+						break;
+					case ActionType.Pause:
+						result = PauseService(controller);
+						break;
+					case ActionType.Continue:
+						result = ContinueService(controller);
+						break;
+					case ActionType.Stop:
+						result = StopService(controller);
+						break;
+					case ActionType.Restart:
+						result = RestartService(controller);
+						break;
+				}
 
-            return result;
-        }
+				// refresh current service status
+				controller.Refresh();
+				base.Status = controller.Status.ToString();
 
-        private ServiceControllerStatus DetermineDesiredStatus()
-        {
-            switch (_action)
-            {
-                case ActionType.Stop:
-                    return ServiceControllerStatus.Stopped;
-                case ActionType.Pause:
-                    return ServiceControllerStatus.Paused;
-                default:
-                    return ServiceControllerStatus.Running;
-            }
-        }
+				Log.LogMessage(Properties.Resources.ServiceStatus,
+					DisplayName, MachineName, Status);
 
-        private bool StartService(Service serviceController)
-        {
-            Log.LogMessage("{0} service is starting ...", DisplayName);
+			}
+			catch (Exception ex)
+			{
+				Log.LogErrorFromException(ex);
+				return false;
+			}
+			finally
+			{
+				if (controller != null)
+					controller.Dispose();
+			}
 
-            if (serviceController.Status == ServiceControllerStatus.Paused)
-            {
-                serviceController.Continue();
-            }
-            else
-            {
-                serviceController.Start();
-            }
+			return result;
+		}
 
-            // wait until service is running or timeout expired
-            serviceController.WaitForStatus(ServiceControllerStatus.Running,
-                TimeSpan.FromMilliseconds(Timeout));
+		#endregion Task overrides
 
-            Log.LogMessage("{0} service was started successfully.", DisplayName);
+		#region Private Methods
+		private ServiceControllerStatus DetermineDesiredStatus()
+		{
+			switch (_action)
+			{
+				case ActionType.Stop:
+					return ServiceControllerStatus.Stopped;
+				case ActionType.Pause:
+					return ServiceControllerStatus.Paused;
+				default:
+					return ServiceControllerStatus.Running;
+			}
+		}
 
-            return true;
-        }
+		private bool StartService(Service serviceController)
+		{
+			Log.LogMessage(Properties.Resources.ServiceStarting, DisplayName);
 
-        private bool StopService(Service serviceController)
-        {
-            if (!serviceController.CanStop)
-            {
-                Log.LogError("Cannot stop service {0} on computer '{1}'.", 
-                    ServiceName, MachineName);
-                return false;
-            }
+			if (serviceController.Status == ServiceControllerStatus.Paused)
+			{
+				serviceController.Continue();
+			}
+			else
+			{
+				serviceController.Start();
+			}
 
-            Log.LogMessage("{0} service is stopping ...", DisplayName);
-            serviceController.Stop();
+			// wait until service is running or timeout expired
+			serviceController.WaitForStatus(ServiceControllerStatus.Running,
+				TimeSpan.FromMilliseconds(Timeout));
 
-            // wait until service is stopped or timeout expired
-            serviceController.WaitForStatus(ServiceControllerStatus.Stopped,
-                TimeSpan.FromMilliseconds(Timeout));
+			Log.LogMessage(Properties.Resources.ServiceStarted, DisplayName);
 
-            Log.LogMessage("{0} service was stopped successfully.", DisplayName);
+			return true;
+		}
 
-            return true;
-        }
+		private bool StopService(Service serviceController)
+		{
+			if (!serviceController.CanStop)
+			{
+				Log.LogError(Properties.Resources.ServiceCannotStop,
+					ServiceName, MachineName);
+				return false;
+			}
 
-        private bool RestartService(Service serviceController)
-        {
-            if (serviceController.Status != ServiceControllerStatus.Stopped)
-            {
-                StopService(serviceController);
-            }
-            return StartService(serviceController);
-        }
+			Log.LogMessage(Properties.Resources.ServiceStopping, DisplayName);
+			serviceController.Stop();
 
-        private bool PauseService(Service serviceController)
-        {
+			// wait until service is stopped or timeout expired
+			serviceController.WaitForStatus(ServiceControllerStatus.Stopped,
+				TimeSpan.FromMilliseconds(Timeout));
 
-            if (!serviceController.CanPauseAndContinue)
-            {
-                Log.LogError("Cannot pause service {0} on computer '{1}' as it does not support the pause and continue.",
-                    ServiceName, MachineName);
-                return false;
-            }
+			Log.LogMessage(Properties.Resources.ServiceStopped, DisplayName);
 
-            if (serviceController.Status != ServiceControllerStatus.Running)
-            {
-                Log.LogError("Cannot pause service {0} on computer '{1}' as its not currently started.",
-                    ServiceName, MachineName);
-                return false;
-            }
+			return true;
+		}
 
-            Log.LogMessage("{0} service is pausing ...", DisplayName);
-            serviceController.Pause();
+		private bool RestartService(Service serviceController)
+		{
+			if (serviceController.Status != ServiceControllerStatus.Stopped)
+			{
+				StopService(serviceController);
+			}
+			return StartService(serviceController);
+		}
 
-            // wait until service is paused or timeout expired
-            serviceController.WaitForStatus(ServiceControllerStatus.Paused,
-                TimeSpan.FromMilliseconds(Timeout));
+		private bool PauseService(Service serviceController)
+		{
 
-            Log.LogMessage("{0} service was paused successfully.", DisplayName);
+			if (!serviceController.CanPauseAndContinue)
+			{
+				Log.LogError(Properties.Resources.ServiceCannotPause,
+					ServiceName, MachineName);
+				return false;
+			}
 
-            return true;
-        }
+			if (serviceController.Status != ServiceControllerStatus.Running)
+			{
+				Log.LogError(Properties.Resources.ServiceNotStarted,
+					ServiceName, MachineName);
+				return false;
+			}
 
-        private bool ContinueService(Service serviceController)
-        {
-            
-            if (serviceController.Status == ServiceControllerStatus.Running)
-            {
-                return true; // already running
-            }
+			Log.LogMessage(Properties.Resources.ServicePausing, DisplayName);
+			serviceController.Pause();
 
-            if (!serviceController.CanPauseAndContinue)
-            {
-                Log.LogError("Cannot continue service {0} on computer '{1}' as it does not support the pause and continue.",
-                    ServiceName, MachineName);
-                return false;
-            }
-            if (serviceController.Status != ServiceControllerStatus.Paused)
-            {
-                Log.LogError("Cannot continue service {0} on computer '{1}' as its not currently paused.",
-                    ServiceName, MachineName);
-                return false;
-            }
+			// wait until service is paused or timeout expired
+			serviceController.WaitForStatus(ServiceControllerStatus.Paused,
+				TimeSpan.FromMilliseconds(Timeout));
 
-            Log.LogMessage("{0} service is continuing ...", DisplayName);
+			Log.LogMessage(Properties.Resources.ServicePaused, DisplayName);
 
-            serviceController.Continue();
+			return true;
+		}
 
-            // wait until service is running or timeout expired
-            serviceController.WaitForStatus(ServiceControllerStatus.Running,
-                TimeSpan.FromMilliseconds(Timeout));
+		private bool ContinueService(Service serviceController)
+		{
 
-            Log.LogMessage("{0} service was continued successfully.", DisplayName);
+			if (serviceController.Status == ServiceControllerStatus.Running)
+			{
+				return true; // already running
+			}
 
-            return true;
-        }
-    }
+			if (!serviceController.CanPauseAndContinue)
+			{
+				Log.LogError(Properties.Resources.ServiceCannotContinue,
+					ServiceName, MachineName);
+				return false;
+			}
+			if (serviceController.Status != ServiceControllerStatus.Paused)
+			{
+				Log.LogError(Properties.Resources.ServiceNotPaused,
+					ServiceName, MachineName);
+				return false;
+			}
+
+			Log.LogMessage(Properties.Resources.ServiceContinuing, DisplayName);
+
+			serviceController.Continue();
+
+			// wait until service is running or timeout expired
+			serviceController.WaitForStatus(ServiceControllerStatus.Running,
+				TimeSpan.FromMilliseconds(Timeout));
+
+			Log.LogMessage(Properties.Resources.ServiceContinued, DisplayName);
+
+			return true;
+		}
+
+		#endregion Private Methods
+	}
 }

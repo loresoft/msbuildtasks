@@ -1,8 +1,8 @@
 // $Id$
 
 using System;
+using System.IO;
 using System.Text;
-using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
@@ -13,14 +13,7 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]
     public class FtpUploadTest
     {
-        public FtpUploadTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        [Test]
+        [Test(Description="Upload zip file to localhost")]
         public void FtpExecute()
         {
             ZipTest zip = new ZipTest();
@@ -28,7 +21,8 @@ namespace MSBuild.Community.Tasks.Tests
             
             FtpUpload task = new FtpUpload();
             task.BuildEngine = new MockBuild();
-            task.LocalFile = @"MSBuild.Community.Tasks.zip";
+            string testDir = TaskUtility.TestDirectory;
+            task.LocalFile = Path.Combine(testDir, ZipTest.ZIP_FILE_NAME);
             task.RemoteUri = "ftp://localhost/MSBuild.Community.Tasks.zip";
             Assert.IsTrue(task.Execute(), "Execute Failed");
 

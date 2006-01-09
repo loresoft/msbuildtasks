@@ -3,7 +3,7 @@
         <assembly location="..\Build\MSBuild.Community.Tasks.dll" documentation="..\Build\MSBuild.Community.Tasks.xml" />
     </assemblies>
     <referencePaths>
-        <referencePath path="..\Libraries" />
+        <referencePath path="..\Libraries\**" />
     </referencePaths>
     <namespaces>
         <namespace name="MSBuild.Community.Tasks">Tasks for MSBuild</namespace>
@@ -27,15 +27,17 @@
         </documenter>
         <documenter name="MSDN">
             <property name="OutputDirectory" value=".\doc\" />
-            <property name="HtmlHelpName" value="MSBuild Community Tasks" />
+            <property name="HtmlHelpName" value="MSBuild.Community.Tasks" />
             <property name="Title" value="MSBuild Community Tasks" />
-            <property name="ShowVisualBasic" value="True" />
             <property name="SdkLinksOnWeb" value="True" />
             <property name="RootPageFileName" value="Overview.html" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
             <property name="CopyrightText" value="http://msbuildtasks.tigris.org/" />
             <property name="CopyrightHref" value="http://msbuildtasks.tigris.org/" />
             <property name="DocumentAttributes" value="True" />
             <property name="DocumentedAttributes" value="Output|Required" />
+            <property name="IncludeDefaultThreadSafety" value="False" />
+            <property name="CleanIntermediates" value="True" />
         </documenter>
         <documenter name="MSDN 2003">
             <property name="OutputDirectory" value=".\doc\" />
@@ -44,11 +46,18 @@
         </documenter>
         <documenter name="VS.NET 2003">
             <property name="OutputDirectory" value=".\doc\" />
-            <property name="HtmlHelpName" value="Documentation" />
-            <property name="Title" value="An NDoc documented library" />
+            <property name="HtmlHelpName" value="MSBuild.Community.Tasks" />
+            <property name="Title" value="MSBuild Community Tasks" />
+            <property name="IntroductionPage" value=".\Overview.html" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+            <property name="CopyrightText" value="http://msbuildtasks.tigris.org/" />
+            <property name="CopyrightHref" value="http://msbuildtasks.tigris.org/" />
+            <property name="DocumentedAttributes" value="Output|Required" />
+            <property name="IncludeDefaultThreadSafety" value="False" />
         </documenter>
         <documenter name="XML">
             <property name="OutputFile" value=".\doc\doc.xml" />
+            <property name="IncludeDefaultThreadSafety" value="False" />
         </documenter>
     </documenters>
 </project>

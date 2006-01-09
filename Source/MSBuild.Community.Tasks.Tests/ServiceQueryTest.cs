@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 
@@ -22,12 +21,23 @@ namespace MSBuild.Community.Tasks.Tests
             //TODO: NUnit TearDown
         }
 
-        [Test()]
-        public void ServiceQueryExecute()
+        [Test(Description="Query serice 'w3svc'")]
+        public void ServiceQueryW3SVC()
         {
             ServiceQuery task = new ServiceQuery();
             task.BuildEngine = new MockBuild();
             task.ServiceName = "w3svc";
+
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+            Assert.IsNotNull(task.Status, "Status Null");
+        }
+
+        [Test(Description = "Query serice 'HTTPFilter'")]
+        public void ServiceQueryHTTPFilter()
+        {
+            ServiceQuery task = new ServiceQuery();
+            task.BuildEngine = new MockBuild();
+            task.ServiceName = "HTTPFilter";
 
             Assert.IsTrue(task.Execute(), "Execute Failed");
             Assert.IsNotNull(task.Status, "Status Null");

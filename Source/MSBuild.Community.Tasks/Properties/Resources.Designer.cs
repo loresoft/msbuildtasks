@@ -144,6 +144,15 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not find the NUnit Project File open command. Please make sure NUnit is installed..
+        /// </summary>
+        internal static string NUnitNotFound {
+            get {
+                return ResourceManager.GetString("NUnitNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &quot;{0}&quot; task was not given a value for the required parameter &quot;{1}&quot;..
         /// </summary>
         internal static string ParameterRequired {
@@ -167,6 +176,141 @@ namespace MSBuild.Community.Tasks.Properties {
         internal static string RegistryWrite {
             get {
                 return ResourceManager.GetString("RegistryWrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot continue service {0} on computer &apos;{1}&apos; as it does not support the pause and continue..
+        /// </summary>
+        internal static string ServiceCannotContinue {
+            get {
+                return ResourceManager.GetString("ServiceCannotContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot pause service {0} on computer &apos;{1}&apos; as it does not support the pause and continue..
+        /// </summary>
+        internal static string ServiceCannotPause {
+            get {
+                return ResourceManager.GetString("ServiceCannotPause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot stop service {0} on computer &apos;{1}&apos;..
+        /// </summary>
+        internal static string ServiceCannotStop {
+            get {
+                return ResourceManager.GetString("ServiceCannotStop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} service was continued successfully..
+        /// </summary>
+        internal static string ServiceContinued {
+            get {
+                return ResourceManager.GetString("ServiceContinued", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} service is continuing ....
+        /// </summary>
+        internal static string ServiceContinuing {
+            get {
+                return ResourceManager.GetString("ServiceContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t find the &apos;{0}&apos; service on &apos;{1}&apos;.
+        /// </summary>
+        internal static string ServiceNotFound {
+            get {
+                return ResourceManager.GetString("ServiceNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot continue service {0} on computer &apos;{1}&apos; as its not currently paused..
+        /// </summary>
+        internal static string ServiceNotPaused {
+            get {
+                return ResourceManager.GetString("ServiceNotPaused", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot pause service {0} on computer &apos;{1}&apos; as its not currently started..
+        /// </summary>
+        internal static string ServiceNotStarted {
+            get {
+                return ResourceManager.GetString("ServiceNotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} service was paused successfully..
+        /// </summary>
+        internal static string ServicePaused {
+            get {
+                return ResourceManager.GetString("ServicePaused", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} service is pausing ....
+        /// </summary>
+        internal static string ServicePausing {
+            get {
+                return ResourceManager.GetString("ServicePausing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} service was started successfully..
+        /// </summary>
+        internal static string ServiceStarted {
+            get {
+                return ResourceManager.GetString("ServiceStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} service is starting ....
+        /// </summary>
+        internal static string ServiceStarting {
+            get {
+                return ResourceManager.GetString("ServiceStarting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; service on &apos;{1}&apos; is &apos;{2}&apos;..
+        /// </summary>
+        internal static string ServiceStatus {
+            get {
+                return ResourceManager.GetString("ServiceStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} service was stopped successfully..
+        /// </summary>
+        internal static string ServiceStopped {
+            get {
+                return ResourceManager.GetString("ServiceStopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} service is stopping ....
+        /// </summary>
+        internal static string ServiceStopping {
+            get {
+                return ResourceManager.GetString("ServiceStopping", resourceCulture);
             }
         }
         
@@ -304,6 +448,15 @@ namespace MSBuild.Community.Tasks.Properties {
         internal static string XmlUpdateResult {
             get {
                 return ResourceManager.GetString("XmlUpdateResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No input files.
+        /// </summary>
+        internal static string XsltNoInputFiles {
+            get {
+                return ResourceManager.GetString("XsltNoInputFiles", resourceCulture);
             }
         }
         

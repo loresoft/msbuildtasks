@@ -36,7 +36,7 @@ using Microsoft.Build.Framework;
 using System.Xml;
 using Microsoft.VisualStudio.SourceSafe.Interop;
 
-// $Id: $
+// $Id$
 
 namespace MSBuild.Community.Tasks.SourceSafe
 {

@@ -2,10 +2,9 @@
 
 using System;
 using System.Text;
-using System.Collections.Generic;
 using System.IO;
-using NUnit.Framework;
 using MSBuild.Community.Tasks.Subversion;
+using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests.Subversion
 {
@@ -15,26 +14,61 @@ namespace MSBuild.Community.Tasks.Tests.Subversion
     [TestFixture]
     public class SvnExportTest
     {
-        public SvnExportTest()
+        private string testDirectory;
+
+        [TestFixtureSetUp]
+        public void FixtureInit()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            MockBuild buildEngine = new MockBuild();
+
+            testDirectory = TaskUtility.makeTestDirectory(buildEngine);
+
         }
 
-        [Test]
-        public void SvnExporeExecute()
+        [Test(Description = "Export local repository")]
+        public void SvnExportLocal()
         {
-            if (Directory.Exists("Export"))
-                Directory.Delete("Export", true);
-            
+            string repoPath = "d:/svn/repo/Test";
+            DirectoryInfo dirInfo = new DirectoryInfo(repoPath);
+            if (!dirInfo.Exists)
+            {
+                Assert.Ignore("Repository path '{0}' does not exist", repoPath);
+            }
+
+            string exportDir = Path.Combine(testDirectory, @"TestExport");
+            if (Directory.Exists(exportDir))
+                Directory.Delete(exportDir, true);
+
             SvnExport export = new SvnExport();
             export.BuildEngine = new MockBuild();
 
             Assert.IsNotNull(export);
 
-            export.LocalPath = @"Export";
-            export.RepositoryPath = "file:///d:/svn/repo/Test/trunk";
+            export.LocalPath = exportDir;
+            export.RepositoryPath = "file:///" + repoPath + "/trunk";
+            bool result = export.Execute();
+
+            Assert.IsTrue(result);
+            Assert.IsTrue(export.Revision > 0);
+        }
+
+        [Test(Description = "Export remote repository")]
+        [Ignore(@"long running")]
+        public void SvnExportRemote()
+        {
+            string exportDir = Path.Combine(testDirectory, @"MSBuildTasksExport");
+            if (Directory.Exists(exportDir))
+                Directory.Delete(exportDir, true);
+
+            SvnExport export = new SvnExport();
+            export.BuildEngine = new MockBuild();
+
+            Assert.IsNotNull(export);
+
+            export.LocalPath = exportDir;
+            export.RepositoryPath = "http://msbuildtasks.tigris.org/svn/msbuildtasks/trunk";
+            export.Username = "guest";
+            export.Password = "guest";
             bool result = export.Execute();
 
             Assert.IsTrue(result);

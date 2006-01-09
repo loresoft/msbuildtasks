@@ -29,6 +29,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #endregion
 
+// $Id$
+
 using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
@@ -41,377 +43,391 @@ using System.Xml;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 
-// $Id$
-
 namespace MSBuild.Community.Tasks
 {
-    /// <summary>
-    ///  Executes code contained within the task.
-    /// </summary>
-    /// <example>
-    /// <para>Simple script that writes to the console</para>
-    /// <code><![CDATA[
-    /// <PropertyGroup>
-    ///   <Code>
-    ///     <![CDATA[
-    ///       public static void ScriptMain() {
-    ///         Console.WriteLine("Hello MSBuild Community Scripting World.");
-    ///       }
-    ///     ]]>
-    ///   </Code>
-    /// </PropertyGroup>
-    /// <Script Language="C#" Code="$(Code)" />
-    /// ]]></code>
-    /// </example>
-    public class Script : Task
-    {
-        private static readonly string[] _defaultNamespaces = {
-            "System",
-            "System.Collections.Generic",
-            "System.IO",
-            "System.Text",
-            "System.Text.RegularExpressions"
-        };
-        private string _rootClassName = "msbc" + Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+	/// <summary>
+	/// Executes code contained within the task.
+	/// </summary>
+	/// <example>
+	/// <para>Simple script that writes to the console</para>
+	/// <code>
+	/// <PropertyGroup>
+	///   <Code>
+	///     <![CDATA[
+	///       public static void ScriptMain() {
+	///         Console.WriteLine("Hello MSBuild Community Scripting World.");
+	///       }
+	///     ]]>
+	///   </Code>
+	/// </PropertyGroup>
+	/// <Script Language="C#" Code="$(Code)" />
+	/// </code>
+	/// </example>
+	public class Script : Task
+	{
+		#region Fields
+		private static readonly string[] _defaultNamespaces = {
+			"System",
+			"System.Collections.Generic",
+			"System.IO",
+			"System.Text",
+			"System.Text.RegularExpressions"
+		};
+		private string _rootClassName = "msbc" + Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
 
-        private ITaskItem[] _references;
+		#endregion Fields
 
-        /// <summary>
-        /// The required references
-        /// </summary>
-        public ITaskItem[] References
-        {
-            get { return _references; }
-            set { _references = value; }
-        }
+		#region Input Parameters
+		private ITaskItem[] _references;
 
-        private ITaskItem[] _imports;
+		/// <summary>
+		/// The required references
+		/// </summary>
+		public ITaskItem[] References
+		{
+			get { return _references; }
+			set { _references = value; }
+		}
 
-        /// <summary>
-        /// The namespaces to import.
-        /// </summary>
-        public ITaskItem[] Imports
-        {
-            get { return _imports; }
-            set { _imports = value; }
-        }
+		private ITaskItem[] _imports;
 
-        string _language = "C#";
+		/// <summary>
+		/// The namespaces to import.
+		/// </summary>
+		public ITaskItem[] Imports
+		{
+			get { return _imports; }
+			set { _imports = value; }
+		}
 
-        /// <summary>
-        /// The language of the script block (defaults to C#).
-        /// </summary>
-        /// <remarks><para>The supported languages are:</para>
-        /// <list type="bullet">
-        /// <item><description>Visual Basic.NET (VB, vb, VISUALBASIC)</description></item>
-        /// <item><description>C# (C#, c#, CSHARP)</description></item>
-        /// <item><description>JavaScript (JS, js, JSCRIPT)</description></item>
-        /// <item><description>J# (VJS, vjs, JSHARP)</description></item>
-        /// </list> or, proviude the fully-qualified name for a class implementing 
-        /// <see cref="System.CodeDom.Compiler.CodeDomProvider" />.</remarks>
-        [Required]
-        public string Language
-        {
-            get { return _language; }
-            set { _language = value; }
-        }
+		string _language = "C#";
 
-        private string _mainClass = string.Empty;
+		/// <summary>
+		/// The language of the script block (defaults to C#).
+		/// </summary>
+		/// <remarks><para>The supported languages are:</para>
+		/// <list type="bullet">
+		/// <item><description>Visual Basic.NET (VB, vb, VISUALBASIC)</description></item>
+		/// <item><description>C# (C#, c#, CSHARP)</description></item>
+		/// <item><description>JavaScript (JS, js, JSCRIPT)</description></item>
+		/// <item><description>J# (VJS, vjs, JSHARP)</description></item>
+		/// </list> or, proviude the fully-qualified name for a class implementing 
+		/// <see cref="System.CodeDom.Compiler.CodeDomProvider" />.</remarks>
+		[Required]
+		public string Language
+		{
+			get { return _language; }
+			set { _language = value; }
+		}
 
-        /// <summary>
-        /// The name of the main class containing the static <c>ScriptMain</c> 
-        /// entry point. 
-        /// </summary>
-        public string MainClass
-        {
-            get { return _mainClass; }
-            set { _mainClass = value; }
-        }
+		private string _mainClass = string.Empty;
 
-        private string _code;
+		/// <summary>
+		/// The name of the main class containing the static <c>ScriptMain</c> 
+		/// entry point. 
+		/// </summary>
+		public string MainClass
+		{
+			get { return _mainClass; }
+			set { _mainClass = value; }
+		}
 
-        /// <summary>
-        /// THe code to compile and execute
-        /// </summary>
-        public string Code
-        {
-            get { return _code; }
-            set { _code = value; }
-        }
+		private string _code;
 
-        /// <summary>
-        /// Executes the task.
-        /// </summary>
-        /// <returns><see langword="true"/> if the task ran successfully; 
-        /// otherwise <see langword="false"/>.</returns>
-        public override bool Execute()
-        {
-            try
-            {
-                // create compiler info for user-specified language
-                CompilerInfo compilerInfo = CreateCompilerInfo(Language);
+		/// <summary>
+		/// THe code to compile and execute
+		/// </summary>
+		public string Code
+		{
+			get { return _code; }
+			set { _code = value; }
+		}
 
-                ICodeCompiler compiler = compilerInfo.Compiler;
-                CompilerParameters options = new CompilerParameters();
-                options.GenerateExecutable = false;
-                options.GenerateInMemory = true;
-                options.MainClass = MainClass;
+		#endregion Input Parameters
 
-                // add all available assemblies.
-                foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
-                {
-                    try
-                    {
-                        if (!string.IsNullOrEmpty(asm.Location))
-                        {
-                            options.ReferencedAssemblies.Add(asm.Location);
-                        }
-                    }
-                    catch (NotSupportedException)
-                    {
-                        // Ignore - this error is sometimes thrown by asm.Location 
-                        // for certain dynamic assemblies
-                    }
-                }
+		#region Task Overrides
+		/// <summary>
+		/// Executes the task.
+		/// </summary>
+		/// <returns><see langword="true"/> if the task ran successfully; 
+		/// otherwise <see langword="false"/>.</returns>
+		public override bool Execute()
+		{
+			try
+			{
+				// create compiler info for user-specified language
+				CompilerInfo compilerInfo = CreateCompilerInfo(Language);
 
-                // add (and load) assemblies specified by user
-                if (References != null)
-                {
-                    foreach (ITaskItem item in References)
-                    {
-                        string assemblyFile = item.ItemSpec;
-                        // load assemblies into current AppDomain to ensure assemblies
-                        // are available when executing the emitted assembly
-                        Assembly.LoadFrom(assemblyFile);
+				CodeDomProvider provider = compilerInfo.Provider;
+				CompilerParameters options = new CompilerParameters();
+				options.GenerateExecutable = false;
+				options.GenerateInMemory = true;
+				options.MainClass = MainClass;
 
-                        // make assembly available to compiler
-                        options.ReferencedAssemblies.Add(assemblyFile);
-                    }
-                }
+				// add all available assemblies.
+				foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+				{
+					try
+					{
+						if (!string.IsNullOrEmpty(asm.Location))
+						{
+							options.ReferencedAssemblies.Add(asm.Location);
+						}
+					}
+					catch (NotSupportedException)
+					{
+						// Ignore - this error is sometimes thrown by asm.Location 
+						// for certain dynamic assemblies
+					}
+				}
 
-                // generate the code
-                CodeCompileUnit compileUnit = compilerInfo.GenerateCode(_rootClassName,
-                    Code, _imports);
+				// add (and load) assemblies specified by user
+				if (References != null)
+				{
+					foreach (ITaskItem item in References)
+					{
+						string assemblyFile = item.ItemSpec;
+						// load assemblies into current AppDomain to ensure assemblies
+						// are available when executing the emitted assembly
+						Assembly.LoadFrom(assemblyFile);
 
-                StringWriter sw = new StringWriter(CultureInfo.InvariantCulture);
+						// make assembly available to compiler
+						options.ReferencedAssemblies.Add(assemblyFile);
+					}
+				}
 
-                compilerInfo.CodeGen.GenerateCodeFromCompileUnit(compileUnit, sw, null);
-                string code = sw.ToString();
+				// generate the code
+				CodeCompileUnit compileUnit = compilerInfo.GenerateCode(_rootClassName,
+					Code, _imports);
 
-                Log.LogMessage(MessageImportance.Low, "Generated code:\n{0}", code );
+				StringWriter sw = new StringWriter(CultureInfo.InvariantCulture);
 
-                CompilerResults results = compiler.CompileAssemblyFromDom(options, compileUnit);
+				compilerInfo.Provider.GenerateCodeFromCompileUnit(compileUnit, sw, null);
+				string code = sw.ToString();
 
-                Assembly compiled = null;
-                if (results.Errors.Count > 0)
-                {
-                    string errors = "There were compiler errors:" + Environment.NewLine;
-                    foreach (CompilerError err in results.Errors)
-                    {
-                        errors += err.ToString() + Environment.NewLine;
-                    }
-                    errors += code;
-                    throw new Exception(errors);
-                }
-                else
-                {
-                    compiled = results.CompiledAssembly;
-                }
+				Log.LogMessage(MessageImportance.Low, "Generated code:\n{0}", code);
 
-                string mainClass = _rootClassName;
-                if (!string.IsNullOrEmpty(MainClass))
-                {
-                    mainClass += "+" + MainClass;
-                }
+				CompilerResults results = provider.CompileAssemblyFromDom(options, compileUnit);
 
-                Type mainType = compiled.GetType(mainClass);
-                if (mainType == null)
-                {
-                    //TODO:
-                    throw new Exception("Failed - something to do with MainClass");
-                }
+				Assembly compiled = null;
+				if (results.Errors.Count > 0)
+				{
+					string errors = "There were compiler errors:" + Environment.NewLine;
+					foreach (CompilerError err in results.Errors)
+					{
+						errors += err.ToString() + Environment.NewLine;
+					}
+					errors += code;
+					throw new Exception(errors);
+				}
+				else
+				{
+					compiled = results.CompiledAssembly;
+				}
 
-                MethodInfo entry = mainType.GetMethod("ScriptMain");
-                // check for task or function definitions.
-                if (entry == null)
-                {
-                    throw new Exception("Could not find an entry point");
-                }
+				string mainClass = _rootClassName;
+				if (!string.IsNullOrEmpty(MainClass))
+				{
+					mainClass += "+" + MainClass;
+				}
 
-                if (!entry.IsStatic)
-                {
-                    throw new Exception("Could not find a static entry point");
-                }
+				Type mainType = compiled.GetType(mainClass);
+				if (mainType == null)
+				{
+					//TODO:
+					throw new Exception("Failed - something to do with MainClass");
+				}
 
-                ParameterInfo[] entryParams = entry.GetParameters();
+				MethodInfo entry = mainType.GetMethod("ScriptMain");
+				// check for task or function definitions.
+				if (entry == null)
+				{
+					throw new Exception("Could not find an entry point");
+				}
 
-                if (entryParams.Length != 0)
-                {
-                    throw new Exception("Invalid signatiure for ScriptMain");
-                }
+				if (!entry.IsStatic)
+				{
+					throw new Exception("Could not find a static entry point");
+				}
 
-                /* 
-                 * TODO: if we need to change the sig of the entry point...
-                if (entryParams[0].ParameterType.FullName != typeof(Project).FullName)
-                {
-                    throw new Exception("The entry point has the wrong signature");
-                }
-                 * */
+				ParameterInfo[] entryParams = entry.GetParameters();
 
-                // invoke Main method
-                entry.Invoke(null, new object[] {});
+				if (entryParams.Length != 0)
+				{
+					throw new Exception("Invalid signatiure for ScriptMain");
+				}
 
-                return true;
-           }
-            catch (Exception e)
-            {
-                Log.LogErrorFromException(e, true);
-                return false;
-            }
-        }
+				/* 
+				 * TODO: if we need to change the sig of the entry point...
+				if (entryParams[0].ParameterType.FullName != typeof(Project).FullName)
+				{
+					throw new Exception("The entry point has the wrong signature");
+				}
+				 * */
 
-        #region Private Static Methods
+				// invoke Main method
+				entry.Invoke(null, new object[] { });
 
-        private static CodeDomProvider CreateCodeDomProvider(string typeName, string assemblyName)
-        {
-            Assembly providerAssembly = Assembly.LoadWithPartialName(assemblyName);
-            if (providerAssembly == null)
-            {
-                //TODO:
-                throw new Exception("Invalid CodeDomProvider");
-            }
+				return true;
+			}
+			catch (Exception e)
+			{
+				Log.LogErrorFromException(e, true);
+				return false;
+			}
+		}
 
-            Type providerType = providerAssembly.GetType(typeName, true, true);
-            return CreateCodeDomProvider(providerType);
-        }
+		#endregion Task Overrides
 
-        private static CodeDomProvider CreateCodeDomProvider(string assemblyQualifiedTypeName)
-        {
-            Type providerType = Type.GetType(assemblyQualifiedTypeName, true, true);
-            return CreateCodeDomProvider(providerType);
-        }
+		#region Private Static Methods
 
-        private static CodeDomProvider CreateCodeDomProvider(Type providerType)
-        {
-            object provider = Activator.CreateInstance(providerType);
-            if (!(provider is CodeDomProvider))
-            {
-                //TODO:
-                throw new Exception("Invalid CodeDomProvider");
-            }
-            return (CodeDomProvider)provider;
-        }
+		private static CodeDomProvider CreateCodeDomProvider(string typeName, string assemblyName)
+		{
+			Assembly providerAssembly = Assembly.Load(assemblyName);
+			if (providerAssembly == null)
+			{
+				//TODO:
+				throw new Exception("Invalid CodeDomProvider");
+			}
 
-        #endregion Private Static Methods
+			Type providerType = providerAssembly.GetType(typeName, true, true);
+			return CreateCodeDomProvider(providerType);
+		}
 
-        private CompilerInfo CreateCompilerInfo(string language)
-        {
-            CodeDomProvider provider = null;
-            LanguageId languageId;
+		private static CodeDomProvider CreateCodeDomProvider(string assemblyQualifiedTypeName)
+		{
+			Type providerType = Type.GetType(assemblyQualifiedTypeName, true, true);
+			return CreateCodeDomProvider(providerType);
+		}
 
-            switch (language)
-            {
-                case "vb":
-                case "VB":
-                case "VISUALBASIC":
-                    languageId = LanguageId.VisualBasic;
-                    provider = CreateCodeDomProvider(
-                        "Microsoft.VisualBasic.VBCodeProvider",
-                        "System, Culture=neutral");
-                    break;
-                case "c#":
-                case "C#":
-                case "CSHARP":
-                    languageId = LanguageId.CSharp;
-                    provider = CreateCodeDomProvider(
-                        "Microsoft.CSharp.CSharpCodeProvider",
-                        "System, Culture=neutral");
-                    break;
-                case "js":
-                case "JS":
-                case "JSCRIPT":
-                    languageId = LanguageId.JScript;
-                    provider = CreateCodeDomProvider(
-                        "Microsoft.JScript.JScriptCodeProvider",
-                        "Microsoft.JScript, Culture=neutral");
-                    break;
-                case "vjs":
-                case "VJS":
-                case "JSHARP":
-                    languageId = LanguageId.JSharp;
-                    provider = CreateCodeDomProvider(
-                        "Microsoft.VJSharp.VJSharpCodeProvider",
-                        "VJSharpCodeProvider, Culture=neutral");
-                    break;
-                default:
-                    // if its not one of the above then it must be a fully 
-                    // qualified provider class name
-                    languageId = LanguageId.Other;
-                    provider = CreateCodeDomProvider(language);
-                    break;
-            }
+		private static CodeDomProvider CreateCodeDomProvider(Type providerType)
+		{
+			object provider = Activator.CreateInstance(providerType);
+			if (!(provider is CodeDomProvider))
+			{
+				//TODO:
+				throw new Exception("Invalid CodeDomProvider");
+			}
+			return (CodeDomProvider)provider;
+		}
 
-            return new CompilerInfo(languageId, provider);
-        }
+		#endregion Private Static Methods
 
-        internal enum LanguageId : int
-        {
-            CSharp = 1,
-            VisualBasic = 2,
-            JScript = 3,
-            JSharp = 4,
-            Other = 5
-        }
+		#region Private Methods
+		private CompilerInfo CreateCompilerInfo(string language)
+		{
+			CodeDomProvider provider = null;
+			LanguageId languageId;
 
-        internal class CompilerInfo
-        {
-            private LanguageId _lang;
-            public readonly ICodeCompiler Compiler;
-            public readonly ICodeGenerator CodeGen;
+			switch (language)
+			{
+				case "vb":
+				case "VB":
+				case "VISUALBASIC":
+					languageId = LanguageId.VisualBasic;
+					provider = CreateCodeDomProvider(
+						"Microsoft.VisualBasic.VBCodeProvider",
+						"System, Culture=neutral");
+					break;
+				case "c#":
+				case "C#":
+				case "CSHARP":
+					languageId = LanguageId.CSharp;
+					provider = CreateCodeDomProvider(
+						"Microsoft.CSharp.CSharpCodeProvider",
+						"System, Culture=neutral");
+					break;
+				case "js":
+				case "JS":
+				case "JSCRIPT":
+					languageId = LanguageId.JScript;
+					provider = CreateCodeDomProvider(
+						"Microsoft.JScript.JScriptCodeProvider",
+						"Microsoft.JScript, Culture=neutral");
+					break;
+				case "vjs":
+				case "VJS":
+				case "JSHARP":
+					languageId = LanguageId.JSharp;
+					provider = CreateCodeDomProvider(
+						"Microsoft.VJSharp.VJSharpCodeProvider",
+						"VJSharpCodeProvider, Culture=neutral");
+					break;
+				default:
+					// if its not one of the above then it must be a fully 
+					// qualified provider class name
+					languageId = LanguageId.Other;
+					provider = CreateCodeDomProvider(language);
+					break;
+			}
 
-            public CompilerInfo(LanguageId languageId, CodeDomProvider provider)
-            {
-                _lang = languageId;
+			return new CompilerInfo(languageId, provider);
+		}
 
-                Compiler = provider.CreateCompiler();
-                CodeGen = provider.CreateGenerator();
-            }
+		#endregion Private Methods
+
+		#region Enums
+		internal enum LanguageId : int
+		{
+			CSharp = 1,
+			VisualBasic = 2,
+			JScript = 3,
+			JSharp = 4,
+			Other = 5
+		}
+
+		#endregion Enums
+
+		#region Nested Internal Class
+		internal class CompilerInfo
+		{
+			private LanguageId _lang;
+			public readonly CodeDomProvider Provider;
+
+			public CompilerInfo(LanguageId languageId, CodeDomProvider provider)
+			{
+				_lang = languageId;
+				Provider = provider;
+
+			}
 
 
-            public CodeCompileUnit GenerateCode(string typeName, string codeBody,
-                ITaskItem[] imports)
-            {
-                CodeCompileUnit compileUnit = new CodeCompileUnit();
+			public CodeCompileUnit GenerateCode(string typeName, string codeBody,
+				ITaskItem[] imports)
+			{
+				CodeCompileUnit compileUnit = new CodeCompileUnit();
 
-                CodeTypeDeclaration typeDecl = new CodeTypeDeclaration(typeName);
-                typeDecl.IsClass = true;
-                typeDecl.TypeAttributes = TypeAttributes.Public;
+				CodeTypeDeclaration typeDecl = new CodeTypeDeclaration(typeName);
+				typeDecl.IsClass = true;
+				typeDecl.TypeAttributes = TypeAttributes.Public;
 
-                // pump in the user specified code as a snippet
-                CodeSnippetTypeMember literalMember =
-                    new CodeSnippetTypeMember(codeBody);
-                typeDecl.Members.Add(literalMember);
+				// pump in the user specified code as a snippet
+				CodeSnippetTypeMember literalMember =
+					new CodeSnippetTypeMember(codeBody);
+				typeDecl.Members.Add(literalMember);
 
-                CodeNamespace nspace = new CodeNamespace();
+				CodeNamespace nspace = new CodeNamespace();
 
-                //Add default imports
-                foreach (string nameSpace in Script._defaultNamespaces)
-                {
-                    nspace.Imports.Add(new CodeNamespaceImport(nameSpace));
-                }
-                if (imports != null)
-                {
-                    foreach (ITaskItem item in imports)
-                    {
-                        string nameSpace = item.ItemSpec;
-                        nspace.Imports.Add(new CodeNamespaceImport(nameSpace));
-                    }
-                }
-                compileUnit.Namespaces.Add(nspace);
-                nspace.Types.Add(typeDecl);
+				//Add default imports
+				foreach (string nameSpace in Script._defaultNamespaces)
+				{
+					nspace.Imports.Add(new CodeNamespaceImport(nameSpace));
+				}
+				if (imports != null)
+				{
+					foreach (ITaskItem item in imports)
+					{
+						string nameSpace = item.ItemSpec;
+						nspace.Imports.Add(new CodeNamespaceImport(nameSpace));
+					}
+				}
+				compileUnit.Namespaces.Add(nspace);
+				nspace.Types.Add(typeDecl);
 
-                return compileUnit;
-            }
-        }
-    }
+				return compileUnit;
+			}
+		}
+
+		#endregion Nested Internal Class
+	}
 }

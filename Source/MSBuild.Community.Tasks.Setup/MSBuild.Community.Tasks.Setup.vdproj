@@ -15,44 +15,44 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_6D5A63FD8148D0F1C61D8394EA682056"
-        "OwnerKey" = "8:_9B21427000324CC4A9C34776139351A2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9B21427000324CC4A9C34776139351A2"
+        "MsmKey" = "8:_05D195ED98434FEA87D6DDF9E6BC2254"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_A3A0604185D7EE2C07786F26E2CAA89D"
-        "OwnerKey" = "8:_F988F7EA43E68AB217AD89B64C281BB9"
+        "MsmKey" = "8:_9AC45FA273FADD126CDB93083E977530"
+        "OwnerKey" = "8:_C6CAE77E576040BBBA5ACC301C6E49D2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B32032D78577442DB2D24B26D881D407"
+        "MsmKey" = "8:_A06633EBF0614568AAF5507CCE987B65"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C6CAE77E576040BBBA5ACC301C6E49D2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_F988F7EA43E68AB217AD89B64C281BB9"
-        "OwnerKey" = "8:_9B21427000324CC4A9C34776139351A2"
+        "OwnerKey" = "8:_C6CAE77E576040BBBA5ACC301C6E49D2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9B21427000324CC4A9C34776139351A2"
+        "OwnerKey" = "8:_C6CAE77E576040BBBA5ACC301C6E49D2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6D5A63FD8148D0F1C61D8394EA682056"
+        "OwnerKey" = "8:_9AC45FA273FADD126CDB93083E977530"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,6 +88,16 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.2.0"
+                    {
+                    "Name" = "8:.NET Framework 2.0"
+                    "ProductCode" = "8:Microsoft.Net.Framework.2.0"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
                 }
             }
         }
@@ -151,14 +161,34 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6D5A63FD8148D0F1C61D8394EA682056"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_05D195ED98434FEA87D6DDF9E6BC2254"
+            {
+            "SourcePath" = "8:..\\..\\Documentation\\MSBuild.Community.Tasks.chm"
+            "TargetName" = "8:MSBuild.Community.Tasks.chm"
+            "Tag" = "8:"
+            "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9AC45FA273FADD126CDB93083E977530"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73"
                 "ScatterAssemblies"
                 {
-                    "_6D5A63FD8148D0F1C61D8394EA682056"
+                    "_9AC45FA273FADD126CDB93083E977530"
                     {
                     "Name" = "8:ICSharpCode.SharpZipLib.dll"
                     "Attributes" = "3:512"
@@ -178,26 +208,6 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A3A0604185D7EE2C07786F26E2CAA89D"
-            {
-            "SourcePath" = "8:ssapi.dll"
-            "TargetName" = "8:ssapi.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:4"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
@@ -300,10 +310,10 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MSBuild Community Tasks"
         "ProductCode" = "8:{2474E106-59D0-45F5-AD19-6F3E2723C550}"
-        "PackageCode" = "8:{0800F0B1-EC46-4216-BF12-1CF638031DBB}"
+        "PackageCode" = "8:{EA4A359B-6CBF-41F8-BFED-B002118A124B}"
         "UpgradeCode" = "8:{F289AA13-BBAF-4EA2-97C8-BAEC7E5B743E}"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:TRUE"
+        "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
         "ProductVersion" = "8:1.0.1"
@@ -312,9 +322,9 @@
         "ARPHELPLINK" = "8:http://msbuildtasks.tigris.org/"
         "Title" = "8:MSBuild.Community.Tasks.Setup"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:MSBuild Community Tasks"
+        "ARPCONTACT" = "8:MSBuild Community"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:"
+        "ARPCOMMENTS" = "8:MSBuild Community Tasks"
         "ARPURLINFOABOUT" = "8:http://msbuildtasks.tigris.org/"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
@@ -783,63 +793,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9B21427000324CC4A9C34776139351A2"
-            {
-            "SourcePath" = "8:..\\MSBuild.Community.Tasks\\obj\\Release\\MSBuild.Community.Tasks.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{F88A60A8-564C-4E70-92DC-E92DBB897641}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B32032D78577442DB2D24B26D881D407"
-            {
-            "SourcePath" = "8:..\\..\\Build\\MSBuild.Community.Tasks.xml"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Documentation"
-            "OutputProjectGuid" = "8:{F88A60A8-564C-4E70-92DC-E92DBB897641}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BCB40D0C6DFF46388FA5E9F7A40D9304"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_48AC5CE5BD6741B4B722E039A46CD97D"
             {
             "SourcePath" = "8:"
             "TargetName" = "8:"
@@ -859,8 +813,64 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
+            "OutputConfiguration" = "8:Release|Any CPU"
             "OutputGroupCanonicalName" = "8:ContentFiles"
+            "OutputProjectGuid" = "8:{F88A60A8-564C-4E70-92DC-E92DBB897641}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A06633EBF0614568AAF5507CCE987B65"
+            {
+            "SourcePath" = "8:..\\..\\Build\\MSBuild.Community.Tasks.xml"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:Release|Any CPU"
+            "OutputGroupCanonicalName" = "8:Documentation"
+            "OutputProjectGuid" = "8:{F88A60A8-564C-4E70-92DC-E92DBB897641}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C6CAE77E576040BBBA5ACC301C6E49D2"
+            {
+            "SourcePath" = "8:..\\MSBuild.Community.Tasks\\obj\\Release\\MSBuild.Community.Tasks.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EBBFB13FE7384BCAAC28B6665B56A659"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:Release|Any CPU"
+            "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{F88A60A8-564C-4E70-92DC-E92DBB897641}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"

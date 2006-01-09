@@ -1,10 +1,12 @@
 // $Id$
 
 using System;
+using System.IO;
 using System.Text;
-using System.Collections.Generic;
-using NUnit.Framework;
+using System.Text.RegularExpressions;
 using Microsoft.Build.Utilities;
+using Microsoft.Win32;
+using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
 {
@@ -14,22 +16,33 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]
     public class NUnitTest
     {
-        public NUnitTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
-        [Test]
+        [Test(Description = "Excute NUnit tests of the NUnit framework")]
         public void NUnitExecute()
         {
-            string[] assemblies = new string[] { @"C:\Program Files\NUnit 2.2.3\bin\nunit.framework.tests.dll" };
-            TaskItem[] items = TaskUtility.StringArrayToItemArray(assemblies);
+            #region Find NUnit installation
+            string nunitPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            nunitPath = Path.Combine(nunitPath, NUnit.DEFAULT_NUNIT_DIRECTORY);
+            
+            RegistryKey buildKey = Registry.ClassesRoot.OpenSubKey(@"NUnitTestProject\shell\open\command");
+            if (buildKey == null) Assert.Ignore(@"Can't find NUnit installation");
+
+            nunitPath = buildKey.GetValue(null, nunitPath).ToString();
+            Regex nunitRegex = new Regex("(.+)nunit-gui\\.exe", RegexOptions.IgnoreCase);
+            Match pathMatch = nunitRegex.Match(nunitPath);
+            nunitPath = pathMatch.Groups[1].Value.Replace("\"", "");
+
+            #endregion Find NUnit installation
+
+            MockBuild buildEngine = new MockBuild();
+
+            string testDirectory = TaskUtility.makeTestDirectory(buildEngine);
 
             NUnit task = new NUnit();
-            task.BuildEngine = new MockBuild();            
-            task.Assemblies = items;
+            task.BuildEngine = buildEngine;
+            task.Assemblies = TaskUtility.StringArrayToItemArray(
+                Path.Combine(nunitPath, "nunit.framework.tests.dll"));
+            task.WorkingDirectory = testDirectory;
+            task.OutputXmlFile = Path.Combine(testDirectory, @"nunit.framework.tests-results.xml");
             Assert.IsTrue(task.Execute(), "Execute Failed");
         }
     }
