@@ -264,4 +264,15 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="FtpUpload">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="LocalFile" type="xs:string" />
+				<xs:element name="Password" type="xs:string" />
+				<xs:element name="RemoteUri" type="xs:string" />
+				<xs:element name="UsePassive" type="xs:boolean" />
+				<xs:element name="Username" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 </xs:schema>
