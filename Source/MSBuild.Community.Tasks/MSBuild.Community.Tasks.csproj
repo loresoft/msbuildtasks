@@ -51,7 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+<<<<<<< .mine
+    <Compile Include="CurrentDateTime.cs" />
+=======
     <Compile Include="Attrib.cs" />
+>>>>>>> .r98
     <Compile Include="FileUpdate.cs" />
     <Compile Include="FxCop.cs" />
     <Compile Include="IIS\WebBase.cs" />
