@@ -50,7 +50,7 @@
     <Compile Include="MoveTest.cs" />
     <Compile Include="ServiceQueryTest.cs" />
     <Compile Include="ServiceControllerTest.cs" />
-    <Compile Include="TimeTest.cs" />
+    <Compile Include="Time\TimeTest.cs" />
     <Compile Include="WebDownloadTest.cs" />
     <Compile Include="XmlUpdateTest.cs" />
     <Compile Include="FtpUploadTest.cs" />
