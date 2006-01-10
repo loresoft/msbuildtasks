@@ -30,35 +30,48 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // $Id$
 
 using System;
+using System.Globalization;
+using System.Text;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MSBuild.Community.Tasks
 {
 	/// <summary>
 	/// Gets the current date and time.
 	/// </summary>
-	/// <example>Using the CurrentDateTime task to get the Month, Day,
-	/// Year, Hour, Minute, and Second.
+	/// <remarks>
+	/// See
+	/// <a href="ms-help://MS.VSCC.v80/MS.MSDN.v80/MS.NETDEVFX.v20.en/cpref8/html/T_System_Globalization_DateTimeFormatInfo.htm">
+	/// DateTimeFormatInfo</a>
+	/// for the syntax of the format string.
+	/// </remarks>
+	/// <example>Using the Time task to get the Month, Day,
+	/// Year, Hour, Minute, and Second:
 	/// <code><![CDATA[
-	/// <CurrentDateTime>
+	/// <Time>
 	///   <Output TaskParameter="Month" PropertyName="Month" />
 	///   <Output TaskParameter="Day" PropertyName="Day" />
 	///   <Output TaskParameter="Year" PropertyName="Year" />
 	///   <Output TaskParameter="Hour" PropertyName="Hour" />
 	///	  <Output TaskParameter="Minute" PropertyName="Minute" />
 	///	  <Output TaskParameter="Second" PropertyName="Second" />
-	///	</CurrentDateTime>
-	///	<Message Text="Current DateTime: $(Month)/$(Day)/$(Year) $(Hour):$(Minute):$(Second)" />
-	/// ]]></code>
+	///	</Time>
+	///	<Message Text="Current Date and Time: $(Month)/$(Day)/$(Year) $(Hour):$(Minute):$(Second)" />]]></code>
+	/// Set property "BuildDate" to the current date and time:
+	/// <code><![CDATA[
+	/// <Time Format="yyyyMMddHHmmss">
+	///     <Output TaskParameter="FormattedTime" PropertyName="buildDate" />
+	/// </Time>]]></code>
 	/// </example>
-	public class CurrentDateTime : Task
+	public class Time : Task
 	{
 		#region Fields
 
 		private System.DateTime mDate;
+		private System.DateTimeKind dateTimeKind = DateTimeKind.Local;
+		private string format = null;
+
 		private string mMonth;
 		private string mDay;
 		private string mYear;
@@ -71,7 +84,7 @@ namespace MSBuild.Community.Tasks
 		private string mTimeOfDay;
 		private string mDayOfYear;
 		private string mDayOfWeek;
-		private string mDateTime;
+		private string mFormattedTime;
 		private string mShortDate;
 		private string mLongDate;
 		private string mShortTime;
@@ -79,7 +92,26 @@ namespace MSBuild.Community.Tasks
 
 		#endregion
 
-		#region Properties
+		#region Input Parameters
+		/// <summary>
+		/// Gets or sets the format string
+		/// for output parameter <see cref="FormattedTime"/>.
+		/// </summary>
+		/// <remarks>
+		/// See
+		/// <a href="ms-help://MS.VSCC.v80/MS.MSDN.v80/MS.NETDEVFX.v20.en/cpref8/html/T_System_Globalization_DateTimeFormatInfo.htm">
+		/// DateTimeFormatInfo</a>
+		/// for the syntax of the format string.
+		/// </remarks>
+		public string Format
+		{
+			get { return format; }
+			set { format = value; }
+		}
+
+		#endregion Input Parameters
+
+		#region Output Parameters
 
 		/// <summary>
 		/// Gets the month component of the date represented by this instance.
@@ -154,13 +186,25 @@ namespace MSBuild.Community.Tasks
 		}
 
 		/// <summary>
-		/// Gets a value that indicates whether the time represented by this instance is based
+		/// Gets or sets a value that indicates whether the time represented by this instance is based
 		/// on local time, Coordinated Universal Time (UTC), or neither.
 		/// </summary>
+		/// <remarks>
+		/// Possible values are:
+		/// <list type="ul">
+		/// <item>Local (default)</item>,
+		/// <item>Utc</item>,
+		/// <item>Unspecified</item>
+		/// </list>
+		/// </remarks>
 		[Output]
 		public string Kind
 		{
 			get { return mKind; }
+			set
+			{
+				dateTimeKind = (DateTimeKind)Enum.Parse(typeof(DateTimeKind), value);
+			}
 		}
 
 		/// <summary>
@@ -191,12 +235,14 @@ namespace MSBuild.Community.Tasks
 		}
 
 		/// <summary>
-		/// Gets the value of this instance to its equivalent string representation. 
+		/// Gets the value of this instance to its equivalent string representation.
+		/// If input parameter <see cref="Format"/> is provided,
+		/// the value is formatted according to it.
 		/// </summary>
 		[Output]
-		public string DateTime
+		public string FormattedTime
 		{
-			get { return mDateTime; }
+			get { return mFormattedTime; }
 		}
 
 		/// <summary>
@@ -235,8 +281,21 @@ namespace MSBuild.Community.Tasks
 			get { return mLongTime; }
 		}
 
-		#endregion
+		#endregion Output Parameters
 
+		#region Public Properties
+
+		/// <summary>
+		/// Gets the internal time value.
+		/// </summary>
+		public DateTime DateTimeValue
+		{
+			get { return mDate; }
+		}
+
+		#endregion Public Properties
+
+		#region Task Overrides
 		/// <summary>
 		/// When overridden in a derived class, executes the task.
 		/// </summary>
@@ -263,11 +322,21 @@ namespace MSBuild.Community.Tasks
 			return bSuccess;
 		}
 
+		#endregion Task Overrides
+
 		#region Private Methods
 
 		private void GetDate()
 		{
-			mDate = System.DateTime.Now;
+			if (dateTimeKind == DateTimeKind.Utc)
+			{
+				mDate = System.DateTime.UtcNow;
+			}
+			else
+			{
+				mDate = System.DateTime.Now;
+			}
+
 			mMonth = mDate.Month.ToString();
 			mDay = mDate.Day.ToString();
 			mYear = mDate.Year.ToString();
@@ -280,14 +349,22 @@ namespace MSBuild.Community.Tasks
 			mTimeOfDay = mDate.TimeOfDay.ToString();
 			mDayOfYear = mDate.DayOfYear.ToString();
 			mDayOfWeek = mDate.DayOfWeek.ToString();
-			mDateTime = mDate.ToString();
 			mShortDate = mDate.ToShortDateString();
 			mLongDate = mDate.ToLongDateString();
 			mShortTime = mDate.ToShortTimeString();
 			mLongTime = mDate.ToLongTimeString();
+
+			if (format == null)
+			{
+				mFormattedTime = mDate.ToString(DateTimeFormatInfo.InvariantInfo);
+			}
+			else
+			{
+				mFormattedTime = mDate.ToString(format, DateTimeFormatInfo.InvariantInfo);
+			}
 		}
 
-		#endregion
+		#endregion Private Methods
 
 	}
 }

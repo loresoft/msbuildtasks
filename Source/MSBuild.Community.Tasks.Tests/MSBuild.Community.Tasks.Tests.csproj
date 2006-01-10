@@ -40,9 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfoTest.cs" />
-    <Compile Include="CurrentDateTimeTest.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
-    <Compile Include="Timestamp\TimestampTest.cs" />
     <Compile Include="FileUpdateTest.cs" />
     <Compile Include="IIS\AppPoolControllerTest.cs" />
     <Compile Include="IIS\AppPoolCreateTest.cs" />
@@ -52,6 +50,7 @@
     <Compile Include="MoveTest.cs" />
     <Compile Include="ServiceQueryTest.cs" />
     <Compile Include="ServiceControllerTest.cs" />
+    <Compile Include="TimeTest.cs" />
     <Compile Include="WebDownloadTest.cs" />
     <Compile Include="XmlUpdateTest.cs" />
     <Compile Include="FtpUploadTest.cs" />
@@ -86,7 +85,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Timestamp\TimestampTest.proj" />
+    <None Include="Time\TimeTest.proj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Xslt\XsltTestInput.xml">

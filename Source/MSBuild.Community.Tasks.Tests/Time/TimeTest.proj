@@ -2,7 +2,7 @@
 <!--	
 	$Id$
 	Copyright © 2006 Ignaz Kohlbecker
-	MSBuild file to test the Timestamp task 
+	MSBuild file to test the Time task 
 -->
 
 <Project InitialTargets="buildinfo" DefaultTargets="test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
@@ -18,22 +18,33 @@
 		<Message Text="MSBuildBinPath: $(MSBuildBinPath)" />
 		<Message Text="MSBuildExtensionsPath: $(MSBuildExtensionsPath)" />
 
-		<Timestamp Format="yyyy/MM/dd HH:mm:ss" >
-			<Output TaskParameter="LocalTimestamp" PropertyName="BuildDate" />
-		</Timestamp>
+		<Time Format="yyyy/MM/dd HH:mm:ss" >
+			<Output TaskParameter="FormattedTime" PropertyName="BuildDate" />
+		</Time>
 		<Message Text="Build date: $(BuildDate)" />
 	</Target>
 
-	<Target Name="test">
+	<Target Name="local" DependsOnTargets="buildinfo">
 		<Message Text="Build date: $(BuildDate)" />
 
-		<Timestamp Format="yyyy MMM dd HH:mm" >
-			<Output TaskParameter="LocalTimestamp" PropertyName="LocalTime" />
-			<Output TaskParameter="UniversalTimestamp" PropertyName="UTCTime" />
-		</Timestamp>
+		<Time Format="yyyy MMM dd HH:mm" >
+			<Output TaskParameter="FormattedTime" PropertyName="LocalTime" />
+		</Time>
 
-		<Message Text="Timestamp: $(LocalTime) (local)" />
-		<Message Text="Timestamp: $(UTCTime) (UTC)" />
+		<Message Text="Time: $(LocalTime) (local)" />
+	</Target>
+
+	<Target Name="utc" DependsOnTargets="buildinfo">
+		<Message Text="Build date: $(BuildDate)" />
+
+		<Time Format="yyyy MMM dd HH:mm" Kind="Utc" >
+			<Output TaskParameter="FormattedTime" PropertyName="UTCTime" />
+		</Time>
+
+		<Message Text="Time: $(UTCTime) (UTC)" />
+	</Target>
+
+	<Target Name="test" DependsOnTargets="local;utc">
 	</Target>
 
 </Project>

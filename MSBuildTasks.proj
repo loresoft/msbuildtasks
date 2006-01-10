@@ -239,7 +239,7 @@
 		<Message Text="Test Proj &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;" />
 		<Message Text="=======================================================================================" />
 
-		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Timestamp\TimestampTest.proj"
+		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Time\TimeTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
 	</Target>
 

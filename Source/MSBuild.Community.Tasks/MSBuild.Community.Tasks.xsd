@@ -88,6 +88,34 @@
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="FileUpdate" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:TaskType">
+					<xs:attribute name="Files" />
+					<xs:attribute name="IgnoreCase" type="xs:boolean" />
+					<xs:attribute name="Multiline" type="xs:boolean" />
+					<xs:attribute name="Regex" type="xs:string" />
+					<xs:attribute name="ReplacementCount" type="xs:int" />
+					<xs:attribute name="ReplacementText" type="xs:string" />
+					<xs:attribute name="Singleline" type="xs:boolean" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FtpUpload" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:TaskType">
+					<xs:attribute name="LocalFile" type="xs:string" use="required" />
+					<xs:attribute name="Password" type="xs:string" />
+					<xs:attribute name="RemoteUri" type="xs:string" use="required" />
+					<xs:attribute name="UsePassive" type="xs:boolean" />
+					<xs:attribute name="Username" type="xs:string" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
 	<xs:element name="NDoc" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
@@ -180,11 +208,19 @@
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="Timestamp" substitutionGroup="msb:Task">
+	<xs:simpleType name="DateTimeKind">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Local" />
+			<xs:enumeration value="Utc" />
+			<xs:enumeration value="Unspecified" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="Time" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>
 				<xs:extension base="msb:TaskType">
 					<xs:attribute name="Format" />
+					<xs:attribute name="Kind" type="msb:DateTimeKind" />
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>
@@ -225,54 +261,6 @@
 					<xs:attribute name="WorkingDirectory" />
 				</xs:extension>
 			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="CurrentDateTime">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="DateTime" type="xs:string" />
-				<xs:element name="Day" type="xs:string" />
-				<xs:element name="DayOfWeek" type="xs:string" />
-				<xs:element name="DayOfYear" type="xs:string" />
-				<xs:element name="Hour" type="xs:string" />
-				<xs:element name="Kind" type="xs:string" />
-				<xs:element name="LongDate" type="xs:string" />
-				<xs:element name="LongTime" type="xs:string" />
-				<xs:element name="Millisecond" type="xs:string" />
-				<xs:element name="Minute" type="xs:string" />
-				<xs:element name="Month" type="xs:string" />
-				<xs:element name="Second" type="xs:string" />
-				<xs:element name="ShortDate" type="xs:string" />
-				<xs:element name="ShortTime" type="xs:string" />
-				<xs:element name="Ticks" type="xs:string" />
-				<xs:element name="TimeOfDay" type="xs:string" />
-				<xs:element name="Year" type="xs:string" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="FileUpdate">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="Files" type="msb:Microsoft.Build.Framework.ITaskItem_x005B__x005D_">
-				</xs:element>
-				<xs:element name="IgnoreCase" type="xs:boolean" />
-				<xs:element name="Multiline" type="xs:boolean" />
-				<xs:element name="Regex" type="xs:string" />
-				<xs:element name="ReplacementCount" type="xs:int" />
-				<xs:element name="ReplacementText" type="xs:string" />
-				<xs:element name="Singleline" type="xs:boolean" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="FtpUpload">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="LocalFile" type="xs:string" />
-				<xs:element name="Password" type="xs:string" />
-				<xs:element name="RemoteUri" type="xs:string" />
-				<xs:element name="UsePassive" type="xs:boolean" />
-				<xs:element name="Username" type="xs:string" />
-			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 </xs:schema>

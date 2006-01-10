@@ -3,7 +3,7 @@
   <!-- $Id$ -->
   <PropertyGroup>
     <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
-    <LastUpdate>Montag, 9. Januar 2006</LastUpdate>
+    <LastUpdate>Dienstag, 10. Januar 2006</LastUpdate>
     <TestUpdate>Test from Task.proj</TestUpdate>
   </PropertyGroup>
   <Import Project="MSBuild.Community.Tasks.Targets" />
