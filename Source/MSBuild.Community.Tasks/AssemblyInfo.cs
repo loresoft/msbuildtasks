@@ -226,6 +226,33 @@ namespace MSBuild.Community.Tasks
             set { _attributes["AssemblyFileVersion"] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the assembly key file.
+        /// </summary>
+        public string AssemblyKeyFile
+        {
+            get { return ReadAttribute("AssemblyKeyFile"); }
+            set { _attributes["AssemblyKeyFile"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the assembly key name.
+        /// </summary>
+        public string AssemblyKeyName
+        {
+            get { return ReadAttribute("AssemblyKeyName"); }
+            set { _attributes["AssemblyKeyName"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the assembly delay sign value.
+        /// </summary>
+        public string AssemblyDelaySign
+        {
+            get { return ReadAttribute("AssemblyDelaySign"); }
+            set { _attributes["AssemblyDelaySign"] = value; }
+        }
+
         #endregion Input Parameters
 
         #region Input/Output Parameters

@@ -73,6 +73,7 @@ namespace MSBuild.Community.Tasks.Tests
             task.Guid = "d038566a-1937-478a-b5c5-b79c4afb253d";
             task.AssemblyVersion = "1.2.3.4";
             task.AssemblyFileVersion = "1.2.3.4";
+            task.AssemblyKeyFile = @"..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk";
             Assert.IsTrue(task.Execute(), "Execute Failed");
 
             Assert.IsTrue(File.Exists(outputFile), "File missing: " + outputFile);
