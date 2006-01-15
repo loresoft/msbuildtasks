@@ -37,7 +37,7 @@
 		<!-- The working directory for msbuild targets -->
 		<buildDir>$(root)\build\$(configuration)</buildDir>
 		<!-- The directory where msbuild targets copy all build artefacts to -->
-		<binDir>$(buildDir)\bin</binDir>
+		<binDir Condition="'$(binDir)'==''">$(buildDir)\bin</binDir>
 		<!-- The directory for input, output and result files of tests -->
 		<testDir>$(buildDir)\test</testDir>
 
@@ -95,12 +95,12 @@
 
 	<ItemGroup>
 		<!-- content files to copy to the build directory -->
-		<contents Include="$(libRoot)\ICSharpCode.SharpZipLib.dll" />
-		<contents Include="$(libRoot)\Interop.SourceSafeTypeLib.dll" />
-		<contents Include="$(libRoot)\NUnit\2.2.5\nunit.framework.dll" />
-		<contents Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
-		<contents Include="$(srcRoot)\MSBuild.Community.Tasks\$(nunitReportXsl)" />
-		<contents Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.xsd" />
+		<content Include="$(libRoot)\ICSharpCode.SharpZipLib.dll" />
+		<content Include="$(libRoot)\Interop.SourceSafeTypeLib.dll" />
+		<content Include="$(libRoot)\NUnit\2.2.5\nunit.framework.dll" />
+		<content Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
+		<content Include="$(srcRoot)\MSBuild.Community.Tasks\$(nunitReportXsl)" />
+		<content Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.xsd" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -114,14 +114,30 @@
 		<vsprojects Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\MSBuild.Community.Tasks.Tests.csproj">
 			<group>nunit</group>
 		</vsprojects>
-    </ItemGroup>
+
+		<vsprojects Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\ILMerge\A\A.csproj">
+			<group>test</group>
+		</vsprojects>
+
+		<vsprojects Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\ILMerge\B\B.csproj">
+			<group>test</group>
+		</vsprojects>
+	</ItemGroup>
 
     <ItemGroup>
         <!-- content files to copy to the test directory -->
 		<!-- provide metadata <subDirectory> for relative destination directory -->
-		<nunitContents Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\Xslt\XsltTestInput.xml" >
+		<nunitContent Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\Xslt\XsltTestInput.xml" >
 			<subDirectory>MSBuild.Community.Tasks.Tests</subDirectory>
-		</nunitContents>
+		</nunitContent>
+
+		<nunitContent Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\ILMerge\ExcludeTypes.txt" >
+			<subDirectory>MSBuild.Community.Tasks.Tests</subDirectory>
+		</nunitContent>
+
+		<nunitContent Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\ILMerge\keypair.snk" >
+			<subDirectory>MSBuild.Community.Tasks.Tests</subDirectory>
+		</nunitContent>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -161,7 +177,8 @@
 		Outputs="%(rootdir)%(directory)\Properties\AssemblyInfoCommon.cs">
 		<!-- For each VS project, create the AssemblyInfoCommon.cs file  -->
 
-		<AssemblyInfo CodeLanguage="CS"
+		<AssemblyInfo Condition="'%(group)'!='test'"
+			CodeLanguage="CS"
 			OutputFile="%(vsprojects.rootdir)%(directory)Properties\AssemblyInfoCommon.cs"
 			AssemblyCompany="http://msbuildtasks.tigris.org/"
 			AssemblyProduct="MSBuild.Community.Tasks"
@@ -173,13 +190,13 @@
 	</Target>
 
 	<!-- Copy additional libraries and content files to the bin directory -->
-	<Target Name="contents" >
+	<Target Name="content" >
 		<MakeDir Directories="$(binDir)" />
-		<Copy SourceFiles="@(contents)" DestinationFolder="$(binDir)\%(contents.subDirectory)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(content)" DestinationFolder="$(binDir)\%(content.subDirectory)" SkipUnchangedFiles="true" />
 	</Target>
 
 	<!-- Build the VS projects of one build group, copy .dll, .pdb, .xml to the bin directory -->
-	<Target Name="build" DependsOnTargets="assemblyinfo;contents">
+	<Target Name="build" DependsOnTargets="assemblyinfo;content">
 		<Message Text="=======================================================================================" />
 		<Message Text="Build &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;, group &quot;$(buildgroup)&quot;"/>
 		<Message Text="=======================================================================================" />
@@ -189,29 +206,35 @@
 		   Properties="Configuration=$(configuration)" >
 			<Output TaskParameter="TargetOutputs" ItemName="targetOutputs"/>
 		</MSBuild>
-
+		
 		<Copy SourceFiles="@(targetOutputs)" DestinationFolder="$(binDir)" SkipUnchangedFiles="true" />
-		<Copy SourceFiles="@(targetOutputs -> '%(rootdir)%(directory)%(filename).pdb')" DestinationFolder="$(binDir)" 
+		<Copy SourceFiles="@(targetOutputs -> '%(rootdir)%(directory)%(filename).pdb')" 
+			DestinationFolder="$(binDir)" 
 			Condition="'$(configuration)'=='Debug'"
 			SkipUnchangedFiles="true" />
-		<Copy SourceFiles="@(targetOutputs -> '%(rootdir)%(directory)%(filename).xml')" DestinationFolder="$(binDir)" 
+		<Copy SourceFiles="@(targetOutputs -> '%(rootdir)%(directory)%(filename).xml')" 
+			DestinationFolder="$(binDir)" 
 			Condition="'$(buildgroup)'=='build'"
 			SkipUnchangedFiles="true" />
 	</Target>
 
-	<!-- Copy test files to the test directory -->
-	<Target Name="test-contents" >
+	<!-- Build the VS projects of the 'nunit' group -->
+	<Target Name="build-tests" DependsOnTargets="build" >
 		<MakeDir Directories="$(testDir)" />
-		<Copy SourceFiles="@(nunitContents)" DestinationFolder="$(testDir)\%(nunitContents.subDirectory)" SkipUnchangedFiles="true" />
+		<MSBuild Projects="$(MSBuildProjectFullPath)" Targets="build"
+			Properties="buildgroup=nunit" />
+		<MSBuild Projects="$(MSBuildProjectFullPath)" Targets="build"
+			Properties="buildgroup=test;binDir=$(testDir)\MSBuild.Community.Tasks.Tests" />
 	</Target>
 
-	<!-- Build the VS projects of the 'nunit' group -->
-	<Target Name="build-tests" DependsOnTargets="build;test-contents" >
-		<MSBuild Projects="$(MSBuildProjectFullPath)" Targets="build" Properties="buildgroup=nunit" />
+	<!-- Copy test files to the test directory -->
+	<Target Name="test-content" DependsOnTargets="build-tests" >
+		<MakeDir Directories="$(testDir)" />
+		<Copy SourceFiles="@(nunitContent)" DestinationFolder="$(testDir)\%(nunitContent.subDirectory)" SkipUnchangedFiles="true" />
 	</Target>
 
 	<!-- Execute and report the NUnit tests -->
-	<Target Name="test-nunit" DependsOnTargets="build-tests">
+	<Target Name="test-nunit" DependsOnTargets="build-tests;test-content">
 		<Message Text="=======================================================================================" />
 		<Message Text="Test NUnit &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;" />
 		<Message Text="=======================================================================================" />
@@ -234,10 +257,15 @@
 	</Target>
 
 	<!-- Execute tests with msbuild .proj files -->
-	<Target Name="test-proj" DependsOnTargets="build">
+	<!-- If ILMerge is available on the testing machine,
+		 call with "/p:withILMerge=true" in order to include ILMerge tests -->
+	<Target Name="test-proj" DependsOnTargets="build;test-content">
 		<Message Text="=======================================================================================" />
 		<Message Text="Test Proj &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;" />
 		<Message Text="=======================================================================================" />
+
+		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\ILMerge\ILMergeTest.proj"
+		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests;withILMerge=$(withILMerge)"/>
 
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Time\TimeTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>

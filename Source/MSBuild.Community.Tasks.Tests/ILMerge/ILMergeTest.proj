@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--	
+	$Id$
+	Copyright © 2006 Ignaz Kohlbecker
+	MSBuild file to test the ILMerge task 
+-->
+
+<Project InitialTargets="buildinfo" DefaultTargets="test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<!-- property <testDir> must be provided by the caller -->
+	<!-- If ILMerge is available on the testing machine,
+		 call with "/p:withILMerge=true" in order to include ILMerge tests -->
+
+	<PropertyGroup>
+		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+
+		<outputFile>$(testDir)\ilmergetest.dll</outputFile>
+		<keyFile>$(testDir)\keypair.snk</keyFile>
+		<excludeFile>$(testDir)\ExcludeTypes.txt</excludeFile>
+		<logFile>$(testDir)\ilmergetest.log</logFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<inputAssemblies Include="$(testDir)\A.dll" />
+		<inputAssemblies Include="$(testDir)\B.dll" />
+
+		<allowDuplicates Include="ClassAB" />
+	</ItemGroup>
+
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+	<Target Name="buildinfo">
+		<Message Text="MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
+		<Message Text="MSBuildBinPath: $(MSBuildBinPath)" />
+		<Message Text="MSBuildExtensionsPath: $(MSBuildExtensionsPath)" />
+
+		<Time Format="yyyy/MM/dd HH:mm:ss" >
+			<Output TaskParameter="FormattedTime" PropertyName="BuildDate" />
+		</Time>
+		<Message Text="Build date: $(BuildDate)" />
+	</Target>
+
+	<Target Name="ilmerge" DependsOnTargets="buildinfo"
+			Condition="'$(withILMerge)'!=''" >
+		
+		<ILMerge InputAssemblies="@(inputAssemblies)" 
+			AllowDuplicateTypes="@(allowDuplicates)"
+			ExcludeFile="$(excludeFile)"
+			OutputFile="$(outputFile)" LogFile="$(logFile)"
+			DebugInfo="true" XmlDocumentation="true" 
+			KeyFile="$(keyFile)" DelaySign="true" />
+
+		<Message Text="Time: $(LocalTime) (local)" />
+	</Target>
+
+	<Target Name="test" DependsOnTargets="ilmerge">
+	</Target>
+
+</Project>

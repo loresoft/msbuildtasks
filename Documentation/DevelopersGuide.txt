@@ -33,6 +33,8 @@ Optional Services
 
 - Email
 
+- ILMerge (http://research.microsoft.com/~mbarnett/ILMerge.aspx)
+
 
 Before writing your own task
 ----------------------------
@@ -109,7 +111,9 @@ Writing your own task
 
 4.  Implement your task
 
-	- Insert a $Id$ somewhere in a fileheader comment.
+	- Insert the character sequence '$', 'Id', '$'
+	  (not concatenated here to avoid expansion by svn in this text itself)
+	  somewhere in the fileheader comment.
 
 	- Avoid Console.WriteLine, use Log.LogMessage instead.
 	
@@ -161,6 +165,11 @@ Writing your own task
       <msbuildtasks>\MSBuild.Community.Tasks\MSBuild.Community.Tasks.xsd
       on how to get IntelliSense support for the MSBuild community tasks
       when editing MSBuild project files.
+      
+    - If your test depend on an optional service or tool,
+      it's good style to have the test skipped by default
+      and to provide an extra switch like "/p:withILMerge=true"
+      to execute the test.
    
 9.  Test your task
 

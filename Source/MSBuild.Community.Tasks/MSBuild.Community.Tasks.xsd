@@ -116,6 +116,39 @@
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
+	<xs:simpleType name="ILMergeTargetKind">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Dll" />
+			<xs:enumeration value="Exe" />
+			<xs:enumeration value="WinExe" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="ILMerge" substitutionGroup="msb:Task">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="msb:ToolTaskType">
+					<xs:attribute name="AllowDuplicateTypes" />
+					<xs:attribute name="AllowZeroPeKind" type="xs:boolean" />
+					<xs:attribute name="AttributeFile" />
+					<xs:attribute name="Closed" type="xs:boolean" />
+					<xs:attribute name="CopyAttributes" type="xs:boolean" />
+					<xs:attribute name="DebugInfo" type="xs:boolean" />
+					<xs:attribute name="DelaySign" type="xs:boolean" />
+					<xs:attribute name="ExcludeFile" />
+					<xs:attribute name="InputAssemblies" use="required" />
+					<xs:attribute name="KeyFile" />
+					<xs:attribute name="LogFile" />
+					<xs:attribute name="OutputFile" use="required" />
+					<xs:attribute name="PublicKeyTokens" type="xs:boolean" />
+					<xs:attribute name="TargetPlatformVersion" />
+					<xs:attribute name="TargetPlatformDirectory" />
+					<xs:attribute name="TargetKind" type="msb:ILMergeTargetKind" />
+					<xs:attribute name="Version" />
+					<xs:attribute name="XmlDocumentation" type="xs:boolean" />
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
 	<xs:element name="NDoc" substitutionGroup="msb:Task">
 		<xs:complexType>
 			<xs:complexContent>

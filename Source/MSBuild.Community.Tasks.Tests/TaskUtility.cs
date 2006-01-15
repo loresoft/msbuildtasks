@@ -58,15 +58,25 @@ namespace MSBuild.Community.Tasks.Tests
 
         public static bool IsInteractive
         {
-            get { return String.Equals("nunit-gui.exe", System.Diagnostics.Process.GetCurrentProcess().MainModule.ModuleName); }
+            get { return String.Equals(@"nunit-gui.exe", System.Diagnostics.Process.GetCurrentProcess().MainModule.ModuleName); }
         }
 
         public static bool CalledInBuildDirectory
         {
-            get { return (AssemblyCodeBase.IndexOf("/build/") != -1); }
+            get { return (AssemblyCodeBase.IndexOf(@"/build/") != -1); }
         }
 
-        public static string TestDirectory
+		public static string BuildConfiguration
+		{
+			get
+			{
+				if (AssemblyCodeBase.IndexOf(@"/debug/", StringComparison.InvariantCultureIgnoreCase) != -1) return @"Debug";
+				if (AssemblyCodeBase.IndexOf(@"/release/", StringComparison.InvariantCultureIgnoreCase) != -1) return @"Release";
+				return null;
+			}
+		}
+
+		public static string TestDirectory
         {
             get { return Path.GetFullPath(Path.Combine(AssemblyDirectory, "../test/" + AssemblyName)); }
         }

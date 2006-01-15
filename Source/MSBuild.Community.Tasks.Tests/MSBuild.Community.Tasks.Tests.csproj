@@ -10,6 +10,7 @@
     <RootNamespace>MSBuild.Community.Tasks.Tests</RootNamespace>
     <AssemblyName>MSBuild.Community.Tasks.Tests</AssemblyName>
     <WarningLevel>4</WarningLevel>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfoTest.cs" />
+    <Compile Include="ILMerge\ILMergeTest.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="FileUpdateTest.cs" />
     <Compile Include="IIS\AppPoolControllerTest.cs" />
@@ -85,11 +87,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ILMerge\keypair.snk">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="ILMerge\ILMergeTest.proj" />
     <None Include="Time\TimeTest.proj" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ILMerge\ExcludeTypes.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Xslt\XsltTestInput.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
