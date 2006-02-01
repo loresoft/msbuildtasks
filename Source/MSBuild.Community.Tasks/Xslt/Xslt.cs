@@ -117,7 +117,7 @@ namespace MSBuild.Community.Tasks
 		#region Fields
 		private ITaskItem[] inputs;
 		private string rootTag = DEFAULT_ROOT_TAG;
-		private string rootAttributes = null;
+		private string rootAttributes;
 		private ITaskItem xsl;
 		private string output;
 		#endregion Fields
@@ -210,7 +210,7 @@ namespace MSBuild.Community.Tasks
 			{
 				if ((inputs.Length == 1) && string.IsNullOrEmpty(rootTag))
 				{
-					Log.LogMessage(MessageImportance.Normal, "No root tag inserted");
+					Log.LogMessage(MessageImportance.Normal, Properties.Resources.XsltNoRootTag);
 					doc.Load(inputs[0].ItemSpec);
 
 				}
@@ -235,7 +235,17 @@ namespace MSBuild.Community.Tasks
 				}
 
 			}
-			catch (Exception ex)
+			catch (XmlException ex)
+			{
+				Log.LogErrorFromException(ex);
+				return false;
+			}
+			catch (ArgumentException ex)
+			{
+				Log.LogErrorFromException(ex);
+				return false;
+			}
+			catch (InvalidOperationException ex)
 			{
 				Log.LogErrorFromException(ex);
 				return false;
@@ -256,7 +266,7 @@ namespace MSBuild.Community.Tasks
 				string metatdataValue = xsl.GetMetadata(metadataName);
 				argumentList.AddParam(metadataName, string.Empty, metatdataValue);
 
-				Log.LogMessage(MessageImportance.Low, "Adding Parameter \"{0}\": \"{1}\"",
+				Log.LogMessage(MessageImportance.Low, Properties.Resources.XsltAddingParameter,
 					metadataName, metatdataValue);
 			}
 
@@ -270,7 +280,25 @@ namespace MSBuild.Community.Tasks
 				transform.Transform(doc.DocumentElement, argumentList, xmlWriter);
 
 			}
-			catch (Exception ex)
+			catch (XsltException ex)
+			{
+				Log.LogErrorFromException(ex);
+				return false;
+
+			}
+			catch (FileNotFoundException ex)
+			{
+				Log.LogErrorFromException(ex);
+				return false;
+
+			}
+			catch (DirectoryNotFoundException ex)
+			{
+				Log.LogErrorFromException(ex);
+				return false;
+
+			}
+			catch (XmlException ex)
 			{
 				Log.LogErrorFromException(ex);
 				return false;
@@ -293,14 +321,14 @@ namespace MSBuild.Community.Tasks
 		private void createRootNode(XmlDocument doc)
 		{
 			// create the root element
-			Log.LogMessage(MessageImportance.Normal, "Creating root tag \"{0}\"", rootTag);
+			Log.LogMessage(MessageImportance.Normal, Properties.Resources.XsltCreatingRootTag, rootTag);
 			XmlElement rootElement = doc.CreateElement(rootTag);
 
 			if (rootAttributes == null)
 			{
 				// add the timestamp attribute to the root element
 				string timestamp = DateTime.Now.ToString();
-				Log.LogMessage(MessageImportance.Normal, "Adding root attribute {0}=\"{1}\"",
+				Log.LogMessage(MessageImportance.Normal, Properties.Resources.XsltAddingRootAttribute,
 					CREATED_ATTRIBUTE, timestamp);
 				rootElement.SetAttribute(CREATED_ATTRIBUTE, timestamp);
 
@@ -311,7 +339,7 @@ namespace MSBuild.Community.Tasks
 				{
 					string[] keyValuePair = rootAttribute.Split('=');
 
-					Log.LogMessage(MessageImportance.Normal, "Adding root attribute {0}=\"{1}\"",
+					Log.LogMessage(MessageImportance.Normal, Properties.Resources.XsltAddingRootAttribute,
 						keyValuePair[0], keyValuePair[1]);
 
 					rootElement.SetAttribute(keyValuePair[0], keyValuePair[1]);

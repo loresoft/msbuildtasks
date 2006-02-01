@@ -324,6 +324,24 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to get current date!.
+        /// </summary>
+        internal static string TimeFormatException {
+            get {
+                return ResourceManager.GetString("TimeFormatException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Getting current date..
+        /// </summary>
+        internal static string TimeGettingCurrentDate {
+            get {
+                return ResourceManager.GetString("TimeGettingCurrentDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to   extracted &quot;{0}&quot;.
         /// </summary>
         internal static string UnzipExtracted {
@@ -452,11 +470,47 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adding Parameter \&quot;{0}\&quot;: \&quot;{1}\&quot;.
+        /// </summary>
+        internal static string XsltAddingParameter {
+            get {
+                return ResourceManager.GetString("XsltAddingParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adding root attribute {0}=\&quot;{1}\&quot;.
+        /// </summary>
+        internal static string XsltAddingRootAttribute {
+            get {
+                return ResourceManager.GetString("XsltAddingRootAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating root tag \&quot;{0}\&quot;.
+        /// </summary>
+        internal static string XsltCreatingRootTag {
+            get {
+                return ResourceManager.GetString("XsltCreatingRootTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No input files.
         /// </summary>
         internal static string XsltNoInputFiles {
             get {
                 return ResourceManager.GetString("XsltNoInputFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No root tag inserted.
+        /// </summary>
+        internal static string XsltNoRootTag {
+            get {
+                return ResourceManager.GetString("XsltNoRootTag", resourceCulture);
             }
         }
         

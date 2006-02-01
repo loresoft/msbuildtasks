@@ -206,6 +206,14 @@
   <data name="SvnLocalPathNotWorkCopy" xml:space="preserve">
     <value>LocalPath is not a working subversion copy.</value>
   </data>
+  <data name="TimeFormatException" xml:space="preserve">
+    <value>Failed to get current date!</value>
+    <comment>Log message</comment>
+  </data>
+  <data name="TimeGettingCurrentDate" xml:space="preserve">
+    <value>Getting current date.</value>
+    <comment>Log message</comment>
+  </data>
   <data name="UnzipExtracted" xml:space="preserve">
     <value>  extracted "{0}"</value>
   </data>
@@ -250,8 +258,20 @@
   <data name="XmlUpdateResult" xml:space="preserve">
     <value>XmlUpdate Wrote: "{0}"</value>
   </data>
+  <data name="XsltAddingParameter" xml:space="preserve">
+    <value>Adding Parameter \"{0}\": \"{1}\"</value>
+  </data>
+  <data name="XsltAddingRootAttribute" xml:space="preserve">
+    <value>Adding root attribute {0}=\"{1}\"</value>
+  </data>
+  <data name="XsltCreatingRootTag" xml:space="preserve">
+    <value>Creating root tag \"{0}\"</value>
+  </data>
   <data name="XsltNoInputFiles" xml:space="preserve">
     <value>No input files</value>
+  </data>
+  <data name="XsltNoRootTag" xml:space="preserve">
+    <value>No root tag inserted</value>
   </data>
   <data name="ZipAdded" xml:space="preserve">
     <value>  added "{0}"</value>

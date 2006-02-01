@@ -70,7 +70,7 @@ namespace MSBuild.Community.Tasks
 
 		private System.DateTime mDate;
 		private System.DateTimeKind dateTimeKind = DateTimeKind.Local;
-		private string format = null;
+		private string format;
 
 		private string mMonth;
 		private string mDay;
@@ -308,14 +308,14 @@ namespace MSBuild.Community.Tasks
 
 			try
 			{
+				Log.LogMessage(MessageImportance.Normal, Properties.Resources.TimeGettingCurrentDate);
 				GetDate();
-				Log.LogMessage(MessageImportance.Normal, "Getting current date.");
 			}
-			catch (Exception ex)
+			catch (FormatException ex)
 			{
 				// Log failure
 				Log.LogErrorFromException(ex);
-				Log.LogMessage(MessageImportance.High, "Failed to get current date!");
+				Log.LogMessage(MessageImportance.High, Properties.Resources.TimeFormatException);
 				bSuccess = false;
 			}
 
@@ -337,17 +337,17 @@ namespace MSBuild.Community.Tasks
 				mDate = System.DateTime.Now;
 			}
 
-			mMonth = mDate.Month.ToString();
-			mDay = mDate.Day.ToString();
-			mYear = mDate.Year.ToString();
-			mHour = mDate.Hour.ToString();
-			mMinute = mDate.Minute.ToString();
-			mSecond = mDate.Second.ToString();
-			mMillisecond = mDate.Millisecond.ToString();
-			mTicks = mDate.Ticks.ToString();
+			mMonth = mDate.Month.ToString(DateTimeFormatInfo.InvariantInfo);
+			mDay = mDate.Day.ToString(DateTimeFormatInfo.InvariantInfo);
+			mYear = mDate.Year.ToString(DateTimeFormatInfo.InvariantInfo);
+			mHour = mDate.Hour.ToString(DateTimeFormatInfo.InvariantInfo);
+			mMinute = mDate.Minute.ToString(DateTimeFormatInfo.InvariantInfo);
+			mSecond = mDate.Second.ToString(DateTimeFormatInfo.InvariantInfo);
+			mMillisecond = mDate.Millisecond.ToString(DateTimeFormatInfo.InvariantInfo);
+			mTicks = mDate.Ticks.ToString(DateTimeFormatInfo.InvariantInfo);
 			mKind = mDate.Kind.ToString();
 			mTimeOfDay = mDate.TimeOfDay.ToString();
-			mDayOfYear = mDate.DayOfYear.ToString();
+			mDayOfYear = mDate.DayOfYear.ToString(DateTimeFormatInfo.InvariantInfo);
 			mDayOfWeek = mDate.DayOfWeek.ToString();
 			mShortDate = mDate.ToShortDateString();
 			mLongDate = mDate.ToLongDateString();

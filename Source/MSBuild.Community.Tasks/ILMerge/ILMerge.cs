@@ -52,24 +52,24 @@ namespace MSBuild.Community.Tasks
 	{
 		#region Fields
 
-		private ITaskItem[] allowDuplicateTypes = null;
-		private bool allowZeroPeKind = false;
-		private ITaskItem attributeFile = null;
-		private bool closed = false;
-		private bool copyAttributes = false;
+		private ITaskItem[] allowDuplicateTypes;
+		private bool allowZeroPeKind;
+		private ITaskItem attributeFile;
+		private bool closed;
+		private bool copyAttributes;
 		private bool debugInfo = true;
-		private bool delaySign = false;
-		private ITaskItem excludeFile = null;
-		private ITaskItem keyFile = null;
-		private ITaskItem logFile = null;
-		private ITaskItem outputFile = null;
-		private bool publicKeyTokens = false;
-		private ITaskItem[] inputAssemblies = null;
-		private string targetPlatformVersion = null;
-		private ITaskItem targetPlatformDirectory = null;
-		private string targetKind = null;
-		private string version = null;
-		private bool xmlDocumentation = false;
+		private bool delaySign;
+		private ITaskItem excludeFile;
+		private ITaskItem keyFile;
+		private ITaskItem logFile;
+		private ITaskItem outputFile;
+		private bool publicKeyTokens;
+		private ITaskItem[] inputAssemblies;
+		private string targetPlatformVersion;
+		private ITaskItem targetPlatformDirectory;
+		private string targetKind;
+		private string version;
+		private bool xmlDocumentation;
 		
 		#endregion Fields
 		
