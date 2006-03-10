@@ -157,6 +157,7 @@
 					<xs:attribute name="ProjectFilePath" use="required" />
 					<xs:attribute name="Verbose" type="xs:boolean" />
 					<xs:attribute name="WorkingDirectory" />
+					<xs:attribute name="ToolPath" />
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>
@@ -172,6 +173,7 @@
 					<xs:attribute name="XsltTransformFile" />
 					<xs:attribute name="OutputXmlFile" />
 					<xs:attribute name="WorkingDirectory" />
+					<xs:attribute name="ToolPath" />
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>

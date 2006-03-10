@@ -199,6 +199,39 @@ namespace MSBuild.Community.Tasks
 			return builder.ToString();
 		}
 
+		private void CheckToolPath()
+		{
+			string nunitPath = ToolPath == null ? String.Empty : ToolPath.Trim();
+			if (String.IsNullOrEmpty(nunitPath))
+			{
+				nunitPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+				nunitPath = Path.Combine(nunitPath, DEFAULT_NUNIT_DIRECTORY);
+
+				try
+				{
+					using (RegistryKey buildKey = Registry.ClassesRoot.OpenSubKey(@"NUnitTestProject\shell\open\command"))
+					{
+						if (buildKey == null)
+						{
+							Log.LogError(Properties.Resources.NUnitNotFound);
+						}
+						else
+						{
+							nunitPath = buildKey.GetValue(null, nunitPath).ToString();
+							Regex nunitRegex = new Regex("(.+)nunit-gui\\.exe", RegexOptions.IgnoreCase);
+							Match pathMatch = nunitRegex.Match(nunitPath);
+							nunitPath = pathMatch.Groups[1].Value.Replace("\"", "");
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					Log.LogErrorFromException(ex);
+				}
+				ToolPath = nunitPath;
+			}
+		}
+		
 		/// <summary>
 		/// Returns the fully qualified path to the executable file.
 		/// </summary>
@@ -207,32 +240,7 @@ namespace MSBuild.Community.Tasks
 		/// </returns>
 		protected override string GenerateFullPathToTool()
 		{
-			string nunitPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-			nunitPath = Path.Combine(nunitPath, DEFAULT_NUNIT_DIRECTORY);
-
-			try
-			{
-				using (RegistryKey buildKey = Registry.ClassesRoot.OpenSubKey(@"NUnitTestProject\shell\open\command"))
-				{
-					if (buildKey == null)
-					{
-						Log.LogError(Properties.Resources.NUnitNotFound);
-					}
-					else
-					{
-						nunitPath = buildKey.GetValue(null, nunitPath).ToString();
-						Regex nunitRegex = new Regex("(.+)nunit-gui\\.exe", RegexOptions.IgnoreCase);
-						Match pathMatch = nunitRegex.Match(nunitPath);
-						nunitPath = pathMatch.Groups[1].Value.Replace("\"", "");
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.LogErrorFromException(ex);
-			}
-
-			base.ToolPath = nunitPath;
+			CheckToolPath();
 			return Path.Combine(ToolPath, ToolName);
 		}
 

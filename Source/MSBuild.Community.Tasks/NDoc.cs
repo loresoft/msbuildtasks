@@ -141,6 +141,39 @@ namespace MSBuild.Community.Tasks
 			return builder.ToString(); ;
 		}
 
+		private void CheckToolPath()
+		{
+			string ndocPath = ToolPath == null ? String.Empty : ToolPath.Trim();
+			if (String.IsNullOrEmpty(ndocPath))
+			{
+				ndocPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+				ndocPath = Path.Combine(ndocPath, @"NDoc 1.3\bin\net\1.1");
+
+				try
+				{
+					using (RegistryKey buildKey = Registry.ClassesRoot.OpenSubKey(@"NDoc Project File\shell\build\command"))
+					{
+						if (buildKey == null)
+						{
+							Log.LogError("Could not find the NDoc Project File build command. Please make sure NDoc is installed.");
+						}
+						else
+						{
+							ndocPath = buildKey.GetValue(null, ndocPath).ToString();
+							Regex ndocRegex = new Regex("(.+)NDocConsole\\.exe", RegexOptions.IgnoreCase);
+							Match pathMatch = ndocRegex.Match(ndocPath);
+							ndocPath = pathMatch.Groups[1].Value.Replace("\"", "");
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					Log.LogErrorFromException(ex);
+				}
+				base.ToolPath = ndocPath;
+			}
+		}
+
 		/// <summary>
 		/// Returns the fully qualified path to the executable file.
 		/// </summary>
@@ -149,32 +182,7 @@ namespace MSBuild.Community.Tasks
 		/// </returns>
 		protected override string GenerateFullPathToTool()
 		{
-			string ndocPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-			ndocPath = Path.Combine(ndocPath, @"NDoc 1.3\bin\net\1.1");
-
-			try
-			{
-				using (RegistryKey buildKey = Registry.ClassesRoot.OpenSubKey(@"NDoc Project File\shell\build\command"))
-				{
-					if (buildKey == null)
-					{
-						Log.LogError("Could not find the NDoc Project File build command. Please make sure NDoc is installed.");
-					}
-					else
-					{
-						ndocPath = buildKey.GetValue(null, ndocPath).ToString();
-						Regex ndocRegex = new Regex("(.+)NDocConsole\\.exe", RegexOptions.IgnoreCase);
-						Match pathMatch = ndocRegex.Match(ndocPath);
-						ndocPath = pathMatch.Groups[1].Value.Replace("\"", "");
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.LogErrorFromException(ex);
-			}
-
-			base.ToolPath = ndocPath;
+			CheckToolPath();
 			return Path.Combine(ToolPath, ToolName);
 		}
 

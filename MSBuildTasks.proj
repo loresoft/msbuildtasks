@@ -41,6 +41,10 @@
 		<!-- The directory for input, output and result files of tests -->
 		<testDir>$(buildDir)\test</testDir>
 
+		<!-- path to NDoc files -->
+		<ndocPath></ndocPath>
+		<!-- path to NUnit files -->
+		<nunitPath></nunitPath>
 		<!-- filename postfix for NUnit result files -->
 		<nunitPostfix>-results.xml</nunitPostfix>
 		<!-- NUnit report xsl transformation file -->
@@ -244,7 +248,9 @@
 		<NUnit Assemblies="@(nunitFiles)"
 			WorkingDirectory="$(testDir)" 
 			OutputXmlFile="%(filename)$(nunitPostfix)"
-			ContinueOnError="true" />
+			ContinueOnError="true" 
+			ToolPath="$(nunitPath)"
+			/>
 
 		<CallTarget Targets="test-report" />
 	</Target>
@@ -278,7 +284,9 @@
 	<Target Name="doc" DependsOnTargets="build">
 		<NDoc Documenter="MSDN" 
 			ProjectFilePath="MSBuild.Community.Tasks.ndoc" 
-			WorkingDirectory="$(docRoot)" />
+			WorkingDirectory="$(docRoot)" 
+			ToolPath="$(ndocPath)"
+			/>
 
 		<Copy SourceFiles="$(docRoot)\doc\MSBuild.Community.Tasks.chm" 
 			DestinationFolder="$(docRoot)" />
