@@ -17,6 +17,12 @@
             ]]></code>
             </example>
         </member>
+        <member name="F:MSBuild.Community.Tasks.AssemblyInfo.DEFAULT_OUTPUT_FILE">
+            <summary>
+            The default value of <see cref="P:MSBuild.Community.Tasks.AssemblyInfo.OutputFile"/>.
+            The value is <c>"AssemblyInfo.cs"</c>.
+            </summary>
+        </member>
         <member name="M:MSBuild.Community.Tasks.AssemblyInfo.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:AssemblyInfo"/> class.
@@ -35,12 +41,6 @@
             Gets or sets the code language.
             </summary>
             <value>The code language.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.AssemblyInfo.OutputFile">
-            <summary>
-            Gets or sets the output file.
-            </summary>
-            <value>The output file.</value>
         </member>
         <member name="P:MSBuild.Community.Tasks.AssemblyInfo.ComVisible">
             <summary>
@@ -119,6 +119,621 @@
             Gets or sets the assembly file version.
             </summary>
             <value>The assembly file version.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AssemblyInfo.AssemblyKeyFile">
+            <summary>
+            Gets or sets the assembly key file.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AssemblyInfo.AssemblyKeyName">
+            <summary>
+            Gets or sets the assembly key name.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AssemblyInfo.AssemblyDelaySign">
+            <summary>
+            Gets or sets the assembly delay sign value.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AssemblyInfo.OutputFile">
+            <summary>
+            Gets or sets the output file.
+            </summary>
+            <value>The output file.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Attrib">
+            <summary>
+            Changes the attributes of files and/or directories
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Attrib.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.ILMerge">
+             <summary>
+             A wrapper for the ILMerge tool.
+             </summary>
+             <remarks>
+             <para>
+             The ILMerge tool itself must be installed separately.
+             It is available <a href="http://research.microsoft.com/~mbarnett/ILMerge.aspx">here</a>.
+             </para>
+             <para>
+             The command line options "/wildcards" and "/lib" of ILMerge is not supported,
+             because MSBuild is in charge of expanding wildcards for item groups.
+             </para>
+             </remarks>
+             <example>
+             This example merges two assemblies A.dll and B.dll into one:
+             <code><![CDATA[
+             <PropertyGroup>
+                 <outputFile>$(testDir)\ilmergetest.dll</outputFile>
+                 <keyFile>$(testDir)\keypair.snk</keyFile>
+                 <excludeFile>$(testDir)\ExcludeTypes.txt</excludeFile>
+                 <logFile>$(testDir)\ilmergetest.log</logFile>
+             </PropertyGroup>
+            
+             <ItemGroup>
+                 <inputAssemblies Include="$(testDir)\A.dll" />
+                 <inputAssemblies Include="$(testDir)\B.dll" />
+            
+                 <allowDuplicates Include="ClassAB" />
+             </ItemGroup>
+            
+             <Target Name="merge" >
+                <ILMerge InputAssemblies="@(inputAssemblies)" 
+                    AllowDuplicateTypes="@(allowDuplicates)"
+                    ExcludeFile="$(excludeFile)"
+                    OutputFile="$(outputFile)" LogFile="$(logFile)"
+                    DebugInfo="true" XmlDocumentation="true" 
+                    KeyFile="$(keyFile)" DelaySign="true" />
+             </Target>]]></code>
+             </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.ILMerge.GenerateFullPathToTool">
+            <summary>
+            Gets the standard installation path of ILMerge.exe.
+            </summary>
+            <remarks>
+            If ILMerge is not installed at its standard installation path,
+            provide its location to <see cref="P:Microsoft.Build.Utilities.ToolTask.ToolPath"/>.
+            </remarks>
+            <returns>Returns [ProgramFiles]\Microsoft\ILMerge.exe.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.ILMerge.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments
+            to pass directly to the executable file.
+            </summary>
+            <returns>
+            Returns a string value containing the command line arguments 
+            to pass directly to the executable file.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.AllowDuplicateTypes">
+            <summary>
+            Gets or sets the names of public types
+            to be renamed when they are duplicates.
+            </summary>
+            <remarks>
+            <para>Set to an empty item group to allow all public types to be renamed.</para>
+            <para>Don't provide this parameter if no duplicates of public types are allowed.</para>
+            <para>Corresponds to command line option "/allowDup".</para>
+            <para>The default value is <c>null</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.AllowZeroPeKind">
+            <summary>
+            Gets or sets the flag to treat an assembly 
+            with a zero PeKind flag 
+            (this is the value of the field listed as .corflags in the Manifest)
+            as if it was ILonly.
+            </summary>
+            <remarks>
+            <para>Corresponds to command line option "/zeroPeKind".</para>
+            <para>The default value is <c>false</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.AttributeFile">
+            <summary>
+            Gets or sets the attribute assembly
+            from whre to get all of the assembly-level attributes
+            such as Culture, Version, etc.
+            It will also be used to get the Win32 Resources from.
+            </summary>
+            <remarks>
+            <para>This property is mutually exclusive with <see cref="P:MSBuild.Community.Tasks.ILMerge.CopyAttributes"/>.</para>
+            <para>
+            When not specified, then the Win32 Resources from the primary assembly 
+            are copied over into the target assembly.
+            </para>
+            <para>Corresponds to command line option "/attr".</para>
+            <para>The default value is <c>null</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.Closed">
+            <summary>
+            Gets or sets the flag to indicate
+            whether to augment the list of input assemblies
+            to its "transitive closure".
+            </summary>
+            <remarks>
+            <para>
+            An assembly is considered part of the transitive closure if it is referenced,
+            either directly or indirectly, 
+            from one of the originally specified input assemblies 
+            and it has an external reference to one of the input assemblies, 
+            or one of the assemblies that has such a reference.
+            </para>
+            <para>Corresponds to command line option "/closed".</para>
+            <para>The default value is <c>false</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.CopyAttributes">
+            <summary>
+            Gets or sets the flag to indicate
+            whether to copy the assembly level attributes
+            of each input assembly over into the target assembly.
+            </summary>
+            <remarks>
+            <para>
+            Any duplicate attribute overwrites a previously copied attribute.
+            The input assemblies are processed in the order they are specified.
+            </para>
+            <para>This parameter is mutually exclusive with <see cref="P:MSBuild.Community.Tasks.ILMerge.AttributeFile"/>.</para>
+            <para>Corresponds to command line option "/copyattrs".</para>
+            <para>The default value is <c>false</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.DebugInfo">
+            <summary>
+            Gets or sets the flag to indicate
+            whether to preserve any .pdb files
+            that are found for the input assemblies
+            into a .pdb file for the target assembly.
+            </summary>
+            <remarks>
+            <para>Corresponds to command line option "/ndebug".</para>
+            <para>The default value is <c>true</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.DelaySign">
+            <summary>
+            Gets or sets the flag to indicate
+            whether the target assembly will be delay signed.
+            </summary>
+            <remarks>
+            <para>This property can be set only in conjunction with <see cref="P:MSBuild.Community.Tasks.ILMerge.KeyFile"/>.</para>
+            <para>Corresponds to command line option "/delaysign".</para>
+            <para>The default value is <c>false</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.ExcludeFile">
+            <summary>
+            Gets or sets the file
+            that will be used to identify types
+            that are not to have their visibility modified.
+            </summary>
+            <remarks>
+            <para>
+            If an empty item group is provided, 
+            then all types in any assembly other than the primary assembly are made non-public.
+            </para>
+            <para>Omit this parameter to prevent ILMerge from modifying the visibility of any types.</para>
+            <para>
+            The contents of the file should be one <see cref="T:System.Text.RegularExpressions.Regex"/> per line. 
+            The regular expressions are matched against each type's full name, 
+            e.g., <c>System.Collections.IList</c>. 
+            If the match fails, it is tried again with the assembly name (surrounded by square brackets) 
+            prepended to the type name. 
+            Thus, the pattern <c>\[A\].*</c> excludes all types in assembly <c>A</c> from being made non-public. 
+            The pattern <c>N.T</c> will match all types named <c>T</c> in the namespace named <c>N</c>
+            no matter what assembly they are defined in.
+            </para>
+            <para>Corresponds to command line option "/internalize".</para>
+            <para>The default value is <c>null</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.InputAssemblies">
+            <summary>
+            Gets or sets the input assemblies to merge.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.KeyFile">
+            <summary>
+            Gets or sets the .snk file
+            to sign the target assembly.
+            </summary>
+            <remarks>
+            <para>Can be used with <see cref="P:MSBuild.Community.Tasks.ILMerge.DelaySign"/>.</para>
+            <para>Corresponds to command line option "/keyfile".</para>
+            <para>The default value is <c>null</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.LogFile">
+            <summary>
+            Gets or sets a log file
+            to write log messages to.
+            </summary>
+            <remarks>
+            <para>
+            If an empty item group is provided,
+            then log messages are writte to <see cref="P:System.Console.Out"/>.
+            </para>
+            <para>Corresponds to command line option "/log".</para>
+            <para>The default value is <c>null</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.OutputFile">
+            <summary>
+            Gets or sets the target assembly.
+            </summary>
+            <remarks>
+            <para>Corresponds to command line option "/out".</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.PublicKeyTokens">
+            <summary>
+            Gets or sets the flag to indicate
+            whether external assembly references in the manifest
+            of the target assembly will use public keys (<c>false</c>)
+            or public key tokens (<c>true</c>).
+            </summary>
+            <remarks>
+            <para>Corresponds to command line option "/publickeytokens".</para>
+            <para>The default value is <c>false</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.TargetPlatformVersion">
+            <summary>
+            Gets or sets the .NET framework version for the target assembly.
+            </summary>
+            <remarks>
+            <para>Valid values are "v1", "v1.1", "v2".</para>
+            <para>Corresponds to the first part of command line option "/targetplatform".</para>
+            <para>The default value is <c>null</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.TargetPlatformDirectory">
+            <summary>
+            Gets or sets the directory in which <c>mscorlib.dll</c> is to be found.
+            </summary>
+            <remarks>
+            <para>Can only be used in conjunction with <see cref="P:MSBuild.Community.Tasks.ILMerge.TargetPlatformVersion"/>.</para>
+            <para>Corresponds to the second part of command line option "/targetplatform".</para>
+            <para>The default value is <c>null</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.TargetKind">
+            <summary>
+            Gets or sets the indicator
+            whether the target assembly is created as a library (<c>Dll</c>),
+            a console application (<c>Exe</c>) or as a Windows application (<c>WinExe</c>).
+            </summary>
+            <remarks>
+            <para>Corresponds to command line option "/target".</para>
+            <para>The default value is the same kind as that of the primary assembly.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.Version">
+            <summary>
+            Gets or sets the version number of the target assembly.
+            </summary>
+            <remarks>
+            <para>The parameter should look like <c>6.2.1.3</c>.</para>
+            <para>Corresponds to command line option "/ver".</para>
+            <para>The default value is null.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.XmlDocumentation">
+            <summary>
+            Gets or sets the flag to indicate
+            whether to merge XML documentation files
+            into one for the target assembly.
+            </summary>
+            <remarks>
+            <para>Corresponds to command line option "/xmldocs".</para>
+            <para>The default value is <c>false</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.ToolName">
+            <summary>
+            Gets the name of the executable file to run.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Time">
+            <summary>
+            Gets the current date and time.
+            </summary>
+            <remarks>
+            See
+            <a href="ms-help://MS.VSCC.v80/MS.MSDN.v80/MS.NETDEVFX.v20.en/cpref8/html/T_System_Globalization_DateTimeFormatInfo.htm">
+            DateTimeFormatInfo</a>
+            for the syntax of the format string.
+            </remarks>
+            <example>Using the Time task to get the Month, Day,
+            Year, Hour, Minute, and Second:
+            <code><![CDATA[
+            <Time>
+              <Output TaskParameter="Month" PropertyName="Month" />
+              <Output TaskParameter="Day" PropertyName="Day" />
+              <Output TaskParameter="Year" PropertyName="Year" />
+              <Output TaskParameter="Hour" PropertyName="Hour" />
+              <Output TaskParameter="Minute" PropertyName="Minute" />
+              <Output TaskParameter="Second" PropertyName="Second" />
+            </Time>
+            <Message Text="Current Date and Time: $(Month)/$(Day)/$(Year) $(Hour):$(Minute):$(Second)" />]]></code>
+            Set property "BuildDate" to the current date and time:
+            <code><![CDATA[
+            <Time Format="yyyyMMddHHmmss">
+                <Output TaskParameter="FormattedTime" PropertyName="buildDate" />
+            </Time>]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Time.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.Format">
+            <summary>
+            Gets or sets the format string
+            for output parameter <see cref="P:MSBuild.Community.Tasks.Time.FormattedTime"/>.
+            </summary>
+            <remarks>
+            See
+            <a href="ms-help://MS.VSCC.v80/MS.MSDN.v80/MS.NETDEVFX.v20.en/cpref8/html/T_System_Globalization_DateTimeFormatInfo.htm">
+            DateTimeFormatInfo</a>
+            for the syntax of the format string.
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.Month">
+            <summary>
+            Gets the month component of the date represented by this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.Day">
+            <summary>
+            Gets the day of the month represented by this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.Year">
+            <summary>
+            Gets the year component of the date represented by this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.Hour">
+            <summary>
+            Gets the hour component of the date represented by this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.Minute">
+            <summary>
+            Gets the minute component of the date represented by this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.Second">
+            <summary>
+            Gets the seconds component of the date represented by this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.Millisecond">
+            <summary>
+            Gets the milliseconds component of the date represented by this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.Ticks">
+            <summary>
+            Gets the number of ticks that represent the date and time of this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.Kind">
+            <summary>
+            Gets or sets a value that indicates whether the time represented by this instance is based
+            on local time, Coordinated Universal Time (UTC), or neither.
+            </summary>
+            <remarks>
+            Possible values are:
+            <list type="ul">
+            <item>Local (default)</item>,
+            <item>Utc</item>,
+            <item>Unspecified</item>
+            </list>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.TimeOfDay">
+            <summary>
+            Gets the time of day for this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.DayOfYear">
+            <summary>
+            Gets the day of the year represented by this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.DayOfWeek">
+            <summary>
+            Gets the day of the week represented by this instance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.FormattedTime">
+            <summary>
+            Gets the value of this instance to its equivalent string representation.
+            If input parameter <see cref="P:MSBuild.Community.Tasks.Time.Format"/> is provided,
+            the value is formatted according to it.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.ShortDate">
+            <summary>
+            Gets the value of this instance to its equivalent short date string representation.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.LongDate">
+            <summary>
+            Gets the value of this instance to its equivalent long date string representation.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.ShortTime">
+            <summary>
+            Gets the value of this instance to its equivalent short time string representation.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.LongTime">
+            <summary>
+            Gets the value of this instance to its equivalent long time string representation.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Time.DateTimeValue">
+            <summary>
+            Gets the internal time value.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Xslt">
+             <summary>
+             A task to merge and transform
+             a set of xml files.
+             </summary>
+             <remarks>
+             <p>
+             The xml files of parameter <see cref="P:MSBuild.Community.Tasks.Xslt.Inputs"/>
+             are merged into one xml document,
+             wrapped with a root tag <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/>
+             (defaults to <see cref="F:MSBuild.Community.Tasks.Xslt.DEFAULT_ROOT_TAG"/>).
+             </p>
+             <p>
+             If only one input file is provided,
+             merging and wrapping can be omitted
+             by setting <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/> to an empty string.
+             </p>
+             <p>
+             The root tag can be given any number of attributes
+             by providing a list of semicolon-delimited name/value pairs
+             to parameter <see cref="P:MSBuild.Community.Tasks.Xslt.RootAttributes"/>.
+             For example: <code>RootAttributes="foo=bar;date=$(buildDate)"</code>
+             </p>
+             <p>
+             Parameter <see cref="P:MSBuild.Community.Tasks.Xslt.RootAttributes"/> defaults to
+             one attribute with a name specified by <see cref="F:MSBuild.Community.Tasks.Xslt.CREATED_ATTRIBUTE"/>,
+             and a local time stamp as value.
+             To suppress the default value, an empty parameter
+             <code>RootAttributes=""</code>
+             must be specified explicitely.
+             </p>
+             <p>
+             The xsl transformation file 
+             specified by parameter <see cref="P:MSBuild.Community.Tasks.Xslt.Xsl"/>
+             is applied on the input.
+             </p>
+             <p>
+             The <see cref="T:Microsoft.Build.Framework.ITaskItem"/> <see cref="P:MSBuild.Community.Tasks.Xslt.Xsl"/>
+             can be given any number of metadata,
+             which will be handed to the xsl transformation
+             as parameters.
+             </p>
+             <p>
+             The output is written to the file
+             specified by parameter <see cref="P:MSBuild.Community.Tasks.Xslt.Output"/>.
+             </p>
+             </remarks>
+             <example>
+             This example for generating a report
+             from a set of NUnit xml results:
+             <code><![CDATA[
+             <ItemGroup>
+                 <nunitReportXslFile Include="$(MSBuildCommunityTasksPath)\$(nunitReportXsl)">
+                     <project>$(project)</project>
+                     <configuration>$(configuration)</configuration>
+                     <msbuildFilename>$(MSBuildProjectFullPath)</msbuildFilename>
+                     <msbuildBinpath>$(MSBuildBinPath)</msbuildBinpath>
+                     <xslFile>$(MSBuildCommunityTasksPath)\$(nunitReportXsl)</xslFile>
+                 </nunitReportXslFile>
+             </ItemGroup>
+            
+             <Target Name="test-report" >
+                 <Xslt Inputs="@(nunitFiles)"
+                     Xsl="@(nunitReportXslFile)" 
+                     Output="$(testDir)\TestReport.html" />
+             </Target>]]></code>
+             
+             This examples shows all available task attributes:
+             <code><![CDATA[
+             <Timestamp Format="yyyyMMddHHmmss">
+                 <Output TaskParameter="LocalTimestamp" PropertyName="buildDate" />
+             </Timestamp>
+             
+             <Xslt
+                  Inputs="@(xmlfiles)"
+                  RootTag="mergedroot"
+                  RootAttributes="foo=bar;date=$(buildDate)"
+                  Xsl="transformation.xsl"
+                  Output="report.html"
+             />]]></code>
+             </example>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Xslt.DEFAULT_ROOT_TAG">
+            <summary>
+            The default value for <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/>.
+            The value is <c>"mergedroot"</c>.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Xslt.CREATED_ATTRIBUTE">
+            <summary>
+            The name of the default attribute
+            of the <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/>.
+            The value is <c>"created"</c>,
+            and the attribute will contain a local time stamp.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xslt.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            Returns <c>true</c> if the task successfully executed; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xslt.Inputs">
+            <summary>
+            Gets or sets the xml input files.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xslt.RootTag">
+            <summary>
+            Gets or sets the xml tag name
+            of the root tag wrapped
+            around the merged xml input files.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xslt.RootAttributes">
+            <summary>
+            Gets or sets the list of
+            semicolon-delimited name/value pairs
+            of the <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/>.
+            For example: <code>RootAttributes="foo=bar;date=$(buildDate)"</code>
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xslt.Xsl">
+            <summary>
+            Gets or sets the path of the
+            xsl transformation file to apply.
+            </summary>
+            <remarks>
+            The property can be given any number of metadata,
+            which will be handed to the xsl transformation
+            as parameters.
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Xslt.Output">
+            <summary>
+            Gets or sets the path of the output file.
+            </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.FileUpdate">
             <summary>
@@ -531,6 +1146,13 @@
             <summary>
             Task that can determine the status of a specified service
             on a target server.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceQuery.UNKNOWN_STATUS">
+            <summary>
+            The unknown <see cref="P:MSBuild.Community.Tasks.ServiceQuery.Status"/>
+            returned when the service does not exist.
+            The value is "Unknown".
             </summary>
         </member>
         <member name="M:MSBuild.Community.Tasks.ServiceQuery.#ctor">
@@ -1722,6 +2344,18 @@
             This property is required.
             </remarks>
         </member>
+        <member name="P:MSBuild.Community.Tasks.Mail.Username">
+            <summary>
+            Gets or sets the username.
+            </summary>
+            <value>The username.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Mail.Password">
+            <summary>
+            Gets or sets the password.
+            </summary>
+            <value>The password.</value>
+        </member>
         <member name="T:MSBuild.Community.Tasks.Math.Add">
             <summary>
             Add numbers
@@ -1954,6 +2588,12 @@
             ]]></code>
             </example>
         </member>
+        <member name="F:MSBuild.Community.Tasks.NUnit.DEFAULT_NUNIT_DIRECTORY">
+            <summary>
+            The default relative path of the NUnit installation.
+            The value is <c>@"NUnit-Net-2.0 2.2.5\bin"</c>.
+            </summary>
+        </member>
         <member name="M:MSBuild.Community.Tasks.NUnit.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:NUnit"/> class.
@@ -2105,6 +2745,11 @@
               Looks up a localized string similar to &quot;{0}&quot; is not a number..
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.NUnitNotFound">
+            <summary>
+              Looks up a localized string similar to Could not find the NUnit Project File open command. Please make sure NUnit is installed..
+            </summary>
+        </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ParameterRequired">
             <summary>
               Looks up a localized string similar to The &quot;{0}&quot; task was not given a value for the required parameter &quot;{1}&quot;..
@@ -2120,9 +2765,94 @@
               Looks up a localized string similar to Write Windows Registry.
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceCannotContinue">
+            <summary>
+              Looks up a localized string similar to Cannot continue service {0} on computer &apos;{1}&apos; as it does not support the pause and continue..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceCannotPause">
+            <summary>
+              Looks up a localized string similar to Cannot pause service {0} on computer &apos;{1}&apos; as it does not support the pause and continue..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceCannotStop">
+            <summary>
+              Looks up a localized string similar to Cannot stop service {0} on computer &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceContinued">
+            <summary>
+              Looks up a localized string similar to {0} service was continued successfully..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceContinuing">
+            <summary>
+              Looks up a localized string similar to {0} service is continuing ....
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceNotFound">
+            <summary>
+              Looks up a localized string similar to Couldn&apos;t find the &apos;{0}&apos; service on &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceNotPaused">
+            <summary>
+              Looks up a localized string similar to Cannot continue service {0} on computer &apos;{1}&apos; as its not currently paused..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceNotStarted">
+            <summary>
+              Looks up a localized string similar to Cannot pause service {0} on computer &apos;{1}&apos; as its not currently started..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServicePaused">
+            <summary>
+              Looks up a localized string similar to {0} service was paused successfully..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServicePausing">
+            <summary>
+              Looks up a localized string similar to {0} service is pausing ....
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceStarted">
+            <summary>
+              Looks up a localized string similar to {0} service was started successfully..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceStarting">
+            <summary>
+              Looks up a localized string similar to {0} service is starting ....
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceStatus">
+            <summary>
+              Looks up a localized string similar to The &apos;{0}&apos; service on &apos;{1}&apos; is &apos;{2}&apos;..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceStopped">
+            <summary>
+              Looks up a localized string similar to {0} service was stopped successfully..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceStopping">
+            <summary>
+              Looks up a localized string similar to {0} service is stopping ....
+            </summary>
+        </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.SvnLocalPathNotWorkCopy">
             <summary>
               Looks up a localized string similar to LocalPath is not a working subversion copy..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.TimeFormatException">
+            <summary>
+              Looks up a localized string similar to Failed to get current date!.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.TimeGettingCurrentDate">
+            <summary>
+              Looks up a localized string similar to Getting current date..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.UnzipExtracted">
@@ -2195,6 +2925,31 @@
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XmlUpdateResult">
             <summary>
               Looks up a localized string similar to XmlUpdate Wrote: &quot;{0}&quot;.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltAddingParameter">
+            <summary>
+              Looks up a localized string similar to Adding Parameter \&quot;{0}\&quot;: \&quot;{1}\&quot;.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltAddingRootAttribute">
+            <summary>
+              Looks up a localized string similar to Adding root attribute {0}=\&quot;{1}\&quot;.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltCreatingRootTag">
+            <summary>
+              Looks up a localized string similar to Creating root tag \&quot;{0}\&quot;.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltNoInputFiles">
+            <summary>
+              Looks up a localized string similar to No input files.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltNoRootTag">
+            <summary>
+              Looks up a localized string similar to No root tag inserted.
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ZipAdded">
@@ -2313,7 +3068,26 @@
             </summary>
             <value>The value.</value>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:MSBuild.Community.Tasks.Script" -->
+        <member name="T:MSBuild.Community.Tasks.Script">
+            <summary>
+            Executes code contained within the task.
+            </summary>
+            <example>
+            <para>Simple script that writes to the console</para>
+            <code>
+            <PropertyGroup>
+              <Code>
+                <![CDATA[
+                  public static void ScriptMain() {
+                    Console.WriteLine("Hello MSBuild Community Scripting World.");
+                  }
+                ]]>
+              </Code>
+            </PropertyGroup>
+            <Script Language="C#" Code="$(Code)" />
+            </code>
+            </example>
+        </member>
         <member name="M:MSBuild.Community.Tasks.Script.Execute">
             <summary>
             Executes the task.
@@ -2831,14 +3605,6 @@
             Initializes a new instance of the <see cref="T:SvnClient"/> class.
             </summary>
         </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateCommandLineCommands">
-            <summary>
-            Returns a string value containing the command line arguments to pass directly to the executable file.
-            </summary>
-            <returns>
-            A string value containing the command line arguments to pass directly to the executable file.
-            </returns>
-        </member>
         <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateSvnCommand">
             <summary>
             Generates the SVN command.
@@ -2850,6 +3616,14 @@
             Generates the SVN arguments.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments to pass directly to the executable file.
+            </summary>
+            <returns>
+            A string value containing the command line arguments to pass directly to the executable file.
+            </returns>
         </member>
         <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.ValidateParameters">
             <summary>
@@ -2928,17 +3702,17 @@
             </summary>
             <value>The local path.</value>
         </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Revision">
-            <summary>
-            Gets or sets the revision.
-            </summary>
-            <value>The revision.</value>
-        </member>
         <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Targets">
             <summary>
             Gets or sets the targets.
             </summary>
             <value>The targets.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Revision">
+            <summary>
+            Gets or sets the revision.
+            </summary>
+            <value>The revision.</value>
         </member>
         <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.CommandSwitchs">
             <summary>
