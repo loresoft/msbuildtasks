@@ -127,11 +127,11 @@ namespace MSBuild.Community.Tasks
             _value = _value ?? string.Empty;
 
             Log.LogMessage(Properties.Resources.RegistryRead);
-            Log.LogMessage("[{0}]", _keyName);
+            Log.LogMessage(MessageImportance.Low, "[{0}]", _keyName);
             if(string.IsNullOrEmpty(_valueName))
-                Log.LogMessage("@=\"{0}\"", _value);
+                Log.LogMessage(MessageImportance.Low, "@=\"{0}\"", _value);
             else
-                Log.LogMessage("\"{0}\"=\"{1}\"", _valueName, _value);
+                Log.LogMessage(MessageImportance.Low, "\"{0}\"=\"{1}\"", _valueName, _value);
 
             return true;
         }
