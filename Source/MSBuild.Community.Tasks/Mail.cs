@@ -183,6 +183,29 @@ namespace MSBuild.Community.Tasks
             set { _to = value; }
         }
 
+        private string _username;
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>The username.</value>
+        public string Username
+        {
+            get { return _username; }
+            set { _username = value; }
+        }
+
+        private string _password;
+
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        /// <value>The password.</value>
+        public string Password
+        {
+            get { return _password; }
+            set { _password = value; }
+        }
         #endregion
 
         /// <summary>Sends an email message</summary>
