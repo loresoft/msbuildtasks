@@ -3,10 +3,10 @@
 	<!-- $Id$ -->
 
 	<PropertyGroup>
-		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
+		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\MSBuild.Community.Tasks\bin\Debug</MSBuildCommunityTasksPath>
 	</PropertyGroup>
 
-	<Import Project="MSBuild.Community.Tasks.Targets"/>
+	<Import Project="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets"/>
 
 	<Target Name="AssemblyInfo">
 		<MakeDir Directories="$(MSBuildProjectDirectory)\Test" />
@@ -71,8 +71,6 @@
 		<Zip Files="@(ZipFiles)" 
 			ZipFileName="Test\MSBuild.Community.Tasks.zip" />
 
-		<Zip Files="@(RepoFiles)" WorkingDirectory="D:\svn\repo" 
-			ZipFileName="D:\svn\repo.zip" />
 	</Target>
 
 	<Target Name="Unzip" DependsOnTargets="Zip">
@@ -123,12 +121,12 @@
 	<Target Name="NDoc">
 		<NDoc Documenter="MSDN" 
 			ProjectFilePath="MSBuild.Community.Tasks.ndoc" 
-			WorkingDirectory="..\..\Documentation"/>
+			WorkingDirectory="..\Documentation"/>
 
-		<Copy SourceFiles="..\..\Documentation\doc\MSBuild Community Tasks.chm" 
-			DestinationFiles="..\..\Documentation\MSBuild.Community.Tasks.chm" />
+		<Copy SourceFiles="..\Documentation\doc\MSBuild.Community.Tasks.chm" 
+			DestinationFiles="..\Documentation\MSBuild.Community.Tasks.chm" />
 
-		<RemoveDir Directories="..\..\Documentation\doc" />
+		<RemoveDir Directories="...\Documentation\doc" />
 	</Target>
 
 	<Target Name="Registry">
@@ -154,36 +152,32 @@
 	</Target>
 
 	<Target Name="XML">
-		<XmlRead Prefix="n"
+    <MakeDir Directories="Test" />
+    <Copy SourceFiles="Subversion.proj" DestinationFolder="Test\Subversion.proj" />
+
+    <XmlRead Prefix="n"
 			Namespace="http://schemas.microsoft.com/developer/msbuild/2003" 
 			XPath="/n:Project/n:Target/@Name"
-			XmlFileName="Subversion.proj">
+			XmlFileName="Test\Subversion.proj">
 			<Output TaskParameter="Value" PropertyName="BuildTargets" />
 		</XmlRead>
 		<Message Text="Build Targets: $(BuildTargets)"/>
 
-		<XmlUpdate Prefix="n"
+
+
+    <XmlUpdate Prefix="n"
 			Namespace="http://schemas.microsoft.com/developer/msbuild/2003" 
 			XPath="/n:Project/n:PropertyGroup/n:TestUpdate"
-			XmlFileName="Subversion.proj"
+			XmlFileName="Test\Subversion.proj"
 			Value="Test from $(MSBuildProjectFile)"/>
 
 	</Target>
 
 	<ItemGroup>
-		<TestAssembly Include="C:\Program Files\NUnit 2.2.5\bin\nunit.mocks.tests.dll" />
-		<TestAssembly Include="C:\Program Files\NUnit 2.2.5\bin\nunit-console.tests.dll" />
-		<TestAssembly Include="D:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\bin\Debug\MSBuild.Community.Tasks.Tests.dll" />
+		<TestAssembly Include="$(MSBuildProjectDirectory)\..\Libraries\mock.test.dll" />
 	</ItemGroup>
 	<Target Name="NUnit">
 		<NUnit Assemblies="@(TestAssembly)" />
-	</Target>
-
-	<ItemGroup>
-		<TestAssemblies2 Include="D:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\bin\Debug\MSBuild.Community.Tasks.Tests.dll" />
-	</ItemGroup>
-	<Target Name="NUnit2">
-		<NUnit Assemblies="@(TestAssemblies2)" WorkingDirectory="D:\svnroot\msbuildtasks\Source\MSBuild.Community.Tasks.Tests\bin\Debug" />
 	</Target>
 
 	<Target Name="FileUpdate" DependsOnTargets="Version">
@@ -203,7 +197,11 @@
 	</Target>
 
 	<Target Name="WebDownload">
-		<WebDownload FileUri="http://www.microsoft.com/default.aspx" 
-			FileName="microsoft.html" />
+    <MakeDir Directories="Test" />
+    <WebDownload FileUri="http://www.microsoft.com/default.aspx" 
+			FileName="Test\microsoft.html" />
 	</Target>
+
+  <Target Name="All" 
+          DependsOnTargets="AssemblyInfo;Mail;Zip;Unzip;Math;Version;NDoc;Registry;FTP;XML;NUnit;FileUpdate;Service;WebDownload" />
 </Project>

@@ -3,10 +3,10 @@
 	<!-- $Id$ -->
 
 	<PropertyGroup>
-		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\bin\Debug</MSBuildCommunityTasksPath>
+		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\MSBuild.Community.Tasks\bin\Debug</MSBuildCommunityTasksPath>
 	</PropertyGroup>
 
-	<Import Project="MSBuild.Community.Tasks.Targets"/>
+	<Import Project="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets"/>
 	<PropertyGroup>
 		<Code>
 			<![CDATA[
