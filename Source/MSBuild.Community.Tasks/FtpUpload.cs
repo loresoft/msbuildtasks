@@ -180,7 +180,8 @@ namespace MSBuild.Community.Tasks
                         if (watch.ElapsedMilliseconds - progressUpdated > 5000)
                         {
                             progressUpdated = watch.ElapsedMilliseconds;
-                            Log.LogMessage(Properties.Resources.FtpPercentComplete,
+                            Log.LogMessage(MessageImportance.Low, 
+                                Properties.Resources.FtpPercentComplete,
                                 wroteBytes * 100 / totalBytes,
                                 FormatBytesPerSecond(wroteBytes, watch.Elapsed.TotalSeconds, 1));
                         }
@@ -191,7 +192,7 @@ namespace MSBuild.Community.Tasks
 
                 using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
                 {
-                    Log.LogMessage(Properties.Resources.FtpUploadComplete, response.StatusDescription);
+                    Log.LogMessage(MessageImportance.Low, Properties.Resources.FtpUploadComplete, response.StatusDescription);
                     Log.LogMessage(Properties.Resources.FtpTransfered,
                         FormatByte(totalBytes, 1),
                         FormatBytesPerSecond(totalBytes, watch.Elapsed.TotalSeconds, 1),

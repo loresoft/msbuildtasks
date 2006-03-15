@@ -361,6 +361,15 @@ namespace MSBuild.Community.Tasks.Subversion
 			return Path.Combine(ToolPath, ToolName);
 		}
 
+        /// <summary>
+        /// Logs the starting point of the run to all registered loggers.
+        /// </summary>
+        /// <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
+        protected override void LogToolCommand(string message)
+        {
+            Log.LogCommandLine(MessageImportance.Low, message);
+        }
+
 		/// <summary>
 		/// Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
 		/// </summary>
@@ -380,6 +389,7 @@ namespace MSBuild.Community.Tasks.Subversion
 		{
 			get { return "svn.exe"; }
 		}
+
 		#endregion Task Overrides
 
 	}

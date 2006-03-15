@@ -33,6 +33,7 @@ using System.Text;
 using System.Net.Mail;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
+using System.Net;
 
 // $Id$
 
@@ -220,7 +221,11 @@ namespace MSBuild.Community.Tasks
             {
                 smtp = new SmtpClient();
                 smtp.Host = _smtpServer;
-                smtp.UseDefaultCredentials = true;
+
+                if (!string.IsNullOrEmpty(_username))
+                    smtp.Credentials = new NetworkCredential(_username, _password);
+                else
+                    smtp.UseDefaultCredentials = true;
 
                 message = new MailMessage();
 
