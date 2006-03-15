@@ -445,6 +445,95 @@
             Gets the name of the executable file to run.
             </summary>
         </member>
+        <member name="T:MSBuild.Community.Tasks.Schema.TaskListAssemblyFormatType">
+            <summary>
+            Different ways to specify the assembly in a UsingTask element.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Schema.TaskListAssemblyFormatType.AssemblyFileName">
+            <summary>
+            Assembly file name (Default): &lt;UsingTask AssemblyFile=&quot;foo.dll&quot; /&gt;
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Schema.TaskListAssemblyFormatType.AssemblyFileFullPath">
+            <summary>
+            Assembly location: &lt;UsingTask AssemblyName=&quot;foo&quot; /&gt;
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Schema.TaskListAssemblyFormatType.AssemblyName">
+            <summary>
+            Assembly Name: &lt;UsingTask AssemblyFile=&quot;bin\debug\foo.dll&quot; /&gt;
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Schema.TaskListAssemblyFormatType.AssemblyFullName">
+            <summary>
+            Assembly fully qualified name: &lt;UsingTask AssemblyName=&quot;foo.dll,version ....&quot; /&gt;
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Schema.TaskSchema">
+            <summary>
+            A Task that generates a 
+            XSD schema of the tasks in an assembly.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Schema.TaskSchema.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Schema.TaskSchema.Assemblies">
+            <summary>
+            Gets or sets the list of <see cref="T:System.Reflection.Assembly"/> path to analyse.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Schema.TaskSchema.OutputPath">
+            <summary>
+            Gets or sets the output path for the generated files.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Schema.TaskSchema.Schemas">
+            <summary>
+            Gets the list of path to the generated XSD schema.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Schema.TaskSchema.CreateTaskList">
+            <summary>
+            Gets or sets a value indicating if the task list (using UsingTask)
+            has to be genereted.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Schema.TaskSchema.TaskListAssemblyFormat">
+            <summary>
+            Gets or sets a value indicating how the assembly is specified in the
+            UsingTask element.
+            </summary>
+            <enum cref="T:MSBuild.Community.Tasks.Schema.TaskListAssemblyFormatType"/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Schema.TaskSchema.IgnoreDocumentation">
+            <summary>
+            Gets or sets a value indicating wheter documentation should be ignored
+            even if available (Default is false).
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Schema.TaskSchema.TaskLists">
+            <summary>
+            Gets the path to the task list if it was generated.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Schema.TaskSchema.IgnoreMsBuildSchema">
+            <summary>
+            Gets or sets a value indicating if the 
+            MsBuild schema inclusing should be ignored
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Schema.TaskSchema.Includes">
+            <summary>
+            Gets or sets a list of included schemas
+            </summary>
+        </member>
         <member name="T:MSBuild.Community.Tasks.Time">
             <summary>
             Gets the current date and time.
@@ -2523,6 +2612,12 @@
             The fully qualified path to the executable file.
             </returns>
         </member>
+        <member name="M:MSBuild.Community.Tasks.NDoc.LogToolCommand(System.String)">
+            <summary>
+            Logs the starting point of the run to all registered loggers.
+            </summary>
+            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
+        </member>
         <member name="M:MSBuild.Community.Tasks.NDoc.GetWorkingDirectory">
             <summary>
             Returns the directory in which to run the executable file.
@@ -2614,6 +2709,12 @@
             <returns>
             The fully qualified path to the executable file.
             </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.NUnit.LogToolCommand(System.String)">
+            <summary>
+            Logs the starting point of the run to all registered loggers.
+            </summary>
+            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
         </member>
         <member name="M:MSBuild.Community.Tasks.NUnit.GetWorkingDirectory">
             <summary>
@@ -3648,6 +3749,12 @@
             The fully qualified path to the executable file.
             </returns>
         </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.LogToolCommand(System.String)">
+            <summary>
+            Logs the starting point of the run to all registered loggers.
+            </summary>
+            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
+        </member>
         <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Command">
             <summary>
             Gets or sets the command.
@@ -3823,6 +3930,12 @@
             <returns>
             The fully qualified path to the executable file.
             </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnVersion.LogToolCommand(System.String)">
+            <summary>
+            Logs the starting point of the run to all registered loggers.
+            </summary>
+            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
         </member>
         <member name="M:MSBuild.Community.Tasks.Subversion.SvnVersion.GenerateCommandLineCommands">
             <summary>
