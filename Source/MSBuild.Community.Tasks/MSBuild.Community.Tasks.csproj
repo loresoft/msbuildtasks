@@ -43,7 +43,10 @@
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks" />
     <Reference Include="Microsoft.Build.Utilities" />
-    <Reference Include="Microsoft.VisualStudio.SourceSafe.Interop, Version=5.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.SourceSafe.Interop, Version=5.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\Microsoft.VisualStudio.SourceSafe.Interop.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
@@ -56,6 +59,11 @@
     <Compile Include="Attrib.cs" />
     <Compile Include="ILMerge\ILMerge.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Schema\DocumentationLoader.cs" />
+    <Compile Include="Schema\ReflectionHelper.cs" />
+    <Compile Include="Schema\TaskSchema.cs" />
+    <Compile Include="Schema\TaskSchemaAnalyser.cs" />
+    <Compile Include="Schema\TaskVisitorBase.cs" />
     <Compile Include="Time\Time.cs" />
     <Compile Include="Xslt\Xslt.cs" />
     <Compile Include="FileUpdate.cs" />
@@ -121,7 +129,6 @@
     <None Include="MSBuild.Community.Tasks.snk" />
     <Content Include="MSBuild.Community.Tasks.xsd">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="MSBuild.Community.Tasks.Targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
