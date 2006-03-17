@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{A49CE20D-CE64-4A08-9F24-92A6443D6699}") = "Installer", "Installer.wixproj", "{20015C50-AC15-4D22-ADAE-3EFAB8C5EAAB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20015C50-AC15-4D22-ADAE-3EFAB8C5EAAB}.Debug|Default.ActiveCfg = Debug
+		{20015C50-AC15-4D22-ADAE-3EFAB8C5EAAB}.Debug|Default.Build.0 = Debug
+		{20015C50-AC15-4D22-ADAE-3EFAB8C5EAAB}.Release|Default.ActiveCfg = Release
+		{20015C50-AC15-4D22-ADAE-3EFAB8C5EAAB}.Release|Default.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

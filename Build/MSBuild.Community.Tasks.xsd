@@ -116,7 +116,20 @@
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-	<xs:simpleType name="ILMergeTargetKind">
+  <xs:element name="Mail" substitutionGroup="msb:Task">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="LocalFile" type="xs:string" use="required" />
+          <xs:attribute name="Password" type="xs:string" />
+          <xs:attribute name="RemoteUri" type="xs:string" use="required" />
+          <xs:attribute name="UsePassive" type="xs:boolean" />
+          <xs:attribute name="Username" type="xs:string" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="ILMergeTargetKind">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="Dll" />
 			<xs:enumeration value="Exe" />
