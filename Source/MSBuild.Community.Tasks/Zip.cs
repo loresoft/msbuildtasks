@@ -187,72 +187,77 @@ namespace MSBuild.Community.Tasks
 
             try
             {
-                Log.LogMessage(Properties.Resources.ZipCreating, _zipFileName);
+                Log.LogMessage(MSBuild.Community.Tasks.Properties.Resources.ZipCreating, _zipFileName);
 
-                FileInfo zipFile = new FileInfo(_zipFileName);
-                zs = new ZipOutputStream(zipFile.Create());
-
-                // make sure level in range
-                _zipLevel = System.Math.Max(0, _zipLevel);
-                _zipLevel = System.Math.Min(9, _zipLevel);
-
-                zs.SetLevel(_zipLevel);
-                if (!string.IsNullOrEmpty(_comment))
-                    zs.SetComment(_comment);
-
-                // add files to zip
-                foreach (ITaskItem fileItem in _files)
+                using (zs = new ZipOutputStream(File.Create(_zipFileName)))
                 {
-                    string name = fileItem.ItemSpec;
-                    FileInfo file = new FileInfo(name);
 
-                    if (string.Compare(file.FullName, zipFile.FullName, true) == 0)
+                    // make sure level in range
+                    _zipLevel = System.Math.Max(0, _zipLevel);
+                    _zipLevel = System.Math.Min(9, _zipLevel);
+
+                    zs.SetLevel(_zipLevel);
+                    if (!string.IsNullOrEmpty(_comment))
+                        zs.SetComment(_comment);
+
+                    byte[] buffer = new byte[32768];
+                    // add files to zip
+                    foreach (ITaskItem fileItem in _files)
                     {
-                        continue; //skip self
-                    }
-                    if (!file.Exists)
-                    {
-                        Log.LogWarning(Properties.Resources.FileNotFound, file.FullName);
-                        continue;
-                    }
+                        string name = fileItem.ItemSpec;
+                        FileInfo file = new FileInfo(name);
+                        if (!file.Exists)
+                        {
+                            Log.LogWarning(MSBuild.Community.Tasks.Properties.Resources.FileNotFound, file.FullName);
+                            continue;
+                        }
 
-                    byte[] buffer;
+                        // clean up name
+                        if (_flatten)
+                            name = file.Name;
+                        else if (!string.IsNullOrEmpty(_workingDirectory)
+                            && name.StartsWith(_workingDirectory, true, CultureInfo.InvariantCulture))
+                            name = name.Remove(0, _workingDirectory.Length);
 
-                    using (FileStream fs = file.OpenRead())
-                    {
-                        buffer = new byte[fs.Length];
-                        fs.Read(buffer, 0, buffer.Length);
-                    }
+                        name = ZipEntry.CleanName(name, true);
 
-                    // clean up name
-                    if (_flatten)
-                    {
-                        name = file.Name;
-                    }
-                    else if (!string.IsNullOrEmpty(_workingDirectory)
-                        && name.StartsWith(_workingDirectory, true, CultureInfo.InvariantCulture))
-                    {
-                        name = name.Remove(0, _workingDirectory.Length);
-                    }
-                    name = ZipEntry.CleanName(name, true);
+                        ZipEntry entry = new ZipEntry(name);
+                        entry.DateTime = file.LastWriteTime;
+                        entry.Size = file.Length;
 
-                    ZipEntry entry = new ZipEntry(name);
-                    entry.DateTime = file.LastWriteTime;
-                    entry.Size = file.Length;
+                        using (FileStream fs = file.OpenRead())
+                        {
+                            crc.Reset();
+                            long len = fs.Length;
+                            while (len > 0)
+                            {
+                                int readSoFar = fs.Read(buffer, 0, buffer.Length);
+                                crc.Update(buffer, 0, readSoFar);
+                                len -= readSoFar;
+                            }
+                            entry.Crc = crc.Value;
+                            zs.PutNextEntry(entry);
 
-                    crc.Reset();
-                    crc.Update(buffer);
-                    entry.Crc = crc.Value;
-
-                    zs.PutNextEntry(entry);
-                    zs.Write(buffer, 0, buffer.Length);
-
-                    Log.LogMessage(Properties.Resources.ZipAdded, name);
-                } // foreach file
-                zs.Finish();
-                Log.LogMessage(Properties.Resources.ZipSuccessfully, _zipFileName);
-
+                            len = fs.Length;
+                            fs.Seek(0, SeekOrigin.Begin);
+                            while (len > 0)
+                            {
+                                int readSoFar = fs.Read(buffer, 0, buffer.Length);
+                                zs.Write(buffer, 0, readSoFar);
+                                len -= readSoFar;
+                            }
+                        }
+                        Log.LogMessage(MSBuild.Community.Tasks.Properties.Resources.ZipAdded, name);
+                    } // foreach file
+                    zs.Finish();
+                }
+                Log.LogMessage(MSBuild.Community.Tasks.Properties.Resources.ZipSuccessfully, _zipFileName);
                 return true;
+            }
+            catch (Exception exc)
+            {
+                Log.LogErrorFromException(exc);
+                return false;
             }
             finally
             {
