@@ -35,9 +35,12 @@ namespace MSBuild.Community.Tasks.Schema
 
         protected IEnumerable<Type> GetTaskTypes()
         {
-            foreach (Type type in this.TaskAssembly.GetExportedTypes())
+            Type[] types = this.TaskAssembly.GetExportedTypes();
+            Array.Sort<Type>(types, CompareType);
+
+            foreach (Type type in types)
             {
-                if (!typeof(ITask).IsAssignableFrom(type))
+                if (!typeof(ITask).IsAssignableFrom(type) || type.IsAbstract)
                     continue;
                 yield return type;
             }
@@ -45,12 +48,26 @@ namespace MSBuild.Community.Tasks.Schema
 
         protected IEnumerable<PropertyInfo> GetProperties(Type taskType)
         {
-            foreach (PropertyInfo property in taskType.GetProperties())
+            PropertyInfo[] properties = taskType.GetProperties();
+            Array.Sort<PropertyInfo>(properties, ComparePropertyInfo);
+
+            foreach (PropertyInfo property in properties)
             {
-                if (property.DeclaringType != taskType)
+                if (property.DeclaringType == typeof(Task))
                     continue;
                 yield return property;
             }
         }
+
+        static int CompareType(Type x, Type y)
+        {
+            return x.FullName.CompareTo(y.FullName);
+        }
+
+        static int ComparePropertyInfo(PropertyInfo x, PropertyInfo y)
+        {
+            return x.Name.CompareTo(y.Name);
+        }
+
     }
 }

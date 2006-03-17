@@ -59,6 +59,7 @@ namespace MSBuild.Community.Tasks.Schema
             this.taskSchemaType = new XmlSchemaType();
             this.taskSchemaType.Name = "msb:TaskType";
 
+
             foreach (Type type in this.GetTaskTypes())
             {
                 CreateTaskElement(type);
@@ -88,7 +89,7 @@ namespace MSBuild.Community.Tasks.Schema
             {
                 foreach (ITaskItem item in this.Parent.Includes)
                 {
-                    string itemPath = item.GetMetadata("FullPath");
+                    string itemPath = item.ItemSpec;
                     this.Parent.Log.LogMessage("Adding include {0}", itemPath);
                     AddInclude(itemPath);
                 }
@@ -164,11 +165,8 @@ namespace MSBuild.Community.Tasks.Schema
             taskElementType.ContentModel.Content = extension;
             extension.BaseTypeName = new XmlQualifiedName("msb:TaskType");
 
-            foreach (PropertyInfo property in taskType.GetProperties())
+            foreach (PropertyInfo property in this.GetProperties(taskType))
             {
-                if (property.DeclaringType != taskType)
-                    continue;
-
                 XmlSchemaAttribute attribute = new XmlSchemaAttribute();
                 attribute.Name = property.Name;
                 // is it required ?

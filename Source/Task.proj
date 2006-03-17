@@ -202,6 +202,14 @@
 			FileName="Test\microsoft.html" />
 	</Target>
 
+  <Target Name="TaskSchema">
+
+    <TaskSchema Assemblies="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks\bin\Debug\MSBuild.Community.Tasks.dll" 
+      OutputPath="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks" CreateTaskList="false" IgnoreMsBuildSchema="true"
+      Includes="Microsoft.Build.Commontypes.xsd"/>
+
+  </Target>
+  
   <Target Name="All" 
           DependsOnTargets="AssemblyInfo;Mail;Zip;Unzip;Math;Version;NDoc;Registry;FTP;XML;NUnit;FileUpdate;Service;WebDownload" />
 </Project>

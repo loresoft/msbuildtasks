@@ -42,7 +42,7 @@ namespace MSBuild.Community.Tasks.Schema
     /// A Task that generates a 
     /// XSD schema of the tasks in an assembly.
     /// </summary>
-    public sealed class TaskSchema : Task
+    public class TaskSchema : Task
     {
         private ITaskItem[] assemblies;
         private ITaskItem[] schemas;

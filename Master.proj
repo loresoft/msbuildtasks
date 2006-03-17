@@ -72,7 +72,7 @@
 				AssemblyProduct="MSBuild.Community.Tasks"
 				AssemblyCopyright="Copyright © 2005 Paul Welter"      
 				ComVisible="false"
-				CLSCompliant="true"
+				CLSCompliant="false"
 				AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)" 
 				AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)" 
 				Condition="$(Revision) != '0' "/>
@@ -95,7 +95,11 @@
 
 		<RemoveDir Directories="Documentation\doc" />
 
-	</Target>
+    <TaskSchema Assemblies="Build\MSBuild.Community.Tasks.dll" 
+        OutputPath="Build" CreateTaskList="false" IgnoreMsBuildSchema="true"
+        Includes="Microsoft.Build.Commontypes.xsd"/>
+
+  </Target>
 
 	<Target Name="Zip" DependsOnTargets="Documentation">
 		<Zip Files="@(ZipFiles)" 

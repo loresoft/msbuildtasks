@@ -17,8 +17,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("MSBuild.Community.Tasks")]
 [assembly: AssemblyCopyright("Copyright © 2005 Paul Welter")]
 [assembly: ComVisible(false)]
-[assembly: CLSCompliant(true)]
-[assembly: AssemblyVersion("1.1.0.123")]
-[assembly: AssemblyFileVersion("1.1.0.123")]
+[assembly: CLSCompliant(false)]
+[assembly: AssemblyVersion("1.1.0.130")]
+[assembly: AssemblyFileVersion("1.1.0.130")]
 
 
