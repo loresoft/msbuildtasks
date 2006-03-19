@@ -1280,6 +1280,36 @@
             The application pool has stopped.
             </summary>
         </member>
+        <member name="T:MSBuild.Community.Tasks.ServiceActions">
+            <summary>
+            Defines the actions that can be performed on a service.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceActions.Start">
+            <summary>
+            Starts a service.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceActions.Stop">
+            <summary>
+            Stops a service.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceActions.Restart">
+            <summary>
+            Restarts a service.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceActions.Pause">
+            <summary>
+            Pauses a running service.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.ServiceActions.Continue">
+            <summary>
+            Continues a paused service.
+            </summary>
+        </member>
         <member name="T:MSBuild.Community.Tasks.ServiceController">
             <summary>
             Task that can control a Windows service.
@@ -1382,10 +1412,10 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.ServiceController.Action">
             <summary>
-            Gets or sets the <see cref="T:ActionType"/> to perform on the service.
+            Gets or sets the <see cref="T:ServiceActions"/> to perform on the service.
             </summary>
             <value>The action to perform on the service.</value>
-            <enum cref="T:MSBuild.Community.Tasks.ServiceController.ActionType"/>
+            <enum cref="T:MSBuild.Community.Tasks.ServiceActions"/>
         </member>
         <member name="P:MSBuild.Community.Tasks.ServiceController.Timeout">
             <summary>
@@ -1393,36 +1423,6 @@
             one minute.
             </summary>
             <value>The timeout for the command.</value>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.ServiceController.ActionType">
-            <summary>
-            Defines the actions that can be performed on a service.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.ServiceController.ActionType.Start">
-            <summary>
-            Starts a service.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.ServiceController.ActionType.Stop">
-            <summary>
-            Stops a service.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.ServiceController.ActionType.Restart">
-            <summary>
-            Restarts a service.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.ServiceController.ActionType.Pause">
-            <summary>
-            Pauses a running service.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.ServiceController.ActionType.Continue">
-            <summary>
-            Continues a paused service.
-            </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.SourceSafe.VssClean">
             <summary>

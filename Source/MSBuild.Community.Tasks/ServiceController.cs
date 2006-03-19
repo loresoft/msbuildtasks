@@ -94,7 +94,7 @@ namespace MSBuild.Community.Tasks
 		private ServiceActions _action;
 
 		/// <summary>
-		/// Gets or sets the <see cref="T:ActionType"/> to perform on the service.
+        /// Gets or sets the <see cref="T:ServiceActions"/> to perform on the service.
 		/// </summary>
 		/// <value>The action to perform on the service.</value>
         /// <enum cref="ServiceActions"/>
