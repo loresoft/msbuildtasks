@@ -36,6 +36,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
+using System.IO;
 
 namespace MSBuild.Community.Tasks
 {
@@ -44,6 +45,104 @@ namespace MSBuild.Community.Tasks
     /// </summary>
     public class Attrib : Task
     {
+        #region Properties
+        private Dictionary<string, bool> attributeBag = new Dictionary<string, bool>();
+
+        private ITaskItem[] _files;
+
+        /// <summary>
+        /// Gets or sets the list of files to change attributes on.
+        /// </summary>
+        /// <value>The files to change attributes on.</value>
+        public ITaskItem[] Files
+        {
+            get { return _files; }
+            set { _files = value; }
+        }
+
+        private ITaskItem[] _directories;
+
+        /// <summary>
+        /// Gets or sets the list of directories to change attributes on.
+        /// </summary>
+        /// <value>The directories to change attributes on.</value>
+        public ITaskItem[] Directories
+        {
+            get { return _directories; }
+            set { _directories = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets file's archive status.
+        /// </summary>
+        /// <value><c>true</c> if archive; otherwise, <c>false</c>.</value>
+        public bool Archive
+        {
+            get { return attributeBag.ContainsKey("Archive") ? attributeBag["Archive"] : false; }
+            set { attributeBag["Archive"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating file is compressed.
+        /// </summary>
+        /// <value><c>true</c> if compressed; otherwise, <c>false</c>.</value>
+        public bool Compressed
+        {
+            get { return attributeBag.ContainsKey("Compressed") ? attributeBag["Compressed"] : false; }
+            set { attributeBag["Compressed"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating file is encrypted.
+        /// </summary>
+        /// <value><c>true</c> if encrypted; otherwise, <c>false</c>.</value>
+        public bool Encrypted
+        {
+            get { return attributeBag.ContainsKey("Encrypted") ? attributeBag["Encrypted"] : false; }
+            set { attributeBag["Encrypted"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating file is hidden, and thus is not included in an ordinary directory listing.
+        /// </summary>
+        /// <value><c>true</c> if hidden; otherwise, <c>false</c>.</value>
+        public bool Hidden
+        {
+            get { return attributeBag.ContainsKey("Hidden") ? attributeBag["Hidden"] : false; }
+            set { attributeBag["Hidden"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating file is normal and has no other attributes set.
+        /// </summary>
+        /// <value><c>true</c> if normal; otherwise, <c>false</c>.</value>
+        public bool Normal
+        {
+            get { return attributeBag.ContainsKey("Normal") ? attributeBag["Normal"] : false; }
+            set { attributeBag["Normal"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating file is read-only.
+        /// </summary>
+        /// <value><c>true</c> if read-only; otherwise, <c>false</c>.</value>
+        public bool ReadOnly
+        {
+            get { return attributeBag.ContainsKey("ReadOnly") ? attributeBag["ReadOnly"] : false; }
+            set { attributeBag["ReadOnly"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating file is a system file.
+        /// </summary>
+        /// <value><c>true</c> if system; otherwise, <c>false</c>.</value>
+        public bool System
+        {
+            get { return attributeBag.ContainsKey("System") ? attributeBag["System"] : false; }
+            set { attributeBag["System"] = value; }
+        } 
+        #endregion
+
         /// <summary>
         /// Executes the task.
         /// </summary>
@@ -51,7 +150,88 @@ namespace MSBuild.Community.Tasks
         /// otherwise <see langword="false"/>.</returns>
         public override bool Execute()
         {
-            throw new NotImplementedException();
+            if (_directories != null)
+            {
+                foreach (ITaskItem item in _directories)
+                {
+                    DirectoryInfo dir = new DirectoryInfo(item.ItemSpec);
+                    if (!dir.Exists)
+                        continue;
+
+                    FileAttributes flags = dir.Attributes;
+                    flags = UpdateAttributes(flags);
+                    Log.LogMessage(Properties.Resources.AttribDirectory, item.ItemSpec, flags.ToString());
+                    dir.Attributes = flags;
+                }
+            }
+
+            if (_files != null)
+            {
+                foreach (ITaskItem item in _files)
+                {
+                    FileInfo file = new FileInfo(item.ItemSpec);
+                    if (!file.Exists)
+                        continue;
+
+                    FileAttributes flags = file.Attributes;
+                    flags = UpdateAttributes(flags);
+                    Log.LogMessage(Properties.Resources.AttribFile, item.ItemSpec, flags.ToString());
+                    file.Attributes = flags;
+                }
+            }
+            return true;
         }
+
+        private FileAttributes UpdateAttributes(FileAttributes flags)
+        {
+            if (attributeBag.ContainsKey("Archive"))
+            {
+                if (attributeBag["Archive"])
+                    flags |= FileAttributes.Archive;
+                else
+                    flags &= ~FileAttributes.Archive;
+            }
+            if (attributeBag.ContainsKey("Compressed"))
+            {
+                if (attributeBag["Compressed"])
+                    flags |= FileAttributes.Compressed;
+                else
+                    flags &= ~FileAttributes.Compressed;
+            }
+            if (attributeBag.ContainsKey("Encrypted"))
+            {
+                if (attributeBag["Encrypted"])
+                    flags |= FileAttributes.Encrypted;
+                else
+                    flags &= ~FileAttributes.Encrypted;
+            }
+            if (attributeBag.ContainsKey("Hidden"))
+            {
+                if (attributeBag["Hidden"])
+                    flags |= FileAttributes.Hidden;
+                else
+                    flags &= ~FileAttributes.Hidden;
+            }
+            if (attributeBag.ContainsKey("Normal"))
+            {
+                if (attributeBag["Normal"])
+                    flags = FileAttributes.Normal;
+            }
+            if (attributeBag.ContainsKey("ReadOnly"))
+            {
+                if (attributeBag["ReadOnly"])
+                    flags |= FileAttributes.ReadOnly;
+                else
+                    flags &= ~FileAttributes.ReadOnly;
+            }
+            if (attributeBag.ContainsKey("System"))
+            {
+                if (attributeBag["System"])
+                    flags |= FileAttributes.System;
+                else
+                    flags &= ~FileAttributes.System;
+            }
+            return flags;
+        } 
     }
 }

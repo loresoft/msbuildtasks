@@ -38,7 +38,22 @@ using System.Management;
 
 namespace MSBuild.Community.Tasks.IIS
 {
-	/// <summary>
+    /// <summary>
+    /// Actions the <see cref="AppPoolController"/> can do.
+    /// </summary>
+    public enum AppPoolControllerActions
+    {
+        /// <summary>Start the applicaiton pool</summary>
+        Start,
+        /// <summary>Stop the applicaiton pool</summary>
+        Stop,
+        /// <summary>Restart the applicaiton pool</summary>
+        Restart,
+        /// <summary>Recycle the applicaiton pool</summary>
+        Recycle
+    }
+
+    /// <summary>
 	/// Allows control for an application pool on a local or remote machine with IIS installed.  The default is 
 	/// to control the application pool on the local machine.  If connecting to a remote machine, you can
 	/// specify the <see cref="WebBase.Username"/> and <see cref="WebBase.Password"/> for the task
@@ -81,6 +96,7 @@ namespace MSBuild.Community.Tasks.IIS
 		/// Gets or sets the application pool action.
 		/// </summary>
 		/// <value>The application pool action.</value>
+        /// <enum cref="AppPoolControllerActions" />
 		[Required]
 		public string Action
 		{

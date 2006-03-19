@@ -61,6 +61,24 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attrib directory &apos;{0}&apos;. {1}.
+        /// </summary>
+        internal static string AttribDirectory {
+            get {
+                return ResourceManager.GetString("AttribDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attrib file &apos;{0}&apos;. {1}.
+        /// </summary>
+        internal static string AttribFile {
+            get {
+                return ResourceManager.GetString("AttribFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File Not Found: {0}.
         /// </summary>
         internal static string FileNotFound {
@@ -140,6 +158,69 @@ namespace MSBuild.Community.Tasks.Properties {
         internal static string MathNotNumber {
             get {
                 return ResourceManager.GetString("MathNotNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating directory &quot;{0}&quot;..
+        /// </summary>
+        internal static string MoveCreatesDirectory {
+            get {
+                return ResourceManager.GetString("MoveCreatesDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not move the file &quot;{0}&quot; to the destination file &quot;{1}&quot;, because the destination is a folder instead of a file. To move the source file into a folder, consider using the DestinationFolder parameter instead of DestinationFiles..
+        /// </summary>
+        internal static string MoveDestinationIsDirectory {
+            get {
+                return ResourceManager.GetString("MoveDestinationIsDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to move file &quot;{0}&quot; to &quot;{1}&quot;. {2}.
+        /// </summary>
+        internal static string MoveError {
+            get {
+                return ResourceManager.GetString("MoveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Both &quot;{0}&quot; and &quot;{1}&quot; were specified as input parameters in the project file. Please choose one or the other..
+        /// </summary>
+        internal static string MoveExactlyOneTypeOfDestination {
+            get {
+                return ResourceManager.GetString("MoveExactlyOneTypeOfDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving file from &quot;{0}&quot; to &quot;{1}&quot;..
+        /// </summary>
+        internal static string MoveFileComment {
+            get {
+                return ResourceManager.GetString("MoveFileComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No destination specified for Move. Please supply either &quot;{0}&quot; or &quot;{1}&quot;..
+        /// </summary>
+        internal static string MoveNeedsDestination {
+            get {
+                return ResourceManager.GetString("MoveNeedsDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The source file &quot;{0}&quot; is actually a directory.  The &quot;Move&quot; task does not support moving directories..
+        /// </summary>
+        internal static string MoveSourceIsDirectory {
+            get {
+                return ResourceManager.GetString("MoveSourceIsDirectory", resourceCulture);
             }
         }
         
@@ -338,6 +419,15 @@ namespace MSBuild.Community.Tasks.Properties {
         internal static string TimeGettingCurrentDate {
             get {
                 return ResourceManager.GetString("TimeGettingCurrentDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;{2}&quot; refers to {0} item(s), and &quot;{3}&quot; refers to {1} item(s). They must have the same number of items..
+        /// </summary>
+        internal static string TwoVectorsMustHaveSameLength {
+            get {
+                return ResourceManager.GetString("TwoVectorsMustHaveSameLength", resourceCulture);
             }
         }
         

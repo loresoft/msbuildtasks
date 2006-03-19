@@ -209,7 +209,38 @@
       Includes="Microsoft.Build.Commontypes.xsd"/>
 
   </Target>
+
+  <Target Name="Attrib" DependsOnTargets="Version">
+    <Attrib Files="Test\version.txt" 
+      ReadOnly="true" Hidden="true" System="true"/>
+
+    <Attrib Files="Test\version.txt" 
+      Hidden="false" System="false"/>
+
+    <Attrib Files="Test\version.txt" 
+      Normal="true"/>
+
+  </Target>
   
   <Target Name="All" 
-          DependsOnTargets="AssemblyInfo;Mail;Zip;Unzip;Math;Version;NDoc;Registry;FTP;XML;NUnit;FileUpdate;Service;WebDownload" />
+          DependsOnTargets="AssemblyInfo;Mail;Zip;Unzip;Math;Version;NDoc;Registry;FTP;XML;NUnit;FileUpdate;Service;WebDownload">
+    
+    <CallTarget Targets="AssemblyInfo" />
+    <CallTarget Targets="Mail" />
+    <CallTarget Targets="Zip" />
+    <CallTarget Targets="Unzip" />
+    <CallTarget Targets="Math" />
+    <CallTarget Targets="Version" />
+    <CallTarget Targets="NDoc" />
+    <CallTarget Targets="Registry" />
+    <CallTarget Targets="FTP" />
+    <CallTarget Targets="XML" />
+    <CallTarget Targets="NUnit" />
+    <CallTarget Targets="FileUpdate" />
+    <CallTarget Targets="Service" />
+    <CallTarget Targets="WebDownload" />
+    <CallTarget Targets="TaskSchema" />
+    <CallTarget Targets="WebDownload" />
+
+  </Target>
 </Project>

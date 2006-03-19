@@ -197,6 +197,7 @@ namespace MSBuild.Community.Tasks
 		/// <item>Unspecified</item>
 		/// </list>
 		/// </remarks>
+        /// <enum cref="DateTimeKind"/>
 		[Output]
 		public string Kind
 		{

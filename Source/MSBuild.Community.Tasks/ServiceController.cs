@@ -99,6 +99,7 @@ namespace MSBuild.Community.Tasks
 		/// Gets or sets the <see cref="T:ActionType"/> to perform on the service.
 		/// </summary>
 		/// <value>The action to perform on the service.</value>
+        /// <enum cref="ActionType"/>
 		[Required]
 		public string Action
 		{

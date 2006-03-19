@@ -32,16 +32,78 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
+using System.IO;
+using System.Collections;
+using MSBuild.Community.Tasks.Properties;
 
 // $Id$
 
 namespace MSBuild.Community.Tasks
 {
     /// <summary>
-    /// TODO ...
+    /// Moves files on the filesystem to a new location.
     /// </summary>
     public class Move : Task
     {
+        #region Properties
+        // Properties
+        private ITaskItem[] movedFiles;
+
+        /// <summary>
+        /// Gets the items that were successfully moved.
+        /// </summary>
+        /// <value>The moved files.</value>
+        [Output]
+        public ITaskItem[] MovedFiles
+        {
+            get { return this.movedFiles; }
+        }
+
+        private ITaskItem[] destinationFiles;
+
+        /// <summary>
+        /// Gets or sets the list of files to moved the source files to. 
+        /// </summary>
+        /// <remarks>
+        /// This list is expected to be a one-to-one mapping with the 
+        /// list specified in the SourceFiles parameter. That is, the 
+        /// first file specified in SourceFiles will be moved to the 
+        /// first location specified in DestinationFiles, and so forth.
+        /// </remarks>
+        /// <value>The destination files.</value>
+        [Output]
+        public ITaskItem[] DestinationFiles
+        {
+            get { return this.destinationFiles; }
+            set { this.destinationFiles = value; }
+        }
+
+        private ITaskItem destinationFolder;
+
+        /// <summary>
+        /// Gets or sets the directory to which you want to move the files.
+        /// </summary>
+        /// <value>The destination folder.</value>
+        public ITaskItem DestinationFolder
+        {
+            get { return this.destinationFolder; }
+            set { this.destinationFolder = value; }
+        }
+
+        private ITaskItem[] sourceFiles;
+
+        /// <summary>
+        /// Gets or sets the source files to move.
+        /// </summary>
+        /// <value>The source files to move.</value>
+        [Required]
+        public ITaskItem[] SourceFiles
+        {
+            get { return this.sourceFiles; }
+            set { this.sourceFiles = value; }
+        } 
+        #endregion
+        
         /// <summary>
         /// When overridden in a derived class, executes the task.
         /// </summary>
@@ -50,7 +112,152 @@ namespace MSBuild.Community.Tasks
         /// </returns>
         public override bool Execute()
         {
-            throw new Exception("The method or operation is not implemented.");
+            bool result = true;
+            if ((this.sourceFiles == null) || (this.sourceFiles.Length == 0))
+            {
+                this.destinationFiles = new TaskItem[0];
+                this.movedFiles = new TaskItem[0];
+                return true;
+            }
+            if ((this.destinationFiles == null) && (this.destinationFolder == null))
+            {
+                Log.LogError(Resources.MoveNeedsDestination, "DestinationFiles", "DestinationDirectory");
+                return false;
+            }
+            if ((this.destinationFiles != null) && (this.destinationFolder != null))
+            {
+                Log.LogError(Resources.MoveExactlyOneTypeOfDestination, "DestinationFiles", "DestinationDirectory");
+                return false;
+            }
+            if ((this.destinationFiles != null) && (this.destinationFiles.Length != this.sourceFiles.Length))
+            {
+                Log.LogError(Resources.TwoVectorsMustHaveSameLength, 
+                    this.destinationFiles.Length, 
+                    this.sourceFiles.Length, 
+                    "DestinationFiles", 
+                    "SourceFiles");
+                return false;
+            }
+            
+            // create destination array
+            if (this.destinationFiles == null)
+            {
+                this.destinationFiles = new ITaskItem[this.sourceFiles.Length];
+                for (int x = 0; x < this.sourceFiles.Length; x++)
+                {
+                    string newPath;
+                    try
+                    {
+                        newPath = Path.Combine(this.destinationFolder.ItemSpec, Path.GetFileName(this.sourceFiles[x].ItemSpec));
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        this.destinationFiles = new ITaskItem[0];
+                        Log.LogError(Resources.MoveError, 
+                            this.sourceFiles[x].ItemSpec, 
+                            this.destinationFolder.ItemSpec, 
+                            ex.Message);
+                        return false;
+                    }
+                    this.destinationFiles[x] = new TaskItem(newPath);
+                    this.sourceFiles[x].CopyMetadataTo(this.destinationFiles[x]);
+                }
+            }
+
+            ArrayList movedList = new ArrayList();
+            for (int x = 0; x < this.sourceFiles.Length; x++)
+            {
+                string sourceFile = this.sourceFiles[x].ItemSpec;
+                string destinationFile = this.destinationFiles[x].ItemSpec;
+                try
+                {
+                    if (MoveFile(sourceFile, destinationFile))
+                    {
+                        this.sourceFiles[x].CopyMetadataTo(this.destinationFiles[x]);
+                        movedList.Add(this.destinationFiles[x]);
+                    }
+                    else
+                    {
+                        result = false;
+                    }
+                }
+                catch (PathTooLongException ptlEx)
+                {
+                    Log.LogError(Resources.MoveError,
+                        sourceFile,
+                        destinationFile,
+                        ptlEx.Message);
+
+                    result = false;
+                }
+                catch (IOException ioEx)
+                {
+                    if (this.PathsAreIdentical(sourceFile, destinationFile))
+                    {
+                        this.sourceFiles[x].CopyMetadataTo(this.destinationFiles[x]);
+                        movedList.Add(this.destinationFiles[x]);
+                    }
+                    else
+                    {
+                        Log.LogError(Resources.MoveError,
+                            sourceFile,
+                            destinationFile,
+                            ioEx.Message);
+                        result = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.LogError(Resources.MoveError,
+                        sourceFile,
+                        destinationFile,
+                        ex.Message);
+                    result = false;
+                }
+            }
+            this.movedFiles = (ITaskItem[])movedList.ToArray(typeof(ITaskItem));
+            return result;
+
         }
+
+        private bool MoveFile(string sourceFile, string destinationFile)
+        {
+            if (Directory.Exists(destinationFile))
+            {
+                Log.LogError(Resources.MoveDestinationIsDirectory, sourceFile, destinationFile);
+                return false;
+            }
+            if (Directory.Exists(sourceFile))
+            {
+                Log.LogError(Resources.MoveSourceIsDirectory, sourceFile);
+                return false;
+            }
+            
+            string directory = Path.GetDirectoryName(destinationFile);
+            if (((directory != null) && (directory.Length > 0)) && !Directory.Exists(directory))
+            {
+                Log.LogError(Resources.MoveCreatesDirectory, directory);
+                Directory.CreateDirectory(directory);
+            }
+
+            Log.LogMessage(MessageImportance.Normal, Resources.MoveFileComment, sourceFile, destinationFile);
+
+            Log.LogMessage(MessageImportance.Low, "Command:", new object[0]);
+            
+            string[] textArray = new string[] { "move /y \"", sourceFile, "\" \"", destinationFile, "\"" };
+            base.Log.LogCommandLine(MessageImportance.Low, string.Concat(textArray));
+            
+            File.Move(sourceFile, destinationFile);
+
+            return true;
+        }
+
+        private bool PathsAreIdentical(string source, string destination)
+        {
+            string sourcePath = Path.GetFullPath(source);
+            string destinationPath = Path.GetFullPath(destination);
+            return (0 == string.Compare(sourcePath, destinationPath, StringComparison.OrdinalIgnoreCase));
+        }
+
     }
 }
