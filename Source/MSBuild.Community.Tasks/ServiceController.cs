@@ -39,7 +39,41 @@ using Service = System.ServiceProcess.ServiceController;
 
 namespace MSBuild.Community.Tasks
 {
-	/// <summary>
+    #region Enums
+    /// <summary>
+    /// Defines the actions that can be performed on a service.
+    /// </summary>
+    public enum ServiceActions
+    {
+        /// <summary>
+        /// Starts a service.
+        /// </summary>
+        Start,
+
+        /// <summary>
+        /// Stops a service.
+        /// </summary>
+        Stop,
+
+        /// <summary>
+        /// Restarts a service.
+        /// </summary>
+        Restart,
+
+        /// <summary>
+        /// Pauses a running service.
+        /// </summary>
+        Pause,
+
+        /// <summary>
+        /// Continues a paused service.
+        /// </summary>
+        Continue
+    }
+
+    #endregion Enums
+
+    /// <summary>
 	/// Task that can control a Windows service.
 	/// </summary>
 	public class ServiceController : ServiceQuery
@@ -56,55 +90,19 @@ namespace MSBuild.Community.Tasks
 
 		#endregion Constructor
 
-		#region Enums
-		/// <summary>
-		/// Defines the actions that can be performed on a service.
-		/// </summary>
-		public enum ActionType
-		{
-			/// <summary>
-			/// Starts a service.
-			/// </summary>
-			Start,
-
-			/// <summary>
-			/// Stops a service.
-			/// </summary>
-			Stop,
-
-			/// <summary>
-			/// Restarts a service.
-			/// </summary>
-			Restart,
-
-			/// <summary>
-			/// Pauses a running service.
-			/// </summary>
-			Pause,
-
-			/// <summary>
-			/// Continues a paused service.
-			/// </summary>
-			Continue
-		}
-
-		#endregion Enums
-
-
-
 		#region Properties
-		private ActionType _action;
+		private ServiceActions _action;
 
 		/// <summary>
 		/// Gets or sets the <see cref="T:ActionType"/> to perform on the service.
 		/// </summary>
 		/// <value>The action to perform on the service.</value>
-        /// <enum cref="ActionType"/>
+        /// <enum cref="ServiceActions"/>
 		[Required]
 		public string Action
 		{
 			get { return _action.ToString(); }
-			set { _action = (ActionType)Enum.Parse(typeof(ActionType), value); }
+			set { _action = (ServiceActions)Enum.Parse(typeof(ServiceActions), value); }
 		}
 
 		private double _timeout = TimeSpan.FromSeconds(60).TotalMilliseconds;
@@ -145,7 +143,7 @@ namespace MSBuild.Community.Tasks
 				ServiceControllerStatus desiredStatus = DetermineDesiredStatus();
 				ServiceControllerStatus currentStatus = controller.Status;
 
-				if (currentStatus == desiredStatus && _action != ActionType.Restart)
+				if (currentStatus == desiredStatus && _action != ServiceActions.Restart)
 				{
 					Log.LogMessage(Properties.Resources.ServiceStatus,
 						DisplayName, MachineName, currentStatus);
@@ -155,19 +153,19 @@ namespace MSBuild.Community.Tasks
 
 				switch (_action)
 				{
-					case ActionType.Start:
+					case ServiceActions.Start:
 						result = StartService(controller);
 						break;
-					case ActionType.Pause:
+					case ServiceActions.Pause:
 						result = PauseService(controller);
 						break;
-					case ActionType.Continue:
+					case ServiceActions.Continue:
 						result = ContinueService(controller);
 						break;
-					case ActionType.Stop:
+					case ServiceActions.Stop:
 						result = StopService(controller);
 						break;
-					case ActionType.Restart:
+					case ServiceActions.Restart:
 						result = RestartService(controller);
 						break;
 				}
@@ -201,9 +199,9 @@ namespace MSBuild.Community.Tasks
 		{
 			switch (_action)
 			{
-				case ActionType.Stop:
+				case ServiceActions.Stop:
 					return ServiceControllerStatus.Stopped;
-				case ActionType.Pause:
+				case ServiceActions.Pause:
 					return ServiceControllerStatus.Paused;
 				default:
 					return ServiceControllerStatus.Running;

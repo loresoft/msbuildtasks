@@ -148,7 +148,7 @@ namespace MSBuild.Community.Tasks.Schema
                         enumTypeName = Assembly.CreateQualifiedName(assemblyName, enumTypeName);
                     }
 
-                    return Type.GetType(enumTypeName, true, false);
+                    return Type.GetType(enumTypeName, false, false);
                 }
             }
         }

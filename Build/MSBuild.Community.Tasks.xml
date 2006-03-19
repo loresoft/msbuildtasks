@@ -153,6 +153,60 @@
             <returns><see langword="true"/> if the task ran successfully; 
             otherwise <see langword="false"/>.</returns>
         </member>
+        <member name="P:MSBuild.Community.Tasks.Attrib.Files">
+            <summary>
+            Gets or sets the list of files to change attributes on.
+            </summary>
+            <value>The files to change attributes on.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Attrib.Directories">
+            <summary>
+            Gets or sets the list of directories to change attributes on.
+            </summary>
+            <value>The directories to change attributes on.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Attrib.Archive">
+            <summary>
+            Gets or sets file's archive status.
+            </summary>
+            <value><c>true</c> if archive; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Attrib.Compressed">
+            <summary>
+            Gets or sets a value indicating file is compressed.
+            </summary>
+            <value><c>true</c> if compressed; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Attrib.Encrypted">
+            <summary>
+            Gets or sets a value indicating file is encrypted.
+            </summary>
+            <value><c>true</c> if encrypted; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Attrib.Hidden">
+            <summary>
+            Gets or sets a value indicating file is hidden, and thus is not included in an ordinary directory listing.
+            </summary>
+            <value><c>true</c> if hidden; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Attrib.Normal">
+            <summary>
+            Gets or sets a value indicating file is normal and has no other attributes set.
+            </summary>
+            <value><c>true</c> if normal; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Attrib.ReadOnly">
+            <summary>
+            Gets or sets a value indicating file is read-only.
+            </summary>
+            <value><c>true</c> if read-only; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Attrib.System">
+            <summary>
+            Gets or sets a value indicating file is a system file.
+            </summary>
+            <value><c>true</c> if system; otherwise, <c>false</c>.</value>
+        </member>
         <member name="T:MSBuild.Community.Tasks.ILMerge">
              <summary>
              A wrapper for the ILMerge tool.
@@ -472,8 +526,7 @@
         </member>
         <member name="T:MSBuild.Community.Tasks.Schema.TaskSchema">
             <summary>
-            A Task that generates a 
-            XSD schema of the tasks in an assembly.
+            A Task that generates a XSD schema of the tasks in an assembly.
             </summary>
         </member>
         <member name="M:MSBuild.Community.Tasks.Schema.TaskSchema.Execute">
@@ -636,6 +689,7 @@
             <item>Unspecified</item>
             </list>
             </remarks>
+            <enum cref="T:System.DateTimeKind"/>
         </member>
         <member name="P:MSBuild.Community.Tasks.Time.TimeOfDay">
             <summary>
@@ -1331,6 +1385,7 @@
             Gets or sets the <see cref="T:ActionType"/> to perform on the service.
             </summary>
             <value>The action to perform on the service.</value>
+            <enum cref="T:MSBuild.Community.Tasks.ServiceController.ActionType"/>
         </member>
         <member name="P:MSBuild.Community.Tasks.ServiceController.Timeout">
             <summary>
@@ -2310,6 +2365,23 @@
             </summary>
             <value>The name of the virtual directory.</value>
         </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.AppPoolControllerActions">
+            <summary>
+            Actions the <see cref="T:MSBuild.Community.Tasks.IIS.AppPoolController"/> can do.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.AppPoolControllerActions.Start">
+            <summary>Start the applicaiton pool</summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.AppPoolControllerActions.Stop">
+            <summary>Stop the applicaiton pool</summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.AppPoolControllerActions.Restart">
+            <summary>Restart the applicaiton pool</summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.AppPoolControllerActions.Recycle">
+            <summary>Recycle the applicaiton pool</summary>
+        </member>
         <member name="T:MSBuild.Community.Tasks.IIS.AppPoolController">
             <summary>
             Allows control for an application pool on a local or remote machine with IIS installed.  The default is 
@@ -2342,6 +2414,7 @@
             Gets or sets the application pool action.
             </summary>
             <value>The application pool action.</value>
+            <enum cref="T:MSBuild.Community.Tasks.IIS.AppPoolControllerActions"/>
         </member>
         <member name="T:MSBuild.Community.Tasks.Mail">
             <summary>
@@ -2569,7 +2642,7 @@
         </member>
         <member name="T:MSBuild.Community.Tasks.Move">
             <summary>
-            TODO ...
+            Moves files on the filesystem to a new location.
             </summary>
         </member>
         <member name="M:MSBuild.Community.Tasks.Move.Execute">
@@ -2579,6 +2652,36 @@
             <returns>
             true if the task successfully executed; otherwise, false.
             </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Move.MovedFiles">
+            <summary>
+            Gets the items that were successfully moved.
+            </summary>
+            <value>The moved files.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Move.DestinationFiles">
+            <summary>
+            Gets or sets the list of files to moved the source files to. 
+            </summary>
+            <remarks>
+            This list is expected to be a one-to-one mapping with the 
+            list specified in the SourceFiles parameter. That is, the 
+            first file specified in SourceFiles will be moved to the 
+            first location specified in DestinationFiles, and so forth.
+            </remarks>
+            <value>The destination files.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Move.DestinationFolder">
+            <summary>
+            Gets or sets the directory to which you want to move the files.
+            </summary>
+            <value>The destination folder.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Move.SourceFiles">
+            <summary>
+            Gets or sets the source files to move.
+            </summary>
+            <value>The source files to move.</value>
         </member>
         <member name="T:MSBuild.Community.Tasks.NDoc">
             <summary>
@@ -2799,6 +2902,16 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.AttribDirectory">
+            <summary>
+              Looks up a localized string similar to Attrib directory &apos;{0}&apos;. {1}.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.AttribFile">
+            <summary>
+              Looks up a localized string similar to Attrib file &apos;{0}&apos;. {1}.
+            </summary>
+        </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.FileNotFound">
             <summary>
               Looks up a localized string similar to File Not Found: {0}.
@@ -2844,6 +2957,41 @@
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.MathNotNumber">
             <summary>
               Looks up a localized string similar to &quot;{0}&quot; is not a number..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.MoveCreatesDirectory">
+            <summary>
+              Looks up a localized string similar to Creating directory &quot;{0}&quot;..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.MoveDestinationIsDirectory">
+            <summary>
+              Looks up a localized string similar to Could not move the file &quot;{0}&quot; to the destination file &quot;{1}&quot;, because the destination is a folder instead of a file. To move the source file into a folder, consider using the DestinationFolder parameter instead of DestinationFiles..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.MoveError">
+            <summary>
+              Looks up a localized string similar to Unable to move file &quot;{0}&quot; to &quot;{1}&quot;. {2}.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.MoveExactlyOneTypeOfDestination">
+            <summary>
+              Looks up a localized string similar to Both &quot;{0}&quot; and &quot;{1}&quot; were specified as input parameters in the project file. Please choose one or the other..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.MoveFileComment">
+            <summary>
+              Looks up a localized string similar to Moving file from &quot;{0}&quot; to &quot;{1}&quot;..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.MoveNeedsDestination">
+            <summary>
+              Looks up a localized string similar to No destination specified for Move. Please supply either &quot;{0}&quot; or &quot;{1}&quot;..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.MoveSourceIsDirectory">
+            <summary>
+              Looks up a localized string similar to The source file &quot;{0}&quot; is actually a directory.  The &quot;Move&quot; task does not support moving directories..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.NUnitNotFound">
@@ -2954,6 +3102,11 @@
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.TimeGettingCurrentDate">
             <summary>
               Looks up a localized string similar to Getting current date..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.TwoVectorsMustHaveSameLength">
+            <summary>
+              Looks up a localized string similar to &quot;{2}&quot; refers to {0} item(s), and &quot;{3}&quot; refers to {1} item(s). They must have the same number of items..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.UnzipExtracted">

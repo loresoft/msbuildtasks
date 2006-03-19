@@ -108,7 +108,53 @@
     </xs:annotation>
     <xs:complexType>
       <xs:complexContent mixed="false">
-        <xs:extension base="msb:TaskType" />
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Archive" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets file's archive status.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Compressed" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating file is compressed.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Directories" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the list of directories to change attributes on.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Encrypted" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating file is encrypted.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Files" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the list of files to change attributes on.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Hidden" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating file is hidden, and thus is not included in an ordinary directory listing.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Normal" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating file is normal and has no other attributes set.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ReadOnly" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating file is read-only.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="System" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating file is a system file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
@@ -324,7 +370,7 @@
     <xs:complexType>
       <xs:complexContent mixed="false">
         <xs:extension base="msb:TaskType">
-          <xs:attribute name="Action" type="msb:non_empty_string" use="required">
+          <xs:attribute name="Action" type="msb:AppPoolControllerActionsType" use="required">
             <xs:annotation>
               <xs:documentation>Gets or sets the application pool action.</xs:documentation>
             </xs:annotation>
@@ -360,6 +406,34 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:simpleType name="AppPoolControllerActionsType">
+    <xs:union memberTypes="msb:non_empty_string">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Start">
+            <xs:annotation>
+              <xs:documentation>Start the applicaiton pool</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Stop">
+            <xs:annotation>
+              <xs:documentation>Stop the applicaiton pool</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Restart">
+            <xs:annotation>
+              <xs:documentation>Restart the applicaiton pool</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Recycle">
+            <xs:annotation>
+              <xs:documentation>Recycle the applicaiton pool</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
   <xs:element name="AppPoolCreate" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Creates a new application pool on a local or remote machine with IIS installed.  The default is 
@@ -1499,11 +1573,32 @@
   </xs:element>
   <xs:element name="Move" substitutionGroup="msb:Task">
     <xs:annotation>
-      <xs:documentation>TODO ...</xs:documentation>
+      <xs:documentation>Moves files on the filesystem to a new location.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:complexContent mixed="false">
-        <xs:extension base="msb:TaskType" />
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="DestinationFiles" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the list of files to moved the source files to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="DestinationFolder" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the directory to which you want to move the files.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="MovedFiles" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the items that were successfully moved.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SourceFiles" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the source files to move.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
@@ -1649,8 +1744,7 @@
   </xs:element>
   <xs:element name="TaskSchema" substitutionGroup="msb:Task">
     <xs:annotation>
-      <xs:documentation>A Task that generates a 
-            XSD schema of the tasks in an assembly.</xs:documentation>
+      <xs:documentation>A Task that generates a XSD schema of the tasks in an assembly.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:complexContent mixed="false">
@@ -1788,7 +1882,7 @@
     <xs:complexType>
       <xs:complexContent mixed="false">
         <xs:extension base="msb:TaskType">
-          <xs:attribute name="Action" type="msb:non_empty_string" use="required">
+          <xs:attribute name="Action" type="msb:ServiceActionsType" use="required">
             <xs:annotation>
               <xs:documentation>Gets or sets the  to perform on the service.</xs:documentation>
             </xs:annotation>
@@ -1843,6 +1937,49 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:simpleType name="ServiceActionsType">
+    <xs:union memberTypes="msb:non_empty_string">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Start">
+            <xs:annotation>
+              <xs:documentation>
+            Starts a service.
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Stop">
+            <xs:annotation>
+              <xs:documentation>
+            Stops a service.
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Restart">
+            <xs:annotation>
+              <xs:documentation>
+            Restarts a service.
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Pause">
+            <xs:annotation>
+              <xs:documentation>
+            Pauses a running service.
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Continue">
+            <xs:annotation>
+              <xs:documentation>
+            Continues a paused service.
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
   <xs:element name="ServiceQuery" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Task that can determine the status of a specified service
@@ -2850,7 +2987,7 @@
               <xs:documentation>[Optional] [Output] Gets the hour component of the date represented by this instance.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="Kind" type="xs:string">
+          <xs:attribute name="Kind" type="msb:DateTimeKindType">
             <xs:annotation>
               <xs:documentation>[Optional] [Output] Gets or sets a value that indicates whether the time represented by this instance is based
             on local time, Coordinated Universal Time (UTC), or neither.</xs:documentation>
@@ -2915,6 +3052,29 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:simpleType name="DateTimeKindType">
+    <xs:union memberTypes="msb:non_empty_string">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Unspecified">
+            <xs:annotation>
+              <xs:documentation>The time represented is not specified as either local time or Coordinated Universal Time (UTC).1</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Utc">
+            <xs:annotation>
+              <xs:documentation>The time represented is UTC.1</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Local">
+            <xs:annotation>
+              <xs:documentation>The time represented is local time.1</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
   <xs:element name="Unzip" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Unzip a file to a target directory.</xs:documentation>
