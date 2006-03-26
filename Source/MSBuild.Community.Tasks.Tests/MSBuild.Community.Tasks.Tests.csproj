@@ -54,6 +54,7 @@
     <Compile Include="MoveTest.cs" />
     <Compile Include="ServiceQueryTest.cs" />
     <Compile Include="ServiceControllerTest.cs" />
+    <Compile Include="Subversion\SvnInfoTest.cs" />
     <Compile Include="Time\TimeTest.cs" />
     <Compile Include="WebDownloadTest.cs" />
     <Compile Include="XmlUpdateTest.cs" />

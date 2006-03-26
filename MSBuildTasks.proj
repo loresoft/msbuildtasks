@@ -100,8 +100,8 @@
 	<ItemGroup>
 		<!-- content files to copy to the build directory -->
 		<content Include="$(libRoot)\ICSharpCode.SharpZipLib.dll" />
-		<content Include="$(libRoot)\Interop.SourceSafeTypeLib.dll" />
-		<content Include="$(libRoot)\NUnit\2.2.5\nunit.framework.dll" />
+		<content Include="$(libRoot)\Microsoft.VisualStudio.SourceSafe.Interop.dll" />
+		<content Include="$(libRoot)\nunit.framework.dll" />
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\$(nunitReportXsl)" />
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.xsd" />
