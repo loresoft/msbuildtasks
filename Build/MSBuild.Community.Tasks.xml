@@ -587,6 +587,288 @@
             Gets or sets a list of included schemas
             </summary>
         </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.NodeKind">
+            <summary>
+            The kind of Subversion node. The names match the text output
+            by "svn info".
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Subversion.NodeKind.file">
+            <summary>
+            Node is a file
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Subversion.NodeKind.directory">
+            <summary>
+            Node is a directory
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Subversion.NodeKind.unknown">
+            <summary>
+            Unknown node type
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.Schedule">
+            <summary>
+            The Subversion schedule type.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Subversion.Schedule.normal">
+            <summary>
+            Normal schedule
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Subversion.Schedule.unknown">
+            <summary>
+            Unknown schedule.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.SvnInfo">
+            <summary>
+            Run the "svn info" command and parse the output
+            </summary>
+            <example>
+            This example will determine the Subversion repository root for the.
+            current directory and print it out.
+            <code><![CDATA[
+            <Target Name="printinfo">
+              <SvnInfo LocalPath=".">
+                <Output TaskParameter="RepositoryRoot" PropertyName="root" />
+              </SvnInfo>
+              <Message Text="root: $(root)" />
+            </Target>
+            ]]></code>
+            </example>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.SvnClient">
+            <summary>
+            Subversion client base class
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SvnClient"/> class.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateSvnCommand">
+            <summary>
+            Generates the SVN command.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateSvnArguments">
+            <summary>
+            Generates the SVN arguments.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments to pass directly to the executable file.
+            </summary>
+            <returns>
+            A string value containing the command line arguments to pass directly to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.ValidateParameters">
+            <summary>
+            Indicates whether all task paratmeters are valid.
+            </summary>
+            <returns>
+            true if all task parameters are valid; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.LogEventsFromTextOutput(System.String,Microsoft.Build.Framework.MessageImportance)">
+            <summary>
+            Logs the events from text output.
+            </summary>
+            <param name="singleLine">The single line.</param>
+            <param name="messageImportance">The message importance.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateFullPathToTool">
+            <summary>
+            Returns the fully qualified path to the executable file.
+            </summary>
+            <returns>
+            The fully qualified path to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.LogToolCommand(System.String)">
+            <summary>
+            Logs the starting point of the run to all registered loggers.
+            </summary>
+            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Command">
+            <summary>
+            Gets or sets the command.
+            </summary>
+            <value>The command.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Arguments">
+            <summary>
+            Gets or sets the arguments.
+            </summary>
+            <value>The arguments.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Username">
+            <summary>
+            Gets or sets the username.
+            </summary>
+            <value>The username.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Password">
+            <summary>
+            Gets or sets the password.
+            </summary>
+            <value>The password.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Verbose">
+            <summary>
+            Gets or sets the verbose.
+            </summary>
+            <value>The verbose.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Force">
+            <summary>
+            Gets or sets the force.
+            </summary>
+            <value>The force.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Message">
+            <summary>
+            Gets or sets the message.
+            </summary>
+            <value>The message.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.RepositoryPath">
+            <summary>
+            Gets or sets the repository path.
+            </summary>
+            <value>The repository path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.LocalPath">
+            <summary>
+            Gets or sets the local path.
+            </summary>
+            <value>The local path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Targets">
+            <summary>
+            Gets or sets the targets.
+            </summary>
+            <value>The targets.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Revision">
+            <summary>
+            Gets or sets the revision.
+            </summary>
+            <value>The revision.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.CommandSwitchs">
+            <summary>
+            Gets or sets the command switchs.
+            </summary>
+            <value>The command switchs.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.StandardOutputLoggingImportance">
+            <summary>
+            Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
+            </summary>
+            <value></value>
+            <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.ToolName">
+            <summary>
+            Gets the name of the executable file to run.
+            </summary>
+            <value></value>
+            <returns>The name of the executable file to run.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SvnInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.ResetMemberVariables">
+            <summary>
+            Reset all instance variables to their default (unset) state.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.ValidateParameters">
+            <summary>
+            Indicates whether all task paratmeters are valid.
+            </summary>
+            <returns>
+            true if all task parameters are valid; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.Execute">
+            <summary>
+            Execute the task.
+            </summary>
+            <returns>true if execution is successful, false if not.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.ExtractKeyValuePair(System.String,System.String@,System.String@)">
+            <summary>
+            "svn.exe info" prints out key/value pairs separated by a colon. 
+            </summary>
+            <param name="strLine">A line of text printed out by svn.exe</param>
+            <param name="strKey">The key string. empty if no key/value found.</param>
+            <param name="strValue">The value string. empty of no key/value found.</param>
+            <returns>true if a key/value pair found. false if not</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.ParseSvnDate(System.String)">
+            <summary>
+            Parse a subversion date/time value. They print out a date that
+            looks like this "2006-02-09 14:36:05 -0600 (Thu, 09 Feb 2006)" which
+            isn't directly parsable by the DateTime class.
+            </summary>
+            <param name="datetime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnInfo.LogEventsFromTextOutput(System.String,Microsoft.Build.Framework.MessageImportance)">
+            <summary>
+            Parse the text output from the command and log the lines.
+            </summary>
+            <param name="singleLine">One line of text output from the tool being run.</param>
+            <param name="messageImportance">The message importance.</param>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnInfo.RepositoryRoot">
+            <summary>
+            Return the repository root or null if not set by Subversion.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnInfo.RepositoryUuid">
+            <summary>
+            Return the repository UUID value from Subversion.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnInfo.NodeKind">
+            <summary>
+            The Subversion node kind.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnInfo.LastChangedAuthor">
+            <summary>
+            The author who last changed this node.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnInfo.LastChangedRev">
+            <summary>
+            The last changed revision number.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnInfo.LastChangedDate">
+            <summary>
+            The date this node was last changed.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnInfo.Schedule">
+            <summary>
+            The sch
+            </summary>
+        </member>
         <member name="T:MSBuild.Community.Tasks.Time">
             <summary>
             Gets the current date and time.
@@ -3848,151 +4130,6 @@
             </Target>
             ]]></code>
             </example>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.Subversion.SvnClient">
-            <summary>
-            Subversion client base class
-            </summary>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:SvnClient"/> class.
-            </summary>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateSvnCommand">
-            <summary>
-            Generates the SVN command.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateSvnArguments">
-            <summary>
-            Generates the SVN arguments.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateCommandLineCommands">
-            <summary>
-            Returns a string value containing the command line arguments to pass directly to the executable file.
-            </summary>
-            <returns>
-            A string value containing the command line arguments to pass directly to the executable file.
-            </returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.ValidateParameters">
-            <summary>
-            Indicates whether all task paratmeters are valid.
-            </summary>
-            <returns>
-            true if all task parameters are valid; otherwise, false.
-            </returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.LogEventsFromTextOutput(System.String,Microsoft.Build.Framework.MessageImportance)">
-            <summary>
-            Logs the events from text output.
-            </summary>
-            <param name="singleLine">The single line.</param>
-            <param name="messageImportance">The message importance.</param>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateFullPathToTool">
-            <summary>
-            Returns the fully qualified path to the executable file.
-            </summary>
-            <returns>
-            The fully qualified path to the executable file.
-            </returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.LogToolCommand(System.String)">
-            <summary>
-            Logs the starting point of the run to all registered loggers.
-            </summary>
-            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Command">
-            <summary>
-            Gets or sets the command.
-            </summary>
-            <value>The command.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Arguments">
-            <summary>
-            Gets or sets the arguments.
-            </summary>
-            <value>The arguments.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Username">
-            <summary>
-            Gets or sets the username.
-            </summary>
-            <value>The username.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Password">
-            <summary>
-            Gets or sets the password.
-            </summary>
-            <value>The password.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Verbose">
-            <summary>
-            Gets or sets the verbose.
-            </summary>
-            <value>The verbose.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Force">
-            <summary>
-            Gets or sets the force.
-            </summary>
-            <value>The force.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Message">
-            <summary>
-            Gets or sets the message.
-            </summary>
-            <value>The message.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.RepositoryPath">
-            <summary>
-            Gets or sets the repository path.
-            </summary>
-            <value>The repository path.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.LocalPath">
-            <summary>
-            Gets or sets the local path.
-            </summary>
-            <value>The local path.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Targets">
-            <summary>
-            Gets or sets the targets.
-            </summary>
-            <value>The targets.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Revision">
-            <summary>
-            Gets or sets the revision.
-            </summary>
-            <value>The revision.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.CommandSwitchs">
-            <summary>
-            Gets or sets the command switchs.
-            </summary>
-            <value>The command switchs.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.StandardOutputLoggingImportance">
-            <summary>
-            Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
-            </summary>
-            <value></value>
-            <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.ToolName">
-            <summary>
-            Gets the name of the executable file to run.
-            </summary>
-            <value></value>
-            <returns>The name of the executable file to run.</returns>
         </member>
         <member name="M:MSBuild.Community.Tasks.Subversion.SvnCheckout.#ctor">
             <summary>
