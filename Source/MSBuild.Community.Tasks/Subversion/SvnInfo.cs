@@ -187,7 +187,7 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <summary>
         /// The Subversion node kind.
         /// </summary>
-        /// <enum cref="NodeKind"/>
+        /// <enum cref="MSBuild.Community.Tasks.Subversion.NodeKind"/>
         [Output]
         public string NodeKind
         {
@@ -236,7 +236,7 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <summary>
         /// The Subversion schedule type.
         /// </summary>
-        /// <enum cref="Schedule"/>
+        /// <enum cref="MSBuild.Community.Tasks.Subversion.Schedule"/>
         [Output]
         public string Schedule
         {
