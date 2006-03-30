@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Build.Framework;
+
+// $Id: SvnCheckout.cs 102 2006-01-09 18:01:13Z iko $
 
 namespace MSBuild.Community.Tasks.Subversion
 {
@@ -58,7 +61,7 @@ namespace MSBuild.Community.Tasks.Subversion
     {
         private string m_strRepositoryRoot;
         private Guid m_Guid;
-        private NodeKind m_eNodeKind = NodeKind.unknown;
+        private NodeKind m_eNodeKind = Subversion.NodeKind.unknown;
         private string m_strLastChangedAuthor;
         private int m_nLastChangedRev;
         private System.DateTime m_LastChangedDate;
@@ -81,11 +84,11 @@ namespace MSBuild.Community.Tasks.Subversion
             RepositoryPath = string.Empty;
             m_strRepositoryRoot = string.Empty;
             m_Guid = Guid.Empty;
-            m_eNodeKind = NodeKind.unknown;
+            m_eNodeKind = Subversion.NodeKind.unknown;
             m_strLastChangedAuthor = string.Empty;
             m_nLastChangedRev = 0;
             m_LastChangedDate = DateTime.Now;
-            m_eSchedule = Schedule.unknown;
+            m_eSchedule = Subversion.Schedule.unknown;
         }
 
 
@@ -99,7 +102,7 @@ namespace MSBuild.Community.Tasks.Subversion
         {
             if (string.IsNullOrEmpty(base.LocalPath))
             {
-                Log.LogError("SvnInfo", "LocalPath");
+                Log.LogError(Properties.Resources.ParameterRequired, "SvnInfo", "LocalPath");
                 return false;
             }
             return base.ValidateParameters();
@@ -160,6 +163,7 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <summary>
         /// Return the repository root or null if not set by Subversion.
         /// </summary>
+        [Output]
         public string RepositoryRoot
         {
             get
@@ -171,28 +175,32 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <summary>
         /// Return the repository UUID value from Subversion.
         /// </summary>
-        public Guid RepositoryUuid
+        [Output]
+        public string RepositoryUuid
         {
             get
             {
-                return m_Guid;
+                return m_Guid.ToString();
             }
         }
 
         /// <summary>
         /// The Subversion node kind.
         /// </summary>
-        public NodeKind NodeKind
+        /// <enum cref="NodeKind"/>
+        [Output]
+        public string NodeKind
         {
             get
             {
-                return m_eNodeKind;
+                return m_eNodeKind.ToString();
             }
         }
 
         /// <summary>
         /// The author who last changed this node.
         /// </summary>
+        [Output]
         public string LastChangedAuthor
         {
             get
@@ -204,7 +212,8 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <summary>
         /// The last changed revision number.
         /// </summary>
-        public int LastChangedRev
+        [Output]
+        public int LastChangedRevision
         {
             get
             {
@@ -215,22 +224,25 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <summary>
         /// The date this node was last changed.
         /// </summary>
-        public System.DateTime LastChangedDate
+        [Output]
+        public string LastChangedDate
         {
             get
             {
-                return m_LastChangedDate;
+                return m_LastChangedDate.ToString();
             }
         }
 
         /// <summary>
-        /// The sch
+        /// The Subversion schedule type.
         /// </summary>
-        public Schedule Schedule
+        /// <enum cref="Schedule"/>
+        [Output]
+        public string Schedule
         {
             get
             {
-                return m_eSchedule;
+                return m_eSchedule.ToString();
             }
         }
 
@@ -299,9 +311,9 @@ namespace MSBuild.Community.Tasks.Subversion
                 }
                 else if (key == "Schedule")
                 {
-                    if (value == Schedule.normal.ToString())
+                    if (value == Subversion.Schedule.normal.ToString())
                     {
-                        m_eSchedule = Schedule.normal;
+                        m_eSchedule = Subversion.Schedule.normal;
                     }
                     else
                     {
@@ -310,13 +322,13 @@ namespace MSBuild.Community.Tasks.Subversion
                 }
                 else if (key == "Node Kind")
                 {
-                    if (value == NodeKind.directory.ToString())
+                    if (value == Subversion.NodeKind.directory.ToString())
                     {
-                        m_eNodeKind = NodeKind.directory;
+                        m_eNodeKind = Subversion.NodeKind.directory;
                     }
-                    else if (value == NodeKind.file.ToString())
+                    else if (value == Subversion.NodeKind.file.ToString())
                     {
-                        m_eNodeKind = NodeKind.file;
+                        m_eNodeKind = Subversion.NodeKind.file;
                     }
                     else
                     {

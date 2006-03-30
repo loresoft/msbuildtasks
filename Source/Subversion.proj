@@ -6,61 +6,80 @@
     <LastUpdate>Dienstag, 10. Januar 2006</LastUpdate>
     <TestUpdate>Test from Task.proj</TestUpdate>
   </PropertyGroup>
-  
+
   <Import Project="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
-  
+
   <Target Name="Version">
     <SvnVersion LocalPath="$(MSBuildProjectDirectory)">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnVersion>
-    
+
     <Message Text="Revision: $(Revision)" />
   </Target>
-  
+
   <Target Name="Export">
     <MakeDir Directories="$(MSBuildProjectDirectory)\Test" />
     <RemoveDir Directories="$(MSBuildProjectDirectory)\Test\Export" />
-    
+
     <SvnExport RepositoryPath="file:///d:/svn/repo/Test/trunk" 
                LocalPath="$(MSBuildProjectDirectory)\Test\Export">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnExport>
-    
+
     <Message Text="Revision: $(Revision)" />
   </Target>
-  
+
   <Target Name="Checkout">
     <RemoveDir Directories="$(MSBuildProjectDirectory)\Test\Checkout" />
-    
+
     <SvnCheckout RepositoryPath="file:///d:/svn/repo/Test/trunk" 
                  LocalPath="$(MSBuildProjectDirectory)\Test\Checkout">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnCheckout>
-    
+
     <Message Text="Revision: $(Revision)" />
   </Target>
-  
+
   <Target Name="Update" DependsOnTargets="Checkout">
     <SvnUpdate LocalPath="$(MSBuildProjectDirectory)\Test\Checkout">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnUpdate>
     <Message Text="Revision: $(Revision)" />
   </Target>
-  
+
   <ItemGroup>
     <CommitFiles Include="$(MSBuildProjectDirectory)\Test\Checkout\test.txt" />
     <CommitFiles Include="$(MSBuildProjectDirectory)\Test\Checkout\Blah.txt" />
   </ItemGroup>
-  
+
   <Target Name="Commit" DependsOnTargets="Checkout">
     <WriteLinesToFile File="$(MSBuildProjectDirectory)\Test\Checkout\test.txt" Lines="This is a test append." />
     <WriteLinesToFile File="$(MSBuildProjectDirectory)\Test\Checkout\Blah.txt" Lines="This is a test append." />
-    
+
     <SvnCommit Targets="@(CommitFiles)" Message="Auto commit from MSBuild.">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnCommit>
-    
+
     <Message Text="Revision: $(Revision)" />
+  </Target>
+
+  <Target Name="Info" DependsOnTargets="Checkout">
+    <SvnInfo LocalPath=".">
+      <Output TaskParameter="RepositoryRoot" PropertyName="RepositoryRoot" />
+      <Output TaskParameter="LastChangedAuthor" PropertyName="LastChangedAuthor" />
+      <Output TaskParameter="LastChangedRevision" PropertyName="LastChangedRevision" />
+      <Output TaskParameter="LastChangedDate" PropertyName="LastChangedDate" />
+      <Output TaskParameter="Schedule" PropertyName="Schedule" />
+      <Output TaskParameter="NodeKind" PropertyName="NodeKind" />
+      <Output TaskParameter="RepositoryUuid" PropertyName="RepositoryUuid" />
+    </SvnInfo>
+    <Message Text="RepositoryRoot: $(RepositoryRoot)" />
+    <Message Text="LastChangedAuthor: $(LastChangedAuthor)" />
+    <Message Text="LastChangedRevision: $(LastChangedRevision)" />
+    <Message Text="LastChangedDate: $(LastChangedDate)" />
+    <Message Text="Schedule: $(Schedule)" />
+    <Message Text="NodeKind: $(NodeKind)" />
+    <Message Text="RepositoryUuid: $(RepositoryUuid)" />
   </Target>
 
   <Target Name="All">
