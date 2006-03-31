@@ -71,6 +71,8 @@
               Compressed="yes" Vital="yes" Source="..\..\Build\MSBuild.Community.Tasks.Targets" />
         <File Id="F_MSBUIL_XML" Name="MSBUIL_1.XML" LongName="MSBuild.Community.Tasks.xml" 
               Compressed="yes" Source="..\..\Build\MSBuild.Community.Tasks.xml" />
+        <File Id="F_SAMPLE_PRJ" Name="SAMPLE.PRJ" LongName="Sample.proj" 
+              Compressed="yes" Source="..\Sample.proj" />
       </Component>
 
       <Component Id="C_SCHEMA" DiskId="1" Guid="F22319C9-7937-47bb-968B-CA3939299FE1">

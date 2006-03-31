@@ -2823,6 +2823,161 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="SvnInfo" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Run the "svn info" command and parse the output</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Arguments" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the arguments.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Command" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the command.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="Force" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the force.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="LastChangedAuthor" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The author who last changed this node.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="LastChangedDate" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The date this node was last changed.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="LastChangedRevision" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The last changed revision number.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="LocalPath" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the local path.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Message" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the message.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NodeKind" type="msb:NodeKindType">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The Subversion node kind.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the password.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="RepositoryPath" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the repository path.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="RepositoryRoot" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Return the repository root or null if not set by Subversion.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="RepositoryUuid" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Return the repository UUID value from Subversion.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Revision" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the revision.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Schedule" type="msb:ScheduleType">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] The Subversion schedule type.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Targets" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the targets.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="Username" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the username.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Verbose" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the verbose.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="NodeKindType">
+    <xs:union memberTypes="msb:non_empty_string">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="file">
+            <xs:annotation>
+              <xs:documentation>
+            Node is a file
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="directory">
+            <xs:annotation>
+              <xs:documentation>
+            Node is a directory
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="unknown">
+            <xs:annotation>
+              <xs:documentation>
+            Unknown node type
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="ScheduleType">
+    <xs:union memberTypes="msb:non_empty_string">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="normal">
+            <xs:annotation>
+              <xs:documentation>
+            Normal schedule
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="unknown">
+            <xs:annotation>
+              <xs:documentation>
+            Unknown schedule.
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
   <xs:element name="SvnUpdate" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Subversion Update command</xs:documentation>
