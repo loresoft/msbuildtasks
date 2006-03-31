@@ -24,6 +24,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild Scripts", "MSBuild Scripts", "{0D470952-AD01-4FD8-ACAA-9340AF1A6674}"
 	ProjectSection(SolutionItems) = preProject
 		FxCop.proj = FxCop.proj
+		Sample.proj = Sample.proj
 		Script.proj = Script.proj
 		Services.proj = Services.proj
 		Sleep.proj = Sleep.proj
