@@ -44,7 +44,16 @@ namespace MSBuild.Community.Tasks
 	/// Task that can determine the status of a specified service
 	/// on a target server.
 	/// </summary>
-	public class ServiceQuery : Task
+    /// <example>
+    /// <para>Check status of SQL Server</para>
+    /// <code><![CDATA[
+    /// <ServiceQuery ServiceName="MSSQLServer">
+    ///     <Output TaskParameter="Status" PropertyName="ResultStatus" />
+    /// </ServiceQuery>
+    /// <Message Text="MSSQLServer Service Status: $(ResultStatus)"/>
+    /// ]]></code>
+    /// </example>
+    public class ServiceQuery : Task
 	{
 		#region Constants
 
@@ -99,7 +108,7 @@ namespace MSBuild.Community.Tasks
 		/// <summary>
 		/// Gets or sets the status.
 		/// </summary>
-		/// <value>The status.</value>
+		/// <value>The status of the service.</value>
 		[Output]
 		public string Status
 		{

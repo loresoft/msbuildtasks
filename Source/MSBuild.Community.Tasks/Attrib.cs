@@ -43,6 +43,23 @@ namespace MSBuild.Community.Tasks
     /// <summary>
     /// Changes the attributes of files and/or directories
     /// </summary>
+    /// <example>
+    /// <para>Make file Readonly, Hidden and System.</para>
+    /// <code><![CDATA[
+    /// <Attrib Files="Test\version.txt" 
+    ///     ReadOnly="true" Hidden="true" System="true"/>
+    /// ]]></code>
+    /// <para>Clear Hidden and System attributes.</para>
+    /// <code><![CDATA[
+    /// <Attrib Files="Test\version.txt" 
+    ///     Hidden="false" System="false"/>
+    /// ]]></code>
+    /// <para>Make file Normal.</para>
+    /// <code><![CDATA[
+    /// <Attrib Files="Test\version.txt" 
+    ///     Normal="true"/>
+    /// ]]></code>
+    /// </example>
     public class Attrib : Task
     {
         #region Properties

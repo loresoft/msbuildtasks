@@ -13,6 +13,7 @@
     </namespaces>
     <documenters>
         <documenter name="MSDN-CHM">
+            <property name="RootPageFileName" value=".\Overview.html" />
             <property name="SdkLinksOnWeb" value="True" />
             <property name="OutputDirectory" value=".\doc\" />
             <property name="HtmlHelpName" value="MSBuild Community Tasks" />

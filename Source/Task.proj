@@ -221,6 +221,21 @@
       Normal="true"/>
 
   </Target>
+
+  <Target Name="Move">
+    <MakeDir Directories="Test\Move" />
+    <WriteLinesToFile File="Test\MoveMe.txt" 
+      Lines="This File Will be moved." />
+    
+    <!-- Move File -->
+    <Move SourceFiles="Test\MoveMe.txt"
+      DestinationFolder="Test\Move" />
+
+    <!-- Rename File -->
+    <Move SourceFiles="Test\Move\MoveMe.txt"
+      DestinationFiles="Test\Move\Renamed.txt" />
+
+  </Target>
   
   <Target Name="All" 
           DependsOnTargets="AssemblyInfo;Mail;Zip;Unzip;Math;Version;NDoc;Registry;FTP;XML;NUnit;FileUpdate;Service;WebDownload">

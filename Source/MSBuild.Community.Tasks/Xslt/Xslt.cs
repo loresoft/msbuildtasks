@@ -82,9 +82,9 @@ namespace MSBuild.Community.Tasks
 	/// 
 	/// This examples shows all available task attributes:
 	/// <code><![CDATA[
-	/// <Timestamp Format="yyyyMMddHHmmss">
+	/// <Time Format="yyyyMMddHHmmss">
 	///     <Output TaskParameter="LocalTimestamp" PropertyName="buildDate" />
-	/// </Timestamp>
+	/// </Time>
 	/// 
 	/// <Xslt
 	///      Inputs="@(xmlfiles)"

@@ -38,7 +38,7 @@ using Microsoft.Build.Framework;
 namespace MSBuild.Community.Tasks.Vault
 {
     /// <summary>
-    /// TODO ...
+    /// TODO Not Complete ...
     /// </summary>
     public class VaultClient
     {

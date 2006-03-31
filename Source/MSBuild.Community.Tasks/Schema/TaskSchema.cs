@@ -41,6 +41,16 @@ namespace MSBuild.Community.Tasks.Schema
     /// <summary>
     /// A Task that generates a XSD schema of the tasks in an assembly.
     /// </summary>
+    /// <example>
+    /// <para>Creates schema for MSBuild Community Task project</para>
+    /// <code><![CDATA[
+    /// <TaskSchema Assemblies="Build\MSBuild.Community.Tasks.dll" 
+    ///     OutputPath="Build" 
+    ///     CreateTaskList="true" 
+    ///     IgnoreMsBuildSchema="true"
+    ///     Includes="Microsoft.Build.Commontypes.xsd"/>
+    /// ]]></code>
+    /// </example>
     public class TaskSchema : Task
     {
         private ITaskItem[] assemblies;

@@ -49,7 +49,8 @@ namespace MSBuild.Community.Tasks
     /// to present the report as an HTML file. If the static anlysis fails,
     /// the build does not stop - this is controlled with the <c>FailOnError</c>
     /// parameter.</para>
-    /// <code><![CDATA[<FxCop 
+    /// <code><![CDATA[
+    /// <FxCop 
     ///   TargetAssemblies="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll"
     ///   RuleLibraries="@(FxCopRuleAssemblies)" 
     ///   AnalysisReportFileName="Test.html"

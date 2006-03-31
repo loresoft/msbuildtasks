@@ -44,7 +44,7 @@ namespace MSBuild.Community.Tasks
     /// </summary>
     /// <example>Causes the build to sleep for 300 milliseconds.
     /// <code><![CDATA[
-    /// <Sleep Milliseconds="200" />
+    /// <Sleep Milliseconds="300" />
     /// ]]></code>
     /// </example>
     public class Sleep : Task

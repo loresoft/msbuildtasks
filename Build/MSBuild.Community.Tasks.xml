@@ -8,10 +8,28 @@
             <summary>
             Generates an AssemblyInfo files
             </summary>
-            <example>Generates a common version file.
+            <example>
+            <para>Generates a common version file.</para>
             <code><![CDATA[
             <AssemblyInfo CodeLanguage="CS"  
                 OutputFile="VersionInfo.cs" 
+                AssemblyVersion="1.0.0.0" 
+                AssemblyFileVersion="1.0.0.0" />
+            ]]></code>
+            <para>Generates a complete version file.</para>
+            <code><![CDATA[
+            <AssemblyInfo CodeLanguage="CS"  
+                OutputFile="$(MSBuildProjectDirectory)\Test\GlobalInfo.cs" 
+                AssemblyTitle="AssemblyInfoTask" 
+                AssemblyDescription="AssemblyInfo Description"
+                AssemblyConfiguration=""
+                AssemblyCompany="Company Name, LLC"
+                AssemblyProduct="AssemblyInfoTask"
+                AssemblyCopyright="Copyright (c) Company Name, LLC 2006"
+                AssemblyTrademark=""
+                ComVisible="false"
+                CLSCompliant="true"
+                Guid="d038566a-1937-478a-b5c5-b79c4afb253d"
                 AssemblyVersion="1.0.0.0" 
                 AssemblyFileVersion="1.0.0.0" />
             ]]></code>
@@ -145,6 +163,23 @@
             <summary>
             Changes the attributes of files and/or directories
             </summary>
+            <example>
+            <para>Make file Readonly, Hidden and System.</para>
+            <code><![CDATA[
+            <Attrib Files="Test\version.txt" 
+                ReadOnly="true" Hidden="true" System="true"/>
+            ]]></code>
+            <para>Clear Hidden and System attributes.</para>
+            <code><![CDATA[
+            <Attrib Files="Test\version.txt" 
+                Hidden="false" System="false"/>
+            ]]></code>
+            <para>Make file Normal.</para>
+            <code><![CDATA[
+            <Attrib Files="Test\version.txt" 
+                Normal="true"/>
+            ]]></code>
+            </example>
         </member>
         <member name="M:MSBuild.Community.Tasks.Attrib.Execute">
             <summary>
@@ -528,6 +563,16 @@
             <summary>
             A Task that generates a XSD schema of the tasks in an assembly.
             </summary>
+            <example>
+            <para>Creates schema for MSBuild Community Task project</para>
+            <code><![CDATA[
+            <TaskSchema Assemblies="Build\MSBuild.Community.Tasks.dll" 
+                OutputPath="Build" 
+                CreateTaskList="true" 
+                IgnoreMsBuildSchema="true"
+                Includes="Microsoft.Build.Commontypes.xsd"/>
+            ]]></code>
+            </example>
         </member>
         <member name="M:MSBuild.Community.Tasks.Schema.TaskSchema.Execute">
             <summary>
@@ -1091,9 +1136,9 @@
              
              This examples shows all available task attributes:
              <code><![CDATA[
-             <Timestamp Format="yyyyMMddHHmmss">
+             <Time Format="yyyyMMddHHmmss">
                  <Output TaskParameter="LocalTimestamp" PropertyName="buildDate" />
-             </Timestamp>
+             </Time>
              
              <Xslt
                   Inputs="@(xmlfiles)"
@@ -1241,7 +1286,8 @@
             to present the report as an HTML file. If the static anlysis fails,
             the build does not stop - this is controlled with the <c>FailOnError</c>
             parameter.</para>
-            <code><![CDATA[<FxCop 
+            <code><![CDATA[
+            <FxCop 
               TargetAssemblies="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll"
               RuleLibraries="@(FxCopRuleAssemblies)" 
               AnalysisReportFileName="Test.html"
@@ -1598,12 +1644,27 @@
             <summary>
             Task that can control a Windows service.
             </summary>
+            <example>
+            <para>Restart Web Server</para>
+            <code><![CDATA[
+            <ServiceController ServiceName="w3svc" Action="Restart" />
+            ]]></code>
+            </example>
         </member>
         <member name="T:MSBuild.Community.Tasks.ServiceQuery">
             <summary>
             Task that can determine the status of a specified service
             on a target server.
             </summary>
+            <example>
+            <para>Check status of SQL Server</para>
+            <code><![CDATA[
+            <ServiceQuery ServiceName="MSSQLServer">
+                <Output TaskParameter="Status" PropertyName="ResultStatus" />
+            </ServiceQuery>
+            <Message Text="MSSQLServer Service Status: $(ResultStatus)"/>
+            ]]></code>
+            </example>
         </member>
         <member name="F:MSBuild.Community.Tasks.ServiceQuery.UNKNOWN_STATUS">
             <summary>
@@ -1646,7 +1707,7 @@
             <summary>
             Gets or sets the status.
             </summary>
-            <value>The status.</value>
+            <value>The status of the service.</value>
         </member>
         <member name="P:MSBuild.Community.Tasks.ServiceQuery.CanPauseAndContinue">
             <summary>
@@ -2928,6 +2989,18 @@
             <summary>
             Moves files on the filesystem to a new location.
             </summary>
+            <example>
+            <para>Move a file to another folder</para>
+            <code><![CDATA[
+            <Move SourceFiles="Test\MoveMe.txt"
+                DestinationFolder="Test\Move" />
+            ]]></code>
+            <para>Rename a file</para>
+            <code><![CDATA[
+            <Move SourceFiles="Test\Move\MoveMe.txt"
+                DestinationFiles="Test\Move\Renamed.txt" />
+            ]]></code>
+            </example>
         </member>
         <member name="M:MSBuild.Community.Tasks.Move.Execute">
             <summary>
@@ -3612,18 +3685,20 @@
             </summary>
             <example>
             <para>Simple script that writes to the console</para>
-            <code>
+            <code><![CDATA[
             <PropertyGroup>
-              <Code>
-                <![CDATA[
-                  public static void ScriptMain() {
-                    Console.WriteLine("Hello MSBuild Community Scripting World.");
-                  }
-                ]]>
-              </Code>
+                <HelloCode>
+                    <![CDATA[
+                    public static void ScriptMain() {
+                        Console.WriteLine("Hello MSBuild Community Scripting World.");
+                    }
+                    ]] >
+                </HelloCode>
             </PropertyGroup>
-            <Script Language="C#" Code="$(Code)" />
-            </code>
+            <Target Name="Hello">
+                <Script Language="C#" Code="$(HelloCode)" />
+            </Target>
+            ]]></code>
             </example>
         </member>
         <member name="M:MSBuild.Community.Tasks.Script.Execute">
@@ -3673,7 +3748,7 @@
             </summary>
             <example>Causes the build to sleep for 300 milliseconds.
             <code><![CDATA[
-            <Sleep Milliseconds="200" />
+            <Sleep Milliseconds="300" />
             ]]></code>
             </example>
         </member>
@@ -4346,7 +4421,7 @@
         </member>
         <member name="T:MSBuild.Community.Tasks.Vault.VaultClient">
             <summary>
-            TODO ...
+            TODO Not Complete ...
             </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.Version">

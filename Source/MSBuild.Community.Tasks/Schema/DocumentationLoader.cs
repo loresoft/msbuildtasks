@@ -136,9 +136,9 @@ namespace MSBuild.Community.Tasks.Schema
                     // get cref attribute
                     string enumTypeName = enumElement.GetAttribute("cref");
                     if (String.IsNullOrEmpty(enumTypeName))
-                        throw new ArgumentException("Missing cref attribute in enum");
+                        return null;
                     if (!enumTypeName.StartsWith("T"))
-                        throw new ArgumentException("cref value must be a type");
+                        return null;
 
                     enumTypeName = enumTypeName.Substring(2).Trim();
                     // do we have an assembly name ?

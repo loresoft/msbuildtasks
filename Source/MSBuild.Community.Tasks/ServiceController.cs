@@ -76,7 +76,13 @@ namespace MSBuild.Community.Tasks
     /// <summary>
 	/// Task that can control a Windows service.
 	/// </summary>
-	public class ServiceController : ServiceQuery
+    /// <example>
+    /// <para>Restart Web Server</para>
+    /// <code><![CDATA[
+    /// <ServiceController ServiceName="w3svc" Action="Restart" />
+    /// ]]></code>
+    /// </example>
+    public class ServiceController : ServiceQuery
 	{
 
 		#region Constructor
@@ -97,7 +103,7 @@ namespace MSBuild.Community.Tasks
         /// Gets or sets the <see cref="T:ServiceActions"/> to perform on the service.
 		/// </summary>
 		/// <value>The action to perform on the service.</value>
-        /// <enum cref="ServiceActions"/>
+        /// <enum cref="MSBuild.Community.Tasks.ServiceActions"/>
 		[Required]
 		public string Action
 		{

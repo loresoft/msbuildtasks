@@ -107,7 +107,7 @@
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="Zip">
-		<Message Text="CodeSmith Build Complete"/>
+		<Message Text="Build Complete"/>
 	</Target>
 
   <Target Name="Nightly" DependsOnTargets="Build">

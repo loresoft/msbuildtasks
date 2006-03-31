@@ -50,18 +50,20 @@ namespace MSBuild.Community.Tasks
 	/// </summary>
 	/// <example>
 	/// <para>Simple script that writes to the console</para>
-	/// <code>
-	/// <PropertyGroup>
-	///   <Code>
-	///     <![CDATA[
-	///       public static void ScriptMain() {
-	///         Console.WriteLine("Hello MSBuild Community Scripting World.");
-	///       }
-	///     ]]>
-	///   </Code>
-	/// </PropertyGroup>
-	/// <Script Language="C#" Code="$(Code)" />
-	/// </code>
+    /// <code><![CDATA[
+    /// <PropertyGroup>
+    ///     <HelloCode>
+    ///         <![CDATA[
+    ///         public static void ScriptMain() {
+    ///             Console.WriteLine("Hello MSBuild Community Scripting World.");
+    ///         }
+    ///         ]] >
+    ///     </HelloCode>
+    /// </PropertyGroup>
+    /// <Target Name="Hello">
+    ///     <Script Language="C#" Code="$(HelloCode)" />
+    /// </Target>
+    /// ]]></code>
 	/// </example>
 	public class Script : Task
 	{

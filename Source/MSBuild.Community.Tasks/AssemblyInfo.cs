@@ -43,10 +43,28 @@ namespace MSBuild.Community.Tasks
     /// <summary>
     /// Generates an AssemblyInfo files
     /// </summary>
-    /// <example>Generates a common version file.
+    /// <example>
+    /// <para>Generates a common version file.</para>
     /// <code><![CDATA[
     /// <AssemblyInfo CodeLanguage="CS"  
     ///     OutputFile="VersionInfo.cs" 
+    ///     AssemblyVersion="1.0.0.0" 
+    ///     AssemblyFileVersion="1.0.0.0" />
+    /// ]]></code>
+    /// <para>Generates a complete version file.</para>
+    /// <code><![CDATA[
+    /// <AssemblyInfo CodeLanguage="CS"  
+    ///     OutputFile="$(MSBuildProjectDirectory)\Test\GlobalInfo.cs" 
+    ///     AssemblyTitle="AssemblyInfoTask" 
+    ///     AssemblyDescription="AssemblyInfo Description"
+    ///     AssemblyConfiguration=""
+    ///     AssemblyCompany="Company Name, LLC"
+    ///     AssemblyProduct="AssemblyInfoTask"
+    ///     AssemblyCopyright="Copyright (c) Company Name, LLC 2006"
+    ///     AssemblyTrademark=""
+    ///     ComVisible="false"
+    ///     CLSCompliant="true"
+    ///     Guid="d038566a-1937-478a-b5c5-b79c4afb253d"
     ///     AssemblyVersion="1.0.0.0" 
     ///     AssemblyFileVersion="1.0.0.0" />
     /// ]]></code>

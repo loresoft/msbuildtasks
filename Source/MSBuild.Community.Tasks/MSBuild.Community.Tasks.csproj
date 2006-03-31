@@ -127,7 +127,6 @@
     <None Include="MSBuild.Community.Tasks.snk" />
     <Content Include="MSBuild.Community.Tasks.xsd">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="MSBuild.Community.Tasks.Targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

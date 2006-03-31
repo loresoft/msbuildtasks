@@ -43,6 +43,18 @@ namespace MSBuild.Community.Tasks
     /// <summary>
     /// Moves files on the filesystem to a new location.
     /// </summary>
+    /// <example>
+    /// <para>Move a file to another folder</para>
+    /// <code><![CDATA[
+    /// <Move SourceFiles="Test\MoveMe.txt"
+    ///     DestinationFolder="Test\Move" />
+    /// ]]></code>
+    /// <para>Rename a file</para>
+    /// <code><![CDATA[
+    /// <Move SourceFiles="Test\Move\MoveMe.txt"
+    ///     DestinationFiles="Test\Move\Renamed.txt" />
+    /// ]]></code>
+    /// </example>
     public class Move : Task
     {
         #region Properties
