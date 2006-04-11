@@ -1,73 +1,56 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<!-- $Id: MSBuild.Community.Tasks.Targets 139 2006-03-26 13:34:13Z cmumford $ -->
-
-	<PropertyGroup>
-		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
-		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
-	</PropertyGroup>
-  
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.AssemblyInfo" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Attrib" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.ExecuteSQL" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.FileUpdate" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.FtpUpload" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.FxCop" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.ILMerge" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Mail" />
-  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Move" />
-
-  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Math.Add" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Math.Divide" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Math.Multiple" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Math.Subtract" />
-
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.NDoc" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.NUnit" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.RegistryRead" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.RegistryWrite" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Script" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.ServiceController" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.ServiceQuery" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Sleep" />
-
-  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Schema.TaskSchema" />
-
-  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.SourceSafe.VssAdd" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.SourceSafe.VssCheckin" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.SourceSafe.VssCheckout" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.SourceSafe.VssClean" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.SourceSafe.VssDiff" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.SourceSafe.VssGet" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.SourceSafe.VssHistory" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.SourceSafe.VssLabel" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.SourceSafe.VssUndoCheckout" />
-
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Subversion.SvnCheckout" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Subversion.SvnClient" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Subversion.SvnCommit" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Subversion.SvnExport" />
-  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Subversion.SvnInfo" />
-  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Subversion.SvnUpdate" />
-  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Subversion.SvnVersion" />
-
-  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Time" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Unzip" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Version" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.WebDownload" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.XmlRead" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.XmlUpdate" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Xslt" />
-	<UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Zip" />
-
-	<ItemGroup>
-		<FxCopRuleAssemblies Include="UsageRules.dll"/>
-		<FxCopRuleAssemblies Include="SecurityRules.dll"/>
-		<FxCopRuleAssemblies Include="PortabilityRules.dll"/>
-		<FxCopRuleAssemblies Include="PerformanceRules.dll"/>
-		<FxCopRuleAssemblies Include="MobilityRules.dll"/>
-		<FxCopRuleAssemblies Include="InteroperabilityRules.dll"/>
-		<FxCopRuleAssemblies Include="GlobalizationRules.dll"/>
-		<FxCopRuleAssemblies Include="DesignRules.dll"/>
-	</ItemGroup>
+  <UsingTask TaskName="MSBuild.Community.Tasks.AssemblyInfo" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Attrib" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.FileUpdate" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.FtpUpload" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.FxCop" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.IIS.AppPoolController" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.IIS.AppPoolCreate" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.IIS.AppPoolDelete" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.IIS.WebDirectoryCreate" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.IIS.WebDirectoryDelete" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.ILMerge" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Mail" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Math.Add" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Math.Divide" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Math.Multiple" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Math.Subtract" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Move" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.NDoc" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.NUnit" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.RegexMatch" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.RegexReplace" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.RegistryRead" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.RegistryWrite" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Schema.TaskSchema" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Script" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.ServiceController" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.ServiceQuery" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Sleep" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssAdd" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssCheckin" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssCheckout" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssClean" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssDiff" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssGet" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssHistory" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssLabel" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.SourceSafe.VssUndoCheckout" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.SqlExecute" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCheckout" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnClient" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnCommit" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnExport" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnInfo" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnUpdate" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Subversion.SvnVersion" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Time" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Unzip" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Version" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.WebDownload" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.XmlRead" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.XmlUpdate" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Xslt" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="MSBuild.Community.Tasks.dll" />
 </Project>

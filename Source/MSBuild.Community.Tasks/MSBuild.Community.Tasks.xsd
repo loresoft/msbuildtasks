@@ -1685,6 +1685,108 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="RegexMatch" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Task to filter an Input list with a Regex expression.
+            Output list contains items from Input list that matched given expression</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Expression" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Regex expression</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Input" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Input, list of items to perform the regex on</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Options" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Regex options as strings corresponding to the RegexOptions enum:
+                Compiled
+                CultureInvariant
+                ECMAScript 
+                ExplicitCapture
+                IgnoreCase
+                IgnorePatternWhitespace
+                Multiline
+                None
+                RightToLeft
+                Singleline</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Output" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Results of the Regex transformation.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RegexReplace" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Task to replace portions of strings within the Input list
+            Output list contains all the elements of the Input list after
+            performing the Regex Replace.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Count" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Number of matches to allow on each input item.
+            -1 indicates to perform matches on all matches within input item</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Expression" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Regex expression</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Input" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Input, list of items to perform the regex on</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Options" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Regex options as strings corresponding to the RegexOptions enum:
+                Compiled
+                CultureInvariant
+                ECMAScript 
+                ExplicitCapture
+                IgnoreCase
+                IgnorePatternWhitespace
+                Multiline
+                None
+                RightToLeft
+                Singleline</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Output" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Results of the Regex transformation.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Replacement" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] String replacing matching expression strings in input list.
+            If left empty matches in the input list are removed (replaced with empty string)</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StartAt" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Position within the input item to start matching</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="RegistryRead" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Reads a value from the Registry</xs:documentation>

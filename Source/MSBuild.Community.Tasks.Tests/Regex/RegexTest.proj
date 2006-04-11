@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--	
+	$Id$
+	Copyright © 2006 Andy Johns
+	MSBuild file to test RegexReplace and RegexMatch tasks 
+-->
+
+<Project DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildCommunityTasksPath)/MSBuild.Community.Tasks.Targets" />
+  
+  <ItemGroup>
+    <TestGroup Include="foo.my.foo.foo.test.o" />
+    <TestGroup Include="foo.my.faa.foo.test.a" />
+    <TestGroup Include="foo.my.fbb.foo.test.b" />
+    <TestGroup Include="foo.my.fcc.foo.test.c" />
+    <TestGroup Include="foo.my.fdd.foo.test.d" />
+    <TestGroup Include="foo.my.fee.foo.test.e" />
+    <TestGroup Include="foo.my.fff.foo.test.f" />
+  </ItemGroup>
+  
+  <Target Name="Test">
+    <Message Text="$(MSBuildCommunityTasksPath)"/>
+    <Message Text="Input:&#xA;@(TestGroup, '&#xA;')"/>
+    
+    <!-- Replaces first occurance of "foo." with empty string-->
+    <RegexReplace Input="@(TestGroup)" Expression="foo\." Replacement="" Count="1">
+      <Output ItemName ="ReplaceReturn1" TaskParameter="Output" />
+    </RegexReplace>
+    <Message Text="&#xA;Output Replace 1:&#xA;@(ReplaceReturn1, '&#xA;')" />
+
+    <!-- Replaces occurance of "foo." after character 6 with "oop." string-->
+    <RegexReplace Input="@(TestGroup)" Expression="foo\." Replacement="oop." Startat="6">
+      <Output ItemName ="ReplaceReturn2" TaskParameter="Output" />
+    </RegexReplace>
+    <Message Text="&#xA;Output Replace 2:&#xA;@(ReplaceReturn2, '&#xA;')" />
+
+    <!-- Replaces first occurance of "." with "!" starting from the right-->
+    <RegexReplace Input="@(TestGroup)" Expression="\." Replacement="!" Count="1" Options="RightToLeft">
+      <Output ItemName ="ReplaceReturn3" TaskParameter="Output" />
+    </RegexReplace>
+    <Message Text="&#xA;Output Replace 3:&#xA;@(ReplaceReturn3, '&#xA;')" />
+    
+    <!-- Outputs only items that end with a, b or c -->
+    <RegexMatch Input="@(TestGroup)" Expression="[a-c]$">
+      <Output ItemName ="MatchReturn" TaskParameter="Output" />
+    </RegexMatch>
+
+    <Message Text="&#xA;Output Match:&#xA;@(MatchReturn, '&#xA;')" />
+  </Target>
+</Project>

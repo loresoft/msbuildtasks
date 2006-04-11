@@ -534,6 +534,140 @@
             Gets the name of the executable file to run.
             </summary>
         </member>
+        <member name="T:MSBuild.Community.Tasks.RegexBase">
+            <summary>
+            Base class for Regex tasks
+            Handles public properties for Input, Expression, Options and Output
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexBase.Expression">
+            <summary>
+            Regex expression
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexBase.Input">
+            <summary>
+            Input, list of items to perform the regex on
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexBase.Options">
+            <summary>
+            Regex options as strings corresponding to the RegexOptions enum:
+                Compiled
+                CultureInvariant
+                ECMAScript 
+                ExplicitCapture
+                IgnoreCase
+                IgnorePatternWhitespace
+                Multiline
+                None
+                RightToLeft
+                Singleline
+            </summary>
+            <enum cref="T:System.Text.RegularExpressions.RegexOptions"/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexBase.Output">
+            <summary>
+            Results of the Regex transformation.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexBase.ExpressionOptions">
+            <summary>
+            Options converted to RegexOptions enum
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.RegexMatch">
+            <summary>
+            Task to filter an Input list with a Regex expression.
+            Output list contains items from Input list that matched given expression
+            </summary>
+            <example>Causes the build to sleep for 300 milliseconds.
+            <code><![CDATA[
+            <ItemGroup>
+               <TestGroup Include="foo.my.foo.foo.test.o" />
+               <TestGroup Include="foo.my.faa.foo.test.a" />
+               <TestGroup Include="foo.my.fbb.foo.test.b" />
+               <TestGroup Include="foo.my.fcc.foo.test.c" />
+               <TestGroup Include="foo.my.fdd.foo.test.d" />
+               <TestGroup Include="foo.my.fee.foo.test.e" />
+               <TestGroup Include="foo.my.fff.foo.test.f" />
+            </ItemGroup>
+            <Target Name="Test">
+               <!-- Outputs only items that end with a, b or c -->
+               <RegexMatch Input="@(TestGroup)" Expression="[a-c]$">
+                  <Output ItemName ="MatchReturn" TaskParameter="Output" />
+               </RegexMatch>
+               <Message Text="&#xA;Output Match:&#xA;@(MatchReturn, '&#xA;')" />
+            </Target>
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.RegexMatch.Execute">
+            <summary>
+            Performs the Match task
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.RegexReplace">
+            <summary>
+            Task to replace portions of strings within the Input list
+            Output list contains all the elements of the Input list after
+            performing the Regex Replace.
+            </summary>
+            <example>
+            1st example replaces first occurance of "foo." with empty string
+            2nd example replaces occurance of "foo." after character 6 with "oop." string
+            <code><![CDATA[
+            <ItemGroup>
+               <TestGroup Include="foo.my.foo.foo.test.o" />
+               <TestGroup Include="foo.my.faa.foo.test.a" />
+               <TestGroup Include="foo.my.fbb.foo.test.b" />
+               <TestGroup Include="foo.my.fcc.foo.test.c" />
+               <TestGroup Include="foo.my.fdd.foo.test.d" />
+               <TestGroup Include="foo.my.fee.foo.test.e" />
+               <TestGroup Include="foo.my.fff.foo.test.f" />
+            </ItemGroup>
+            <Target Name="Test">
+               <Message Text="Input:&#xA;@(TestGroup, '&#xA;')"/>
+               <!-- Replaces first occurance of "foo." with empty string-->
+               <RegexReplace Input="@(TestGroup)" Expression="foo\." Replacement="" Count="1">
+                  <Output ItemName ="ReplaceReturn1" TaskParameter="Output" />
+               </RegexReplace>
+               <Message Text="&#xA;Output Replace 1:&#xA;@(ReplaceReturn1, '&#xA;')" />
+               <!-- Replaces occurance of "foo." after character 6 with "oop." string-->
+               <RegexReplace Input="@(TestGroup)" Expression="foo\." Replacement="oop" Startat="6">
+                  <Output ItemName ="ReplaceReturn2" TaskParameter="Output" />
+               </RegexReplace>
+               <Message Text="&#xA;Output Replace 2:&#xA;@(ReplaceReturn2, '&#xA;')" />
+            </Target>
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.RegexReplace.Execute">
+            <summary>
+            Performs the Replace task
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexReplace.Replacement">
+            <summary>
+            String replacing matching expression strings in input list.
+            If left empty matches in the input list are removed (replaced with empty string)
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexReplace.Count">
+            <summary>
+            Number of matches to allow on each input item.
+            -1 indicates to perform matches on all matches within input item
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.RegexReplace.StartAt">
+            <summary>
+            Position within the input item to start matching
+            </summary>
+        </member>
         <member name="T:MSBuild.Community.Tasks.Schema.TaskListAssemblyFormatType">
             <summary>
             Different ways to specify the assembly in a UsingTask element.
