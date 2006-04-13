@@ -67,6 +67,7 @@
     <Compile Include="Schema\TaskSchema.cs" />
     <Compile Include="Schema\TaskSchemaAnalyser.cs" />
     <Compile Include="Schema\TaskVisitorBase.cs" />
+    <Compile Include="Solution\GetSolutionProjects.cs" />
     <Compile Include="Subversion\SvnInfo.cs" />
     <Compile Include="Time\Time.cs" />
     <Compile Include="Xslt\Xslt.cs" />

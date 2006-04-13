@@ -5,6 +5,7 @@
   <UsingTask TaskName="MSBuild.Community.Tasks.FileUpdate" AssemblyFile="MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.FtpUpload" AssemblyFile="MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.FxCop" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.GetSolutionProjects" AssemblyFile="MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.IIS.AppPoolController" AssemblyFile="MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.IIS.AppPoolCreate" AssemblyFile="MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.IIS.AppPoolDelete" AssemblyFile="MSBuild.Community.Tasks.dll" />

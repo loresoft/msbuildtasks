@@ -396,6 +396,15 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Solution file &quot;{0}&quot; not found..
+        /// </summary>
+        internal static string SolutionNotFound {
+            get {
+                return ResourceManager.GetString("SolutionNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LocalPath is not a working subversion copy..
         /// </summary>
         internal static string SvnLocalPathNotWorkCopy {

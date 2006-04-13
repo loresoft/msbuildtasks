@@ -55,6 +55,7 @@
     <Compile Include="Regex\RegexTest.cs" />
     <Compile Include="ServiceQueryTest.cs" />
     <Compile Include="ServiceControllerTest.cs" />
+    <Compile Include="Solution\GetSolutionProjectsTest.cs" />
     <Compile Include="Subversion\SvnInfoTest.cs" />
     <Compile Include="Time\TimeTest.cs" />
     <Compile Include="WebDownloadTest.cs" />
@@ -96,10 +97,14 @@
     </Content>
     <None Include="ILMerge\ILMergeTest.proj" />
     <None Include="Regex\RegexTest.proj" />
+    <None Include="Solution\GetSolutionProjectsTest.proj" />
     <None Include="Time\TimeTest.proj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ILMerge\ExcludeTypes.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Solution\TestSolution.sln">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Xslt\XsltTestInput.xml">

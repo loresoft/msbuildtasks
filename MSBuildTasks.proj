@@ -276,9 +276,13 @@
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Time\TimeTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
 
-    <MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Regex\RegexTest.proj"
+        <MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Regex\RegexTest.proj"
+		       Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
+
+        <MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Solution\GetSolutionProjectsTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
-  </Target>
+
+    </Target>
 
 	<!-- Execute and report the NUnit and msbuild .proj tests -->
 	<Target Name="test" DependsOnTargets="test-nunit; test-proj">

@@ -581,7 +581,7 @@
             Task to filter an Input list with a Regex expression.
             Output list contains items from Input list that matched given expression
             </summary>
-            <example>Causes the build to sleep for 300 milliseconds.
+            <example>Matches from TestGroup those names ending in a, b or c
             <code><![CDATA[
             <ItemGroup>
                <TestGroup Include="foo.my.foo.foo.test.o" />
@@ -764,6 +764,41 @@
         <member name="P:MSBuild.Community.Tasks.Schema.TaskSchema.Includes">
             <summary>
             Gets or sets a list of included schemas
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.GetSolutionProjects">
+            <summary>
+            Task to get paths to projects and project names from VS2005 solution file
+            </summary>
+            <example>
+            Returns project name and relative path from test solution
+            <code><![CDATA[
+              <Target Name="Test">
+                  <GetSolutionProjects Solution="TestSolution.sln">
+                      <Output ItemName="ProjectFiles" TaskParameter="Output"/>
+                  </GetSolutionProjects>
+            
+                <Message Text="Solution Project paths:" />
+                <Message Text="%(ProjectFiles.ProjectName) : @(ProjectFiles)" />
+              </Target>
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.GetSolutionProjects.Execute">
+            <summary>
+            Perform task
+            </summary>
+            <returns>true on success</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.GetSolutionProjects.Output">
+            <summary>
+            Output list contains TaskItems of project filenames contained within the given solution.
+            Metadata tag "ProjectName" contains name of project.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.GetSolutionProjects.Solution">
+            <summary>
+            Name of Solution to get Projects from
             </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.Subversion.NodeKind">
@@ -3578,6 +3613,11 @@
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ServiceStopping">
             <summary>
               Looks up a localized string similar to {0} service is stopping ....
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.SolutionNotFound">
+            <summary>
+              Looks up a localized string similar to Solution file &quot;{0}&quot; not found..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.SvnLocalPathNotWorkCopy">

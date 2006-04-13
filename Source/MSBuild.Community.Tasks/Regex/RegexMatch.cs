@@ -42,7 +42,7 @@ namespace MSBuild.Community.Tasks
     /// Task to filter an Input list with a Regex expression.
     /// Output list contains items from Input list that matched given expression
     /// </summary>
-    /// <example>Causes the build to sleep for 300 milliseconds.
+    /// <example>Matches from TestGroup those names ending in a, b or c
     /// <code><![CDATA[
     /// <ItemGroup>
     ///    <TestGroup Include="foo.my.foo.foo.test.o" />

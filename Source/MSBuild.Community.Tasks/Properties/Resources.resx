@@ -230,6 +230,9 @@
   <data name="ServiceStopping" xml:space="preserve">
     <value>{0} service is stopping ...</value>
   </data>
+  <data name="SolutionNotFound" xml:space="preserve">
+    <value>Solution file "{0}" not found.</value>
+  </data>
   <data name="SvnLocalPathNotWorkCopy" xml:space="preserve">
     <value>LocalPath is not a working subversion copy.</value>
   </data>

@@ -360,6 +360,28 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetSolutionProjects" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Task to get paths to projects and project names from VS2005 solution file</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Output" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Output list contains TaskItems of project filenames contained within the given solution.
+            Metadata tag "ProjectName" contains name of project.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Solution" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Name of Solution to get Projects from</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="AppPoolController" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Allows control for an application pool on a local or remote machine with IIS installed.  The default is 
