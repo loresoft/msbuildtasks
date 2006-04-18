@@ -115,7 +115,7 @@ namespace MSBuild.Community.Tasks.Tests
 			AssertResults(task, PUBLIC_COUNT, VERSION_A);
 		}
 
-		[Test(Description = "Internalize all byt primary assembly types")]
+		[Test(Description = "Internalize all but primary assembly types")]
 		public void PrimaryTypesOnly()
 		{
 			if (!ilMergeAvailable) Assert.Ignore(@"ILMerge.exe not available");
@@ -204,7 +204,7 @@ namespace MSBuild.Community.Tasks.Tests
 			Assert.IsTrue(File.Exists(task.OutputFile.ItemSpec), @"No merged assembly");
 			string pdbFile = Path.ChangeExtension(task.OutputFile.ItemSpec, "pdb"); 
 			Assert.AreEqual(task.DebugInfo, File.Exists(pdbFile), @"No debug file");
-			string xmlFile = Path.ChangeExtension(task.OutputFile.ItemSpec, "doc");
+			string xmlFile = Path.ChangeExtension(task.OutputFile.ItemSpec, @"xml");
 			Assert.AreEqual(task.XmlDocumentation, File.Exists(xmlFile), @"No xml documentation file");
 
 			Assembly merge = Assembly.LoadFile(task.OutputFile.ItemSpec);
