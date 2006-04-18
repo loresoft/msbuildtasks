@@ -252,7 +252,7 @@
              It is available <a href="http://research.microsoft.com/~mbarnett/ILMerge.aspx">here</a>.
              </para>
              <para>
-             The command line options "/wildcards" and "/lib" of ILMerge is not supported,
+             The command line options "/wildcards" and "/lib" of ILMerge are not supported,
              because MSBuild is in charge of expanding wildcards for item groups.
              </para>
              </remarks>

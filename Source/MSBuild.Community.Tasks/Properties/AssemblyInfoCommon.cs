@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © 2005 Paul Welter")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
-[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.1.0.152")]
+[assembly: AssemblyFileVersion("1.1.0.152")]
 
 
