@@ -34,6 +34,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
+using Microsoft.Win32;
 
 // $Id$
 
@@ -387,7 +388,30 @@ namespace MSBuild.Community.Tasks.Subversion
 		/// <returns>The name of the executable file to run.</returns>
 		protected override string ToolName
 		{
-			get { return "svn.exe"; }
+            get
+            {
+                RegistryKey hklm = Registry.CurrentUser;
+                RegistryKey key = hklm.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\svn.exe", false);
+                if (key != null)
+                {
+                    object obj = key.GetValue(null);	// Default value
+                    return (string)obj;
+                }
+                else
+                {
+                    // Not in the registry
+                    const string defaultPath = "C:\\Program Files\\Subversion\\bin\\svn.exe";
+                    if (File.Exists(defaultPath))
+                    {
+                        return defaultPath;
+                    }
+                    else
+                    {
+                        // Let's hope it's in the path
+                        return "svn.exe";
+                    }
+                }
+            }
 		}
 
 		#endregion Task Overrides
