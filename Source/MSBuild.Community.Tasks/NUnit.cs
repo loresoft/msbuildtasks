@@ -45,7 +45,7 @@ namespace MSBuild.Community.Tasks
 	/// <example>Run NUnit tests.
 	/// <code><![CDATA[
 	/// <ItemGroup>
-	///     <TestAssembly Include="C:\Program Files\NUnit 2.2.3\bin\*.tests.dll" />
+	///     <TestAssembly Include="C:\Program Files\NUnit 2.2.7\bin\*.tests.dll" />
 	/// </ItemGroup>
 	/// <Target Name="NUnit">
 	///     <NUnit Assemblies="@(TestAssembly)" />
@@ -58,9 +58,9 @@ namespace MSBuild.Community.Tasks
 
 		/// <summary>
 		/// The default relative path of the NUnit installation.
-		/// The value is <c>@"NUnit-Net-2.0 2.2.5\bin"</c>.
+		/// The value is <c>@"NUnit-Net-2.0 2.2.7\bin"</c>.
 		/// </summary>
-		public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit-Net-2.0 2.2.5\bin";
+		public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit-Net-2.0 2.2.7\bin";
 
 		#endregion Constants
 
@@ -260,7 +260,7 @@ namespace MSBuild.Community.Tasks
 		/// <returns>The name of the executable file to run.</returns>
 		protected override string ToolName
 		{
-			get { return "nunit-console.exe"; }
+			get { return @"nunit-console.exe"; }
 		}
 
 		/// <summary>

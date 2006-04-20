@@ -291,12 +291,12 @@
 	<Target Name="doc" DependsOnTargets="build">
 		<NDoc Documenter="MSDN" 
 			ProjectFilePath="MSBuild.Community.Tasks.ndoc" 
-			WorkingDirectory="$(docRoot)" 
+			WorkingDirectory="$(docRoot)"
 			ToolPath="$(ndocPath)"
 			/>
 
-		<Copy SourceFiles="$(docRoot)\doc\MSBuild.Community.Tasks.chm" 
-			DestinationFolder="$(docRoot)" />
+		<Copy SourceFiles="$(docRoot)\doc\Documentation.chm"
+			DestinationFiles="$(docRoot)\MSBuild.Community.Tasks.chm" />
 
 		<RemoveDir Directories="$(docRoot)\doc" />
 

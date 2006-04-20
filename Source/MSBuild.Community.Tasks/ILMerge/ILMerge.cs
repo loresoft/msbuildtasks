@@ -383,7 +383,7 @@ namespace MSBuild.Community.Tasks
 		/// </summary>
 		protected override string ToolName
 		{
-			get { return "ILMerge.exe"; }
+			get { return @"ILMerge.exe"; }
 		}
 
 		/// <summary>
