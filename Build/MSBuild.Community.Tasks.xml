@@ -3304,7 +3304,7 @@
             <example>Run NUnit tests.
             <code><![CDATA[
             <ItemGroup>
-                <TestAssembly Include="C:\Program Files\NUnit 2.2.3\bin\*.tests.dll" />
+                <TestAssembly Include="C:\Program Files\NUnit 2.2.7\bin\*.tests.dll" />
             </ItemGroup>
             <Target Name="NUnit">
                 <NUnit Assemblies="@(TestAssembly)" />
@@ -3315,7 +3315,7 @@
         <member name="F:MSBuild.Community.Tasks.NUnit.DEFAULT_NUNIT_DIRECTORY">
             <summary>
             The default relative path of the NUnit installation.
-            The value is <c>@"NUnit-Net-2.0 2.2.5\bin"</c>.
+            The value is <c>@"NUnit-Net-2.0 2.2.7\bin"</c>.
             </summary>
         </member>
         <member name="M:MSBuild.Community.Tasks.NUnit.#ctor">
