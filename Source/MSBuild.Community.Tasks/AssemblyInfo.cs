@@ -265,10 +265,10 @@ namespace MSBuild.Community.Tasks
         /// <summary>
         /// Gets or sets the assembly delay sign value.
         /// </summary>
-        public string AssemblyDelaySign
+        public bool AssemblyDelaySign
         {
-            get { return ReadAttribute("AssemblyDelaySign"); }
-            set { _attributes["AssemblyDelaySign"] = value; }
+            get { return ReadBooleanAttribute("AssemblyDelaySign"); }
+            set { _attributes["AssemblyDelaySign"] = value.ToString(); }
         }
 
         #endregion Input Parameters
@@ -352,7 +352,9 @@ namespace MSBuild.Community.Tasks
 
                 bool typedValue;
 
-                if ((assemblyAttribute.Key == "CLSCompliant" || assemblyAttribute.Key == "ComVisible")
+                if ((assemblyAttribute.Key == "CLSCompliant" ||
+                     assemblyAttribute.Key == "AssemblyDelaySign" || 
+                     assemblyAttribute.Key == "ComVisible")
                     && bool.TryParse(assemblyAttribute.Value, out typedValue))
                 {
                     codeAttributeDeclaration.Arguments.Add(new CodeAttributeArgument(new CodePrimitiveExpression(typedValue)));
