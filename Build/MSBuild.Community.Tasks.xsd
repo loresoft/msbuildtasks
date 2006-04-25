@@ -28,7 +28,7 @@
               <xs:documentation>[Optional] Gets or sets the assembly culture.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="AssemblyDelaySign" type="xs:string">
+          <xs:attribute name="AssemblyDelaySign" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the assembly delay sign value.</xs:documentation>
             </xs:annotation>
