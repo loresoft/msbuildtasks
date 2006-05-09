@@ -23,7 +23,6 @@ namespace MSBuild.Community.Tasks
 	/// The xml files of parameter <see cref="Inputs"/>
 	/// are merged into one xml document,
 	/// wrapped with a root tag <see cref="RootTag"/>
-	/// (defaults to <see cref="DEFAULT_ROOT_TAG"/>).
 	/// </p>
 	/// <p>
 	/// If only one input file is provided,
@@ -99,12 +98,6 @@ namespace MSBuild.Community.Tasks
 		#region Constants
 
 		/// <summary>
-		/// The default value for <see cref="RootTag"/>.
-		/// The value is <c>"mergedroot"</c>.
-		/// </summary>
-		public const string DEFAULT_ROOT_TAG = @"mergedroot";
-
-		/// <summary>
 		/// The name of the default attribute
 		/// of the <see cref="RootTag"/>.
 		/// The value is <c>"created"</c>,
@@ -116,7 +109,7 @@ namespace MSBuild.Community.Tasks
 
 		#region Fields
 		private ITaskItem[] inputs;
-		private string rootTag = DEFAULT_ROOT_TAG;
+		private string rootTag;
 		private string rootAttributes;
 		private ITaskItem xsl;
 		private string output;

@@ -26,7 +26,7 @@ namespace MSBuild.Community.Tasks.Tests
 
             // assert default values
             Assert.IsNull(task.Inputs, @"Wrong default inputs");
-            Assert.AreEqual(Xslt.DEFAULT_ROOT_TAG, task.RootTag, @"Wrong default root tag");
+            Assert.IsNull(task.RootTag, @"Wrong default root tag");
             Assert.IsNull(task.RootAttributes, @"Wrong default root attributes");
             Assert.IsNull(task.Xsl, @"Wrong default xsl");
             Assert.IsNull(task.Output, @"Wrong default output");
@@ -66,7 +66,7 @@ namespace MSBuild.Community.Tasks.Tests
             task.Output = Path.Combine(testDir, @"XsltTestOutput.html");
 
             Assert.IsNotNull(task.Inputs, @"No inputs");
-            Assert.AreEqual(Xslt.DEFAULT_ROOT_TAG, task.RootTag, @"Wrong default root tag");
+            Assert.IsNull(task.RootTag, @"Wrong default root tag");
             Assert.IsNull(task.RootAttributes, @"Wrong default root attributes");
             Assert.IsNotNull(task.Xsl, @"No xsl");
             Assert.IsNotNull(task.Output, @"No output");

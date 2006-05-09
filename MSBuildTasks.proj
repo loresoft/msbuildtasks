@@ -259,7 +259,8 @@
 	<Target Name="test-report" >
 		<Xslt Inputs="@(nunitFiles -> '$(testDir)\%(filename)$(nunitPostfix)')"
 			Xsl="@(nunitReportXslFile)" 
-			Output="$(testDir)\TestReport.html" />
+			Output="$(testDir)\TestReport.html" 
+			RootTag="mergedroot" />
 	</Target>
 
 	<!-- Execute tests with msbuild .proj files -->
