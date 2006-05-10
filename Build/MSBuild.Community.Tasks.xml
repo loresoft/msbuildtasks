@@ -1246,7 +1246,6 @@
              The xml files of parameter <see cref="P:MSBuild.Community.Tasks.Xslt.Inputs"/>
              are merged into one xml document,
              wrapped with a root tag <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/>
-             (defaults to <see cref="F:MSBuild.Community.Tasks.Xslt.DEFAULT_ROOT_TAG"/>).
              </p>
              <p>
              If only one input file is provided,
@@ -1317,12 +1316,6 @@
                   Output="report.html"
              />]]></code>
              </example>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.Xslt.DEFAULT_ROOT_TAG">
-            <summary>
-            The default value for <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/>.
-            The value is <c>"mergedroot"</c>.
-            </summary>
         </member>
         <member name="F:MSBuild.Community.Tasks.Xslt.CREATED_ATTRIBUTE">
             <summary>
