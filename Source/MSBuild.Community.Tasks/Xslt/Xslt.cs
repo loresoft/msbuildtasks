@@ -75,6 +75,7 @@ namespace MSBuild.Community.Tasks
 	///
 	/// <Target Name="test-report" >
 	///     <Xslt Inputs="@(nunitFiles)"
+	///         RootTag="mergedroot"
 	///         Xsl="@(nunitReportXslFile)" 
 	///         Output="$(testDir)\TestReport.html" />
 	/// </Target>]]></code>
