@@ -58,11 +58,12 @@ Before writing your own task
       the default target "build" is executed
       and should yield "Build succeeded".
 
-    - Run "msbuild MSBuildTasks.proj /p:devel=true /t:test" to run the NUnit test suite;
+    - Run "msbuild MSBuildTasks.proj /p:devel=true /p:nunitpath=c:\tools\nunit\bin /t:test" to run the NUnit test suite;
       "Build succeeded." indicates that the tests have been executed successfully.
       /p:devel=true is necessary when you want to work with 
       the assemblies of your own build, for example because
       you did not run the installer of MSBuildCommunityTasks yet.
+      /p:nunitpath must point to the bin folder of your local installation of NUnit 2.2.x
 
     - Open <msbuildtasks>\Debug\test\TestReport.html
       and check the test results.

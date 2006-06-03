@@ -1,0 +1,71 @@
+?<?xml version="1.0" encoding="utf-8"?>
+<!--	
+	$Id$
+	MSBuild file to test the IIS tasks
+	/p:withIIS = true
+	expects $(testDir) is set by caller
+-->
+
+<Project InitialTargets="buildinfo" DefaultTargets="test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+	</PropertyGroup>
+
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+	<Target Name="buildinfo">
+		<Message Text="MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
+		<Message Text="MSBuildBinPath: $(MSBuildBinPath)" />
+		<Message Text="MSBuildExtensionsPath: $(MSBuildExtensionsPath)" />
+
+		<Time Format="yyyy/MM/dd HH:mm:ss" >
+			<Output TaskParameter="FormattedTime" PropertyName="BuildDate" />
+		</Time>
+		<Message Text="Build date: $(BuildDate)" />
+	</Target>
+
+	<PropertyGroup>
+		<TestWebPath>$(testdir)\web</TestWebPath>
+		<TestWebName>CreatedByMSBuildTask</TestWebName>
+	</PropertyGroup>
+	
+	<Target Name="createWeb">
+		<RemoveDir Directories="$(TestWebPath)" />
+		<MakeDir Directories="$(TestWebPath)" />
+		<WebDirectoryCreate VirtualDirectoryName="$(TestWebName)" VirtualDirectoryPhysicalPath="$(TestWebPath)" AuthAnonymous="True" />
+	</Target>
+
+	<Target Name="modifyWeb">
+		<WebDirectorySetting VirtualDirectoryName="$(TestWebName)" SettingName="AuthAnonymous">
+			<Output TaskParameter="SettingValue" PropertyName="BeforeAnonymousEnabled" />
+		</WebDirectorySetting>
+		<Message Text="BEFORE: Anonymous authentication enabled: $(BeforeAnonymousEnabled)" />
+
+		<WebDirectorySetting VirtualDirectoryName="$(TestWebName)" SettingName="AuthAnonymous" SettingValue="False">
+			<Output TaskParameter="SettingValue" PropertyName="OutputAnonymousEnabled" />
+		</WebDirectorySetting>
+		<Message Text="Output from modify: $(OutputAnonymousEnabled)" />
+
+		<WebDirectorySetting VirtualDirectoryName="$(TestWebName)" SettingName="AuthAnonymous">
+			<Output TaskParameter="SettingValue" PropertyName="AfterAnonymousEnabled" />
+		</WebDirectorySetting>
+		<Message Text="AFTER: Anonymous authentication enabled: $(AfterAnonymousEnabled)" />
+	</Target>
+
+	<Target Name="queryWeb">
+		<WebDirectorySetting VirtualDirectoryName="$(TestWebName)" SettingName="DefaultDoc">
+			<Output TaskParameter="SettingValue" PropertyName="DefaultDocument" />
+		</WebDirectorySetting>
+		<Message Text="Default document is: $(DefaultDocument)" />
+	</Target>
+
+	<Target Name="deleteWeb">
+		<WebDirectoryDelete VirtualDirectoryName="$(TestWebName)" />
+		<RemoveDir Directories="$(TestWebPath)" />
+	</Target>
+
+	<Target Name="test" DependsOnTargets="createWeb;modifyWeb;queryWeb;deleteWeb" Condition="'$(withIIS)'!='' AND '$(testDir)' != '' ">
+	</Target>
+
+</Project>

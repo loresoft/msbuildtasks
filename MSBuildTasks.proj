@@ -265,7 +265,8 @@
 
 	<!-- Execute tests with msbuild .proj files -->
 	<!-- If ILMerge is available on the testing machine,
-		 call with "/p:withILMerge=true" in order to include ILMerge tests -->
+		 call with "/p:withILMerge=true" in order to include ILMerge tests
+		 call with "/p:withIIS=true" in order to include IIS tests -->
 	<Target Name="test-proj" DependsOnTargets="build;test-content">
 		<Message Text="=======================================================================================" />
 		<Message Text="Test Proj &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;" />
@@ -282,6 +283,9 @@
 
         <MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Solution\GetSolutionProjectsTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
+
+		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\IIS\IISTest.proj"
+		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests;withIIS=$(withIIS)"/>
 
     </Target>
 

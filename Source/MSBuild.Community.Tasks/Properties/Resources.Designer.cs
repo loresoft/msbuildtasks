@@ -515,6 +515,42 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Web directory {0} does not exist on {1}..
+        /// </summary>
+        internal static string WebDirectoryInvalidDirectory {
+            get {
+                return ResourceManager.GetString("WebDirectoryInvalidDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web directory {0} on {1} does not have a setting called {2}..
+        /// </summary>
+        internal static string WebDirectorySettingInvalidSetting {
+            get {
+                return ResourceManager.GetString("WebDirectorySettingInvalidSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reading {0} property of web directory {1} on {2}..
+        /// </summary>
+        internal static string WebDirectorySettingStatusRead {
+            get {
+                return ResourceManager.GetString("WebDirectorySettingStatusRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting {0} property of web directory {1} on {2}..
+        /// </summary>
+        internal static string WebDirectorySettingStatusSet {
+            get {
+                return ResourceManager.GetString("WebDirectorySettingStatusSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reading Xml Document &quot;{0}&quot;..
         /// </summary>
         internal static string XmlReadDocument {

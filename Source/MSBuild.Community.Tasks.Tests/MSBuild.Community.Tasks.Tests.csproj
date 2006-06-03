@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfoTest.cs" />
     <Compile Include="AttribTest.cs" />
+    <Compile Include="IIS\WebDirectorySettingTest.cs" />
     <Compile Include="ILMerge\ILMergeTest.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="FileUpdateTest.cs" />
