@@ -159,7 +159,7 @@ namespace MSBuild.Community.Tasks.Tests
 					iisRegKey.Close();
 				}
 			}
-			catch (Exception e)
+			catch ()
 			{
 				iisExists = false;
 			}
