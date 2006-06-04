@@ -60,6 +60,8 @@
     <Compile Include="Attrib.cs" />
     <Compile Include="IIS\WebDirectorySetting.cs" />
     <Compile Include="ILMerge\ILMerge.cs" />
+    <Compile Include="Install\InstallAssembly.cs" />
+    <Compile Include="Install\UninstallAssembly.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regex\RegexBase.cs" />
     <Compile Include="Regex\RegexMatch.cs" />

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	$id$
+	MSBuild file to test the Install tasks
+-->
+<Project InitialTargets="buildinfo" DefaultTargets="test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+	</PropertyGroup>
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+	<Target Name="buildinfo">
+		<Message Text="MSBuildProjectFullPath: $(MSBuildProjectFullPath)" />
+		<Message Text="MSBuildBinPath: $(MSBuildBinPath)" />
+		<Message Text="MSBuildExtensionsPath: $(MSBuildExtensionsPath)" />
+
+		<Time Format="yyyy/MM/dd HH:mm:ss" >
+			<Output TaskParameter="FormattedTime" PropertyName="BuildDate" />
+		</Time>
+		<Message Text="Build date: $(BuildDate)" />
+	</Target>
+
+	<Target Name="test" DependsOnTargets="install;uninstall" />
+
+  
+  <Target Name="install">
+		<InstallAssembly AssemblyFiles="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" LogFile=" "/>
+	</Target>
+
+	<Target Name="uninstall">
+		<UninstallAssembly AssemblyFiles="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll" LogFile=" "/>
+	</Target>
+
+</Project>

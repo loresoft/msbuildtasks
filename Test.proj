@@ -249,6 +249,10 @@
     <Sleep Milliseconds="200" />
   </Target>
   
+  <Target Name="Install">
+	<MSBuild Projects="Source\MSBuild.Community.Tasks.Tests\Install\InstallTest.proj" Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)" />
+  </Target>
+  
   <Target Name="All">
     
     <CallTarget Targets="AssemblyInfo" />
@@ -271,6 +275,7 @@
     <CallTarget Targets="Attrib" />
     <CallTarget Targets="DoScript" />
     <CallTarget Targets="Sleep" />
+    <CallTarget Targets="Install" />
 
   </Target>
 </Project>

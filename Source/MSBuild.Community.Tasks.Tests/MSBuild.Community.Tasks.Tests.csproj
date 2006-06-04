@@ -45,6 +45,8 @@
     <Compile Include="AttribTest.cs" />
     <Compile Include="IIS\WebDirectorySettingTest.cs" />
     <Compile Include="ILMerge\ILMergeTest.cs" />
+    <Compile Include="Install\InstallAssemblyTest.cs" />
+    <Compile Include="Install\UninstallAssemblyTest.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="FileUpdateTest.cs" />
     <Compile Include="IIS\AppPoolControllerTest.cs" />
@@ -96,7 +98,9 @@
     <Content Include="ILMerge\keypair.snk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="IIS\IISTest.proj" />
     <None Include="ILMerge\ILMergeTest.proj" />
+    <None Include="Install\InstallTest.proj" />
     <None Include="Regex\RegexTest.proj" />
     <None Include="Solution\GetSolutionProjectsTest.proj" />
     <None Include="Time\TimeTest.proj" />
