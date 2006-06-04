@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Tasks;
 using Microsoft.Build.Utilities;
+using Microsoft.Win32;
 using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
@@ -123,6 +124,49 @@ namespace MSBuild.Community.Tasks.Tests
             return testDir.Substring(0, foundIndex);
 
         }
+    	
+    	/// <summary>
+		/// Determines if IIS is installed on the machine.
+    	/// </summary>
+    	/// <param name="machineName">Machine to test if IIS is installed.</param>
+    	/// <returns>True if installed, false if not.</returns>
+    	public static bool isIISInstalled(string machineName)
+    	{
+    		bool iisExists = false;
+			string iisRegKeyName = @"SYSTEM\CurrentControlSet\Services\W3SVC\Parameters";
+			RegistryKey iisRegKey;
+    		
+			try
+			{
+				if (machineName == "localhost")
+				{
+					iisRegKey = Registry.LocalMachine.OpenSubKey(iisRegKeyName);
+				}
+				else
+				{
+					iisRegKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, machineName).OpenSubKey(iisRegKeyName);
+				}
+
+				if (iisRegKey != null)
+				{
+					object oValue1 = iisRegKey.GetValue("MajorVersion");
+					object oValue2 = iisRegKey.GetValue("MinorVersion");
+					if (oValue1 != null && oValue2 != null)
+					{
+						iisExists = true;
+					}
+					
+					iisRegKey.Close();
+				}
+			}
+			catch (Exception e)
+			{
+				iisExists = false;
+			}
+
+			return iisExists;
+		}
+    	
         #endregion NUnit Environment Info
     }
 }
