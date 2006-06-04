@@ -13,8 +13,8 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	{
 		private string mVirtualDirectoryName = "VirDirTest";
 		private string mServer = "fenway";
-		private string mWAMUsername = "testuser";
-		private string mWAMPassword = "password";
+		// private string mWAMUsername = "testuser";
+		// private string mWAMPassword = "password";
 
 		[Test]
 		public void WebDirectoryDeleteLocal()
@@ -45,8 +45,8 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			task.BuildEngine = new MockBuild();
 			task.ServerName = mServer;
 			task.VirtualDirectoryName = mVirtualDirectoryName;
-			//			task.Username = mWAMUsername;
-			//			task.Password = mWAMPassword;
+			// task.Username = mWAMUsername;
+			// task.Password = mWAMPassword;
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 	}

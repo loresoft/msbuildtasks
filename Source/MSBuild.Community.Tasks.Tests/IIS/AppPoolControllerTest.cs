@@ -11,30 +11,25 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	public class AppPoolControllerTest
 	{
 		private string mAppPoolName = "TestAppPool";
-		private string mServer = "fenway";
-        private bool gotInitializationError = false;
+		private string mServer = "localhost";
 
 		[TestFixtureSetUp]
 		public void TestFixtureInitilize()
 		{
 			Console.WriteLine("Setting up test objects...");
 
+			if (!TaskUtility.isIISInstalled(mServer))
+			{
+				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+			}
+			
 			AppPoolCreate task = new AppPoolCreate();
 			task.BuildEngine = new MockBuild();
 			task.ApplicationPoolName = mAppPoolName;
 			task.ServerName = mServer;
 			task.Execute();
 
-            gotInitializationError = task.Log.HasLoggedErrors;
-			
 			Console.WriteLine("TestFixture SetUp is complete.");
-        }
-
-        [SetUp]
-        public void TestSetUp() {
-            if (gotInitializationError) {
-                Assert.Ignore(@"AppPoolCreate failed. IIS server missing?");
-            }
         }
 
 		[TestFixtureTearDown]

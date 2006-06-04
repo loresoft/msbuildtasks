@@ -12,8 +12,8 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	{
 		private string mAppPoolName = "AppPoolTest";
 		private string mServer = "fenway";
-		private string mWAMUsername = "testuser";
-		private string mWAMPassword = "password";
+		// private string mWAMUsername = "testuser";
+		// private string mWAMPassword = "password";
 		
 		[Test]
 		public void AppPoolCreateLocal()
@@ -46,8 +46,8 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			task.ApplicationPoolName = mAppPoolName;
 			task.PeriodicRestartSchedule = "08:00, 20:00";
 			task.AppPoolIdentityType = 3;
-			//			task.WAMUserName = mWAMUsername
-			//			task.WAMUserPass = mWAMPassword
+			// task.WAMUserName = mWAMUsername
+			// task.WAMUserPass = mWAMPassword
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 	}

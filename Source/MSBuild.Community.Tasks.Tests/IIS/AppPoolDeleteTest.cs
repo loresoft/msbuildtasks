@@ -12,8 +12,8 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	{
 		private string mAppPoolName = "AppPoolTest";
 		private string mServer = "fenway";
-		private string mWAMUsername = "testuser";
-		private string mWAMPassword = "password";
+		// private string mWAMUsername = "testuser";
+		// private string mWAMPassword = "password";
 		
 		[Test]
 		public void AppPoolDeleteLocal()
@@ -44,8 +44,8 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			task.BuildEngine = new MockBuild();
 			task.ServerName = mServer;
 			task.ApplicationPoolName = mAppPoolName;
-			//			task.Username = mWAMUsername;
-			//			task.Password = mWAMPassword;
+			// task.Username = mWAMUsername;
+			// task.Password = mWAMPassword;
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 	}

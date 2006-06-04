@@ -14,8 +14,8 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 		private string mVirtualDirectoryName = "VirDirTest";
 		private string mVirtualDirectoryPhysicalPath = @"C:\Inetpub\MSBuildDir";
 		private string mServer = "fenway";
-		private string mWAMUsername = "testuser";
-		private string mWAMPassword = "password";
+		// private string mWAMUsername = "testuser";
+		// private string mWAMPassword = "password";
 		
 		[Test]
 		public void WebDirectoryCreateLocal()
@@ -48,8 +48,8 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			task.ServerName = mServer;
 			task.VirtualDirectoryName = mVirtualDirectoryName;
 			task.VirtualDirectoryPhysicalPath = mVirtualDirectoryPhysicalPath;
-			//			task.Username = mWAMUsername;
-			//			task.Password = mWAMPassword;
+			// task.Username = mWAMUsername;
+			// task.Password = mWAMPassword;
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 	}
