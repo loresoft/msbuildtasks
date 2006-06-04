@@ -11,24 +11,45 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	[TestFixture]
 	public class WebDirectoryCreateTest
 	{
+		private string mVirtualDirectoryName = "VirDirTest";
+		private string mVirtualDirectoryPhysicalPath = @"C:\Inetpub\MSBuildDir";
+		private string mServer = "fenway";
+		private string mWAMUsername = "testuser";
+		private string mWAMPassword = "password";
+		
 		[Test]
-		public void WebDirectoryCreateExecute()
+		public void WebDirectoryCreateLocal()
 		{
 			// Local machine test
+			mServer = "localhost";
+			if (!TaskUtility.isIISInstalled(mServer))
+			{
+				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+			}
+			
 			WebDirectoryCreate task = new WebDirectoryCreate();
 			task.BuildEngine = new MockBuild();
-			task.VirtualDirectoryName = "VirDirTest";
-			task.VirtualDirectoryPhysicalPath = @"C:\Inetpub\MSBuildDir";
+			task.VirtualDirectoryName = mVirtualDirectoryName;
+			task.VirtualDirectoryPhysicalPath = mVirtualDirectoryPhysicalPath;
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
-
+		}
+		
+		[Test]
+		public void WebDirectoryCreateRemote()
+		{
 			// Remote machine test
-			task = new WebDirectoryCreate();
+			if (!TaskUtility.isIISInstalled(mServer))
+			{
+				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+			}
+			
+			WebDirectoryCreate task = new WebDirectoryCreate();
 			task.BuildEngine = new MockBuild();
-			task.ServerName = "fenway";
-			task.VirtualDirectoryName = "VirDirTest";
-			task.VirtualDirectoryPhysicalPath = @"C:\Inetpub\MSBuildDir";
-			//			task.Username = "testuser";
-			//			task.Password = "password";
+			task.ServerName = mServer;
+			task.VirtualDirectoryName = mVirtualDirectoryName;
+			task.VirtualDirectoryPhysicalPath = mVirtualDirectoryPhysicalPath;
+			//			task.Username = mWAMUsername;
+			//			task.Password = mWAMPassword;
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 	}

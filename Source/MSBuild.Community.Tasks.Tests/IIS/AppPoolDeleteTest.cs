@@ -10,22 +10,42 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	[TestFixture]
 	public class AppPoolDeleteTest
 	{
+		private string mAppPoolName = "AppPoolTest";
+		private string mServer = "fenway";
+		private string mWAMUsername = "testuser";
+		private string mWAMPassword = "password";
+		
 		[Test]
-		public void AppPoolDeleteExecute()
+		public void AppPoolDeleteLocal()
 		{
-			// Local machine test on Win XP Pro - IIS 5 (should fail)
+			// Local machine test
+			mServer = "localhost";
+			if (!TaskUtility.isIISInstalled(mServer))
+			{
+				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+			}
+			
 			AppPoolDelete task = new AppPoolDelete();
 			task.BuildEngine = new MockBuild();
-			task.ApplicationPoolName = "AppPoolTest";
+			task.ApplicationPoolName = mAppPoolName;
 			Assert.IsFalse(task.Execute(), "Execute Failed!");
-
-			// Remote machine test - Windows Server 2003 - IIS 6 (should pass)
-			task = new AppPoolDelete();
+		}
+		
+		[Test]
+		public void AppPoolDeleteRemote()
+		{
+			// Remote machine test
+			if (!TaskUtility.isIISInstalled(mServer))
+			{
+				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+			}
+			
+			AppPoolDelete task = new AppPoolDelete();
 			task.BuildEngine = new MockBuild();
-			task.ServerName = "fenway";
-			task.ApplicationPoolName = "AppPoolTest";
-			//			task.Username = "testuser";
-			//			task.Password = "password";
+			task.ServerName = mServer;
+			task.ApplicationPoolName = mAppPoolName;
+			//			task.Username = mWAMUsername;
+			//			task.Password = mWAMPassword;
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 	}

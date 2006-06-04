@@ -11,22 +11,42 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	[TestFixture]
 	public class WebDirectoryDeleteTest
 	{
+		private string mVirtualDirectoryName = "VirDirTest";
+		private string mServer = "fenway";
+		private string mWAMUsername = "testuser";
+		private string mWAMPassword = "password";
+
 		[Test]
-		public void WebDirectoryDeleteExecute()
+		public void WebDirectoryDeleteLocal()
 		{
 			// Local machine test
+			mServer = "localhost";
+			if (!TaskUtility.isIISInstalled(mServer))
+			{
+				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+			}
+			
 			WebDirectoryDelete task = new WebDirectoryDelete();
 			task.BuildEngine = new MockBuild();
-			task.VirtualDirectoryName = "VirDirTest";
+			task.VirtualDirectoryName = mVirtualDirectoryName;
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
-
+		}
+		
+		[Test]
+		public void WebDirectoryDeleteRemote()
+		{
 			// Remote machine test
-			task = new WebDirectoryDelete();
+			if (!TaskUtility.isIISInstalled(mServer))
+			{
+				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+			}
+			
+			WebDirectoryDelete task = new WebDirectoryDelete();
 			task.BuildEngine = new MockBuild();
-			task.ServerName = "fenway";
-			task.VirtualDirectoryName = "VirDirTest";
-			//			task.Username = "testuser";
-			//			task.Password = "password";
+			task.ServerName = mServer;
+			task.VirtualDirectoryName = mVirtualDirectoryName;
+			//			task.Username = mWAMUsername;
+			//			task.Password = mWAMPassword;
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 	}
