@@ -86,7 +86,7 @@ namespace MSBuild.Community.Tasks.Vault
 				{
 					if (SelectRepository(Repository))
 					{
-						CheckOut(Path);
+						Checkout(Path);
 					}
 					else
 					{
@@ -119,7 +119,7 @@ namespace MSBuild.Community.Tasks.Vault
 		/// Retrieves the specified file.
 		/// </summary>
 		/// <exception>Exception</exception>
-		private void CheckOut(string fileName)
+		private void Checkout(string fileName)
 		{
 			string normalizedPath = RepositoryPath.NormalizeFolder(fileName);
 

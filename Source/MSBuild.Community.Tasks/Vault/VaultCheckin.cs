@@ -98,7 +98,7 @@ namespace MSBuild.Community.Tasks.Vault
 				{
 					if (SelectRepository(Repository))
 					{
-						CheckInFile(Path);
+						Checkin(Path);
 					}
 					else
 					{
@@ -131,7 +131,7 @@ namespace MSBuild.Community.Tasks.Vault
 		/// Checks the specified file or folder into the repository.
 		/// </summary>
 		/// <exception>Exception</exception>
-		private void CheckInFile(string fileName)
+		private void Checkin(string fileName)
 		{
 			string normalizedPath = RepositoryPath.NormalizeFolder(fileName);
 
