@@ -1288,6 +1288,54 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="WebDirectorySetting" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Reads and modifies a web directory configuration setting.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the password for the account the task will run under.  This property
+            is needed if you specified a  for a remote machine.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ServerName" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the name of the server.  The default value is 'localhost'.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ServerPort" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the server port.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SettingName" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the configuration setting to read or modify.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SettingValue" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the value of  on the web directory</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Username" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the username for the account the task will run under.  This property
+            is needed if you specified a  for a remote machine.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="VirtualDirectoryName" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the name of the virtual directory.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ILMerge" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>A wrapper for the ILMerge tool.</xs:documentation>
@@ -1418,6 +1466,76 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="InstallAssembly" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Installs assemblies.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="AssemblyFiles" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The assemblies to process, identified by their filename.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="AssemblyNames" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The assemblies to process, identified by their assembly name.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="LogFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The file to write installation progress to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ShowCallStack" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] If an exception occurs at any point during installation, the call
+             stack will be printed to the log.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UninstallAssembly" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Uninstalls assemblies.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="AssemblyFiles" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The assemblies to process, identified by their filename.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="AssemblyNames" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The assemblies to process, identified by their assembly name.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="LogFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The file to write installation progress to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ShowCallStack" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] If an exception occurs at any point during installation, the call
+             stack will be printed to the log.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Mail" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Sends an email message</xs:documentation>
@@ -1518,6 +1636,37 @@
   <xs:element name="Divide" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Divide numbers</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Numbers" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the numbers to work with.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NumericFormat" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the numeric format.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Result" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the result.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TruncateResult" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] When , uses integer division to truncate the result. Default is</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Modulo" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Performs the modulo operation on numbers.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:complexContent mixed="false">

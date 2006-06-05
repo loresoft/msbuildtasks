@@ -242,6 +242,206 @@
             </summary>
             <value><c>true</c> if system; otherwise, <c>false</c>.</value>
         </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebDirectorySetting">
+            <summary>
+            Reads and modifies a web directory configuration setting.
+            </summary>
+            <example>Display the file system path of the MyWeb web directory:
+            <code><![CDATA[
+            <WebDirectorySetting VirtualDirectoryName="MyWeb" SettingName="Path">
+                <Output TaskParameter="SettingValue" PropertyName="LocalPath" />
+            </WebDirectorySetting>
+            <Message Text="MyWeb is located at $(LocalPath)" />
+            ]]></code>
+            </example>
+            <example>Set the default document for the MyWeb directory to Default.aspx:
+            <code><![CDATA[
+            <WebDirectorySetting VirtualDirectoryName="MyWeb" SettingName="DefaultDoc" SettingValue="Default.aspx" />
+            <WebDirectorySetting VirtualDirectoryName="MyWeb" SettingName="EnableDefaultDoc" SettingValue="True" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase">
+            <summary>
+            Base task for any IIS-related task.
+            </summary>
+            <remarks>Stores the base logic for gathering the IIS version and server and port checking.  This
+            base task also stores common properties for other related tasks.</remarks>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.mIISVersion">
+            <summary>
+            IIS version.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.GetIISVersion">
+            <summary>
+            Gets the IIS version.
+            </summary>
+            <returns>The <see cref="T:MSBuild.Community.Tasks.IIS.WebBase.IISVersion"/> for IIS.</returns>
+            <exclude/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.GetRemoteOSVersion">
+            <summary>
+            Gets the remote machine OS version.
+            </summary>
+            <returns>Returns a <see cref="T:System.Version"/> of the operating system.</returns>
+            <exclude/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyIISRoot">
+            <summary>
+            Verifies that the IIS root exists based on the <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> and <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerPort"/>.
+            </summary>
+            <exclude/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyServerPortExists(System.DirectoryServices.DirectoryEntry)">
+            <summary>
+            Helper method for <see cref="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyIISRoot"/> that verifies the server port exists.
+            </summary>
+            <param name="site">The site to verify the port.</param>
+            <returns>Boolean value indicating the status of the port check.</returns>
+            <exclude/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName">
+            <summary>
+            Gets or sets the name of the server.  The default value is 'localhost'.
+            </summary>
+            <value>The name of the server.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.ServerPort">
+            <summary>
+            Gets or sets the server port.
+            </summary>
+            <value>The server port.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISServerPath">
+            <summary>
+            Gets or sets the IIS server path.
+            </summary>
+            <remarks>Is in the form 'IIS://localhost/W3SVC/1/Root'.</remarks>
+            <value>The IIS server path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISApplicationPath">
+            <summary>
+            Gets or sets the application path.
+            </summary>
+            <remarks>Is in the form '/LM/W3SVC/1/Root'.</remarks>
+            <value>The application path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISAppPoolPath">
+            <summary>
+            Gets or sets the IIS application pool path.
+            </summary>
+            <remarks>Is in the form 'IIS://localhost/W3SVC/AppPools'.</remarks>
+            <value>The IIS application pool path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.Username">
+            <summary>
+            Gets or sets the username for the account the task will run under.  This property
+            is needed if you specified a <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> for a remote machine.
+            </summary>
+            <value>The username of the account.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.Password">
+            <summary>
+            Gets or sets the password for the account the task will run under.  This property
+            is needed if you specified a <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> for a remote machine.
+            </summary>
+            <value>The password of the account.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.IISVersion">
+            <summary>
+            Defines the possible IIS versions supported by the task.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Four">
+            <summary>
+            IIS version 4.x
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Five">
+            <summary>
+            IIS version 5.x
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Six">
+            <summary>
+            IIS version 6.x
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction">
+            <summary>
+            Defines the possible application pool actions to be performed.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Recycle">
+            <summary>
+            Recycles an application pool.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Restart">
+            <summary>
+            Stops and restarts the application pool.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Start">
+            <summary>
+            Starts the application pool.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Stop">
+            <summary>
+            Stops the application pool.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState">
+            <summary>
+            Defines the current application pool state.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Starting">
+            <summary>
+            The application pool is starting.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Started">
+            <summary>
+            The application pool has started.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Stopping">
+            <summary>
+            The application pool is stopping.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Stopped">
+            <summary>
+            The application pool has stopped.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.IIS.WebDirectorySetting.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            True if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectorySetting.VirtualDirectoryName">
+            <summary>
+            Gets or sets the name of the virtual directory.
+            </summary>
+            <value>The name of the virtual directory.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectorySetting.SettingName">
+            <summary>
+            Gets or sets the configuration setting to read or modify.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.IIS.WebDirectorySetting.SettingValue">
+            <summary>
+            Gets or sets the value of <see cref="P:MSBuild.Community.Tasks.IIS.WebDirectorySetting.SettingName"/> on the web directory
+            </summary>
+        </member>
         <member name="T:MSBuild.Community.Tasks.ILMerge">
              <summary>
              A wrapper for the ILMerge tool.
@@ -533,6 +733,205 @@
             <summary>
             Gets the name of the executable file to run.
             </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Install.InstallAssembly">
+             <summary>
+             Installs assemblies.
+             </summary>
+            <remarks>
+             Uses InstallUtil.exe to execute the 
+             <see href="http://msdn2.microsoft.com/system.configuration.install.installer.install.aspx">Install</see>
+             method of
+             <see href="http://msdn2.microsoft.com/system.configuration.install.installer.aspx">Installer</see>
+             classes contained within specified assemblies.
+             </remarks>
+             <example>Install multiple assemblies by specifying the file names:
+             <code><![CDATA[
+             <InstallAssembly AssemblyFiles="Engine.dll;Presenter.dll" />
+             ]]></code>
+             </example>
+             <example>Install an assembly using the assembly name. Also disable the log file by setting it to a single space:
+             <code><![CDATA[
+             <InstallAssembly AssemblyNames="Engine,Version=1.5.0.0,Culture=neutral" LogFile=" "/>
+             ]]></code>
+             </example>
+             <example>You can easily chain an install to the result of a build:
+             <code><![CDATA[
+             <MSBuild Projects="Project1.csproj;Project2.csproj">
+            	 <Output TaskParameter="TargetOutputs" ItemName="ProjectBinaries" />
+             </MSBuild>
+             <InstallAssembly AssemblyFiles="@(ProjectBinaries)" />
+             ]]></code>
+             </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Install.InstallAssembly.GenerateFullPathToTool">
+            <summary>
+            Returns the fully qualified path to the executable file.
+            </summary>
+            <returns>
+            The fully qualified path to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Install.InstallAssembly.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments 
+            to pass directly to the executable file.
+            </summary>
+            <returns>
+            A string value containing the command line arguments to pass 
+            directly to the executable file.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.AssemblyNames">
+            <summary>
+            The assemblies to process, identified by their assembly name.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.AssemblyFiles">
+            <summary>
+            The assemblies to process, identified by their filename.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.LogFile">
+            <summary>
+            The file to write installation progress to.
+            </summary>
+            <remarks>Set to a single space to disable logging to a file.
+            <para>
+            If not specified, the default is to log to [assemblyname].installLog
+            </para>
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.ShowCallStack">
+            <summary>
+             If an exception occurs at any point during installation, the call
+             stack will be printed to the log.
+             </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.IsUninstall">
+            <summary>
+            Determines whether assemblies are installed or uninstalled.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.InstallAssembly.ToolName">
+            <summary>
+            Gets the name of the executable file to run.
+            </summary>
+            <value></value>
+            <returns>The name of the executable file to run.</returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Install.UninstallAssembly">
+            <summary>Uninstalls assemblies.</summary>    
+            <remarks>
+            Uses InstallUtil.exe to execute the 
+            <see href="http://msdn2.microsoft.com/system.configuration.install.installer.uninstall.aspx">Uninstall</see>
+            method of
+            <see href="http://msdn2.microsoft.com/system.configuration.install.installer.aspx">Installer</see>
+            classes contained within specified assemblies.
+            </remarks>
+            <example>Uninstall multiple assemblies by specifying the file names:
+            <code><![CDATA[
+            <UninstallAssembly AssemblyFiles="Engine.dll;Presenter.dll" />
+            ]]></code>
+            </example>
+            <example>Unnstall an assembly using the assembly name. Also disable the log file by setting it to a single space:
+            <code><![CDATA[
+            <UninstallAssembly AssemblyNames="Engine,Version=1.5.0.0,Culture=neutral" LogFile=" "/>
+            ]]></code>
+            </example>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Install.UninstallAssembly.IsUninstall">
+            <summary>
+            Determines whether assemblies are installed or uninstalled.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Math.Modulo">
+            <summary>
+            Performs the modulo operation on numbers.
+            </summary>
+            <remarks>
+            The modulo operation finds the remainder of the division of one number by another.
+            <para>When the second number (modulus) is a fractional value, the result can be a fractional value.</para>
+            <para>
+            Equivalent to the % operator in C# or the Mod operator in Visual Basic.
+            </para>
+            </remarks>
+            <example>Numbers evenly divide:
+            <code><![CDATA[
+            <Math.Modulo Numbers="12;4">
+                <Output TaskParameter="Result" PropertyName="Result" />
+            </Math.Modulo>
+            <Message Text="12 modulo 4 = $(Result)"/>
+            ]]></code>
+            Above example will display:
+            <code>12 modulo 4 = 0</code>
+            </example>
+            <example>Division on the numbers produces a remainder:
+            <code><![CDATA[
+            <Math.Modulo Numbers="14;4">
+                <Output TaskParameter="Result" PropertyName="Result" />
+            </Math.Modulo>
+            <Message Text="14 modulo 4 = $(Result)"/>
+            ]]></code>
+            Above example will display:
+            <code>14 modulo 4 = 2</code>
+            </example>
+            <example>Modulus is a fractional value:
+            <code><![CDATA[
+            <Math.Modulo Numbers="12;3.5">
+                <Output TaskParameter="Result" PropertyName="Result" />
+            </Math.Modulo>
+            <Message Text="12 modulo 3.5 = $(Result)"/>
+            ]]></code>
+            Above example will display:
+            <code>12 modulo 3.5 = 1.5</code>
+            </example>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Math.MathBase">
+            <summary>
+            Math task base class
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Math.MathBase.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Math.MathBase.StringArrayToDecimalArray(System.String[])">
+            <summary>
+            Strings array to decimal array.
+            </summary>
+            <param name="numbers">The numbers.</param>
+            <returns></returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Math.MathBase.Numbers">
+            <summary>
+            Gets or sets the numbers to work with.
+            </summary>
+            <value>The numbers.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Math.MathBase.Result">
+            <summary>
+            Gets or sets the result.
+            </summary>
+            <value>The result.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Math.MathBase.NumericFormat">
+            <summary>
+            Gets or sets the numeric format.
+            </summary>
+            <value>The numeric format.</value>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Math.Modulo.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
         </member>
         <member name="T:MSBuild.Community.Tasks.RegexBase">
             <summary>
@@ -1615,163 +2014,6 @@
             </summary>
             <value></value>
             <returns>The name of the executable file to run.</returns>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.IIS.WebBase">
-            <summary>
-            Base task for any IIS-related task.
-            </summary>
-            <remarks>Stores the base logic for gathering the IIS version and server and port checking.  This
-            base task also stores common properties for other related tasks.</remarks>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.mIISVersion">
-            <summary>
-            IIS version.
-            </summary>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.GetIISVersion">
-            <summary>
-            Gets the IIS version.
-            </summary>
-            <returns>The <see cref="T:MSBuild.Community.Tasks.IIS.WebBase.IISVersion"/> for IIS.</returns>
-            <exclude/>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.GetRemoteOSVersion">
-            <summary>
-            Gets the remote machine OS version.
-            </summary>
-            <returns>Returns a <see cref="T:System.Version"/> of the operating system.</returns>
-            <exclude/>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyIISRoot">
-            <summary>
-            Verifies that the IIS root exists based on the <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> and <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerPort"/>.
-            </summary>
-            <exclude/>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyServerPortExists(System.DirectoryServices.DirectoryEntry)">
-            <summary>
-            Helper method for <see cref="M:MSBuild.Community.Tasks.IIS.WebBase.VerifyIISRoot"/> that verifies the server port exists.
-            </summary>
-            <param name="site">The site to verify the port.</param>
-            <returns>Boolean value indicating the status of the port check.</returns>
-            <exclude/>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName">
-            <summary>
-            Gets or sets the name of the server.  The default value is 'localhost'.
-            </summary>
-            <value>The name of the server.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.ServerPort">
-            <summary>
-            Gets or sets the server port.
-            </summary>
-            <value>The server port.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISServerPath">
-            <summary>
-            Gets or sets the IIS server path.
-            </summary>
-            <remarks>Is in the form 'IIS://localhost/W3SVC/1/Root'.</remarks>
-            <value>The IIS server path.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISApplicationPath">
-            <summary>
-            Gets or sets the application path.
-            </summary>
-            <remarks>Is in the form '/LM/W3SVC/1/Root'.</remarks>
-            <value>The application path.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.IISAppPoolPath">
-            <summary>
-            Gets or sets the IIS application pool path.
-            </summary>
-            <remarks>Is in the form 'IIS://localhost/W3SVC/AppPools'.</remarks>
-            <value>The IIS application pool path.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.Username">
-            <summary>
-            Gets or sets the username for the account the task will run under.  This property
-            is needed if you specified a <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> for a remote machine.
-            </summary>
-            <value>The username of the account.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.IIS.WebBase.Password">
-            <summary>
-            Gets or sets the password for the account the task will run under.  This property
-            is needed if you specified a <see cref="P:MSBuild.Community.Tasks.IIS.WebBase.ServerName"/> for a remote machine.
-            </summary>
-            <value>The password of the account.</value>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.IISVersion">
-            <summary>
-            Defines the possible IIS versions supported by the task.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Four">
-            <summary>
-            IIS version 4.x
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Five">
-            <summary>
-            IIS version 5.x
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.IISVersion.Six">
-            <summary>
-            IIS version 6.x
-            </summary>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction">
-            <summary>
-            Defines the possible application pool actions to be performed.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Recycle">
-            <summary>
-            Recycles an application pool.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Restart">
-            <summary>
-            Stops and restarts the application pool.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Start">
-            <summary>
-            Starts the application pool.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolAction.Stop">
-            <summary>
-            Stops the application pool.
-            </summary>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState">
-            <summary>
-            Defines the current application pool state.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Starting">
-            <summary>
-            The application pool is starting.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Started">
-            <summary>
-            The application pool has started.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Stopping">
-            <summary>
-            The application pool is stopping.
-            </summary>
-        </member>
-        <member name="F:MSBuild.Community.Tasks.IIS.WebBase.ApplicationPoolState.Stopped">
-            <summary>
-            The application pool has stopped.
-            </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.ServiceActions">
             <summary>
@@ -3039,44 +3281,6 @@
             ]]></code>
             </example>
         </member>
-        <member name="T:MSBuild.Community.Tasks.Math.MathBase">
-            <summary>
-            Math task base class
-            </summary>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Math.MathBase.Execute">
-            <summary>
-            When overridden in a derived class, executes the task.
-            </summary>
-            <returns>
-            true if the task successfully executed; otherwise, false.
-            </returns>
-        </member>
-        <member name="M:MSBuild.Community.Tasks.Math.MathBase.StringArrayToDecimalArray(System.String[])">
-            <summary>
-            Strings array to decimal array.
-            </summary>
-            <param name="numbers">The numbers.</param>
-            <returns></returns>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Math.MathBase.Numbers">
-            <summary>
-            Gets or sets the numbers to work with.
-            </summary>
-            <value>The numbers.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Math.MathBase.Result">
-            <summary>
-            Gets or sets the result.
-            </summary>
-            <value>The result.</value>
-        </member>
-        <member name="P:MSBuild.Community.Tasks.Math.MathBase.NumericFormat">
-            <summary>
-            Gets or sets the numeric format.
-            </summary>
-            <value>The numeric format.</value>
-        </member>
         <member name="M:MSBuild.Community.Tasks.Math.Add.Execute">
             <summary>
             When overridden in a derived class, executes the task.
@@ -3096,6 +3300,18 @@
             </Math.Divide>
             <Message Text="Divide 1/2= $(Result)"/>
             ]]></code>
+            Above example will display:
+            <code>Divide 1/2= 0.5</code>
+            </example>
+            <example>Truncate the result to always return an integer:
+            <code><![CDATA[
+            <Math.Divide Numbers="7;3" TruncateResult="true">
+                <Output TaskParameter="Result" PropertyName="Result" />
+            </Math.Divide>
+            <Message Text="Divide 7/3= $(Result)"/>
+            ]]></code>
+            Above example will display:
+            <code>Divide 7/3= 2</code>
             </example>
         </member>
         <member name="M:MSBuild.Community.Tasks.Math.Divide.Execute">
@@ -3105,6 +3321,18 @@
             <returns>
             true if the task successfully executed; otherwise, false.
             </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Math.Divide.TruncateResult">
+            <summary>
+            When <see langword="true"/>, uses integer division to truncate the result. Default is <see langword="false" />
+            </summary>
+            <remarks>
+            Any remainder in the result is dropped, and the closest integer to zero is returned.
+            <para>
+            Refer to the documentation for the <see href="http://msdn2.microsoft.com/library/0e16fywh.aspx">\ Operator</see>
+            for more information about integer division.
+            </para>
+            </remarks>
         </member>
         <member name="T:MSBuild.Community.Tasks.Math.Multiple">
             <summary>
@@ -3674,6 +3902,26 @@
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.VersionWrote">
             <summary>
               Looks up a localized string similar to Version &quot;{0}&quot; wrote to file &quot;{1}&quot;..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.WebDirectoryInvalidDirectory">
+            <summary>
+              Looks up a localized string similar to Web directory {0} does not exist on {1}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.WebDirectorySettingInvalidSetting">
+            <summary>
+              Looks up a localized string similar to Web directory {0} on {1} does not have a setting called {2}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.WebDirectorySettingStatusRead">
+            <summary>
+              Looks up a localized string similar to Reading {0} property of web directory {1} on {2}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.WebDirectorySettingStatusSet">
+            <summary>
+              Looks up a localized string similar to Setting {0} property of web directory {1} on {2}..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XmlReadDocument">
