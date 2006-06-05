@@ -38,5 +38,54 @@ namespace MSBuild.Community.Tasks.Tests.Math
             Assert.AreEqual("0.5", task.Result);
 
         }
+
+        [Test]
+        public void TruncateResult_DoesNotProduceRemainder()
+        {
+            Divide task = new Divide();
+            task.BuildEngine = new MockBuild();
+            task.Numbers = new string[] { "12", "4" };
+            task.TruncateResult = true;
+            task.Execute();
+
+            Assert.AreEqual("3", task.Result);
+        }
+
+        [Test]
+        public void TruncateResult_ProducesRemainder()
+        {
+            Divide task = new Divide();
+            task.BuildEngine = new MockBuild();
+            task.Numbers = new string[] { "18", "4" };
+            task.TruncateResult = true;
+            task.Execute();
+
+            Assert.AreEqual("4", task.Result);
+        }
+
+
+        [Test]
+        public void TruncateResult_NegativeOperandsProduceRemainder()
+        {
+            Divide task = new Divide();
+            task.BuildEngine = new MockBuild();
+            task.Numbers = new string[] { "-7", "3" };
+            task.TruncateResult = true;
+            task.Execute();
+            
+            Assert.AreEqual("-2", task.Result);
+        }
+
+        [Test]
+        public void TruncateResult_DecimalOperands()
+        {
+            Divide task = new Divide();
+            task.BuildEngine = new MockBuild();
+            task.Numbers = new string[] { "5.4", "1.3" };
+            task.TruncateResult = true;
+            task.Execute();
+
+            Assert.AreEqual("4", task.Result);
+        }
     }
 }

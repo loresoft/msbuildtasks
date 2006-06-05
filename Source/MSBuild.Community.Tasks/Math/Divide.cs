@@ -45,9 +45,39 @@ namespace MSBuild.Community.Tasks.Math
     /// </Math.Divide>
     /// <Message Text="Divide 1/2= $(Result)"/>
     /// ]]></code>
+    /// Above example will display:
+    /// <code>Divide 1/2= 0.5</code>
+    /// </example>
+    /// <example>Truncate the result to always return an integer:
+    /// <code><![CDATA[
+    /// <Math.Divide Numbers="7;3" TruncateResult="true">
+    ///     <Output TaskParameter="Result" PropertyName="Result" />
+    /// </Math.Divide>
+    /// <Message Text="Divide 7/3= $(Result)"/>
+    /// ]]></code>
+    /// Above example will display:
+    /// <code>Divide 7/3= 2</code>
     /// </example>
     public class Divide : MathBase
     {
+        private bool truncateResult;
+
+        /// <summary>
+        /// When <see langword="true"/>, uses integer division to truncate the result. Default is <see langword="false" />
+        /// </summary>
+        /// <remarks>
+        /// Any remainder in the result is dropped, and the closest integer to zero is returned.
+        /// <para>
+        /// Refer to the documentation for the <see href="http://msdn2.microsoft.com/library/0e16fywh.aspx">\ Operator</see>
+        /// for more information about integer division.
+        /// </para>
+        /// </remarks>
+        public bool TruncateResult
+        {
+            get { return truncateResult; }
+            set { truncateResult = value; }
+        }
+
 
         /// <summary>
         /// When overridden in a derived class, executes the task.
@@ -78,7 +108,11 @@ namespace MSBuild.Community.Tasks.Math
             }
 
             decimal actualTotal = total ?? 0;
-
+            if (truncateResult)
+            {
+                actualTotal = (int)actualTotal;
+                logger.Append(" [truncated]");
+            }
             logger.AppendFormat(" = {0}", actualTotal);
             base.Log.LogMessage(logger.ToString());
 

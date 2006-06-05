@@ -47,6 +47,7 @@
     <Compile Include="ILMerge\ILMergeTest.cs" />
     <Compile Include="Install\InstallAssemblyTest.cs" />
     <Compile Include="Install\UninstallAssemblyTest.cs" />
+    <Compile Include="Math\ModuloTest.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="FileUpdateTest.cs" />
     <Compile Include="IIS\AppPoolControllerTest.cs" />

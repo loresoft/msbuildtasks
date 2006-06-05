@@ -126,7 +126,7 @@ Writing your own task
       
     - Recommended Tab width is 4.
 
-5.  Four your NUnit tests, add a folder
+5.  For your NUnit tests, add a folder
     <msbuildtasks>\Source\MSBuild.Community.Task.Test\<MyTask>
     and place <MyTask>Test.cs, <MyTask>Test.proj and related files in there;
     always add a folder, even if you want to add just one file.
@@ -164,11 +164,6 @@ Writing your own task
       in the source tree below
       <msbuildtasks>\Source\
       
-    - See the notes in 
-      <msbuildtasks>\MSBuild.Community.Tasks\MSBuild.Community.Tasks.xsd
-      on how to get IntelliSense support for the MSBuild community tasks
-      when editing MSBuild project files.
-      
     - If your test depend on an optional service or tool,
       it's good style to have the test skipped by default
       and to provide an extra switch like "/p:withILMerge=true"
@@ -194,10 +189,6 @@ Writing your own task
     - Make an entry for your task in 
       <msbuildtasks>\Documentation\Overview.html
       
-    - Make an entry for your task in 
-      <msbuildtasks>\MSBuild.Community.Tasks\MSBuild.Community.Tasks.xsd
-      to provide IntelliSense support in Visual Studio.
-
 11. Before commiting your task,
     run "msbuild MSBuildTasks.proj /p:configuration=Release",
     which treats warnings as errors.

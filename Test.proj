@@ -106,6 +106,16 @@
 		</Math.Divide>
 		<Message Text="Divide 1/2= $(Result)"/>
 
+		<Math.Divide Numbers="7;3" TruncateResult="true">
+			<Output TaskParameter="Result" PropertyName="Result" />
+		</Math.Divide>
+		<Message Text="Divide 7/3= $(Result)"/>
+
+		<Math.Modulo Numbers="7;3">
+			<Output TaskParameter="Result" PropertyName="Result" />
+		</Math.Modulo>
+		<Message Text="Modulo 7/3= $(Result)"/>
+
 	</Target>
 
 	<Target Name="Version">
