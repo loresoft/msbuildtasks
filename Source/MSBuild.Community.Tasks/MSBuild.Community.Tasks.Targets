@@ -65,6 +65,9 @@
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Subversion.SvnUpdate" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Subversion.SvnVersion" />
 
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Vault.VaultCheckout" />
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Vault.VaultCheckin" />
+	
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Time" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Unzip" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Version" />
