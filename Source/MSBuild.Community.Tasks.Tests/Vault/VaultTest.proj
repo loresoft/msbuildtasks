@@ -3,6 +3,7 @@
 	$Id$
 	Copyright © 2006 Douglas Rohm
 	MSBuild file to test the Vault tasks 
+	/p:withVault = true
 -->
 
 <Project InitialTargets="Checkin" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
