@@ -28,8 +28,8 @@ namespace MSBuild.Community.Tasks.Tests.Vault
 		[TestFixtureSetUp]
 		public void FixtureInit()
 		{
-			_username = "drohm";
-			_password = "p@tt3rns";
+			_username = "msbuild";
+			_password = "m$build";
 			_url = "http://fenway";
 			_repository = "DougRohm";
 			_path = "$/Temp/VaultTestFile.txt";
