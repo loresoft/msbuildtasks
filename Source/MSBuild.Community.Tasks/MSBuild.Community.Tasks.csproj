@@ -48,12 +48,32 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\Microsoft.VisualStudio.SourceSafe.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="SGDiff, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=f3bc199665d82028">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\SGDiff.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Management" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
+    <Reference Include="VaultClientNetLib, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=e372e94840f8a4d3">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\VaultClientNetLib.dll</HintPath>
+    </Reference>
+    <Reference Include="VaultClientOperationsLib, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=e372e94840f8a4d3">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\VaultClientOperationsLib.dll</HintPath>
+    </Reference>
+    <Reference Include="VaultLib, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=a74d7badb9387c36">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\VaultLib.dll</HintPath>
+    </Reference>
+    <Reference Include="VCDiff, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=4f75799f06837886">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\VCDiff.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -75,6 +95,9 @@
     <Compile Include="Solution\GetSolutionProjects.cs" />
     <Compile Include="Subversion\SvnInfo.cs" />
     <Compile Include="Time\Time.cs" />
+    <Compile Include="Vault\VaultBase.cs" />
+    <Compile Include="Vault\VaultCheckin.cs" />
+    <Compile Include="Vault\VaultCheckout.cs" />
     <Compile Include="Xslt\Xslt.cs" />
     <Compile Include="FileUpdate.cs" />
     <Compile Include="FxCop.cs" />
@@ -134,6 +157,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MSBuild.Community.Tasks.snk" />
+    <None Include="MSBuild.Community.Tasks.xsx">
+      <DependentUpon>MSBuild.Community.Tasks.xsd</DependentUpon>
+    </None>
     <Content Include="MSBuild.Community.Tasks.Targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
