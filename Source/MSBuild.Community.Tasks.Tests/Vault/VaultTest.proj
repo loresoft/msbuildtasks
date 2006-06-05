@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--	
+	$Id$
+	Copyright © 2006 Douglas Rohm
+	MSBuild file to test the Vault tasks 
+-->
+
+<Project InitialTargets="Checkin" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+		<LastUpdateBy>Douglas Rohm</LastUpdateBy>
+		<TestUpdate>Test from Task.proj</TestUpdate>
+		<WorkingFolder>$(MSBuildProjectDirectory)\Test\Checkout</WorkingFolder>
+	</PropertyGroup>
+
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+	<Target Name="Checkout">
+		<RemoveDir Directories="$(WorkingFolder)" />
+
+		<VaultCheckout Username="msbuild" Password="m$bui1d"
+				 Url="http://fenway" Repository="DougRohm"
+				 Path="$/Temp/VaultTestFile.txt" Comment="Test for Vault Checkout task." 
+				 WorkingFolder="$(WorkingFolder)">
+			<Output TaskParameter="Version" PropertyName="Version" />
+		</VaultCheckout>
+
+		<Message Text="Version: $(Version)" />
+	</Target>
+
+	<Target Name="Checkin" DependsOnTargets="Checkout">
+		<WriteLinesToFile File="$(WorkingFolder)\VaultTestFile.txt" Lines="$(TestUpdate) - $(LastUpdateBy)" />
+
+		<VaultCheckin Username="msbuild" Password="m$bui1d"
+				 Url="http://fenway" Repository="DougRohm"
+				 Path="$/Temp/VaultTestFile.txt" Comment="Test for Vault Checkin task." 
+				 WorkingFolder="$(WorkingFolder)" DiskFile="$(WorkingFolder)\VaultTestFile.txt">
+			<Output TaskParameter="Version" PropertyName="Version" />
+		</VaultCheckin>
+		
+		<Message Text="Version: $(Version)" />
+	</Target>
+
+</Project>
