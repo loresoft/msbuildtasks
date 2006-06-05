@@ -321,6 +321,18 @@
   <data name="VersionWrote" xml:space="preserve">
     <value>Version "{0}" wrote to file "{1}".</value>
   </data>
+  <data name="WebDirectoryInvalidDirectory" xml:space="preserve">
+    <value>Web directory {0} does not exist on {1}.</value>
+  </data>
+  <data name="WebDirectorySettingInvalidSetting" xml:space="preserve">
+    <value>Web directory {0} on {1} does not have a setting called {2}.</value>
+  </data>
+  <data name="WebDirectorySettingStatusRead" xml:space="preserve">
+    <value>Reading {0} property of web directory {1} on {2}.</value>
+  </data>
+  <data name="WebDirectorySettingStatusSet" xml:space="preserve">
+    <value>Setting {0} property of web directory {1} on {2}.</value>
+  </data>
   <data name="XmlReadDocument" xml:space="preserve">
     <value>Reading Xml Document "{0}".</value>
   </data>

@@ -470,6 +470,150 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file {0} could not be checked in: {1}..
+        /// </summary>
+        internal static string VaultCheckinFileException {
+            get {
+                return ResourceManager.GetString("VaultCheckinFileException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File or folder {0} not found for checkin..
+        /// </summary>
+        internal static string VaultCheckinFileNotFoundException {
+            get {
+                return ResourceManager.GetString("VaultCheckinFileNotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The folder {0} could not be checked in: {1}..
+        /// </summary>
+        internal static string VaultCheckinFolderException {
+            get {
+                return ResourceManager.GetString("VaultCheckinFolderException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} successfully checked out..
+        /// </summary>
+        internal static string VaultCheckinSuccessful {
+            get {
+                return ResourceManager.GetString("VaultCheckinSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} successfully checked out..
+        /// </summary>
+        internal static string VaultCheckoutSuccessful {
+            get {
+                return ResourceManager.GetString("VaultCheckoutSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specified diskfile {0} does not exist..
+        /// </summary>
+        internal static string VaultDiskFileDoesNotExist {
+            get {
+                return ResourceManager.GetString("VaultDiskFileDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incorrect parameters passed to VaultSession..
+        /// </summary>
+        internal static string VaultIncorrectParameters {
+            get {
+                return ResourceManager.GetString("VaultIncorrectParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login to Vault repository failed..
+        /// </summary>
+        internal static string VaultLoginFailed {
+            get {
+                return ResourceManager.GetString("VaultLoginFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selection of the repository failed: {0}..
+        /// </summary>
+        internal static string VaultRepositorySelectionFailure {
+            get {
+                return ResourceManager.GetString("VaultRepositorySelectionFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File or folder {0} not found for checkout..
+        /// </summary>
+        internal static string VaultResourceNotFound {
+            get {
+                return ResourceManager.GetString("VaultResourceNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set working folder for {0} to {1} from {2}..
+        /// </summary>
+        internal static string VaultSetNewWorkingFolder {
+            get {
+                return ResourceManager.GetString("VaultSetNewWorkingFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ClientInstance.TreeCache has not been initialized, Common cause is that SelectRepository has not been called sucessfully..
+        /// </summary>
+        internal static string VaultTreeCacheFailure {
+            get {
+                return ResourceManager.GetString("VaultTreeCacheFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url specifying vault location is required..
+        /// </summary>
+        internal static string VaultUrlRequired {
+            get {
+                return ResourceManager.GetString("VaultUrlRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username must be set to access repository..
+        /// </summary>
+        internal static string VaultUsernameRequired {
+            get {
+                return ResourceManager.GetString("VaultUsernameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clearing working folder for {0}..
+        /// </summary>
+        internal static string VaultWorkingFolderCleared {
+            get {
+                return ResourceManager.GetString("VaultWorkingFolderCleared", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restoring working folder for {0} to {1}..
+        /// </summary>
+        internal static string VaultWorkingFolderRestored {
+            get {
+                return ResourceManager.GetString("VaultWorkingFolderRestored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version file &quot;{0}&quot; not found ..
         /// </summary>
         internal static string VersionFileNotFound {
@@ -596,7 +740,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XmlUpdate Wrote: &quot;{0}&quot;.
+        ///   Looks up a localized string similar to XmlUpdate Wrote: &quot;{0}&quot;..
         /// </summary>
         internal static string XmlUpdateResult {
             get {
@@ -605,7 +749,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adding Parameter \&quot;{0}\&quot;: \&quot;{1}\&quot;.
+        ///   Looks up a localized string similar to Adding Parameter \&quot;{0}\&quot;: \&quot;{1}\&quot;..
         /// </summary>
         internal static string XsltAddingParameter {
             get {
@@ -614,7 +758,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adding root attribute {0}=\&quot;{1}\&quot;.
+        ///   Looks up a localized string similar to Adding root attribute {0}=\&quot;{1}\&quot;..
         /// </summary>
         internal static string XsltAddingRootAttribute {
             get {
@@ -623,7 +767,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating root tag \&quot;{0}\&quot;.
+        ///   Looks up a localized string similar to Creating root tag \&quot;{0}\&quot;..
         /// </summary>
         internal static string XsltCreatingRootTag {
             get {
@@ -632,7 +776,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No input files.
+        ///   Looks up a localized string similar to No input files..
         /// </summary>
         internal static string XsltNoInputFiles {
             get {
@@ -641,7 +785,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No root tag inserted.
+        ///   Looks up a localized string similar to No root tag inserted..
         /// </summary>
         internal static string XsltNoRootTag {
             get {
@@ -650,7 +794,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to   added &quot;{0}&quot;.
+        ///   Looks up a localized string similar to   added &quot;{0}&quot;..
         /// </summary>
         internal static string ZipAdded {
             get {
@@ -668,7 +812,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Zip File Not Found: {0}.
+        ///   Looks up a localized string similar to Zip File Not Found: {0}..
         /// </summary>
         internal static string ZipFileNotFound {
             get {
