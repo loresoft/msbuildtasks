@@ -20,9 +20,9 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 		{
 			// Local machine test
 			mServer = "localhost";
-			if (!TaskUtility.isIISInstalled(mServer))
+            if (!TaskUtility.IsMinimumIISVersionInstalled(mServer, 6, 0))
 			{
-				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+				Assert.Ignore(@"IIS 6.0 was not found on the machine.  IIS 6.0 is required to run this test.");
 			}
 			
 			AppPoolDelete task = new AppPoolDelete();
@@ -35,9 +35,9 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 		public void AppPoolDeleteRemote()
 		{
 			// Remote machine test
-			if (!TaskUtility.isIISInstalled(mServer))
+            if (!TaskUtility.IsMinimumIISVersionInstalled(mServer, 6, 0))
 			{
-				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+				Assert.Ignore(@"IIS 6.0 was not found on the machine.  IIS 6.0 is required to run this test.");
 			}
 			
 			AppPoolDelete task = new AppPoolDelete();

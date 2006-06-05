@@ -124,47 +124,56 @@ namespace MSBuild.Community.Tasks.Tests
             return testDir.Substring(0, foundIndex);
 
         }
-    	
+
+        /// <summary>
+        /// Determines the version of IIS installed on a machine.
+        /// </summary>
+        /// <param name="machineName">The name of the server to check for IIS.</param>
+        /// <returns>The IIS version when IIS is found, otherwise returns 0.0.</returns>
+        public static System.Version GetInstalledIISVersion(string machineName)
+        {
+            int majorVersion = 0;
+            int minorVersion = 0;
+            string iisRegKeyName = @"SYSTEM\CurrentControlSet\Services\W3SVC\Parameters";
+            RegistryKey iisRegKey = null;
+
+            try
+            {
+                if (machineName == "localhost")
+                {
+                    iisRegKey = Registry.LocalMachine.OpenSubKey(iisRegKeyName);
+                }
+                else
+                {
+                    iisRegKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, machineName).OpenSubKey(iisRegKeyName);
+                }
+
+                if (iisRegKey != null)
+                {
+                    majorVersion = (int)iisRegKey.GetValue("MajorVersion", 0);
+                    minorVersion = (int)iisRegKey.GetValue("MinorVersion", 0);
+                }
+            }
+            catch { }
+            finally
+            {
+                if (iisRegKey != null)
+                {
+                    iisRegKey.Close();
+                }
+            }
+            return new System.Version(majorVersion, minorVersion);
+        }
+
     	/// <summary>
-		/// Determines if IIS is installed on the machine.
+		/// Determines if the minimum IIS version is installed on the machine.
     	/// </summary>
-    	/// <param name="machineName">Machine to test if IIS is installed.</param>
+    	/// <param name="machineName">Machine to test if IIS version is installed.</param>
     	/// <returns>True if installed, false if not.</returns>
-    	public static bool isIISInstalled(string machineName)
+    	public static bool IsMinimumIISVersionInstalled(string machineName, int iisMajorVersion, int iisMinorVersion)
     	{
-    		bool iisExists = false;
-			string iisRegKeyName = @"SYSTEM\CurrentControlSet\Services\W3SVC\Parameters";
-			RegistryKey iisRegKey;
-    		
-			try
-			{
-				if (machineName == "localhost")
-				{
-					iisRegKey = Registry.LocalMachine.OpenSubKey(iisRegKeyName);
-				}
-				else
-				{
-					iisRegKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, machineName).OpenSubKey(iisRegKeyName);
-				}
-
-				if (iisRegKey != null)
-				{
-					object oValue1 = iisRegKey.GetValue("MajorVersion");
-					object oValue2 = iisRegKey.GetValue("MinorVersion");
-					if (oValue1 != null && oValue2 != null)
-					{
-						iisExists = true;
-					}
-					
-					iisRegKey.Close();
-				}
-			}
-			catch
-			{
-				iisExists = false;
-			}
-
-			return iisExists;
+            System.Version installedVersion = GetInstalledIISVersion(machineName);
+            return installedVersion.CompareTo(new System.Version(iisMajorVersion, iisMinorVersion)) >= 0;
 		}
     	
         #endregion NUnit Environment Info

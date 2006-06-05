@@ -18,9 +18,9 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 		{
 			Console.WriteLine("Setting up test objects...");
 
-			if (!TaskUtility.isIISInstalled(mServer))
+            if (!TaskUtility.IsMinimumIISVersionInstalled(mServer, 6, 0))
 			{
-				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+				Assert.Ignore(@"IIS 6.0 was not found on the machine.  IIS 6.0 is required to run this test.");
 			}
 			
 			AppPoolCreate task = new AppPoolCreate();

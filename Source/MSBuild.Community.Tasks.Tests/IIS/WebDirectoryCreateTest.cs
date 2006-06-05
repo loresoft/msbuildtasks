@@ -22,9 +22,9 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 		{
 			// Local machine test
 			mServer = "localhost";
-			if (!TaskUtility.isIISInstalled(mServer))
+            if (!TaskUtility.IsMinimumIISVersionInstalled(mServer, 5, 0))
 			{
-				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+				Assert.Ignore(@"IIS 5.0 was not found on the machine.  IIS 5.0 is required to run this test.");
 			}
 			
 			WebDirectoryCreate task = new WebDirectoryCreate();
@@ -38,9 +38,9 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 		public void WebDirectoryCreateRemote()
 		{
 			// Remote machine test
-			if (!TaskUtility.isIISInstalled(mServer))
+            if (!TaskUtility.IsMinimumIISVersionInstalled(mServer, 5, 0))
 			{
-				Assert.Ignore(@"IIS was not found on the machine.  IIS is required to run this test.");
+				Assert.Ignore(@"IIS 5.0 was not found on the machine.  IIS 5.0 is required to run this test.");
 			}
 			
 			WebDirectoryCreate task = new WebDirectoryCreate();

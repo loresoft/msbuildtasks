@@ -17,6 +17,11 @@ namespace MSBuild.Community.Tasks.Tests.IIS
         [TestFixtureSetUp]
         public void CreateTestWebDirectory()
         {
+            if (!TaskUtility.IsMinimumIISVersionInstalled("localhost", 5, 0))
+            {
+                Assert.Ignore(@"IIS 5.0 was not found on the machine.  IIS 5.0 is required to run this test.");
+            }
+
             WebDirectoryCreate task = new WebDirectoryCreate();
             task.BuildEngine = new MockBuild();
             task.VirtualDirectoryName = TestWebDirectoryName;
