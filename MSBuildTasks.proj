@@ -102,6 +102,13 @@
 		<content Include="$(libRoot)\ICSharpCode.SharpZipLib.dll" />
 		<content Include="$(libRoot)\Microsoft.VisualStudio.SourceSafe.Interop.dll" />
 		<content Include="$(libRoot)\nunit.framework.dll" />
+
+		<Content Include="$(libRoot)\SGDiff.dll" />
+		<Content Include="$(libRoot)\VaultClientNetLib.dll" />
+		<Content Include="$(libRoot)\VaultClientOperationsLib.dll" />
+		<Content Include="$(libRoot)\VaultLib.dll" />
+		<Content Include="$(libRoot)\VCDiff.dll" />
+		
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\$(nunitReportXsl)" />
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.xsd" />
@@ -267,6 +274,8 @@
 	<!-- If ILMerge is available on the testing machine,
 		 call with "/p:withILMerge=true" in order to include ILMerge tests
 		 call with "/p:withIIS=true" in order to include IIS tests -->
+	<!-- If a Vault server is available in the test environment call with "/p:withVault=true"
+		 in order to include the Vault tests -->
 	<Target Name="test-proj" DependsOnTargets="build;test-content">
 		<Message Text="=======================================================================================" />
 		<Message Text="Test Proj &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;" />
@@ -275,6 +284,9 @@
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\ILMerge\ILMergeTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests;withILMerge=$(withILMerge)"/>
 
+		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Vault\VaultTest.proj"
+		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests;withVault=$(withVault)" />
+		
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Time\TimeTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
 
