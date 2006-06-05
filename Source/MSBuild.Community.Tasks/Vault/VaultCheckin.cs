@@ -16,10 +16,10 @@ namespace MSBuild.Community.Tasks.Vault
 	/// <example>
 	/// <para></para>
 	/// <code><![CDATA[
-	/// <VaultCheckin Username="msbuild" Password="pass"
-	///			Url="http://fenway" Repository="DougRohm"
+	/// <VaultCheckin Username="username" Password="password"
+	///			Url="http://localhost" Repository="repository"
 	///			Path="$/Temp/VaultTestFile.txt" Comment="Test for Vault Checkin task." 
-	///			WorkingFolder="$(WorkingFolder)" DiskFile="$(WorkingFolder)\VaultTestFile.txt">
+	///			WorkingFolder="C:\Temp" DiskFile="C:\Temp\VaultTestFile.txt">
 	///		<Output TaskParameter="Version" PropertyName="Version" />
 	///	</VaultCheckin>
 	///	
