@@ -15,7 +15,7 @@ namespace MSBuild.Community.Tasks.Vault
 	/// <example>
 	/// <para></para>
 	/// <code><![CDATA[
-	/// <VaultCheckout Username="msbuild" Password="m$bui1d"
+	/// <VaultCheckout Username="msbuild" Password="pass"
 	///			Url="http://fenway" Repository="DougRohm"
 	///			Path="$/Temp/VaultTestFile.txt" Comment="Test for Vault Checkout task." 
 	///			WorkingFolder="$(WorkingFolder)">
