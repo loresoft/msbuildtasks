@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -148,7 +148,6 @@
     <Compile Include="Subversion\SvnVersion.cs" />
     <Compile Include="Subversion\SvnUpdate.cs" />
     <Compile Include="Unzip.cs" />
-    <Compile Include="Vault\VaultClient.cs" />
     <Compile Include="Version.cs" />
     <Compile Include="WebDownload.cs" />
     <Compile Include="XmlRead.cs" />
@@ -157,9 +156,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MSBuild.Community.Tasks.snk" />
-    <None Include="MSBuild.Community.Tasks.xsx">
-      <DependentUpon>MSBuild.Community.Tasks.xsd</DependentUpon>
-    </None>
     <Content Include="MSBuild.Community.Tasks.Targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
