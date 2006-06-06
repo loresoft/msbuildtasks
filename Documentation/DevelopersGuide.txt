@@ -118,6 +118,14 @@ Writing your own task
 	  (not concatenated here to avoid expansion by svn in this text itself)
 	  somewhere in the fileheader comment.
 
+	- When adding source files to the repository, set the metadata "svn:keywords" to "Id".
+	  
+	  From the command line: svn ps svn:keywords "Id" myNewTask.cs
+	  
+	  With TortoiseSVN: Right-click the myNewTask.cs in Explorer, choose Properties, change
+	  to Subversion tab, choose svn-keywords from dropdown in Properties section, 
+	  enter "Id" in the text box, and press the Set button.
+
 	- Avoid Console.WriteLine, use Log.LogMessage instead.
 	
     - For log messages in your task,
@@ -175,7 +183,7 @@ Writing your own task
 
     - Run NUnit test on the command line.
 
-    - Run "msbuild MSBuildTasks.proj /t:test", 
+    - Run "msbuild MSBuildTasks.proj /p:devel=true /p:nunitpath=c:\tools\nunit\bin /t:test", 
       which should include calling <MyTask>Test.proj
 
 10. Document your task
@@ -190,8 +198,10 @@ Writing your own task
       <msbuildtasks>\Documentation\Overview.html
       
 11. Before commiting your task,
-    run "msbuild MSBuildTasks.proj /p:configuration=Release",
-    which treats warnings as errors.
+    - run "msbuild MSBuildTasks.proj /p:configuration=Release",
+      which treats warnings as errors.
+     
+    - run "msbuild Master.proj" to validate the nightly build
+      still works. You can also verify the documentation for your task
+      was included correctly in Documentation\MSBuild.Community.Tasks.chm
     
-12. When adding source files to the repository,
-	set the metadata "svn:keywords" to "Id".
