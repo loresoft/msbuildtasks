@@ -3524,6 +3524,136 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="VaultCheckin" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Task that checks a file into the repository.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="AccessLevel" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Accessor for the current access level:  Admin or Client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ClientInstance" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Accessor for _clientInstance.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Comment" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Comment to attach to the files and/or folders being checked in.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="DiskFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The path to a file on disk which will be checked in to the repository.  This is for
+            use when you don't want to maintain a working folder for changes.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The password to use in conjunction with the specified 
+            username to log in to the Vault installation.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Path" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The file to check in from the specified repository.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Repository" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The Vault repository to be used.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Url" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Url where the Vault installation is.  Required.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Username" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The user name to use when logging into Vault.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Version" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the version number for the file or folder.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="WorkingFolder" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The working folder for the file or folder in the repository.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VaultCheckout" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Task that checks a file out of the repository.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="AccessLevel" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Accessor for the current access level:  Admin or Client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ClientInstance" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Accessor for _clientInstance.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Comment" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Comment to attach to the files and/or folders being checked out.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The password to use in conjunction with the specified 
+            username to log in to the Vault installation.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Path" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The file to check out from the specified repository.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Repository" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The Vault repository to be used.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Url" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Url where the Vault installation is.  Required.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Username" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>The user name to use when logging into Vault.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Version" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the version number for the file or folder.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="WorkingFolder" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] The working folder for the file or folder in the repository.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Version" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Get Version information from file.</xs:documentation>

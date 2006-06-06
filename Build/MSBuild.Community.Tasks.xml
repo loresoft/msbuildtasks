@@ -1635,6 +1635,193 @@
             Gets the internal time value.
             </summary>
         </member>
+        <member name="T:MSBuild.Community.Tasks.Vault.VaultBase">
+            <summary>
+            Vault base abstract class.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultBase.Login">
+            <summary>
+            This function logs into the Vault server and chooses the appropriate repository.  It checks
+            for a valid username, password, and successful login to the server.
+            </summary>
+            <exception>Exception</exception>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultBase.Logout">
+            <summary>
+            Used to logout from the Vault Server.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultBase.SelectRepository(System.String)">
+            <summary>
+            This function chooses the active repository on the server.
+            </summary>
+            <param name="repositoryName">Name of the repository to select.</param>
+            <returns>True if the repository selection succeeded, false otherwise.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultBase.IsVaultFolder(System.String)">
+            <summary>
+            Helper function used to simplify many of the tasks.  It simply checks to see if the supplied
+            string is a valid Vault folder or not.
+            </summary>
+            <param name="folderName">Name of the folder you wish to check for the existence of.</param>
+            <returns>True if a folder exists, false otherwise.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultBase.IsVaultFile(System.String)">
+            <summary>
+            Help function used to simplify many of the tasks.  It simply checks to see if the supplied
+            string is a valid Vault file or not.
+            </summary>
+            <param name="fileName">Name of the file you wish to check for the existence of.</param>
+            <returns>True if the file exists, false otherwise.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultBase.VaultLog(System.String)">
+            <summary>
+            This function is used to interact with the logging facility of NAnt.
+            </summary>
+            <param name="logData">String to be passed to NAnt.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultBase.VaultLogVerbose(System.String)">
+            <summary>
+            This function is used to interact with the logging facility of NAnt.
+            </summary>
+            <param name="logData">String to be passed to NAnt.</param>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultBase.AccessLevel">
+            <summary>
+            Accessor for the current access level:  Admin or Client.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultBase.Url">
+            <summary>
+            Url where the Vault installation is.  Required.
+            </summary>
+            <example>http://localhost</example>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultBase.Username">
+            <summary>
+            The user name to use when logging into Vault.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultBase.Password">
+            <summary>
+            The password to use in conjunction with the specified 
+            username to log in to the Vault installation.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultBase.ClientInstance">
+            <summary>
+            Accessor for _clientInstance.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultBase.WorkingFolder">
+            <summary>
+            The working folder for the file or folder in the repository.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultBase.Version">
+            <summary>
+            Gets or sets the version number for the file or folder.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Vault.VaultCheckin">
+            <summary>
+            Task that checks a file into the repository.
+            </summary>
+            <example>
+            <para></para>
+            <code><![CDATA[
+            <VaultCheckin Username="username" Password="password"
+            		Url="http://localhost" Repository="repository"
+            		Path="$/Temp/VaultTestFile.txt" Comment="Test for Vault Checkin task." 
+            		WorkingFolder="C:\Temp" DiskFile="C:\Temp\VaultTestFile.txt">
+            	<Output TaskParameter="Version" PropertyName="Version" />
+            </VaultCheckin>
+            
+            <Message Text="Version: $(Version)" />
+            ]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultCheckin.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultCheckin.Checkin(System.String)">
+            <summary>
+            Checks the specified file or folder into the repository.
+            </summary>
+            <exception>Exception</exception>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultCheckin.Repository">
+            <summary>
+            The Vault repository to be used.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultCheckin.Path">
+            <summary>
+            The file to check in from the specified repository.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultCheckin.DiskFile">
+            <summary>
+            The path to a file on disk which will be checked in to the repository.  This is for
+            use when you don't want to maintain a working folder for changes.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultCheckin.Comment">
+            <summary>
+            Comment to attach to the files and/or folders being checked in.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Vault.VaultCheckout">
+             <summary>
+             Task that checks a file out of the repository.
+             </summary>
+             <example>
+             <para></para>
+             <code><![CDATA[
+             <VaultCheckout Username="username" Password="password"
+            			Url="http://localhost" Repository="repository"
+            			Path="$/Temp/VaultTestFile.txt" Comment="Test for Vault Checkout task." 
+            			WorkingFolder="C:\Temp">
+            		<Output TaskParameter="Version" PropertyName="Version" />
+            	</VaultCheckout>
+            
+            	<Message Text="Version: $(Version)" />
+             ]]></code>
+             </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultCheckout.Execute">
+            <summary>
+            Executes the task.
+            </summary>
+            <returns><see langword="true"/> if the task ran successfully; 
+            otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Vault.VaultCheckout.Checkout(System.String)">
+            <summary>
+            Retrieves the specified file.
+            </summary>
+            <exception>Exception</exception>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultCheckout.Repository">
+            <summary>
+            The Vault repository to be used.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultCheckout.Path">
+            <summary>
+            The file to check out from the specified repository.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Vault.VaultCheckout.Comment">
+            <summary>
+            Comment to attach to the files and/or folders being checked out.
+            </summary>
+        </member>
         <member name="T:MSBuild.Community.Tasks.Xslt">
              <summary>
              A task to merge and transform
@@ -3879,6 +4066,121 @@
               Looks up a localized string similar to Unzipped file &quot;{0}&quot; successfully..
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultAddFileCommitFailed">
+            <summary>
+              Looks up a localized string similar to Commitment of change set failed!.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultAddFileCommitSucceeded">
+            <summary>
+              Looks up a localized string similar to Files added to Vault repository successfully..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultAddFilesException">
+            <summary>
+              Looks up a localized string similar to Files specified for addition to repository cannot be found..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultCheckinFileException">
+            <summary>
+              Looks up a localized string similar to The file {0} could not be checked in: {1}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultCheckinFileNotFoundException">
+            <summary>
+              Looks up a localized string similar to File or folder {0} not found for checkin..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultCheckinFolderException">
+            <summary>
+              Looks up a localized string similar to The folder {0} could not be checked in: {1}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultCheckinSuccessful">
+            <summary>
+              Looks up a localized string similar to {0} successfully checked out..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultCheckoutSuccessful">
+            <summary>
+              Looks up a localized string similar to {0} successfully checked out..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultDiskFileDoesNotExist">
+            <summary>
+              Looks up a localized string similar to Specified diskfile {0} does not exist..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultFileAddedToChangeSet">
+            <summary>
+              Looks up a localized string similar to File [{0}] added to change set..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultFolderAddedToChangeSet">
+            <summary>
+              Looks up a localized string similar to Folder [{0}] added to change set..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultIncorrectParameters">
+            <summary>
+              Looks up a localized string similar to Incorrect parameters passed to VaultSession..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultLoginFailed">
+            <summary>
+              Looks up a localized string similar to Login to Vault repository failed..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultPathValidationException">
+            <summary>
+              Looks up a localized string similar to Error validating path &quot;{0}&quot;..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultRepositorySelectionFailure">
+            <summary>
+              Looks up a localized string similar to Selection of the repository failed: {0}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultResourceNotFound">
+            <summary>
+              Looks up a localized string similar to File or folder {0} not found for checkout..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultSetNewWorkingFolder">
+            <summary>
+              Looks up a localized string similar to Set working folder for {0} to {1} from {2}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultTreeCacheFailure">
+            <summary>
+              Looks up a localized string similar to ClientInstance.TreeCache has not been initialized, Common cause is that SelectRepository has not been called sucessfully..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultUndoCheckoutSuccessful">
+            <summary>
+              Looks up a localized string similar to Successfully undid check out for {0}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultUrlRequired">
+            <summary>
+              Looks up a localized string similar to Url specifying vault location is required..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultUsernameRequired">
+            <summary>
+              Looks up a localized string similar to Username must be set to access repository..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultWorkingFolderCleared">
+            <summary>
+              Looks up a localized string similar to Clearing working folder for {0}..
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Properties.Resources.VaultWorkingFolderRestored">
+            <summary>
+              Looks up a localized string similar to Restoring working folder for {0} to {1}..
+            </summary>
+        </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.VersionFileNotFound">
             <summary>
               Looks up a localized string similar to Version file &quot;{0}&quot; not found ..
@@ -3951,37 +4253,37 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XmlUpdateResult">
             <summary>
-              Looks up a localized string similar to XmlUpdate Wrote: &quot;{0}&quot;.
+              Looks up a localized string similar to XmlUpdate Wrote: &quot;{0}&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltAddingParameter">
             <summary>
-              Looks up a localized string similar to Adding Parameter \&quot;{0}\&quot;: \&quot;{1}\&quot;.
+              Looks up a localized string similar to Adding Parameter \&quot;{0}\&quot;: \&quot;{1}\&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltAddingRootAttribute">
             <summary>
-              Looks up a localized string similar to Adding root attribute {0}=\&quot;{1}\&quot;.
+              Looks up a localized string similar to Adding root attribute {0}=\&quot;{1}\&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltCreatingRootTag">
             <summary>
-              Looks up a localized string similar to Creating root tag \&quot;{0}\&quot;.
+              Looks up a localized string similar to Creating root tag \&quot;{0}\&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltNoInputFiles">
             <summary>
-              Looks up a localized string similar to No input files.
+              Looks up a localized string similar to No input files..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltNoRootTag">
             <summary>
-              Looks up a localized string similar to No root tag inserted.
+              Looks up a localized string similar to No root tag inserted..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ZipAdded">
             <summary>
-              Looks up a localized string similar to   added &quot;{0}&quot;.
+              Looks up a localized string similar to   added &quot;{0}&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ZipCreating">
@@ -3991,7 +4293,7 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ZipFileNotFound">
             <summary>
-              Looks up a localized string similar to Zip File Not Found: {0}.
+              Looks up a localized string similar to Zip File Not Found: {0}..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.ZipSuccessfully">
@@ -4834,11 +5136,6 @@
             Gets or sets the target directory.
             </summary>
             <value>The target directory.</value>
-        </member>
-        <member name="T:MSBuild.Community.Tasks.Vault.VaultClient">
-            <summary>
-            TODO Not Complete ...
-            </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.Version">
             <summary>
