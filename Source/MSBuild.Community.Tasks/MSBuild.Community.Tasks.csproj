@@ -1,4 +1,4 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -50,7 +50,7 @@
     </Reference>
     <Reference Include="SGDiff, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=f3bc199665d82028">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\SGDiff.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\SourceGear\Vault Client API\SGDiff.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -60,19 +60,19 @@
     <Reference Include="System.Xml" />
     <Reference Include="VaultClientNetLib, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=e372e94840f8a4d3">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\VaultClientNetLib.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\SourceGear\Vault Client API\VaultClientNetLib.dll</HintPath>
     </Reference>
     <Reference Include="VaultClientOperationsLib, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=e372e94840f8a4d3">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\VaultClientOperationsLib.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\SourceGear\Vault Client API\VaultClientOperationsLib.dll</HintPath>
     </Reference>
     <Reference Include="VaultLib, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=a74d7badb9387c36">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\VaultLib.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\SourceGear\Vault Client API\VaultLib.dll</HintPath>
     </Reference>
     <Reference Include="VCDiff, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=4f75799f06837886">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\VCDiff.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\SourceGear\Vault Client API\VCDiff.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -95,9 +95,12 @@
     <Compile Include="Solution\GetSolutionProjects.cs" />
     <Compile Include="Subversion\SvnInfo.cs" />
     <Compile Include="Time\Time.cs" />
+    <Compile Include="Vault\VaultAddFile.cs" />
     <Compile Include="Vault\VaultBase.cs" />
     <Compile Include="Vault\VaultCheckin.cs" />
     <Compile Include="Vault\VaultCheckout.cs" />
+    <Compile Include="Vault\VaultGetFile.cs" />
+    <Compile Include="Vault\VaultUndoCheckout.cs" />
     <Compile Include="Xslt\Xslt.cs" />
     <Compile Include="FileUpdate.cs" />
     <Compile Include="FxCop.cs" />
