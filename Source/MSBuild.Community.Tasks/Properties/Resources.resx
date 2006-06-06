@@ -258,6 +258,15 @@
   <data name="UnzipSuccessfully" xml:space="preserve">
     <value>Unzipped file "{0}" successfully.</value>
   </data>
+  <data name="VaultAddFileCommitFailed" xml:space="preserve">
+    <value>Commitment of change set failed!</value>
+  </data>
+  <data name="VaultAddFileCommitSucceeded" xml:space="preserve">
+    <value>Files added to Vault repository successfully.</value>
+  </data>
+  <data name="VaultAddFilesException" xml:space="preserve">
+    <value>Files specified for addition to repository cannot be found.</value>
+  </data>
   <data name="VaultCheckinFileException" xml:space="preserve">
     <value>The file {0} could not be checked in: {1}.</value>
   </data>
@@ -276,11 +285,20 @@
   <data name="VaultDiskFileDoesNotExist" xml:space="preserve">
     <value>Specified diskfile {0} does not exist.</value>
   </data>
+  <data name="VaultFileAddedToChangeSet" xml:space="preserve">
+    <value>File [{0}] added to change set.</value>
+  </data>
+  <data name="VaultFolderAddedToChangeSet" xml:space="preserve">
+    <value>Folder [{0}] added to change set.</value>
+  </data>
   <data name="VaultIncorrectParameters" xml:space="preserve">
     <value>Incorrect parameters passed to VaultSession.</value>
   </data>
   <data name="VaultLoginFailed" xml:space="preserve">
     <value>Login to Vault repository failed.</value>
+  </data>
+  <data name="VaultPathValidationException" xml:space="preserve">
+    <value>Error validating path "{0}".</value>
   </data>
   <data name="VaultRepositorySelectionFailure" xml:space="preserve">
     <value>Selection of the repository failed: {0}.</value>
@@ -293,6 +311,9 @@
   </data>
   <data name="VaultTreeCacheFailure" xml:space="preserve">
     <value>ClientInstance.TreeCache has not been initialized, Common cause is that SelectRepository has not been called sucessfully.</value>
+  </data>
+  <data name="VaultUndoCheckoutSuccessful" xml:space="preserve">
+    <value>Successfully undid check out for {0}.</value>
   </data>
   <data name="VaultUrlRequired" xml:space="preserve">
     <value>Url specifying vault location is required.</value>

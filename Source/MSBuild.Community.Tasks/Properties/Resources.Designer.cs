@@ -470,6 +470,33 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Commitment of change set failed!.
+        /// </summary>
+        internal static string VaultAddFileCommitFailed {
+            get {
+                return ResourceManager.GetString("VaultAddFileCommitFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files added to Vault repository successfully..
+        /// </summary>
+        internal static string VaultAddFileCommitSucceeded {
+            get {
+                return ResourceManager.GetString("VaultAddFileCommitSucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files specified for addition to repository cannot be found..
+        /// </summary>
+        internal static string VaultAddFilesException {
+            get {
+                return ResourceManager.GetString("VaultAddFilesException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file {0} could not be checked in: {1}..
         /// </summary>
         internal static string VaultCheckinFileException {
@@ -524,6 +551,24 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File [{0}] added to change set..
+        /// </summary>
+        internal static string VaultFileAddedToChangeSet {
+            get {
+                return ResourceManager.GetString("VaultFileAddedToChangeSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder [{0}] added to change set..
+        /// </summary>
+        internal static string VaultFolderAddedToChangeSet {
+            get {
+                return ResourceManager.GetString("VaultFolderAddedToChangeSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorrect parameters passed to VaultSession..
         /// </summary>
         internal static string VaultIncorrectParameters {
@@ -538,6 +583,15 @@ namespace MSBuild.Community.Tasks.Properties {
         internal static string VaultLoginFailed {
             get {
                 return ResourceManager.GetString("VaultLoginFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error validating path &quot;{0}&quot;..
+        /// </summary>
+        internal static string VaultPathValidationException {
+            get {
+                return ResourceManager.GetString("VaultPathValidationException", resourceCulture);
             }
         }
         
@@ -574,6 +628,15 @@ namespace MSBuild.Community.Tasks.Properties {
         internal static string VaultTreeCacheFailure {
             get {
                 return ResourceManager.GetString("VaultTreeCacheFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully undid check out for {0}..
+        /// </summary>
+        internal static string VaultUndoCheckoutSuccessful {
+            get {
+                return ResourceManager.GetString("VaultUndoCheckoutSuccessful", resourceCulture);
             }
         }
         
