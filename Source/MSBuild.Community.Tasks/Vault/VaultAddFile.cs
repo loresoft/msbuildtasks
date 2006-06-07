@@ -52,7 +52,7 @@ namespace MSBuild.Community.Tasks.Vault
 		/// <summary>
 		/// The file(s) to add to the specified repository.
 		/// </summary>
-		public ITaskItem[] Addfileset
+		public ITaskItem[] AddFileSet
 		{
 			get { return _addFileSet; }
 			set { _addFileSet = value; }
