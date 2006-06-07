@@ -39,10 +39,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
-    <Reference Include="VaultClientOperationsLib, Version=3.1.8.3771, Culture=neutral, PublicKeyToken=e372e94840f8a4d3">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\VaultClientOperationsLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfoTest.cs" />
@@ -66,7 +62,6 @@
     <Compile Include="Solution\GetSolutionProjectsTest.cs" />
     <Compile Include="Subversion\SvnInfoTest.cs" />
     <Compile Include="Time\TimeTest.cs" />
-    <Compile Include="Vault\VaultTest.cs" />
     <Compile Include="WebDownloadTest.cs" />
     <Compile Include="XmlUpdateTest.cs" />
     <Compile Include="FtpUploadTest.cs" />
@@ -110,7 +105,6 @@
     <None Include="Regex\RegexTest.proj" />
     <None Include="Solution\GetSolutionProjectsTest.proj" />
     <None Include="Time\TimeTest.proj" />
-    <None Include="Vault\VaultTest.proj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ILMerge\ExcludeTypes.txt">
@@ -125,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NUnit\" />
+    <Folder Include="Vault\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
 </Project>
