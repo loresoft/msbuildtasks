@@ -13,6 +13,20 @@
 		<LastUpdateBy>Douglas Rohm</LastUpdateBy>
 		<TestUpdate>Test from Task.proj</TestUpdate>
 		<WorkingFolder>$(MSBuildProjectDirectory)\Test\Checkout</WorkingFolder>
+		<Username>msbuild</Username>
+		<Password>m$bui1d</Password>
+		<AdminUsername>testadmin</AdminUsername>
+		<AdminPassword>password</AdminPassword>
+		<Url>http://fenway</Url>
+		<Repository>DougRohm</Repository>
+		<RepositoryPath>$/Temp/</RepositoryPath>
+		<RepositoryFile>VaultTestFile.txt</RepositoryFile>
+		<DiskFile></DiskFile>
+		<CheckoutComment>Vault unit test for Checkout task.</CheckoutComment>
+		<CheckinComment>Vault unit test for Checkin task.</CheckinComment>
+		<AddFileComment>Vault unit test for AddFile task.</AddFileComment>
+		<NewTestFile1>VaultAddFile1.txt</NewTestFile1>
+		<NewTestFile2>VaultAddFile2.txt</NewTestFile2>
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
@@ -20,9 +34,9 @@
 	<Target Name="Checkout">
 		<RemoveDir Directories="$(WorkingFolder)" />
 
-		<VaultCheckout Username="msbuild" Password="pass"
-				 Url="http://fenway" Repository="DougRohm"
-				 Path="$/Temp/VaultTestFile.txt" Comment="Test for Vault Checkout task." 
+		<VaultCheckout Username="$(Username)" Password="$(Password)"
+				 Url="$(Url)" Repository="$(Repository)"
+				 Path="$(RepositoryPath)$(RepositoryFile)" Comment="$(CheckoutComment)" 
 				 WorkingFolder="$(WorkingFolder)">
 			<Output TaskParameter="Version" PropertyName="Version" />
 		</VaultCheckout>
@@ -33,13 +47,53 @@
 	<Target Name="Checkin" DependsOnTargets="Checkout">
 		<WriteLinesToFile File="$(WorkingFolder)\VaultTestFile.txt" Lines="$(TestUpdate) - $(LastUpdateBy)" />
 
-		<VaultCheckin Username="msbuild" Password="pass"
-				 Url="http://fenway" Repository="DougRohm"
-				 Path="$/Temp/VaultTestFile.txt" Comment="Test for Vault Checkin task." 
+		<VaultCheckin Username="$(Username)" Password="$(Password)"
+				 Url="$(Url)" Repository="$(Repository)"
+				 Path="$(RepositoryPath)$(RepositoryFile)" Comment="$(CheckinComment)" 
 				 WorkingFolder="$(WorkingFolder)" DiskFile="$(WorkingFolder)\VaultTestFile.txt">
 			<Output TaskParameter="Version" PropertyName="Version" />
 		</VaultCheckin>
 		
+		<Message Text="Version: $(Version)" />
+
+		<CallTarget Targets="UndoCheckout;GetFile" />
+	</Target>
+
+	<Target Name="UndoCheckout">
+		<VaultCheckout Username="$(Username)" Password="$(Password)"
+				 Url="$(Url)" Repository="$(Repository)"
+				 Path="$(RepositoryPath)$(RepositoryFile)" Comment="$(CheckoutComment)" 
+				 WorkingFolder="$(WorkingFolder)">
+			<Output TaskParameter="Version" PropertyName="Version" />
+		</VaultCheckout>
+
+		<VaultUndoCheckout username="$(Username)" Password="$(Password)"
+				Url="$(Url)" Repository="$(Repository)"
+				Path="$(RepositoryPath)$(RepositoryFile)" WorkingFolder="$(WorkingFolder)">
+			<Output TaskParameter="Version" PropertyName="Version" />
+		</VaultUndoCheckout>
+
+		<Message Text="Version: $(Version)" />
+	</Target>
+
+	<Target Name="GetFile">
+		<VaultGetFile username="$(Username)" Password="$(Password)"
+				Url="$(Url)" Repository="$(Repository)"
+				Path="$(RepositoryPath)$(RepositoryFile)" WorkingFolder="$(WorkingFolder)">
+			<Output TaskParameter="Version" PropertyName="Version" />
+		</VaultGetFile>
+
+		<Message Text="Version: $(Version)" />
+	</Target>
+
+	<Target Name="AddFile">
+		<VaultAddFile username="$(AdminUsername)" Password="$(AdminPassword)"
+				Url="$(Url)" Repository="$(Repository)"
+				Path="$(RepositoryPath)$(RepositoryFile)" Comment="$(AddFileComment)" 
+				WorkingFolder="$(WorkingFolder)">
+			<Output TaskParameter="Version" PropertyName="Version" />
+		</VaultAddFile>
+
 		<Message Text="Version: $(Version)" />
 	</Target>
 
