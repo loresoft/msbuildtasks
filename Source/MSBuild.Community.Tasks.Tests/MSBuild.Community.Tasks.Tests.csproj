@@ -118,7 +118,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NUnit\" />
     <Folder Include="Vault\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
