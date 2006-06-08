@@ -103,12 +103,6 @@
 		<content Include="$(libRoot)\Microsoft.VisualStudio.SourceSafe.Interop.dll" />
 		<content Include="$(libRoot)\nunit.framework.dll" />
 
-		<Content Include="$(libRoot)\SGDiff.dll" />
-		<Content Include="$(libRoot)\VaultClientNetLib.dll" />
-		<Content Include="$(libRoot)\VaultClientOperationsLib.dll" />
-		<Content Include="$(libRoot)\VaultLib.dll" />
-		<Content Include="$(libRoot)\VCDiff.dll" />
-		
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\$(nunitReportXsl)" />
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.xsd" />
@@ -284,9 +278,10 @@
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\ILMerge\ILMergeTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests;withILMerge=$(withILMerge)"/>
 
+<!-- Vault tasks temporarily unavailable during refactoring
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Vault\VaultTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests;withVault=$(withVault)" />
-		
+-->		
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Time\TimeTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
 
