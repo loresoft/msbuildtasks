@@ -161,7 +161,7 @@ namespace MSBuild.Community.Tasks
                     case XPathResultType.Number:
                     case XPathResultType.Boolean:
                     case XPathResultType.String:
-                        _value = (string)navigator.Evaluate(expression);
+                        _value = navigator.Evaluate(expression).ToString();
                         break;
                     case XPathResultType.NodeSet:
                         XPathNodeIterator nodes = navigator.Select(expression);
