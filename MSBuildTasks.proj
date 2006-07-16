@@ -301,6 +301,9 @@
 
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Install\InstallTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
+
+		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Xml\XmlQueryTest.proj"
+		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
     </Target>
 
 	<!-- Execute and report the NUnit and msbuild .proj tests -->

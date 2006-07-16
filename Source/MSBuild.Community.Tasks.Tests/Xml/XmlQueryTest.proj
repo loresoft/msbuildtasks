@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="RunTests" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- $Id$ -->
+  <PropertyGroup>
+		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+	</PropertyGroup>
+
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+	<Target Name="LoadSampleFile">
+		<ReadLinesFromFile File="Test_XmlQuery.xml">
+			<Output TaskParameter="Lines" ItemName="Contents" />
+		</ReadLinesFromFile>
+	</Target>
+	
+	<Target Name="LoadSampleFileWithNS">
+		<ReadLinesFromFile File="Test_XmlQueryWithNS.xml">
+			<Output TaskParameter="Lines" ItemName="ContentsWithNS" />
+		</ReadLinesFromFile>
+	</Target>
+
+	<Target Name="RetrieveAttributeValueViaXPath" DependsOnTargets="LoadSampleFile">
+		<XmlRead 
+			Namespace="http://schemas.microsoft.com/developer/msbuild/2003" 
+			XPath="/configuration/system.web/compilation/@defaultLanguage"
+			XmlFileName="Test_XmlQuery.xml">
+			<Output TaskParameter="Value" PropertyName="XmlReadAnswer" />
+		</XmlRead>
+		
+
+		<XmlQuery Lines="@(Contents)"
+			XPath = "/configuration/system.web/compilation/@defaultLanguage">
+			<Output TaskParameter="Values" PropertyName="XmlQueryAnswer1" />
+		</XmlQuery>
+		
+		<Message Text="XmlRead Answer: $(XmlReadAnswer)"/>
+		<Message Text="XmlQuery Answer: $(XmlQueryAnswer1)"/>
+	</Target>
+
+	<Target Name="RetrieveAttributeValuesViaMetadata" DependsOnTargets="LoadSampleFile">
+		<!-- XmlRead does not allow you to read multiple attributes -->
+		<XmlQuery Lines="@(Contents)"
+			XPath = "/configuration/system.web/compilation">
+			<Output TaskParameter="Values" ItemName="XmlQueryAnswer2" />
+		</XmlQuery>
+		
+		<Message Text="XmlQuery defaultLanguage: %(XmlQueryAnswer2.defaultLanguage)"/>
+		<Message Text="XmlQuery debug: %(XmlQueryAnswer2.debug)"/>
+	</Target>
+
+	<Target Name="RetrieveElementValue" DependsOnTargets="LoadSampleFile">
+		<XmlRead 
+			XPath="/configuration/singleValue/LastName"
+			XmlFileName="Test_XmlQuery.xml">
+			<Output TaskParameter="Value" PropertyName="XmlReadAnswer" />
+		</XmlRead>
+
+		<XmlQuery Lines="@(Contents)"
+			XPath = "/configuration/singleValue/LastName">
+			<Output TaskParameter="Values" ItemName="XmlQueryAnswer3" />
+		</XmlQuery>
+		
+		<Message Text="XmlRead Answer: $(XmlReadAnswer)"/>
+		<Message Text="XmlQuery Answer: @(XmlQueryAnswer3)"/>
+		<!-- Need to retrieve a metadata -->
+		<Message Text="XmlQuery Answer: %(XmlQueryAnswer3._value)"/>
+	</Target>
+
+	<Target Name="RetrieveSetOfElements" DependsOnTargets="LoadSampleFile">
+		<!-- XmlRead cannot handle multiple results -->
+		<XmlRead 
+			XPath="/configuration/appSettings/add"
+			XmlFileName="Test_XmlQuery.xml">
+			<Output TaskParameter="Value" PropertyName="XmlReadAnswer" />
+		</XmlRead>
+
+		<XmlQuery Lines="@(Contents)"
+			XPath = "/configuration/appSettings/add">
+			<Output TaskParameter="Values" ItemName="XmlQueryAnswer4" />
+		</XmlQuery>
+		
+		<Message Text="XmlRead Answer: $(XmlReadAnswer)"/>
+		<Message Text="XmlQuery Answer: %(XmlQueryAnswer4.key) = %(XmlQueryAnswer4.value)"/>
+	</Target>
+	
+	<Target Name="QueryXmlWithMultipleNamespaces" DependsOnTargets="LoadSampleFileWithNS">
+		<!-- XmlRead cannot handle multiple namespaces -->
+		<XmlRead 
+			XPath="/transform/template/Header/CustomType[@Id='B']"
+			XmlFileName="Test_XmlQueryWithNS.xml">
+			<Output TaskParameter="Value" PropertyName="XmlReadAnswer" />
+		</XmlRead>
+
+		<XmlQuery Lines="@(ContentsWithNS)"
+			XPath = "/x:transform/x:template/soap:Header/o:CustomType[@o:Id='B']"
+			NamespaceDefinitions = "soap=http://www.w3.org/2001/12/soap-envelope;o=urn:test:msbuild:community;x=http://www.w3.org/1999/XSL/Transform">
+			<Output TaskParameter="Values" ItemName="XmlQueryAnswer5" />
+		</XmlQuery>
+		
+		<Message Text="XmlRead Answer: $(XmlReadAnswer)"/>
+		<Message Text="XmlQuery Answer: %(XmlQueryAnswer5._value)"/>
+	</Target>
+
+	<Target Name="RetrieveElementValueWithCustomReservedMetaDataPrefix" DependsOnTargets="LoadSampleFile">
+		<XmlQuery Lines="@(Contents)"
+			XPath = "/configuration/singleValue/LastName"
+			ReservedMetaDataPrefix="__">
+			<Output TaskParameter="Values" ItemName="XmlQueryAnswer6" />
+		</XmlQuery>
+		
+		<Message Text="XmlQuery Answer: @(XmlQueryAnswer6)"/>
+		<!-- Need to retrieve a metadata, using custom reserved metadata prefix -->
+		<Message Text="XmlQuery Answer: %(XmlQueryAnswer6.__value)"/>
+	</Target>
+
+  <Target Name="QueryReturnsBooleanValue" DependsOnTargets="LoadSampleFile">
+    <XmlQuery Lines="@(Contents)"
+      XPath = "10 = 10">
+      <Output TaskParameter="Values" PropertyName="XmlQueryAnswer7" />
+    </XmlQuery>
+    <Message Text="XmlQuery returned a boolean as expected." Condition="'$(XmlQueryAnswer7)' == 'True'" />
+    <Error Text="XmlQuery did NOT return a boolean as expected." Condition="'$(XmlQueryAnswer7)' != 'True'" />
+  </Target>
+
+  <Target Name="XPathThatReturnsNumericValue" DependsOnTargets="LoadSampleFile">
+      <XmlQuery Lines="@(Contents)"
+        XPath = "count(/configuration/appSettings/*)">
+        <Output TaskParameter="Values" PropertyName="XmlQueryAnswer8" />
+      </XmlQuery>
+      <Message Text="Found $(XmlQueryAnswer8) children of the appSettings node." />
+  </Target>
+
+  <Target Name="RunTests" DependsOnTargets=	"RetrieveAttributeValueViaXPath;
+												RetrieveAttributeValuesViaMetadata;
+												RetrieveElementValue;
+												RetrieveSetOfElements;
+												QueryXmlWithMultipleNamespaces;
+												RetrieveElementValueWithCustomReservedMetaDataPrefix;
+                        QueryReturnsBooleanValue;
+                        XPathThatReturnsNumericValue">
+		<Message Text="Tests complete." />
+	</Target>
+</Project>

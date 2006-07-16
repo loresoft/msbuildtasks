@@ -86,6 +86,7 @@
     <Compile Include="UnzipTest.cs" />
     <Compile Include="VersionTest.cs" />
     <Compile Include="XmlReadTest.cs" />
+    <Compile Include="Xml\XmlQueryTests.cs" />
     <Compile Include="Xslt\XsltTest.cs" />
     <Compile Include="ZipTest.cs" />
   </ItemGroup>
@@ -105,6 +106,7 @@
     <None Include="Regex\RegexTest.proj" />
     <None Include="Solution\GetSolutionProjectsTest.proj" />
     <None Include="Time\TimeTest.proj" />
+    <None Include="Xml\XmlQueryTest.proj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ILMerge\ExcludeTypes.txt">
@@ -113,6 +115,8 @@
     <Content Include="Solution\TestSolution.sln">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Xml\Test_XmlQuery.xml" />
+    <Content Include="Xml\Test_XmlQueryWithNS.xml" />
     <Content Include="Xslt\XsltTestInput.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

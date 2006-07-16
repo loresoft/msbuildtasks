@@ -76,6 +76,9 @@
     <Compile Include="Solution\GetSolutionProjects.cs" />
     <Compile Include="Subversion\SvnInfo.cs" />
     <Compile Include="Time\Time.cs" />
+    <Compile Include="Xml\XmlNodeTaskItem.cs" />
+    <Compile Include="Xml\XmlQuery.cs" />
+    <Compile Include="Xml\XmlTaskHelper.cs" />
     <Compile Include="Xslt\Xslt.cs" />
     <Compile Include="FileUpdate.cs" />
     <Compile Include="FxCop.cs" />

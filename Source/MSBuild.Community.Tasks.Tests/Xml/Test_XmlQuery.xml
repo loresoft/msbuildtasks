@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+	  <section name="singleValue" type="SingleValueSection" />
+  </configSections>
+  <appSettings>
+    <add key="DefaultTheme" value="Simple" />
+    <add key="MaxRowsPerPage" value="25" />
+    <!-- This is a comment -->
+    <add key="MinutesToCacheResults" value="10" />
+  </appSettings>
+  <singleValue>
+    <FirstName>John</FirstName>
+    <LastName>Doe</LastName>
+  </singleValue>
+  <system.web>
+    <compilation defaultLanguage="c#" debug="true" />
+    <authorization>
+      <deny users="?" />        
+      <allow users="*" />
+    </authorization>
+    <trace enabled="false" />
+  </system.web>
+</configuration>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:soap="http://www.w3.org/2001/12/soap-envelope" xmlns:other="urn:test:msbuild:community">
+  <xsl:template match="/">
+    <soap:Header>
+      <other:CustomType other:Id="A"  soap:mustUnderstand="1">Nonsense</other:CustomType>
+      <other:CustomType other:Id="B">Gibberish</other:CustomType>
+    </soap:Header>
+  </xsl:template>
+</xsl:transform>

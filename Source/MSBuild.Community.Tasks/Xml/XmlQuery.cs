@@ -1,0 +1,196 @@
+// $Id$
+using System;
+using Microsoft.Build.Utilities;
+using Microsoft.Build.Framework;
+using System.Xml.XPath;
+using System.Xml;
+using System.Collections.Generic;
+
+namespace MSBuild.Community.Tasks.Xml
+{
+    /// <summary>
+    /// Reads a value or values from lines of XML
+    /// </summary>
+    /// <remarks>Use with the ReadLinesFromFile task if the XML is in a file.
+    /// <para>An XPath expression can return multiple nodes in the <see cref="Values"/> collection.
+    /// The number of nodes returned is availabe in the <see cref="ValuesCount"/> output TaskParameter.</para>
+    /// <para>When the XPath expression resolves to an element node, all of the
+    /// attributes of the element are added as metadata to the returned <see cref="ITaskItem"/>.
+    /// In addition, some reserved metadata properties are available on all element nodes.
+    /// They are all prefixed with the <see cref="ReservedMetaDataPrefix"/>, 
+    /// which is a single underscore (_) by default.
+    /// <list type="table">
+    /// <listheader><term>Reserved Property</term></listheader>
+    /// <item><term>_value</term><description>The value of the node (non-xml text between the opening and closing tags).</description></item>
+    /// <item><term>_innerXml</term><description>The markup representing the children of this node.</description></item>
+    /// <item><term>_outerXml</term><description>The markup representing this node and all its child nodes.</description></item>
+    /// </list>
+    /// </para></remarks>
+    /// <example>Read an attribute value by selecting it with an XPath expression:
+    /// <code><![CDATA[
+    /// <ReadLinesFromFile File="web.config">
+	///     <Output TaskParameter="Lines" ItemName="FileContents" />
+    /// </ReadLinesFromFile>
+    ///
+    /// <XmlQuery Lines="@(FileContents)"
+    ///     XPath = "/configuration/system.web/compilation/@defaultLanguage">
+	///		<Output TaskParameter="Values" PropertyName="CompilationLanguage" />
+	///	</XmlQuery>
+    /// 
+    /// <Message Text="The default language is $(CompilationLanguage)." />
+    /// ]]></code>
+    /// </example>
+    /// <example>Read attribute values using item metadata on a selected element node:
+    /// <code><![CDATA[
+    /// <XmlQuery Lines="@(FileContents)"
+    ///     XPath = "/configuration/system.web/compilation">
+    ///		<Output TaskParameter="Values" ItemName="CompilationElement" />
+    ///	</XmlQuery>
+    /// 
+    /// <Message Text="The default language is: $(CompilationElement.defaultLanguage)." />
+    /// <Message Text="Debug is enabled: $(CompilationElement.debug)." />
+    /// ]]></code>
+    /// </example>
+    /// <example>Read an element value (requires use of the reserved metadata property "_value"):
+    /// <code><![CDATA[
+    /// <ReadLinesFromFile File="web.config">
+    ///     <Output TaskParameter="Lines" ItemName="FileContents" />
+    /// </ReadLinesFromFile>
+    ///
+    /// <XmlQuery Lines="@(FileContents)"
+    ///     XPath = "/configuration/singleValue/LastName">
+    ///		<Output TaskParameter="Values" PropertyName="LastNameElement" />
+    ///	</XmlQuery>
+    /// 
+    /// <Message Text="The last name is %(LastNameElement._value)" />
+    /// ]]></code>
+    /// </example>
+    public class XmlQuery : Task
+    {
+        private ITaskItem[] lines;
+
+        /// <summary>
+        /// The lines of a valid XML document
+        /// </summary>
+        [Required]
+        public ITaskItem[] Lines
+        {
+            get { return lines; }
+            set { lines = value; }
+        }
+
+        private ITaskItem[] namespaceDefinitions;
+
+        /// <summary>
+        /// A collection of prefix=namespace definitions used to query the XML document
+        /// </summary>
+        /// <example>Defining multiple namespaces:
+        /// <code><![CDATA[
+        /// <XmlQuery Lines="@(FileContents)"
+		///	    XPath = "/x:transform/x:template/soap:Header"
+		/// 	NamespaceDefinitions = "soap=http://www.w3.org/2001/12/soap-envelope;x=http://www.w3.org/1999/XSL/Transform">
+		/// 	<Output TaskParameter="Values" ItemName="SoapEnvelopeNode" />
+		/// </XmlQuery>]]></code>
+        /// </example>
+        public ITaskItem[] NamespaceDefinitions
+        {
+            get { return namespaceDefinitions; }
+            set { namespaceDefinitions = value; }
+        }
+
+        private string xpath;
+
+        /// <summary>
+        /// The query used to identify the values in the XML document
+        /// </summary>
+        [Required]
+        public string XPath
+        {
+            get { return xpath; }
+            set { xpath = value; }
+        }
+
+        private List<ITaskItem> values = new List<ITaskItem>();
+
+        /// <summary>
+        /// The values selected by <see cref="XPath"/>
+        /// </summary>
+        [Output]
+        public ITaskItem[] Values
+        {
+            get { return values.ToArray(); }
+        }
+
+        /// <summary>
+        /// The number of values returned in <see cref="Values"/>
+        /// </summary>
+        [Output]
+        public int ValuesCount { get { return values.Count; } }
+
+
+        private string reservedMetaDataPrefix = "_";
+
+        /// <summary>
+        /// The string that is prepended to all reserved metadata properties.
+        /// </summary>
+        /// <remarks>The default value is a single underscore: '_'
+        /// <para>All attributes of an element node are added as metadata to the returned ITaskItem,
+        /// so this property can be used to avoid clashes with the reserved properties.
+        /// For example, if you selected the following node:
+        /// <code><![CDATA[ <SomeNode _name="x" _value="y" /> ]]></code>
+        /// the <c>_value</c> attribute would clash with the <c>value</c> reserved property, when using
+        /// the default prefix. If you set the ReservedMetaDataPrefix to another value (two underscores '__')
+        /// there would be no clash. You would be able to select the attribute using <c>%(item._value)</c>
+        /// and the value of the node using <c>%(item.__value)</c>.</para></remarks>
+        public string ReservedMetaDataPrefix
+        {
+            get { return reservedMetaDataPrefix; }
+            set { reservedMetaDataPrefix = value; }
+        }
+
+
+        /// <summary>
+        /// When overridden in a derived class, executes the task.
+        /// </summary>
+        /// <returns>
+        /// True if the task successfully executed; otherwise, false.
+        /// </returns>
+        public override bool Execute()
+        {
+            if (lines == null) throw new ArgumentNullException("Lines");
+            if (xpath == null) throw new ArgumentNullException("XPath");
+
+            System.IO.StringReader xmlContent = new System.IO.StringReader(XmlTaskHelper.JoinItems(lines));
+            XPathDocument document = new XPathDocument(xmlContent);
+            XPathNavigator navigator = document.CreateNavigator();
+
+            XmlNamespaceManager namespaceManager = new XmlNamespaceManager(navigator.NameTable);
+            XmlTaskHelper.LoadNamespaceDefinitionItems(namespaceManager, namespaceDefinitions);
+
+            XPathExpression expression = XPathExpression.Compile(xpath, namespaceManager);
+
+            //Expressions that return a node set can be used in the Select and Evaluate methods. Expressions that return a Boolean, number, or string can be used in the Evaluate method.
+            switch (expression.ReturnType)
+            {
+                case XPathResultType.Boolean:
+                case XPathResultType.Number:
+                case XPathResultType.String:
+                    values.Add(new TaskItem(navigator.Evaluate(expression).ToString()));
+                    break;
+                case XPathResultType.NodeSet:
+                    XPathNodeIterator nodes = navigator.Select(expression);
+                    System.Text.StringBuilder builder = new System.Text.StringBuilder();
+                    while (nodes.MoveNext())
+                    {
+                        values.Add(new XmlNodeTaskItem(nodes.Current, reservedMetaDataPrefix));
+                    }
+                    break;
+                default:
+                    throw new ArgumentException("Unable to evaluate XPath expression.", "XPath");
+            }
+
+
+            return true;
+        }
+    }
+}
