@@ -198,6 +198,11 @@
 	<Target Name="content" >
 		<MakeDir Directories="$(binDir)" />
 		<Copy SourceFiles="@(content)" DestinationFolder="$(binDir)\%(content.subDirectory)" SkipUnchangedFiles="true" />
+		<!-- Make sure at least a stub AssemblyInfoCommon is available -->
+		<WriteLinesToFile Lines="//Placeholder" 
+			File="$(MSBuildProjectDirectory)\Source\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs" 
+			Condition="!Exists('$(MSBuildProjectDirectory)\Source\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs')"
+			Overwrite="True" />
 	</Target>
 
 	<!-- Build the VS projects of one build group, copy .dll, .pdb, .xml to the bin directory -->

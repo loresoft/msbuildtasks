@@ -47,6 +47,8 @@ Before writing your own task
     to a local working copy <msbuildtasks> of your choice.
 
 2.  Check that you can build the project on the command line:
+	** Important ** You must run the build from the command line before attempting to
+	open the Visual Studio solution file, in order to create some required files.
 
     - Add the directory of MSBuild.exe to your PATH environment variable, e.g.
       C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727.

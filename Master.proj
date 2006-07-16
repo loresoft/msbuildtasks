@@ -24,6 +24,7 @@
 
   <Target Name="BoostrapCompile">
 	<RemoveDir Directories="Build" />
+	<WriteLinesToFile Lines="//Placeholder" File="$(MSBuildProjectDirectory)\Source\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs" Overwrite="True" />
 	<MSBuild Projects="Source\MSBuild.Community.Tasks.sln" Properties="Configuration=Release" />
 	<CreateItem Include="Build\*">
 		<Output TaskParameter="Include" ItemName="BootstrapFiles" />
