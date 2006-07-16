@@ -17,7 +17,6 @@ namespace MSBuild.Community.Tasks
     /// This will ensure that the other users do not attempt to execute the task in unattended mode.
     /// </para></remarks>
     /// <example>Pause the build if the interactive property is set:
-    /// <code></code>
     /// <code><![CDATA[
     /// <!-- Pause when invoked with the interactive property: msbuild myproject.proj /property:interactive=true -->
     /// 
