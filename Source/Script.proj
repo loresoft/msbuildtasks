@@ -23,9 +23,21 @@
 			]]>
 		</Code>
 	</PropertyGroup>
+	
+		<PropertyGroup>
+		<CodeWithAssembly>
+			<![CDATA[
+public static void ScriptMain(){
+string x = System.Web.HttpUtility.HtmlEncode("<tag>");
+Console.WriteLine(x);
+}			]]>
+		</CodeWithAssembly>
+	</PropertyGroup>
+
 
 	<Target Name="DoScript">
 		<Script Language="C#" Code="$(Code)" />
+		<Script Language="C#" Code="$(CodeWithAssembly)" References="System.Web" />
 	</Target>
   
 </Project>

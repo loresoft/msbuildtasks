@@ -57,6 +57,7 @@
     <Compile Include="IIS\WebDirectoryDeleteTest.cs" />
     <Compile Include="MoveTest.cs" />
     <Compile Include="Regex\RegexTest.cs" />
+    <Compile Include="ScriptTest.cs" />
     <Compile Include="ServiceQueryTest.cs" />
     <Compile Include="ServiceControllerTest.cs" />
     <Compile Include="Solution\GetSolutionProjectsTest.cs" />

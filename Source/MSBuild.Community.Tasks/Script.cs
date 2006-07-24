@@ -155,129 +155,146 @@ namespace MSBuild.Community.Tasks
 		/// otherwise <see langword="false"/>.</returns>
 		public override bool Execute()
 		{
-			try
+			// create compiler info for user-specified language
+			CompilerInfo compilerInfo = CreateCompilerInfo(Language);
+
+			CodeDomProvider provider = compilerInfo.Provider;
+			CompilerParameters options = new CompilerParameters();
+			options.GenerateExecutable = false;
+			options.GenerateInMemory = true;
+			options.MainClass = MainClass;
+
+			// add all available assemblies.
+			foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
 			{
-				// create compiler info for user-specified language
-				CompilerInfo compilerInfo = CreateCompilerInfo(Language);
-
-				CodeDomProvider provider = compilerInfo.Provider;
-				CompilerParameters options = new CompilerParameters();
-				options.GenerateExecutable = false;
-				options.GenerateInMemory = true;
-				options.MainClass = MainClass;
-
-				// add all available assemblies.
-				foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+				try
 				{
-					try
+					if (!string.IsNullOrEmpty(asm.Location))
 					{
-						if (!string.IsNullOrEmpty(asm.Location))
-						{
-							options.ReferencedAssemblies.Add(asm.Location);
-						}
-					}
-					catch (NotSupportedException)
-					{
-						// Ignore - this error is sometimes thrown by asm.Location 
-						// for certain dynamic assemblies
+						options.ReferencedAssemblies.Add(asm.Location);
 					}
 				}
-
-				// add (and load) assemblies specified by user
-				if (References != null)
+				catch (NotSupportedException)
 				{
-					foreach (ITaskItem item in References)
-					{
-						string assemblyFile = item.ItemSpec;
-						// load assemblies into current AppDomain to ensure assemblies
-						// are available when executing the emitted assembly
-						Assembly.LoadFrom(assemblyFile);
-
-						// make assembly available to compiler
-						options.ReferencedAssemblies.Add(assemblyFile);
-					}
+					// Ignore - this error is sometimes thrown by asm.Location 
+					// for certain dynamic assemblies
 				}
-
-				// generate the code
-				CodeCompileUnit compileUnit = compilerInfo.GenerateCode(_rootClassName,
-					Code, _imports);
-
-				StringWriter sw = new StringWriter(CultureInfo.InvariantCulture);
-
-				compilerInfo.Provider.GenerateCodeFromCompileUnit(compileUnit, sw, null);
-				string code = sw.ToString();
-
-				Log.LogMessage(MessageImportance.Low, "Generated code:\n{0}", code);
-
-				CompilerResults results = provider.CompileAssemblyFromDom(options, compileUnit);
-
-				Assembly compiled = null;
-				if (results.Errors.Count > 0)
-				{
-					string errors = "There were compiler errors:" + Environment.NewLine;
-					foreach (CompilerError err in results.Errors)
-					{
-						errors += err.ToString() + Environment.NewLine;
-					}
-					errors += code;
-					throw new Exception(errors);
-				}
-				else
-				{
-					compiled = results.CompiledAssembly;
-				}
-
-				string mainClass = _rootClassName;
-				if (!string.IsNullOrEmpty(MainClass))
-				{
-					mainClass += "+" + MainClass;
-				}
-
-				Type mainType = compiled.GetType(mainClass);
-				if (mainType == null)
-				{
-					//TODO:
-					throw new Exception("Failed - something to do with MainClass");
-				}
-
-				MethodInfo entry = mainType.GetMethod("ScriptMain");
-				// check for task or function definitions.
-				if (entry == null)
-				{
-					throw new Exception("Could not find an entry point");
-				}
-
-				if (!entry.IsStatic)
-				{
-					throw new Exception("Could not find a static entry point");
-				}
-
-				ParameterInfo[] entryParams = entry.GetParameters();
-
-				if (entryParams.Length != 0)
-				{
-					throw new Exception("Invalid signatiure for ScriptMain");
-				}
-
-				/* 
-				 * TODO: if we need to change the sig of the entry point...
-				if (entryParams[0].ParameterType.FullName != typeof(Project).FullName)
-				{
-					throw new Exception("The entry point has the wrong signature");
-				}
-				 * */
-
-				// invoke Main method
-				entry.Invoke(null, new object[] { });
-
-				return true;
 			}
-			catch (Exception e)
+
+			// add (and load) assemblies specified by user
+			if (References != null)
 			{
-				Log.LogErrorFromException(e, true);
-				return false;
+				foreach (ITaskItem item in References)
+				{
+					string assemblyFile = item.ItemSpec;
+					// load assemblies into current AppDomain to ensure assemblies
+					// are available when executing the emitted assembly
+                    Assembly loadedAssembly;
+                    if (isAssemblyFilePath(assemblyFile))
+                    {
+                        loadedAssembly = Assembly.LoadFrom(assemblyFile);
+                    }
+                    else
+                    {
+                        loadedAssembly = Assembly.Load(assemblyFile);
+                    }
+
+					// make assembly available to compiler
+					options.ReferencedAssemblies.Add(loadedAssembly.Location);
+				}
 			}
+
+			// generate the code
+			CodeCompileUnit compileUnit = compilerInfo.GenerateCode(_rootClassName,
+				Code, _imports);
+
+			StringWriter sw = new StringWriter(CultureInfo.InvariantCulture);
+
+			compilerInfo.Provider.GenerateCodeFromCompileUnit(compileUnit, sw, null);
+			string code = sw.ToString();
+
+			Log.LogMessage(MessageImportance.Low, "Generated code:\n{0}", code);
+
+			CompilerResults results = provider.CompileAssemblyFromDom(options, compileUnit);
+
+			Assembly compiled = null;
+			if (results.Errors.Count > 0)
+			{
+				string errors = "There were compiler errors:" + Environment.NewLine;
+				foreach (CompilerError err in results.Errors)
+				{
+					errors += err.ToString() + Environment.NewLine;
+				}
+				errors += code;
+				throw new Exception(errors);
+			}
+			else
+			{
+				compiled = results.CompiledAssembly;
+			}
+
+			string mainClass = _rootClassName;
+			if (!string.IsNullOrEmpty(MainClass))
+			{
+				mainClass += "+" + MainClass;
+			}
+
+			Type mainType = compiled.GetType(mainClass);
+			if (mainType == null)
+			{
+				//TODO:
+				throw new Exception("Failed - something to do with MainClass");
+			}
+
+			MethodInfo entry = mainType.GetMethod("ScriptMain");
+			// check for task or function definitions.
+			if (entry == null)
+			{
+				throw new Exception("Could not find an entry point. You must create a static (Shared) method named ScriptMain.");
+			}
+
+			if (!entry.IsStatic)
+			{
+				throw new Exception("Could not find a static (Shared) entry point");
+			}
+
+			ParameterInfo[] entryParams = entry.GetParameters();
+
+			if (entryParams.Length != 0)
+			{
+				throw new Exception("Invalid signatiure for ScriptMain");
+			}
+
+			/* 
+			 * TODO: if we need to change the sig of the entry point...
+			if (entryParams[0].ParameterType.FullName != typeof(Project).FullName)
+			{
+				throw new Exception("The entry point has the wrong signature");
+			}
+			 * */
+
+			// invoke Main method
+            try
+            {
+                entry.Invoke(null, new object[] { });
+            }
+            catch (TargetInvocationException targetInvocationException)
+            {
+                throw targetInvocationException.InnerException;
+            }
+
+			return true;
 		}
+
+        private static bool isAssemblyFilePath(string assemblyFile)
+        {
+            if (assemblyFile.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) ||
+                assemblyFile.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+            return false;
+        }
 
 		#endregion Task Overrides
 
@@ -327,17 +344,13 @@ namespace MSBuild.Community.Tasks
 				case "VB":
 				case "VISUALBASIC":
 					languageId = LanguageId.VisualBasic;
-					provider = CreateCodeDomProvider(
-						"Microsoft.VisualBasic.VBCodeProvider",
-						"System, Culture=neutral");
+					provider = CreateCodeDomProvider(typeof(Microsoft.VisualBasic.VBCodeProvider));
 					break;
 				case "c#":
 				case "C#":
 				case "CSHARP":
 					languageId = LanguageId.CSharp;
-					provider = CreateCodeDomProvider(
-						"Microsoft.CSharp.CSharpCodeProvider",
-						"System, Culture=neutral");
+					provider = CreateCodeDomProvider(typeof(Microsoft.CSharp.CSharpCodeProvider));
 					break;
 				case "js":
 				case "JS":
