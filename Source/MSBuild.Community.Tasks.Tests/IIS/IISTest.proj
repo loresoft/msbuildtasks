@@ -60,12 +60,16 @@
 		<Message Text="Default document is: $(DefaultDocument)" />
 	</Target>
 
-	<Target Name="deleteWeb">
+  <Target Name="modifyScriptMap">
+    <WebDirectoryScriptMap VirtualDirectoryName="$(TestWebName)" MapToAspNet="true" Extension=".msbct" />
+  </Target>
+
+  <Target Name="deleteWeb">
 		<WebDirectoryDelete VirtualDirectoryName="$(TestWebName)" />
 		<RemoveDir Directories="$(TestWebPath)" />
 	</Target>
 
-	<Target Name="test" DependsOnTargets="createWeb;modifyWeb;queryWeb;deleteWeb" Condition="'$(withIIS)'!='' AND '$(testDir)' != '' ">
+	<Target Name="test" DependsOnTargets="createWeb;modifyWeb;queryWeb;modifyScriptMap;deleteWeb" Condition="'$(withIIS)'!='' AND '$(testDir)' != '' ">
 	</Target>
 
 </Project>

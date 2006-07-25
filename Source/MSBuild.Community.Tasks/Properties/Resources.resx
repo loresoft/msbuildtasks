@@ -345,6 +345,9 @@
   <data name="WebDirectoryInvalidDirectory" xml:space="preserve">
     <value>Web directory {0} does not exist on {1}.</value>
   </data>
+  <data name="WebDirectoryScriptMapUpdate" xml:space="preserve">
+    <value>Setting scriptmap for {0} on web directory {1} on {2}.</value>
+  </data>
   <data name="WebDirectorySettingInvalidSetting" xml:space="preserve">
     <value>Web directory {0} on {1} does not have a setting called {2}.</value>
   </data>

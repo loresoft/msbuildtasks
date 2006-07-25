@@ -731,6 +731,15 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Setting scriptmap for {0} on web directory {1} on {2}..
+        /// </summary>
+        internal static string WebDirectoryScriptMapUpdate {
+            get {
+                return ResourceManager.GetString("WebDirectoryScriptMapUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web directory {0} on {1} does not have a setting called {2}..
         /// </summary>
         internal static string WebDirectorySettingInvalidSetting {
