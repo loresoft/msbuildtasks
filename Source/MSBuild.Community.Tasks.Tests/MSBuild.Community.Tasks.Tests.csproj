@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AspNet\InstallAspNetTest.cs" />
     <Compile Include="AssemblyInfoTest.cs" />
     <Compile Include="AttribTest.cs" />
     <Compile Include="IIS\WebDirectoryScriptMapTest.cs" />
@@ -102,6 +103,7 @@
     <Content Include="ILMerge\keypair.snk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="AspNet\AspNetTest.proj" />
     <None Include="IIS\IISTest.proj" />
     <None Include="ILMerge\ILMergeTest.proj" />
     <None Include="Install\InstallTest.proj" />

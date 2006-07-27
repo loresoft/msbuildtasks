@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--	
+	$Id$
+	MSBuild file to test the AspNet tasks
+	/p:withIIS = true
+	expects $(testDir) is set by caller
+-->
+
+<Project DefaultTargets="test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+  <PropertyGroup>
+    <TestWebPath>$(testdir)\web</TestWebPath>
+    <TestWebName>CreatedByMSBuildTask</TestWebName>
+  </PropertyGroup>
+
+  <Target Name="createWeb">
+    <RemoveDir Directories="$(TestWebPath)" />
+    <MakeDir Directories="$(TestWebPath)" />
+    <WebDirectoryCreate VirtualDirectoryName="$(TestWebName)" VirtualDirectoryPhysicalPath="$(TestWebPath)" AuthAnonymous="True" />
+  </Target>
+
+
+  <Target Name="registerScriptMaps">
+    <InstallAspNet Path="$(TestWebName)" />
+  </Target>
+  
+    <Target Name="deleteWeb">
+		<WebDirectoryDelete VirtualDirectoryName="$(TestWebName)" />
+		<RemoveDir Directories="$(TestWebPath)" />
+	</Target>
+
+
+  <Target Name="test" DependsOnTargets="createWeb;registerScriptMaps;deleteWeb" Condition="'$(Admin)'!='false' AND '$(withIIS)'!='' AND '$(testDir)' != '' ">
+  </Target>
+
+</Project>

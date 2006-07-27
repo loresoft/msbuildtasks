@@ -274,9 +274,17 @@
 	<!-- Execute tests with msbuild .proj files -->
 	<!-- If ILMerge is available on the testing machine,
 		 call with "/p:withILMerge=true" in order to include ILMerge tests
-		 call with "/p:withIIS=true" in order to include IIS tests -->
+		 call with "/p:withIIS=true" in order to include IIS tests 
+		 call with "/p:admin=false" in order to exclude tests that require local administrator rights
+		 -->
 	<!-- If a Vault server is available in the test environment call with "/p:withVault=true"
 		 in order to include the Vault tests -->
+	 
+	 <!-- tests assume local admin rights, unless overridden by the caller -->
+	 <PropertyGroup>
+		<Admin>true</Admin>
+	 </PropertyGroup>
+	 
 	<Target Name="test-proj" DependsOnTargets="build;test-content">
 		<Message Text="=======================================================================================" />
 		<Message Text="Test Proj &quot;$(project)&quot;, configuration &quot;$(configuration)&quot;" />
@@ -300,6 +308,9 @@
 
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\IIS\IISTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests;withIIS=$(withIIS)"/>
+
+		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\AspNet\AspNetTest.proj"
+		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests;withIIS=$(withIIS);admin=$(admin)"/>
 
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Install\InstallTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)"/>
