@@ -111,7 +111,6 @@ namespace MSBuild.Community.Tasks
         /// <summary>
         /// Specifies the target assembly to analyze.
         /// </summary>
-        [Required]
         public ITaskItem[] TargetAssemblies
         {
             get { return _targetAssemblies; }
@@ -307,32 +306,34 @@ namespace MSBuild.Community.Tasks
         /// </returns>
         protected override string GenerateFullPathToTool()
         {
-            string fxCopPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            fxCopPath = Path.Combine(fxCopPath, @"Microsoft FxCop 1.32");
-
-            try
+            if (string.IsNullOrEmpty(ToolPath))
             {
-                using (RegistryKey buildKey = Registry.ClassesRoot.OpenSubKey(@"FxCopProject\shell\Open\command"))
+                string fxCopPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                fxCopPath = Path.Combine(fxCopPath, @"Microsoft FxCop 1.32");
+
+                try
                 {
-                    if (buildKey == null)
+                    using (RegistryKey buildKey = Registry.ClassesRoot.OpenSubKey(@"FxCopProject\shell\Open\command"))
                     {
-                        Log.LogError("Could not find the FxCopProject File command in the registry. Please make sure FxCop is installed.");
-                    }
-                    else
-                    {
-                        fxCopPath = buildKey.GetValue(null, fxCopPath).ToString();
-                        Regex fxCopRegex = new Regex("(.+)fxcop\\.exe", RegexOptions.IgnoreCase);
-                        Match pathMatch = fxCopRegex.Match(fxCopPath);
-                        fxCopPath = pathMatch.Groups[1].Value.Replace("\"", "");
+                        if (buildKey == null)
+                        {
+                            Log.LogError("Could not find the FxCopProject File command in the registry. Please make sure FxCop is installed.");
+                        }
+                        else
+                        {
+                            fxCopPath = buildKey.GetValue(null, fxCopPath).ToString();
+                            Regex fxCopRegex = new Regex("(.+)fxcop\\.exe", RegexOptions.IgnoreCase);
+                            Match pathMatch = fxCopRegex.Match(fxCopPath);
+                            fxCopPath = pathMatch.Groups[1].Value.Replace("\"", "");
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Log.LogErrorFromException(ex);
+                }
+                base.ToolPath = fxCopPath;
             }
-            catch (Exception ex)
-            {
-                Log.LogErrorFromException(ex);
-            }
-
-            base.ToolPath = fxCopPath;
             return Path.Combine(ToolPath, ToolName);
         }
 
@@ -372,9 +373,12 @@ namespace MSBuild.Community.Tasks
                 }
             }
 
-            foreach (ITaskItem item in TargetAssemblies)
+            if (TargetAssemblies != null)
             {
-                _programArguments.AppendFormat("/f:\"{0}\" ", item.ItemSpec);
+                foreach (ITaskItem item in TargetAssemblies)
+                {
+                    _programArguments.AppendFormat("/f:\"{0}\" ", item.ItemSpec);
+                }
             }
 
             if (ImportFiles != null)
@@ -409,7 +413,7 @@ namespace MSBuild.Community.Tasks
             {
                 foreach (ITaskItem item in RuleLibraries)
                 {
-                    _programArguments.AppendFormat("/r:\"{0}\" ", 
+                    _programArguments.AppendFormat("/r:\"{0}\" ",
                         Path.Combine(Path.Combine(ToolPath, "Rules"), item.ItemSpec));
                 }
             }
@@ -444,10 +448,31 @@ namespace MSBuild.Community.Tasks
         /// <returns>The name of the executable file to run.</returns>
         protected override string ToolName
         {
-            get 
-            { 
-                return "fxcopcmd.exe"; 
+            get
+            {
+                return "fxcopcmd.exe";
             }
+        }
+
+        /// <summary>
+        /// Indicates whether all task paratmeters are valid. 
+        /// </summary>
+        /// <returns>true if all task parameters are valid; otherwise, false</returns>
+        protected override bool ValidateParameters()
+        {
+
+            // Either target assemblies or a project file must be specified
+            if ((TargetAssemblies == null || TargetAssemblies.Length < 1) && string.IsNullOrEmpty(ProjectFile))
+            {
+                return false;
+            }
+
+            // If no project file is specified both target assemblies and a ruleset must be specified
+            if (string.IsNullOrEmpty(ProjectFile) && (RuleLibraries == null || RuleLibraries.Length < 1))
+            {
+                return false;
+            }
+            return base.ValidateParameters();
         }
 
         /// <summary>
