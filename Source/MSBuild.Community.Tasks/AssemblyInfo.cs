@@ -245,6 +245,16 @@ namespace MSBuild.Community.Tasks
         }
 
         /// <summary>
+        /// Gets or sets the assembly informational version.
+        /// </summary>
+        /// <value>The assembly informational version.</value>
+        public string AssemblyInformationalVersion
+        {
+            get { return ReadAttribute("AssemblyInformationalVersion"); }
+            set { _attributes["AssemblyInformationalVersion"] = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the assembly key file.
         /// </summary>
         public string AssemblyKeyFile
