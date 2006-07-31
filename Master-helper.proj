@@ -30,11 +30,6 @@
 
 
   <ItemGroup>
-    <CommitFiles Include="Build\MSBuild.Community.Tasks.dll" />
-    <CommitFiles Include="Build\MSBuild.Community.Tasks.Targets" />
-    <CommitFiles Include="Build\MSBuild.Community.Tasks.xml" />
-    <CommitFiles Include="Build\MSBuild.Community.Tasks.xsd" />
-    <CommitFiles Include="Documentation\MSBuild.Community.Tasks.chm" />
     <CommitFiles Include="www\index.html" />    
     <CommitFiles Include="www\MSBuild.Community.Tasks.Nightly.zip" />
   </ItemGroup>
