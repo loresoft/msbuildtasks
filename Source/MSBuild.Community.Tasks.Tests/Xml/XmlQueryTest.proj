@@ -130,6 +130,14 @@
       <Message Text="Found $(XmlQueryAnswer8) children of the appSettings node." />
   </Target>
 
+  <Target Name="LoadFromFile">
+    <XmlQuery XmlFileName="Test_XmlQuery.xml"
+			XPath = "/configuration/system.web/compilation/@defaultLanguage">
+      <Output TaskParameter="Values" PropertyName="XmlQueryAnswer9" />
+    </XmlQuery>
+    <Message Text="XmlQuery Loaded from file: $(XmlQueryAnswer9)"/>
+  </Target>
+  
   <Target Name="RunTests" DependsOnTargets=	"RetrieveAttributeValueViaXPath;
 												RetrieveAttributeValuesViaMetadata;
 												RetrieveElementValue;
@@ -137,7 +145,8 @@
 												QueryXmlWithMultipleNamespaces;
 												RetrieveElementValueWithCustomReservedMetaDataPrefix;
                         QueryReturnsBooleanValue;
-                        XPathThatReturnsNumericValue">
+                        XPathThatReturnsNumericValue;
+                        LoadFromFile">
 		<Message Text="Tests complete." />
 	</Target>
 </Project>

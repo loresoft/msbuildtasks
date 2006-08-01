@@ -127,6 +127,44 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             Assert.AreEqual("3", task.Values[0].ToString(), "Should have found 3 children of the appSettings node.");
         }
 
+        [Test]
+        public void LoadXmlFromFile()
+        {
+            task = new XmlQuery();
+            task.BuildEngine = new MockBuild();
+
+            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            task.XmlFileName = System.IO.Path.Combine(prjRootPath, @"Source\Subversion.proj");
+            task.XPath = "count(/n:Project/n:PropertyGroup/*)";
+            task.NamespaceDefinitions = new ITaskItem[] { 
+                new TaskItem("n=http://schemas.microsoft.com/developer/msbuild/2003")
+            };
+
+            Assert.IsTrue(task.Execute(), "Should have executed successfully.");
+            Assert.AreEqual("3", task.Values[0].ToString());
+
+        }
+
+        [Test]
+        public void SpecifyBothLinesAndXmlFileName_ReturnFalse()
+        {
+            setupTask(testXml);
+            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            task.XmlFileName = System.IO.Path.Combine(prjRootPath, @"Source\Subversion.proj");
+            task.XPath = "count(/configuration/appSettings/*)";
+            Assert.IsFalse(task.Execute(), "Should have failed to execute.");
+        }
+
+        [Test]
+        public void SpecifyNeitherLinesNorXmlFileName_ReturnFalse()
+        {
+            task = new XmlQuery();
+            task.BuildEngine = new MockBuild();
+            task.XPath = "count(/configuration/appSettings/*)";
+            Assert.IsFalse(task.Execute(), "Should have failed to execute.");
+        }
+
+
         string testXml = @"
 <configuration>
   <configSections>

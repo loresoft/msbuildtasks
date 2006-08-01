@@ -11,7 +11,8 @@ namespace MSBuild.Community.Tasks.Xml
     /// <summary>
     /// Reads a value or values from lines of XML
     /// </summary>
-    /// <remarks>Use with the ReadLinesFromFile task if the XML is in a file.
+    /// <remarks>Use the Lines property (possibly populated from the the ReadLinesFromFile task) if you want to perform multiple
+    /// queries against some XML in memory. Use the XmlFileName property to query a large XML file.
     /// <para>An XPath expression can return multiple nodes in the <see cref="Values"/> collection.
     /// The number of nodes returned is availabe in the <see cref="ValuesCount"/> output TaskParameter.</para>
     /// <para>When the XPath expression resolves to an element node, all of the
@@ -40,9 +41,9 @@ namespace MSBuild.Community.Tasks.Xml
     /// <Message Text="The default language is $(CompilationLanguage)." />
     /// ]]></code>
     /// </example>
-    /// <example>Read attribute values using item metadata on a selected element node:
+    /// <example>Read attribute values (from an XML file) using item metadata on a selected element node:
     /// <code><![CDATA[
-    /// <XmlQuery Lines="@(FileContents)"
+    /// <XmlQuery XmlFileName="$(MSBuildProjectDirectory)\web.config"
     ///     XPath = "/configuration/system.web/compilation">
     ///		<Output TaskParameter="Values" ItemName="CompilationElement" />
     ///	</XmlQuery>
@@ -72,11 +73,22 @@ namespace MSBuild.Community.Tasks.Xml
         /// <summary>
         /// The lines of a valid XML document
         /// </summary>
-        [Required]
         public ITaskItem[] Lines
         {
             get { return lines; }
             set { lines = value; }
+        }
+
+        private string xmlFileName;
+
+        /// <summary>
+        /// Gets or sets the name of an XML file to query
+        /// </summary>
+        /// <value>The full path of the XML file.</value>
+        public string XmlFileName
+        {
+            get { return xmlFileName; }
+            set { xmlFileName = value; }
         }
 
         private ITaskItem[] namespaceDefinitions;
@@ -157,11 +169,9 @@ namespace MSBuild.Community.Tasks.Xml
         /// </returns>
         public override bool Execute()
         {
-            if (lines == null) throw new ArgumentNullException("Lines");
-            if (xpath == null) throw new ArgumentNullException("XPath");
+            if (!validParameters()) return false;
 
-            System.IO.StringReader xmlContent = new System.IO.StringReader(XmlTaskHelper.JoinItems(lines));
-            XPathDocument document = new XPathDocument(xmlContent);
+            XPathDocument document = loadXmlContent();
             XPathNavigator navigator = document.CreateNavigator();
 
             XmlNamespaceManager namespaceManager = new XmlNamespaceManager(navigator.NameTable);
@@ -179,7 +189,6 @@ namespace MSBuild.Community.Tasks.Xml
                     break;
                 case XPathResultType.NodeSet:
                     XPathNodeIterator nodes = navigator.Select(expression);
-                    System.Text.StringBuilder builder = new System.Text.StringBuilder();
                     while (nodes.MoveNext())
                     {
                         values.Add(new XmlNodeTaskItem(nodes.Current, reservedMetaDataPrefix));
@@ -190,6 +199,38 @@ namespace MSBuild.Community.Tasks.Xml
             }
 
 
+            return true;
+        }
+
+        private XPathDocument loadXmlContent()
+        {
+            if (xmlFileName != null)
+            {
+                return new XPathDocument(xmlFileName);
+            }
+            
+            System.IO.StringReader xmlContent = new System.IO.StringReader(XmlTaskHelper.JoinItems(lines));
+            return new XPathDocument(xmlContent);
+        }
+
+        private bool validParameters()
+        {
+            if (xpath == null)
+            {
+                Log.LogError("You must provide a value for the XPath property.");
+                return false;
+            }
+
+            if ((lines == null && xmlFileName == null) || (lines != null && xmlFileName != null))
+            {
+                Log.LogError("You must provide a value for either the Lines or XmlFileName property.");
+                return false;
+            }
+            if (xmlFileName != null && !System.IO.File.Exists(xmlFileName))
+            {
+                Log.LogError("Could not find the file provided in the XmlFileName property.");
+                return false;
+            }
             return true;
         }
     }
