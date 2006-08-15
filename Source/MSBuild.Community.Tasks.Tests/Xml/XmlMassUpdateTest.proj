@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <!-- $Id$ -->
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Substitutions>
+      <xsl:template match="/all" />
+    </Substitutions>
+  </PropertyGroup>
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+  <Target Name="DebuggerHook" Condition="'$(DEBUG)'!=''" >
+    <Prompt  Text="Attach debugger and press Enter to continue." />
+  </Target>
+
+  <Target Name="SubstituteFromProperty" DependsOnTargets="DebuggerHook">
+    <XmlMassUpdate ContentFile="Test_XmlQueryWithNS.xml" SubstitutionsFile="$(MSBuildProjectFullPath)" MergedFile="$(testDir)\web.config.prop.xml" ContentRoot="/xsl:transform" SubstitutionsRoot="/msb:Project/msb:PropertyGroup/msb:Substitutions"
+                   NamespaceDefinitions="msb=http://schemas.microsoft.com/developer/msbuild/2003;xsl=http://www.w3.org/1999/XSL/Transform;soap=http://www.w3.org/2001/12/soap-envelope;other=urn:test:msbuild:community"/>
+  </Target>
+
+  <Target Name="ContentAndSubstitutionsDifferent" DependsOnTargets="DebuggerHook">
+    <XmlMassUpdate ContentFile="Test_XmlQuery.xml" SubstitutionsFile="substitutions.config" MergedFile="$(testDir)\web.config.diff.xml" ContentRoot="/configuration" SubstitutionsRoot="/configuration" />
+  </Target>
+
+  <Target Name="ContentAndSubstitutionsSame" DependsOnTargets="DebuggerHook">
+    <XmlMassUpdate ContentFile="Test_XmlQuery.xml" MergedFile="$(testDir)\web.config.same.xml" ContentRoot="/configuration" SubstitutionsRoot="/configuration/substitutions/prod" />
+  </Target>
+
+  <Target Name="Test" DependsOnTargets="ContentAndSubstitutionsSame;
+                                        ContentAndSubstitutionsDifferent;
+                                        SubstituteFromProperty" />
+</Project>

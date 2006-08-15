@@ -59,6 +59,7 @@
     <Compile Include="AspNet\InstallAspNet.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attrib.cs" />
+    <Compile Include="Xml\XmlMassUpdate.cs" />
     <Compile Include="IIS\WebDirectoryScriptMap.cs" />
     <Compile Include="IIS\WebDirectorySetting.cs" />
     <Compile Include="ILMerge\ILMerge.cs" />

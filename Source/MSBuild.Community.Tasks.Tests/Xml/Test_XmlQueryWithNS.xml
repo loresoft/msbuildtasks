@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id$ -->
 <xsl:transform version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:soap="http://www.w3.org/2001/12/soap-envelope" xmlns:other="urn:test:msbuild:community">
   <xsl:template match="/">
     <soap:Header>

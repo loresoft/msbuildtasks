@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id$ -->
 <configuration>
   <configSections>
 	  <section name="singleValue" type="SingleValueSection" />
@@ -21,4 +22,18 @@
     </authorization>
     <trace enabled="false" />
   </system.web>
+  <substitutions>
+	<test>
+		<system.web>
+			<compilation debug="true" />
+			<customErrors mode="RemoteOnly" />
+		</system.web>
+	</test>
+	<prod>
+		<system.web>
+			<compilation debug="false" />
+			<customErrors mode="On" defaultRedirect="Errors.htm" />
+		</system.web>
+	</prod>
+  </substitutions>
 </configuration>

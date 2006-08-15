@@ -111,6 +111,7 @@
     <None Include="Regex\RegexTest.proj" />
     <None Include="Solution\GetSolutionProjectsTest.proj" />
     <None Include="Time\TimeTest.proj" />
+    <None Include="Xml\XmlMassUpdateTest.proj" />
     <None Include="Xml\XmlQueryTest.proj" />
   </ItemGroup>
   <ItemGroup>
