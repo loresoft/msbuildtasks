@@ -22,18 +22,26 @@
     </authorization>
     <trace enabled="false" />
   </system.web>
-  <substitutions>
+  <substitutions xmlns:keyed="urn:msbuildcommunitytasks-xmlmassupdate">
 	<test>
 		<system.web>
 			<compilation debug="true" />
 			<customErrors mode="RemoteOnly" />
 		</system.web>
+		<appSettings>
+			<add keyed:key="MaxRowsPerPage" value="10" />
+			<add keyed:key="DefaultTheme" value="Elegant" />
+			<add keyed:key="BrandNewSetting" value="2" />
+		</appSettings>
 	</test>
 	<prod>
 		<system.web>
 			<compilation debug="false" />
 			<customErrors mode="On" defaultRedirect="Errors.htm" />
 		</system.web>
+		<appSettings>
+			<add keyed:key="MaxRowsPerPage" value="50" />
+		</appSettings>
 	</prod>
   </substitutions>
 </configuration>

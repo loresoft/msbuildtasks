@@ -52,6 +52,9 @@ namespace MSBuild.Community.Tasks.Xml
         /// <summary>
         /// The XPath expression used to locate the list of substitutions to perform
         /// </summary>
+        /// <remarks>When there is a set of elements with the same name, and you want to update
+        /// a single element which can be identified by one of its attributes, you can mark the attribute
+        /// with the following namespace: <c>urn:msbuildcommunitytasks-xmlmassupdate</c>.</remarks>
         [Required]
         public string SubstitutionsRoot
         {
@@ -126,7 +129,15 @@ namespace MSBuild.Community.Tasks.Xml
             XmlNode substitutionsRootNode = substitutionsDocument.SelectSingleNode(substitutionsRoot, namespaceManager);
             XmlNode configurationRootNode = existingDocument.SelectSingleNode(contentRoot, namespaceManager);
 
-            addAllChildNodes(existingDocument, substitutionsRootNode, configurationRootNode);
+            try
+            {
+                addAllChildNodes(existingDocument, substitutionsRootNode, configurationRootNode);
+            }
+            catch (MultipleKeyedAttributesException)
+            {
+                Log.LogError("A substitution node contained more than one keyed attributed.");
+                return false;
+            }
 
             string mergedFilePath = mergedFile.GetMetadata("FullPath");
             if (String.IsNullOrEmpty(mergedFilePath)) mergedFilePath = mergedFile.ItemSpec;
@@ -140,11 +151,14 @@ namespace MSBuild.Community.Tasks.Xml
             XmlNode sourceNode = sourceParentNode.FirstChild;
             while (sourceNode != null && sourceNode.NodeType == XmlNodeType.Element)
             {
-                XmlNode targetNode = ensureNode(config, configurationParentNode, sourceNode.Name);
+                XmlNode targetNode = ensureNode(config, configurationParentNode, sourceNode);
 
                 foreach (XmlAttribute sourceAttribute in sourceNode.Attributes)
                 {
-                    setAttributeValue(config, targetNode, sourceAttribute.Name, sourceAttribute.Value);
+                    if (sourceAttribute.NamespaceURI != KeyedNodeIdentifyingNamespace)
+                    {
+                        setAttributeValue(config, targetNode, sourceAttribute.Name, sourceAttribute.Value);
+                    }
                 }
 
                 addAllChildNodes(config, sourceNode, targetNode);
@@ -157,22 +171,62 @@ namespace MSBuild.Community.Tasks.Xml
             XmlAttribute targetAttribute = modifiedNode.Attributes[attributeName];
             if (targetAttribute == null)
             {
-                Log.LogMessage(MessageImportance.Low, "Creating attribute {0} on {1}", attributeName, modifiedNode.Name);
+                Log.LogMessage(MessageImportance.Low, "Creating attribute '{0}' on '{1}'", attributeName, modifiedNode.Name);
                 targetAttribute = modifiedNode.Attributes.Append(config.CreateAttribute(attributeName));
             }
             targetAttribute.Value = attributeValue;
-            Log.LogMessage("Setting attribute {0} to {1} on {2}", targetAttribute.Name, targetAttribute.Value, modifiedNode.Name);
+            Log.LogMessage("Setting attribute '{0}' to '{1}' on '{2}'", targetAttribute.Name, targetAttribute.Value, modifiedNode.Name);
         }
 
-        private XmlNode ensureNode(XmlDocument config, XmlNode parentNode, string nodeName)
+        /// <summary>
+        /// The namespace used to decorate attributes that should be used as a key to locate an existing node.
+        /// </summary>
+        public readonly string KeyedNodeIdentifyingNamespace = "urn:msbuildcommunitytasks-xmlmassupdate";
+
+        private XmlNode ensureNode(XmlDocument config, XmlNode parentNode, XmlNode sourceNode)
         {
-            XmlNode targetNode = parentNode.SelectSingleNode(nodeName, namespaceManager);
+            XmlAttribute keyAttribute = getKeyAttribute(sourceNode);
+            string xpath;
+            if (keyAttribute == null)
+            {
+                xpath = sourceNode.Name;
+            }
+            else
+            {
+                Log.LogMessage(MessageImportance.Low, "Using keyed attribute '{0}' to locate node '{1}'", keyAttribute.LocalName, sourceNode.LocalName);
+                xpath = String.Format("{0}[@{1}='{2}']", sourceNode.LocalName, keyAttribute.LocalName, keyAttribute.Value);
+            }
+            XmlNode targetNode = parentNode.SelectSingleNode(xpath, namespaceManager);
             if (targetNode == null)
             {
-                Log.LogMessage(MessageImportance.Low, "Creating node {0} under {1}", nodeName, parentNode.Name);
-                targetNode = parentNode.AppendChild(config.CreateNode(XmlNodeType.Element, nodeName, String.Empty));
+                Log.LogMessage(MessageImportance.Low, "Creating node '{0}' under '{1}'", sourceNode.Name, parentNode.Name);
+                targetNode = parentNode.AppendChild(config.CreateNode(XmlNodeType.Element, sourceNode.Name, String.Empty));
+                if (keyAttribute != null)
+                {
+                    XmlAttribute keyAttributeOnNewNode = targetNode.Attributes.Append(config.CreateAttribute(keyAttribute.LocalName));
+                    keyAttributeOnNewNode.Value = keyAttribute.Value;
+                }
             }
             return targetNode;
         }
+
+        private XmlAttribute getKeyAttribute(XmlNode sourceNode)
+        {
+            XmlAttribute keyAttribute = null;
+            for (int i = 0; i < sourceNode.Attributes.Count; i++)
+            {
+                if (sourceNode.Attributes[i].NamespaceURI == KeyedNodeIdentifyingNamespace)
+                {
+                    if (keyAttribute != null)
+                    {
+                        throw new MultipleKeyedAttributesException();
+                    }
+                    keyAttribute = sourceNode.Attributes[i];
+                }
+            }
+            return keyAttribute;
+        }
+
+        private class MultipleKeyedAttributesException : Exception {}
     }
 }
