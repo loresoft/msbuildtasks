@@ -82,7 +82,7 @@ namespace MSBuild.Community.Tasks.Xml
         /// <XmlMassUpdate ContentFile="web.config"
         ///	    SubstitutionsRoot="/configuration/substitutions"
         /// 	NamespaceDefinitions = "soap=http://www.w3.org/2001/12/soap-envelope;x=http://www.w3.org/1999/XSL/Transform">
-        /// 	/></code>
+        /// 	/>]]></code>
         /// </example>
         public ITaskItem[] NamespaceDefinitions
         {
