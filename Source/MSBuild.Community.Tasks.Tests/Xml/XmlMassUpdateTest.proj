@@ -26,7 +26,7 @@
   </Target>
 
   <Target Name="ContentAndSubstitutionsDifferent" DependsOnTargets="DebuggerHook">
-    <XmlMassUpdate ContentFile="Test_XmlQuery.xml" SubstitutionsFile="substitutions.config" MergedFile="$(testDir)\web.config.diff.xml" ContentRoot="/configuration" SubstitutionsRoot="/configuration" />
+    <XmlMassUpdate ContentFile="Test_XmlQuery.xml" SubstitutionsFile="substitutions.config" MergedFile="$(testDir)\web.config.diff.xml"/>
   </Target>
 
   <Target Name="ContentAndSubstitutionsSame" DependsOnTargets="DebuggerHook">

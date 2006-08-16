@@ -52,10 +52,10 @@ namespace MSBuild.Community.Tasks.Xml
         /// <summary>
         /// The XPath expression used to locate the list of substitutions to perform
         /// </summary>
-        /// <remarks>When there is a set of elements with the same name, and you want to update
+        /// <remarks>When not specified, the default is the document root: <c>/</c>
+        /// <para>When there is a set of elements with the same name, and you want to update
         /// a single element which can be identified by one of its attributes, you can mark the attribute
-        /// with the following namespace: <c>urn:msbuildcommunitytasks-xmlmassupdate</c>.</remarks>
-        [Required]
+        /// with the following namespace: <c>urn:msbuildcommunitytasks-xmlmassupdate</c>.</para></remarks>
         public string SubstitutionsRoot
         {
             get { return substitutionsRoot; }
@@ -67,7 +67,7 @@ namespace MSBuild.Community.Tasks.Xml
         /// <summary>
         /// The XPath expression identifying root node that substitions are relative to
         /// </summary>
-        [Required]
+        /// <remarks>When not specified, the default is the document root: <c>/</c></remarks>
         public string ContentRoot
         {
             get { return contentRoot; }
@@ -79,11 +79,10 @@ namespace MSBuild.Community.Tasks.Xml
         /// </summary>
         /// <example>Defining multiple namespaces:
         /// <code><![CDATA[
-        /// <XmlQuery Lines="@(FileContents)"
-        ///	    XPath = "/x:transform/x:template/soap:Header"
+        /// <XmlMassUpdate ContentFile="web.config"
+        ///	    SubstitutionsRoot="/configuration/substitutions"
         /// 	NamespaceDefinitions = "soap=http://www.w3.org/2001/12/soap-envelope;x=http://www.w3.org/1999/XSL/Transform">
-        /// 	<Output TaskParameter="Values" ItemName="SoapEnvelopeNode" />
-        /// </XmlQuery>]]></code>
+        /// 	/></code>
         /// </example>
         public ITaskItem[] NamespaceDefinitions
         {
@@ -104,22 +103,42 @@ namespace MSBuild.Community.Tasks.Xml
             if (substitutionsFile == null) substitutionsFile = contentFile;
             if (mergedFile == null) mergedFile = contentFile;
 
-            string existingFilePath = contentFile.GetMetadata("FullPath");
-            if (String.IsNullOrEmpty(existingFilePath)) existingFilePath = contentFile.ItemSpec;
+            string contentFilePath = contentFile.GetMetadata("FullPath");
+            if (String.IsNullOrEmpty(contentFilePath)) contentFilePath = contentFile.ItemSpec;
 
             string substitutionsFilePath = substitutionsFile.GetMetadata("FullPath");
             if (String.IsNullOrEmpty(substitutionsFilePath)) substitutionsFilePath = substitutionsFile.ItemSpec;
 
+            if (String.IsNullOrEmpty(substitutionsRoot)) substitutionsRoot = "/";
+            if (String.IsNullOrEmpty(contentRoot)) contentRoot = "/";
+            
+            if (contentFilePath.Equals(substitutionsFilePath, StringComparison.InvariantCultureIgnoreCase)  && (contentRoot == substitutionsRoot))
+            {
+                Log.LogError("The SubstitutionsRoot must be different from the ContentRoot when the ContentFile and SubstitutionsFile are the same.");
+                return false;
+            }
+
+            if (!System.IO.File.Exists(contentFilePath))
+            {
+                Log.LogError("Unable to load content file {0}", contentFilePath);
+                return false;
+            }
+
             XmlDocument existingDocument = new XmlDocument();
-            existingDocument.Load(existingFilePath);
+            existingDocument.Load(contentFilePath);
 
             XmlDocument substitutionsDocument;
-            if (String.Compare(existingFilePath, substitutionsFilePath, StringComparison.InvariantCultureIgnoreCase) == 0)
+            if (contentFilePath.Equals(substitutionsFilePath, StringComparison.InvariantCultureIgnoreCase))
             {
                 substitutionsDocument = existingDocument;
             }
             else
             {
+                if (!System.IO.File.Exists(substitutionsFilePath))
+                {
+                    Log.LogError("Unable to load substitutions file {0}", substitutionsFilePath);
+                    return false;
+                }
                 substitutionsDocument = new XmlDocument();
                 substitutionsDocument.Load(substitutionsFilePath);
             }
@@ -141,27 +160,37 @@ namespace MSBuild.Community.Tasks.Xml
 
             string mergedFilePath = mergedFile.GetMetadata("FullPath");
             if (String.IsNullOrEmpty(mergedFilePath)) mergedFilePath = mergedFile.ItemSpec;
-
-            existingDocument.Save(mergedFilePath);
+            try
+            {
+                existingDocument.Save(mergedFilePath);
+            }
+            catch (System.IO.IOException exception)
+            {
+                Log.LogError("Unable to create MergedFile - {0}", exception.Message);
+                return false;
+            }
             return true;
         }
 
         private void addAllChildNodes(XmlDocument config, XmlNode sourceParentNode, XmlNode configurationParentNode)
         {
             XmlNode sourceNode = sourceParentNode.FirstChild;
-            while (sourceNode != null && sourceNode.NodeType == XmlNodeType.Element)
+            while (sourceNode != null)
             {
-                XmlNode targetNode = ensureNode(config, configurationParentNode, sourceNode);
-
-                foreach (XmlAttribute sourceAttribute in sourceNode.Attributes)
+                if (sourceNode.NodeType == XmlNodeType.Element)
                 {
-                    if (sourceAttribute.NamespaceURI != KeyedNodeIdentifyingNamespace)
-                    {
-                        setAttributeValue(config, targetNode, sourceAttribute.Name, sourceAttribute.Value);
-                    }
-                }
+                    XmlNode targetNode = ensureNode(config, configurationParentNode, sourceNode);
 
-                addAllChildNodes(config, sourceNode, targetNode);
+                    foreach (XmlAttribute sourceAttribute in sourceNode.Attributes)
+                    {
+                        if (sourceAttribute.NamespaceURI != KeyedNodeIdentifyingNamespace)
+                        {
+                            setAttributeValue(config, targetNode, sourceAttribute.Name, sourceAttribute.Value);
+                        }
+                    }
+
+                    addAllChildNodes(config, sourceNode, targetNode);
+                }
                 sourceNode = sourceNode.NextSibling;
             }
         }
