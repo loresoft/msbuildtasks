@@ -174,7 +174,7 @@ namespace MSBuild.Community.Tasks.Xml
         }
 
         /// <summary>
-        /// Returns <see cref="SubstitutionsFile" as an <see cref="XmlDocument"/>./>
+        /// Returns <see cref="SubstitutionsFile"/> as an <see cref="XmlDocument"/>.
         /// </summary>
         /// <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
         /// <returns></returns>
@@ -211,7 +211,7 @@ namespace MSBuild.Community.Tasks.Xml
         }
 
         /// <summary>
-        /// Returns <see cref="ContentFile" as an <see cref="XmlDocument"/>./>
+        /// Returns <see cref="ContentFile"/> as an <see cref="XmlDocument"/>.
         /// </summary>
         /// <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
         /// <returns></returns>
