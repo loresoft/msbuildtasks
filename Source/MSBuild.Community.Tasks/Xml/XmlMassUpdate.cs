@@ -157,15 +157,31 @@ namespace MSBuild.Community.Tasks.Xml
             XmlTaskHelper.LoadNamespaceDefinitionItems(namespaceManager, namespaceDefinitions);
 
             XmlNode substitutionsRootNode = substitutionsDocument.SelectSingleNode(substitutionsRoot, namespaceManager);
-            XmlNode configurationRootNode = contentDocument.SelectSingleNode(contentRoot, namespaceManager);
+            XmlNode contentRootNode = contentDocument.SelectSingleNode(contentRoot, namespaceManager);
+
+            if (substitutionsRootNode == null)
+            {
+                Log.LogError("Unable to locate '{0}' in {1}.", substitutionsRoot, substitutionsPathUsedByTask);
+                return false;
+            }
+            if (contentRootNode == null)
+            {
+                Log.LogError("Unable to locate '{0}' in {1}.", contentRoot, contentPathUsedByTask);
+                return false;
+            }
 
             try
             {
-                addAllChildNodes(contentDocument, substitutionsRootNode, configurationRootNode);
+                addAllChildNodes(contentDocument, substitutionsRootNode, contentRootNode);
             }
             catch (MultipleKeyedAttributesException)
             {
                 Log.LogError("A substitution node contained more than one keyed attributed.");
+                return false;
+            }
+            catch (MultipleRootNodesException)
+            {
+                Log.LogError("Cannot create a new document root node because one already exists. Make sure to set the SubstitutionsRoot property.");
                 return false;
             }
 
@@ -323,6 +339,10 @@ namespace MSBuild.Community.Tasks.Xml
             XmlNode ensuredNode = destinationParentNode.SelectSingleNode(xpath, namespaceManager);
             if (ensuredNode == null)
             {
+                if (destinationParentNode.NodeType == XmlNodeType.Document)
+                {
+                    throw new MultipleRootNodesException();
+                }
                 ensuredNode = destinationParentNode.AppendChild(config.CreateNode(XmlNodeType.Element, nodeToEnsure.Name, String.Empty));
                 Log.LogMessage(MessageImportance.Low, "Created node '{0}'", getFullPathOfNode(ensuredNode));
                 if (keyAttribute != null)
@@ -352,5 +372,6 @@ namespace MSBuild.Community.Tasks.Xml
         }
 
         private class MultipleKeyedAttributesException : Exception {}
+        private class MultipleRootNodesException : Exception { }
     }
 }

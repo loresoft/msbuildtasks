@@ -5,6 +5,7 @@ using MSBuild.Community.Tasks.Xml;
 using System.Xml;
 using System.IO;
 using Microsoft.Build.Utilities;
+using Microsoft.Build.Framework;
 
 namespace MSBuild.Community.Tasks.Tests.Xml
 {
@@ -27,9 +28,51 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             task.ContentRoot = "/configuration";
             task.SubstitutionsRoot = "/configuration/substitutions/prod";
             task.ContentXml = contentXml;
+
             bool executeSucceeded = task.Execute();
             Assert.IsTrue(executeSucceeded, "Task should have succeeded.");
         }
+
+        [Test]
+        public void SpecifyContentFileOnly_SubstitionsAndMergedShouldBeContentFile()
+        {
+            setupTask();
+            task.ContentFile = new TaskItem("test.xml");
+            task.ContentRoot = "/configuration";
+            task.SubstitutionsRoot = "/configuration/substitutions/prod";
+            task.ContentXml = contentXml;
+            
+            bool executeSucceeded = task.Execute();
+
+            Assert.AreEqual(task.ContentPathUsedByTask, task.SubstitutionsPathUsedByTask, "Substitutions file should default to the content file.");
+            Assert.AreEqual(task.ContentPathUsedByTask, task.MergedPathUsedByTask, "Merged file should default to the content file.");
+        }
+
+        [Test]
+        public void SpecifyContentFileOnlyWithNoRoots_TaskFails()
+        {
+            setupTask();
+            task.ContentFile = new TaskItem("test.xml");
+            task.ContentXml = contentXml;
+
+            bool executeSucceeded = task.Execute();
+
+            Assert.IsFalse(executeSucceeded, "Task should have failed - cannot use same root for content and substitution.");
+        }
+
+        [Test]
+        public void SpecifyContentFileOnlyWithSameRoots_TaskFails()
+        {
+            setupTask();
+            task.ContentFile = new TaskItem("test.xml");
+            task.ContentXml = contentXml;
+            task.ContentRoot = "/configuration";
+            task.SubstitutionsRoot = "/configuration";
+            bool executeSucceeded = task.Execute();
+
+            Assert.IsFalse(executeSucceeded, "Task should have failed - cannot use same root for content and substitution.");
+        }
+
 
         [Test]
         public void SameContentAndSubstitutionsFiles()
@@ -58,6 +101,38 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             assertXml("VB", "/configuration/system.web/compilation/@defaultLanguage", "Should have changed defaultLangugage");
         }
 
+        [Test]
+        public void MultipleKeyedAttributesOnSingleNode()
+        {
+            setupTask();
+            setupContent();
+            task.SubstitutionsRoot = "/configuration/substitutions/multipleKeys";
+
+            bool executeSucceeded = task.Execute();
+            Assert.IsFalse(executeSucceeded, "Task should have failed and because of multiple keyed attributes on an element.");
+        }
+
+        [Test]
+        public void UpdateDocumentWithNamespaces()
+        {
+            setupTask();
+            task.ContentFile = new TaskItem("test.xml");
+            task.SubstitutionsFile = new TaskItem("test2.xml");
+            task.ContentXml = contentXml;
+            task.SubstitutionsXml = substitutionsXmlWithNamespaces;
+            task.ContentRoot = "/configuration";
+            task.SubstitutionsRoot = "/MS:Project/MS:PropertyGroup/MS:Substitutions";
+            task.NamespaceDefinitions = new ITaskItem[] { new TaskItem("MS=http://schemas.microsoft.com/developer/msbuild/2003") };
+
+            string originalDebug = getInitialValue("/configuration/system.web/compilation/@debug");
+            Assert.AreEqual("true", originalDebug, "Should be true initially.");
+
+            bool executeSucceeded = task.Execute();
+
+            Assert.IsTrue(executeSucceeded, "Task should have succeeded.");
+            assertXml("false", "/configuration/system.web/compilation/@debug", "Should have changed debug value");
+        }
+
         private void setupContent()
         {
             task.ContentFile = new TaskItem("test.xml");
@@ -83,6 +158,7 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             assertXml("100", "/configuration/appSettings/add[@key='B']/@value", "B should have changed");
             assertXml(originalC, "/configuration/appSettings/add[@key='C']/@value", "C should not have changed");
         }
+
 
         [Test]
         public void UpdateMultipleKeyedElements()
@@ -201,9 +277,25 @@ namespace MSBuild.Community.Tasks.Tests.Xml
         <add key:key=""D"" value=""Earth"" />
       </appSettings>
     </addNewKeyed>
+    <multipleKeys>
+      <appSettings>
+        <add key:key=""B"" key:value=""100"" other=""other"" />
+      </appSettings>
+    </multipleKeys>
 </substitutions>
 </configuration>";
 
+        const string substitutionsXmlWithNamespaces = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<Project xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
+  <PropertyGroup>
+    <Substitutions>
+      <system.web>
+        <compilation debug=""false"" />
+      </system.web>
+    </Substitutions>
+  </PropertyGroup>
+</Project>
+";
     }
 
     /// <summary>
