@@ -92,6 +92,37 @@ namespace MSBuild.Community.Tasks.Xml
         private ITaskItem[] namespaceDefinitions;
         XmlNamespaceManager namespaceManager;
 
+
+        /// <summary>
+        /// The full path of the file containing content updated by the task
+        /// </summary>
+        [Output]
+        public string ContentPathUsedByTask
+        {
+            get { return contentPathUsedByTask; }
+        }
+        private string contentPathUsedByTask;
+
+        /// <summary>
+        /// The full path of the file containing substitutions used by the task
+        /// </summary>
+        [Output]
+        public string SubstitutionsPathUsedByTask
+        {
+            get { return substitutionsPathUsedByTask; }
+        }
+        string substitutionsPathUsedByTask;
+
+        /// <summary>
+        /// The full path of the file containing the results of the task
+        /// </summary>
+        [Output]
+        public string MergedPathUsedByTask
+        {
+            get { return mergedPathUsedByTask; }
+        }
+        string mergedPathUsedByTask;
+
         /// <summary>
         /// When overridden in a derived class, executes the task.
         /// </summary>
@@ -103,54 +134,34 @@ namespace MSBuild.Community.Tasks.Xml
             if (substitutionsFile == null) substitutionsFile = contentFile;
             if (mergedFile == null) mergedFile = contentFile;
 
-            string contentFilePath = contentFile.GetMetadata("FullPath");
-            if (String.IsNullOrEmpty(contentFilePath)) contentFilePath = contentFile.ItemSpec;
+            setContentPath();
 
-            string substitutionsFilePath = substitutionsFile.GetMetadata("FullPath");
-            if (String.IsNullOrEmpty(substitutionsFilePath)) substitutionsFilePath = substitutionsFile.ItemSpec;
+            setSubstitutionsPath();
 
             if (String.IsNullOrEmpty(substitutionsRoot)) substitutionsRoot = "/";
             if (String.IsNullOrEmpty(contentRoot)) contentRoot = "/";
-            
-            if (contentFilePath.Equals(substitutionsFilePath, StringComparison.InvariantCultureIgnoreCase)  && (contentRoot == substitutionsRoot))
+
+            if (contentPathUsedByTask.Equals(substitutionsPathUsedByTask, StringComparison.InvariantCultureIgnoreCase) && (contentRoot == substitutionsRoot))
             {
                 Log.LogError("The SubstitutionsRoot must be different from the ContentRoot when the ContentFile and SubstitutionsFile are the same.");
                 return false;
             }
 
-            if (!System.IO.File.Exists(contentFilePath))
-            {
-                Log.LogError("Unable to load content file {0}", contentFilePath);
-                return false;
-            }
+            XmlDocument contentDocument = LoadContentDocument();
+            if (contentDocument == null) return false;
 
-            XmlDocument existingDocument = new XmlDocument();
-            existingDocument.Load(contentFilePath);
+            XmlDocument substitutionsDocument = LoadSubstitutionsDocument();
+            if (substitutionsDocument == null) return false;
 
-            XmlDocument substitutionsDocument;
-            if (contentFilePath.Equals(substitutionsFilePath, StringComparison.InvariantCultureIgnoreCase))
-            {
-                substitutionsDocument = existingDocument;
-            }
-            else
-            {
-                if (!System.IO.File.Exists(substitutionsFilePath))
-                {
-                    Log.LogError("Unable to load substitutions file {0}", substitutionsFilePath);
-                    return false;
-                }
-                substitutionsDocument = new XmlDocument();
-                substitutionsDocument.Load(substitutionsFilePath);
-            }
-            namespaceManager = new XmlNamespaceManager(existingDocument.NameTable);
+            namespaceManager = new XmlNamespaceManager(contentDocument.NameTable);
             XmlTaskHelper.LoadNamespaceDefinitionItems(namespaceManager, namespaceDefinitions);
 
             XmlNode substitutionsRootNode = substitutionsDocument.SelectSingleNode(substitutionsRoot, namespaceManager);
-            XmlNode configurationRootNode = existingDocument.SelectSingleNode(contentRoot, namespaceManager);
+            XmlNode configurationRootNode = contentDocument.SelectSingleNode(contentRoot, namespaceManager);
 
             try
             {
-                addAllChildNodes(existingDocument, substitutionsRootNode, configurationRootNode);
+                addAllChildNodes(contentDocument, substitutionsRootNode, configurationRootNode);
             }
             catch (MultipleKeyedAttributesException)
             {
@@ -158,11 +169,75 @@ namespace MSBuild.Community.Tasks.Xml
                 return false;
             }
 
-            string mergedFilePath = mergedFile.GetMetadata("FullPath");
-            if (String.IsNullOrEmpty(mergedFilePath)) mergedFilePath = mergedFile.ItemSpec;
+            setMergedPath();
+            return SaveMergedDocument(contentDocument);
+        }
+
+        /// <summary>
+        /// Returns <see cref="SubstitutionsFile" as an <see cref="XmlDocument"/>./>
+        /// </summary>
+        /// <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
+        /// <returns></returns>
+        protected virtual XmlDocument LoadSubstitutionsDocument()
+        {
+            XmlDocument substitutionsDocument;
+            if (contentPathUsedByTask.Equals(substitutionsPathUsedByTask, StringComparison.InvariantCultureIgnoreCase))
+            {
+                substitutionsDocument = LoadContentDocument();
+            }
+            else
+            {
+                if (!System.IO.File.Exists(substitutionsPathUsedByTask))
+                {
+                    Log.LogError("Unable to load substitutions file {0}", substitutionsPathUsedByTask);
+                    return null;
+                }
+                substitutionsDocument = new XmlDocument();
+                substitutionsDocument.Load(substitutionsPathUsedByTask);
+            }
+            return substitutionsDocument;
+        }
+
+        private void setSubstitutionsPath()
+        {
+            substitutionsPathUsedByTask = substitutionsFile.GetMetadata("FullPath");
+            if (String.IsNullOrEmpty(substitutionsPathUsedByTask)) substitutionsPathUsedByTask = substitutionsFile.ItemSpec;
+        }
+
+        private void setContentPath()
+        {
+            contentPathUsedByTask = contentFile.GetMetadata("FullPath");
+            if (String.IsNullOrEmpty(contentPathUsedByTask)) contentPathUsedByTask = contentFile.ItemSpec;
+        }
+
+        /// <summary>
+        /// Returns <see cref="ContentFile" as an <see cref="XmlDocument"/>./>
+        /// </summary>
+        /// <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
+        /// <returns></returns>
+        protected virtual XmlDocument LoadContentDocument()
+        {
+            if (!System.IO.File.Exists(contentPathUsedByTask))
+            {
+                Log.LogError("Unable to load content file {0}", contentPathUsedByTask);
+                return null;
+            }
+            XmlDocument contentDocument = new XmlDocument();
+            contentDocument.Load(contentPathUsedByTask);
+            return contentDocument;
+        }
+
+        /// <summary>
+        /// Creates <see cref="MergedFile"/> from the specified <see cref="XmlDocument"/>
+        /// </summary>
+        /// <param name="mergedDocument">The XML to save to a file</param>
+        /// <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
+        /// <returns></returns>
+        protected virtual bool SaveMergedDocument(XmlDocument mergedDocument)
+        {
             try
             {
-                existingDocument.Save(mergedFilePath);
+                mergedDocument.Save(mergedPathUsedByTask);
             }
             catch (System.IO.IOException exception)
             {
@@ -170,6 +245,12 @@ namespace MSBuild.Community.Tasks.Xml
                 return false;
             }
             return true;
+        }
+
+        private void setMergedPath()
+        {
+            mergedPathUsedByTask = mergedFile.GetMetadata("FullPath");
+            if (String.IsNullOrEmpty(mergedPathUsedByTask)) mergedPathUsedByTask = mergedFile.ItemSpec;
         }
 
         private void addAllChildNodes(XmlDocument config, XmlNode sourceParentNode, XmlNode configurationParentNode)
@@ -183,7 +264,7 @@ namespace MSBuild.Community.Tasks.Xml
 
                     foreach (XmlAttribute sourceAttribute in sourceNode.Attributes)
                     {
-                        if (sourceAttribute.NamespaceURI != KeyedNodeIdentifyingNamespace)
+                        if (sourceAttribute.NamespaceURI != keyedNodeIdentifyingNamespace)
                         {
                             setAttributeValue(config, targetNode, sourceAttribute.Name, sourceAttribute.Value);
                         }
@@ -200,43 +281,57 @@ namespace MSBuild.Community.Tasks.Xml
             XmlAttribute targetAttribute = modifiedNode.Attributes[attributeName];
             if (targetAttribute == null)
             {
-                Log.LogMessage(MessageImportance.Low, "Creating attribute '{0}' on '{1}'", attributeName, modifiedNode.Name);
+                Log.LogMessage(MessageImportance.Low, "Creating attribute '{0}' on '{1}'", attributeName, getFullPathOfNode(modifiedNode));
                 targetAttribute = modifiedNode.Attributes.Append(config.CreateAttribute(attributeName));
             }
             targetAttribute.Value = attributeValue;
-            Log.LogMessage("Setting attribute '{0}' to '{1}' on '{2}'", targetAttribute.Name, targetAttribute.Value, modifiedNode.Name);
+            Log.LogMessage("Setting attribute '{0}' to '{1}' on '{2}'", targetAttribute.Name, targetAttribute.Value, getFullPathOfNode(modifiedNode));
+        }
+
+        private string getFullPathOfNode(XmlNode node)
+        {
+            string fullPath = String.Empty;
+            XmlNode currentNode = node;
+            while (currentNode != null && currentNode.NodeType != XmlNodeType.Document)
+            {
+                fullPath = "/" + currentNode.Name + fullPath;
+                currentNode = currentNode.ParentNode;
+            }
+            return fullPath;
         }
 
         /// <summary>
         /// The namespace used to decorate attributes that should be used as a key to locate an existing node.
         /// </summary>
-        public readonly string KeyedNodeIdentifyingNamespace = "urn:msbuildcommunitytasks-xmlmassupdate";
+        /// <remarks>Evaluates to: <c>urn:msbuildcommunitytasks-xmlmassupdate</c></remarks>
+        public string KeyedNodeIdentifyingNamespace { get { return keyedNodeIdentifyingNamespace; } }
+        private const string keyedNodeIdentifyingNamespace = "urn:msbuildcommunitytasks-xmlmassupdate";
 
-        private XmlNode ensureNode(XmlDocument config, XmlNode parentNode, XmlNode sourceNode)
+        private XmlNode ensureNode(XmlDocument config, XmlNode destinationParentNode, XmlNode nodeToEnsure)
         {
-            XmlAttribute keyAttribute = getKeyAttribute(sourceNode);
+            XmlAttribute keyAttribute = getKeyAttribute(nodeToEnsure);
             string xpath;
             if (keyAttribute == null)
             {
-                xpath = sourceNode.Name;
+                xpath = nodeToEnsure.Name;
             }
             else
             {
-                Log.LogMessage(MessageImportance.Low, "Using keyed attribute '{0}' to locate node '{1}'", keyAttribute.LocalName, sourceNode.LocalName);
-                xpath = String.Format("{0}[@{1}='{2}']", sourceNode.LocalName, keyAttribute.LocalName, keyAttribute.Value);
+                Log.LogMessage(MessageImportance.Low, "Using keyed attribute '{0}={1}' to locate node '{2}'", keyAttribute.LocalName,keyAttribute.Value, getFullPathOfNode(destinationParentNode) + "/" + nodeToEnsure.LocalName);
+                xpath = String.Format("{0}[@{1}='{2}']", nodeToEnsure.LocalName, keyAttribute.LocalName, keyAttribute.Value);
             }
-            XmlNode targetNode = parentNode.SelectSingleNode(xpath, namespaceManager);
-            if (targetNode == null)
+            XmlNode ensuredNode = destinationParentNode.SelectSingleNode(xpath, namespaceManager);
+            if (ensuredNode == null)
             {
-                Log.LogMessage(MessageImportance.Low, "Creating node '{0}' under '{1}'", sourceNode.Name, parentNode.Name);
-                targetNode = parentNode.AppendChild(config.CreateNode(XmlNodeType.Element, sourceNode.Name, String.Empty));
+                ensuredNode = destinationParentNode.AppendChild(config.CreateNode(XmlNodeType.Element, nodeToEnsure.Name, String.Empty));
+                Log.LogMessage(MessageImportance.Low, "Created node '{0}'", getFullPathOfNode(ensuredNode));
                 if (keyAttribute != null)
                 {
-                    XmlAttribute keyAttributeOnNewNode = targetNode.Attributes.Append(config.CreateAttribute(keyAttribute.LocalName));
+                    XmlAttribute keyAttributeOnNewNode = ensuredNode.Attributes.Append(config.CreateAttribute(keyAttribute.LocalName));
                     keyAttributeOnNewNode.Value = keyAttribute.Value;
                 }
             }
-            return targetNode;
+            return ensuredNode;
         }
 
         private XmlAttribute getKeyAttribute(XmlNode sourceNode)
@@ -244,7 +339,7 @@ namespace MSBuild.Community.Tasks.Xml
             XmlAttribute keyAttribute = null;
             for (int i = 0; i < sourceNode.Attributes.Count; i++)
             {
-                if (sourceNode.Attributes[i].NamespaceURI == KeyedNodeIdentifyingNamespace)
+                if (sourceNode.Attributes[i].NamespaceURI == keyedNodeIdentifyingNamespace)
                 {
                     if (keyAttribute != null)
                     {
