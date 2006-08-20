@@ -190,7 +190,22 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             assertXml("Earth", "/configuration/appSettings/add[@key='D']/@value", "A should have changed");
         }
 
+        [Test]
+        public void RemoveElement()
+        {
+            setupTask();
+            setupContent();
+            task.SubstitutionsRoot = "/configuration/substitutions/removeElement";
 
+            XmlNode traceNode = getNode(task.ContentXml, "/configuration/system.web/trace");
+            Assert.IsNotNull(traceNode, "The trace element should exist.");
+
+            bool executeSucceeded = task.Execute();
+            Assert.IsTrue(executeSucceeded, "Task should have succeeded.");
+
+            traceNode = getNode(task.MergedXmlDocument, "/configuration/system.web/trace");
+            Assert.IsNull(traceNode, "The trace element should not exist.");
+        }
 
         private string getInitialValue(string xpath)
         {
@@ -204,6 +219,17 @@ namespace MSBuild.Community.Tasks.Tests.Xml
         private void assertXml(string expectedValue, string xpath, string message)
         {
             Assert.DoAssert(new XPathAsserter(task.MergedXmlDocument, xpath, expectedValue, message));
+        }
+
+        private XmlNode getNode(string xml, string xpath)
+        {
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+            return getNode(document, xpath);
+        }
+        private XmlNode getNode(XmlDocument document, string xpath)
+        {
+            return document.SelectSingleNode(xpath);
         }
 
 
@@ -267,6 +293,11 @@ namespace MSBuild.Community.Tasks.Tests.Xml
         <add xmu:key=""key"" key=""D"" value=""Earth"" />
       </appSettings>
     </addNewKeyed>
+    <removeElement>
+      <system.web>
+        <trace xmu:action=""remove"" />
+      </system.web>
+    </removeElement>
 </substitutions>
 </configuration>";
 

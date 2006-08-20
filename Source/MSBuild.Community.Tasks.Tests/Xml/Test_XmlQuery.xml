@@ -2,7 +2,7 @@
 <!-- $Id$ -->
 <configuration>
   <configSections>
-	  <section name="singleValue" type="SingleValueSection" />
+    <section name="singleValue" type="SingleValueSection" />
   </configSections>
   <appSettings>
     <add key="DefaultTheme" value="Simple" />
@@ -17,31 +17,36 @@
   <system.web>
     <compilation defaultLanguage="c#" debug="true" />
     <authorization>
-      <deny users="?" />        
+      <deny users="?" />
       <allow users="*" />
     </authorization>
     <trace enabled="false" />
   </system.web>
   <substitutions xmlns:xmu="urn:msbuildcommunitytasks-xmlmassupdate">
-	<test>
-		<system.web>
-			<compilation debug="true" />
-			<customErrors mode="RemoteOnly" />
-		</system.web>
-		<appSettings>
-			<add xmu:key="key" key="MaxRowsPerPage" value="10" />
-			<add xmu:key="key" key="DefaultTheme" value="Elegant" />
-			<add xmu:key="key" key="BrandNewSetting" value="2" />
-		</appSettings>
-	</test>
-	<prod>
-		<system.web>
-			<compilation debug="false" />
-			<customErrors mode="On" defaultRedirect="Errors.htm" />
-		</system.web>
-		<appSettings>
-			<add xmu:key="key" key="MaxRowsPerPage" value="50" />
-		</appSettings>
-	</prod>
+    <keyed>
+      <system.web>
+        <compilation debug="true" />
+        <customErrors mode="RemoteOnly" />
+      </system.web>
+      <appSettings>
+        <add xmu:key="key" key="MaxRowsPerPage" value="10" />
+        <add xmu:key="key" key="DefaultTheme" value="Elegant" />
+        <add xmu:key="key" key="BrandNewSetting" value="2" />
+      </appSettings>
+    </keyed>
+    <same>
+      <system.web>
+        <compilation debug="false" />
+        <customErrors mode="On" defaultRedirect="Errors.htm" />
+      </system.web>
+      <appSettings>
+        <add xmu:key="key" key="MaxRowsPerPage" value="50" />
+      </appSettings>
+    </same>
+    <remove>
+      <system.web>
+        <trace xmu:action="remove" />
+      </system.web>
+    </remove>
   </substitutions>
 </configuration>

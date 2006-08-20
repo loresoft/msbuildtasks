@@ -136,8 +136,8 @@ namespace MSBuild.Community.Tasks.Xml
             if (mergedFile == null) mergedFile = contentFile;
 
             setContentPath();
-
             setSubstitutionsPath();
+            setMergedPath();
 
             if (String.IsNullOrEmpty(substitutionsRoot)) substitutionsRoot = "/";
             if (String.IsNullOrEmpty(contentRoot)) contentRoot = "/";
@@ -173,7 +173,7 @@ namespace MSBuild.Community.Tasks.Xml
 
             try
             {
-                addAllChildNodes(contentDocument, substitutionsRootNode, contentRootNode);
+                addAllChildNodes(contentDocument, contentRootNode, substitutionsRootNode);
             }
             catch (MultipleRootNodesException)
             {
@@ -181,8 +181,25 @@ namespace MSBuild.Community.Tasks.Xml
                 return false;
             }
 
-            setMergedPath();
             return SaveMergedDocument(contentDocument);
+        }
+
+        private void setContentPath()
+        {
+            contentPathUsedByTask = contentFile.GetMetadata("FullPath");
+            if (String.IsNullOrEmpty(contentPathUsedByTask)) contentPathUsedByTask = contentFile.ItemSpec;
+        }
+
+        private void setSubstitutionsPath()
+        {
+            substitutionsPathUsedByTask = substitutionsFile.GetMetadata("FullPath");
+            if (String.IsNullOrEmpty(substitutionsPathUsedByTask)) substitutionsPathUsedByTask = substitutionsFile.ItemSpec;
+        }
+
+        private void setMergedPath()
+        {
+            mergedPathUsedByTask = mergedFile.GetMetadata("FullPath");
+            if (String.IsNullOrEmpty(mergedPathUsedByTask)) mergedPathUsedByTask = mergedFile.ItemSpec;
         }
 
         /// <summary>
@@ -208,18 +225,6 @@ namespace MSBuild.Community.Tasks.Xml
                 substitutionsDocument.Load(substitutionsPathUsedByTask);
             }
             return substitutionsDocument;
-        }
-
-        private void setSubstitutionsPath()
-        {
-            substitutionsPathUsedByTask = substitutionsFile.GetMetadata("FullPath");
-            if (String.IsNullOrEmpty(substitutionsPathUsedByTask)) substitutionsPathUsedByTask = substitutionsFile.ItemSpec;
-        }
-
-        private void setContentPath()
-        {
-            contentPathUsedByTask = contentFile.GetMetadata("FullPath");
-            if (String.IsNullOrEmpty(contentPathUsedByTask)) contentPathUsedByTask = contentFile.ItemSpec;
         }
 
         /// <summary>
@@ -259,42 +264,59 @@ namespace MSBuild.Community.Tasks.Xml
             return true;
         }
 
-        private void setMergedPath()
+        private void addAllChildNodes(XmlDocument mergedDocument, XmlNode contentParentNode, XmlNode substitutionsParentNode)
         {
-            mergedPathUsedByTask = mergedFile.GetMetadata("FullPath");
-            if (String.IsNullOrEmpty(mergedPathUsedByTask)) mergedPathUsedByTask = mergedFile.ItemSpec;
-        }
-
-        private void addAllChildNodes(XmlDocument config, XmlNode sourceParentNode, XmlNode configurationParentNode)
-        {
-            XmlNode sourceNode = sourceParentNode.FirstChild;
-            while (sourceNode != null)
+            XmlNode substitutionNode = substitutionsParentNode.FirstChild;
+            while (substitutionNode != null)
             {
-                if (sourceNode.NodeType == XmlNodeType.Element)
+                if (substitutionNode.NodeType == XmlNodeType.Element)
                 {
-                    XmlNode targetNode = ensureNode(config, configurationParentNode, sourceNode);
-
-                    foreach (XmlAttribute sourceAttribute in sourceNode.Attributes)
+                    if (shouldDeleteElement(substitutionNode))
                     {
-                        if (sourceAttribute.NamespaceURI != updateControlNamespace)
-                        {
-                            setAttributeValue(config, targetNode, sourceAttribute.Name, sourceAttribute.Value);
-                        }
+                        removeChildNode(mergedDocument, contentParentNode, substitutionNode);
+                    } 
+                    else
+                    {
+                        XmlNode mergedNode = addChildNode(mergedDocument, contentParentNode, substitutionNode);
+                        addAllChildNodes(mergedDocument, mergedNode, substitutionNode);
                     }
-
-                    addAllChildNodes(config, sourceNode, targetNode);
                 }
-                sourceNode = sourceNode.NextSibling;
+                substitutionNode = substitutionNode.NextSibling;
             }
         }
 
-        private void setAttributeValue(XmlDocument config, XmlNode modifiedNode, string attributeName, string attributeValue)
+        private void removeChildNode(XmlDocument mergedDocument, XmlNode contentParentNode, XmlNode substitutionNode)
+        {
+            modifyNode(mergedDocument, contentParentNode, substitutionNode, true);
+        }
+
+        private XmlNode addChildNode(XmlDocument mergedDocument, XmlNode destinationParentNode, XmlNode nodeToAdd)
+        {
+            XmlNode newNode = modifyNode(mergedDocument, destinationParentNode, nodeToAdd);
+
+            foreach (XmlAttribute sourceAttribute in nodeToAdd.Attributes)
+            {
+                if (sourceAttribute.NamespaceURI != updateControlNamespace)
+                {
+                    setAttributeValue(mergedDocument, newNode, sourceAttribute.Name, sourceAttribute.Value);
+                }
+            }
+            return newNode;
+        }
+
+        private bool shouldDeleteElement(XmlNode sourceNode)
+        {
+            string action = getActionAttribute(sourceNode);
+            return action.Equals("remove", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private void setAttributeValue(XmlDocument mergedDocument, XmlNode modifiedNode, string attributeName, string attributeValue)
         {
             XmlAttribute targetAttribute = modifiedNode.Attributes[attributeName];
             if (targetAttribute == null)
             {
                 Log.LogMessage(MessageImportance.Low, "Creating attribute '{0}' on '{1}'", attributeName, getFullPathOfNode(modifiedNode));
-                targetAttribute = modifiedNode.Attributes.Append(config.CreateAttribute(attributeName));
+                targetAttribute = modifiedNode.Attributes.Append(mergedDocument.CreateAttribute(attributeName));
             }
             targetAttribute.Value = attributeValue;
             Log.LogMessage("Setting attribute '{0}' to '{1}' on '{2}'", targetAttribute.Name, targetAttribute.Value, getFullPathOfNode(modifiedNode));
@@ -322,35 +344,54 @@ namespace MSBuild.Community.Tasks.Xml
         public string UpdateControlNamespace { get { return updateControlNamespace; } }
         private const string updateControlNamespace = "urn:msbuildcommunitytasks-xmlmassupdate";
 
-        private XmlNode ensureNode(XmlDocument config, XmlNode destinationParentNode, XmlNode nodeToEnsure)
+        private XmlNode modifyNode(XmlDocument mergedDocument, XmlNode destinationParentNode, XmlNode nodeToModify)
         {
-            XmlAttribute keyAttribute = getKeyAttribute(nodeToEnsure);
-            string xpath;
-            if (keyAttribute == null)
+            return modifyNode(mergedDocument, destinationParentNode, nodeToModify, false);
+        }
+        private XmlNode modifyNode(XmlDocument mergedDocument, XmlNode destinationParentNode, XmlNode nodeToModify, bool remove)
+        {
+            XmlAttribute keyAttribute = getKeyAttribute(nodeToModify);
+            XmlNode targetNode = locateTargetNode(destinationParentNode, nodeToModify, keyAttribute);
+            if (targetNode == null)
             {
-                xpath = nodeToEnsure.Name;
-            }
-            else
-            {
-                Log.LogMessage(MessageImportance.Low, "Using keyed attribute '{0}={1}' to locate node '{2}'", keyAttribute.LocalName,keyAttribute.Value, getFullPathOfNode(destinationParentNode) + "/" + nodeToEnsure.LocalName);
-                xpath = String.Format("{0}[@{1}='{2}']", nodeToEnsure.LocalName, keyAttribute.LocalName, keyAttribute.Value);
-            }
-            XmlNode ensuredNode = destinationParentNode.SelectSingleNode(xpath, namespaceManager);
-            if (ensuredNode == null)
-            {
+                if (remove) return null;
                 if (destinationParentNode.NodeType == XmlNodeType.Document)
                 {
                     throw new MultipleRootNodesException();
                 }
-                ensuredNode = destinationParentNode.AppendChild(config.CreateNode(XmlNodeType.Element, nodeToEnsure.Name, String.Empty));
-                Log.LogMessage(MessageImportance.Low, "Created node '{0}'", getFullPathOfNode(ensuredNode));
+                targetNode = destinationParentNode.AppendChild(mergedDocument.CreateNode(XmlNodeType.Element, nodeToModify.Name, String.Empty));
+                Log.LogMessage(MessageImportance.Low, "Created node '{0}'", getFullPathOfNode(targetNode));
                 if (keyAttribute != null)
                 {
-                    XmlAttribute keyAttributeOnNewNode = ensuredNode.Attributes.Append(config.CreateAttribute(keyAttribute.LocalName));
+                    XmlAttribute keyAttributeOnNewNode = targetNode.Attributes.Append(mergedDocument.CreateAttribute(keyAttribute.LocalName));
                     keyAttributeOnNewNode.Value = keyAttribute.Value;
                 }
             }
-            return ensuredNode;
+            else
+            {
+                if (remove)
+                {
+                    Log.LogMessage(MessageImportance.Normal, "Removing node '{0}'", getFullPathOfNode(targetNode));
+                    destinationParentNode.RemoveChild(targetNode);
+                }
+            }
+            return targetNode;
+        }
+
+        private XmlNode locateTargetNode(XmlNode parentNode, XmlNode nodeToFind, XmlAttribute keyAttribute)
+        {
+            string xpath;
+            if (keyAttribute == null)
+            {
+                xpath = nodeToFind.Name;
+            }
+            else
+            {
+                Log.LogMessage(MessageImportance.Low, "Using keyed attribute '{0}={1}' to locate node '{2}'", keyAttribute.LocalName, keyAttribute.Value, getFullPathOfNode(parentNode) + "/" + nodeToFind.LocalName);
+                xpath = String.Format("{0}[@{1}='{2}']", nodeToFind.LocalName, keyAttribute.LocalName, keyAttribute.Value);
+            }
+            XmlNode foundNode = parentNode.SelectSingleNode(xpath, namespaceManager);
+            return foundNode;
         }
 
         private XmlAttribute getKeyAttribute(XmlNode sourceNode)
@@ -367,6 +408,15 @@ namespace MSBuild.Community.Tasks.Xml
                 }
             }
             return keyAttribute;
+        }
+
+        private string getActionAttribute(XmlNode sourceNode)
+        {
+            XmlNamespaceManager specialNamespaces = new XmlNamespaceManager(sourceNode.OwnerDocument.NameTable);
+            specialNamespaces.AddNamespace("xmu", updateControlNamespace);
+            XmlNode actionNode = sourceNode.SelectSingleNode("@xmu:action", specialNamespaces);
+            if (actionNode == null) return String.Empty;
+            return actionNode.Value;
         }
 
         private class MultipleRootNodesException : Exception { }

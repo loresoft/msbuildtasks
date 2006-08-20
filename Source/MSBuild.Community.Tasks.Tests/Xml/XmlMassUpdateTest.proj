@@ -16,8 +16,12 @@
     <Prompt  Text="Attach debugger and press Enter to continue." />
   </Target>
 
+  <Target Name="RemoveElement" DependsOnTargets="DebuggerHook">
+    <XmlMassUpdate ContentFile="Test_XmlQuery.xml" MergedFile="$(testDir)\web.config.remove.xml" ContentRoot="/configuration" SubstitutionsRoot="/configuration/substitutions/remove" />
+  </Target>
+
   <Target Name="UpdateKeyedElement" DependsOnTargets="DebuggerHook">
-    <XmlMassUpdate ContentFile="Test_XmlQuery.xml" MergedFile="$(testDir)\web.config.keyed.xml" ContentRoot="/configuration" SubstitutionsRoot="/configuration/substitutions/test" />
+    <XmlMassUpdate ContentFile="Test_XmlQuery.xml" MergedFile="$(testDir)\web.config.keyed.xml" ContentRoot="/configuration" SubstitutionsRoot="/configuration/substitutions/keyed" />
   </Target>
 
   <Target Name="SubstituteFromProperty" DependsOnTargets="DebuggerHook">
@@ -30,11 +34,12 @@
   </Target>
 
   <Target Name="ContentAndSubstitutionsSame" DependsOnTargets="DebuggerHook">
-    <XmlMassUpdate ContentFile="Test_XmlQuery.xml" MergedFile="$(testDir)\web.config.same.xml" ContentRoot="/configuration" SubstitutionsRoot="/configuration/substitutions/prod" />
+    <XmlMassUpdate ContentFile="Test_XmlQuery.xml" MergedFile="$(testDir)\web.config.same.xml" ContentRoot="/configuration" SubstitutionsRoot="/configuration/substitutions/same" />
   </Target>
 
   <Target Name="Test" DependsOnTargets="ContentAndSubstitutionsSame;
                                         ContentAndSubstitutionsDifferent;
                                         SubstituteFromProperty;
-                                        UpdateKeyedElement" />
+                                        UpdateKeyedElement;
+                                        RemoveElement" />
 </Project>
