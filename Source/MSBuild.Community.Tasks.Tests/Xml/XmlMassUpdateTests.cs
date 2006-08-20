@@ -207,6 +207,30 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             Assert.IsNull(traceNode, "The trace element should not exist.");
         }
 
+        [Test]
+        public void RemoveKeyedElement()
+        {
+            setupTask();
+            setupContent();
+            task.SubstitutionsRoot = "/configuration/substitutions/removeKeyedElement";
+
+            string originalA = getInitialValue("/configuration/appSettings/add[@key='A']/@value");
+            string originalB = getInitialValue("/configuration/appSettings/add[@key='B']/@value");
+            string originalC = getInitialValue("/configuration/appSettings/add[@key='C']/@value");
+            Assert.IsNotNull(originalA, "A should exist.");
+            Assert.IsNotNull(originalB, "B should exist.");
+            Assert.IsNotNull(originalC, "C should exist.");
+
+            bool executeSucceeded = task.Execute();
+            Assert.IsTrue(executeSucceeded, "Task should have succeeded.");
+
+            assertXml(originalA, "/configuration/appSettings/add[@key='A']/@value", "A should not have changed");
+            assertXml(originalC, "/configuration/appSettings/add[@key='C']/@value", "C should not have changed");
+
+            XmlNode bNode = getNode(task.MergedXmlDocument, "/configuration/appSettings/add[@key='B']/@value");
+            Assert.IsNull(bNode, "The B element should not exist.");
+        }
+
         private string getInitialValue(string xpath)
         {
             XmlDocument original = new XmlDocument();
@@ -298,6 +322,11 @@ namespace MSBuild.Community.Tasks.Tests.Xml
         <trace xmu:action=""remove"" />
       </system.web>
     </removeElement>
+    <removeKeyedElement>
+      <appSettings>
+        <add xmu:key=""key"" key=""B"" xmu:action=""remove"" />
+      </appSettings>
+    </removeKeyedElement>
 </substitutions>
 </configuration>";
 
