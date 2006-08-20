@@ -54,8 +54,9 @@ namespace MSBuild.Community.Tasks.Xml
         /// </summary>
         /// <remarks>When not specified, the default is the document root: <c>/</c>
         /// <para>When there is a set of elements with the same name, and you want to update
-        /// a single element which can be identified by one of its attributes, you can mark the attribute
-        /// with the following namespace: <c>urn:msbuildcommunitytasks-xmlmassupdate</c>.</para></remarks>
+        /// a single element which can be identified by one of its attributes, you need to include an attribute
+        /// named 'key' in the namespace <c>urn:msbuildcommunitytasks-xmlmassupdate</c>. The value of the
+        /// attribute is the name of the attribute that should be used as the unique identifier.</para></remarks>
         public string SubstitutionsRoot
         {
             get { return substitutionsRoot; }
@@ -174,11 +175,6 @@ namespace MSBuild.Community.Tasks.Xml
             {
                 addAllChildNodes(contentDocument, substitutionsRootNode, contentRootNode);
             }
-            catch (MultipleKeyedAttributesException)
-            {
-                Log.LogError("A substitution node contained more than one keyed attributed.");
-                return false;
-            }
             catch (MultipleRootNodesException)
             {
                 Log.LogError("Cannot create a new document root node because one already exists. Make sure to set the SubstitutionsRoot property.");
@@ -280,7 +276,7 @@ namespace MSBuild.Community.Tasks.Xml
 
                     foreach (XmlAttribute sourceAttribute in sourceNode.Attributes)
                     {
-                        if (sourceAttribute.NamespaceURI != keyedNodeIdentifyingNamespace)
+                        if (sourceAttribute.NamespaceURI != updateControlNamespace)
                         {
                             setAttributeValue(config, targetNode, sourceAttribute.Name, sourceAttribute.Value);
                         }
@@ -317,11 +313,14 @@ namespace MSBuild.Community.Tasks.Xml
         }
 
         /// <summary>
-        /// The namespace used to decorate attributes that should be used as a key to locate an existing node.
+        /// The namespace used for XmlMassUpdate pre-defined attributes
         /// </summary>
-        /// <remarks>Evaluates to: <c>urn:msbuildcommunitytasks-xmlmassupdate</c></remarks>
-        public string KeyedNodeIdentifyingNamespace { get { return keyedNodeIdentifyingNamespace; } }
-        private const string keyedNodeIdentifyingNamespace = "urn:msbuildcommunitytasks-xmlmassupdate";
+        /// <remarks>Evaluates to: <c>urn:msbuildcommunitytasks-xmlmassupdate</c>
+        /// <para>Attributes decorated with this namespace are used to control how a substitutions element
+        /// or attribute is handled during the update. For example, the key attribute is used to identify the
+        /// attribute on an element that uniquely identifies the element in a set.</para></remarks>
+        public string UpdateControlNamespace { get { return updateControlNamespace; } }
+        private const string updateControlNamespace = "urn:msbuildcommunitytasks-xmlmassupdate";
 
         private XmlNode ensureNode(XmlDocument config, XmlNode destinationParentNode, XmlNode nodeToEnsure)
         {
@@ -359,19 +358,17 @@ namespace MSBuild.Community.Tasks.Xml
             XmlAttribute keyAttribute = null;
             for (int i = 0; i < sourceNode.Attributes.Count; i++)
             {
-                if (sourceNode.Attributes[i].NamespaceURI == keyedNodeIdentifyingNamespace)
+                if ((sourceNode.Attributes[i].NamespaceURI == updateControlNamespace) &&
+                    (sourceNode.Attributes[i].LocalName == "key"))
                 {
-                    if (keyAttribute != null)
-                    {
-                        throw new MultipleKeyedAttributesException();
-                    }
-                    keyAttribute = sourceNode.Attributes[i];
+                    string keyAttributeName = sourceNode.Attributes[i].Value;
+                    keyAttribute = sourceNode.Attributes[keyAttributeName];
+                    break;
                 }
             }
             return keyAttribute;
         }
 
-        private class MultipleKeyedAttributesException : Exception {}
         private class MultipleRootNodesException : Exception { }
     }
 }

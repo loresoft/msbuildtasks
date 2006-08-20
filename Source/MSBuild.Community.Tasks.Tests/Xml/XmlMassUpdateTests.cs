@@ -102,17 +102,6 @@ namespace MSBuild.Community.Tasks.Tests.Xml
         }
 
         [Test]
-        public void MultipleKeyedAttributesOnSingleNode()
-        {
-            setupTask();
-            setupContent();
-            task.SubstitutionsRoot = "/configuration/substitutions/multipleKeys";
-
-            bool executeSucceeded = task.Execute();
-            Assert.IsFalse(executeSucceeded, "Task should have failed and because of multiple keyed attributes on an element.");
-        }
-
-        [Test]
         public void UpdateDocumentWithNamespaces()
         {
             setupTask();
@@ -211,6 +200,7 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             if (node == null) return null;
             return node.Value;
         }
+
         private void assertXml(string expectedValue, string xpath, string message)
         {
             Assert.DoAssert(new XPathAsserter(task.MergedXmlDocument, xpath, expectedValue, message));
@@ -260,28 +250,23 @@ namespace MSBuild.Community.Tasks.Tests.Xml
     <trace enabled=""false"" pageOutput=""true"" />
   </system.web>
 
-  <substitutions xmlns:key=""urn:msbuildcommunitytasks-xmlmassupdate"">
+  <substitutions xmlns:xmu=""urn:msbuildcommunitytasks-xmlmassupdate"">
     <updateKeyed>
       <appSettings>
-        <add key:key=""B"" value=""100"" />
+        <add xmu:key=""key"" key=""B"" value=""100"" />
       </appSettings>
     </updateKeyed>
     <updateMultipleKeyed>
       <appSettings>
-        <add key:key=""A"" value=""Red"" />
-        <add key:key=""C"" value=""Green"" />
+        <add xmu:key=""key"" key=""A"" value=""Red"" />
+        <add xmu:key=""key"" key=""C"" value=""Green"" />
       </appSettings>
     </updateMultipleKeyed>
     <addNewKeyed>
       <appSettings>
-        <add key:key=""D"" value=""Earth"" />
+        <add xmu:key=""key"" key=""D"" value=""Earth"" />
       </appSettings>
     </addNewKeyed>
-    <multipleKeys>
-      <appSettings>
-        <add key:key=""B"" key:value=""100"" other=""other"" />
-      </appSettings>
-    </multipleKeys>
 </substitutions>
 </configuration>";
 
