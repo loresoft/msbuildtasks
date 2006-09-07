@@ -29,6 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.CodeDom;
 using System.CodeDom.Compiler;
@@ -84,6 +85,7 @@ namespace MSBuild.Community.Tasks
         #region Fields
         private Dictionary<string, string> _attributes;
         private string[] _Imports;
+        private bool _generateClass = false;
 
         #endregion Fields
 
@@ -281,6 +283,16 @@ namespace MSBuild.Community.Tasks
             set { _attributes["AssemblyDelaySign"] = value.ToString(); }
         }
 
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to generate the ThisAssmebly class.
+        /// </summary>
+        public bool GenerateClass
+        {
+            get { return _generateClass; }
+            set { _generateClass = value; }
+        }
+        
         #endregion Input Parameters
 
         #region Input/Output Parameters
@@ -352,7 +364,6 @@ namespace MSBuild.Community.Tasks
             {
                 codeNamespace.Imports.Add(new CodeNamespaceImport(import));
             }
-
             codeCompileUnit.Namespaces.Add(codeNamespace);
 
             foreach (KeyValuePair<string, string> assemblyAttribute in _attributes)
@@ -376,6 +387,36 @@ namespace MSBuild.Community.Tasks
 
                 // add assembly-level argument to code compile unit
                 codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
+            }
+            if (_generateClass)
+            {
+                //Create Class Declaration
+                CodeTypeDeclaration thisAssemblyType = new CodeTypeDeclaration("ThisAssembly");
+                thisAssemblyType.IsClass = true;
+                thisAssemblyType.IsPartial = true;
+                thisAssemblyType.TypeAttributes = TypeAttributes.NotPublic | TypeAttributes.Sealed;
+
+                CodeConstructor privateConstructor = new CodeConstructor();
+                privateConstructor.Attributes = MemberAttributes.Private;
+                thisAssemblyType.Members.Add(privateConstructor);
+                
+                foreach (KeyValuePair<string, string> assemblyAttribute in _attributes)
+                {
+                    if (assemblyAttribute.Key == "CLSCompliant" ||
+                        assemblyAttribute.Key == "AssemblyDelaySign" || 
+                        assemblyAttribute.Key == "ComVisible" || 
+                        assemblyAttribute.Key == "AssemblyKeyFile")
+                    {
+                        continue;
+                    }    
+                    
+                    CodeMemberField field = new CodeMemberField(typeof(string), assemblyAttribute.Key);
+                    field.Attributes = MemberAttributes.Assembly | MemberAttributes.Const;
+                    field.InitExpression = new CodePrimitiveExpression(assemblyAttribute.Value);
+                    thisAssemblyType.Members.Add(field);
+                }
+                
+                codeNamespace.Types.Add(thisAssemblyType);                
             }
             provider.GenerateCodeFromCompileUnit(codeCompileUnit, writer, new CodeGeneratorOptions());
         }
