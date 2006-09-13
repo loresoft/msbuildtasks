@@ -39,9 +39,9 @@ using System.IO;
 namespace MSBuild.Community.Tasks
 {
 	/// <summary>
-	/// Get Version information from file.
+	/// Generates version information based on various algorithms
 	/// </summary>
-	/// <example>Get version information and increment revision.
+	/// <example>Get version information from file and increment revision.
 	/// <code><![CDATA[
 	/// <Version VersionFile="number.txt" BuildType="Automatic" RevisionType="Increment">
 	///     <Output TaskParameter="Major" PropertyName="Major" />
@@ -52,7 +52,19 @@ namespace MSBuild.Community.Tasks
 	/// <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
 	/// ]]></code>
 	/// </example>
-	public class Version : Task {
+    /// <example>Specify Major and Minor version information and generate Build and Revision.
+    /// <code><![CDATA[
+    /// <Version BuildType="Date" RevisionType="Automatic" Major="1" Minor="3" >
+    ///     <Output TaskParameter="Major" PropertyName="Major" />
+    ///     <Output TaskParameter="Minor" PropertyName="Minor" />
+    ///     <Output TaskParameter="Build" PropertyName="Build" />
+    ///     <Output TaskParameter="Revision" PropertyName="Revision" />
+    /// </Version>
+    /// <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+    /// ]]></code>
+    /// </example>
+    public class Version : Task
+    {
 
         #region Enumerators
         private enum BuildTypeEnum {
@@ -141,10 +153,16 @@ namespace MSBuild.Community.Tasks
 		private string _versionFile;
 
 		/// <summary>
-		/// Gets or sets the version file.
+		/// Gets or sets the file used to initialize and persist the version.
 		/// </summary>
 		/// <value>The version file.</value>
-		[Required]
+        /// <remarks>
+        /// When specified, the task will attempt to load the previous version information from the file.
+        /// After updating the version, the new value will be saved to the file.
+        /// <para>
+        /// If you do not specify a value for this property, the version will be calculated
+        /// based on the values passed to the <see cref="Major"/>, <see cref="Minor"/>,
+        /// <see cref="Build"/>, and <see cref="Revision"/> properties. The new version will not be persisted.</para></remarks>
 		public string VersionFile
 		{
 			get { return _versionFile; }
@@ -154,13 +172,20 @@ namespace MSBuild.Community.Tasks
         private BuildTypeEnum _buildTypeEnum;
 
 		/// <summary>
-		/// Gets or sets the type of the build. Possible values are None, Automatic, Increment, Date, DateIncrement
+        /// Gets or sets the method used to generate a <see cref="Build"/> number
 		/// </summary>
 		/// <remarks>
-		/// Possible values include None, Automatic, Increment, NonIncrement, or DateIncrement.  If value is not provided, None is assumed.
-        /// If the BuildType of DateIncrement is selected, the StartAt parameter will be used to calculate the build number based on the the number of days that passed
-        /// between the StartDate and the current date.
-		/// </remarks>
+		/// If value is not provided, None is assumed.
+        /// The Build number is set according to the following table:
+        /// <list type="table">
+        /// <listheader><term>BuildType</term><description>Description</description></listheader>
+        /// <item><term>None</term><description>The number is not modified.</description></item>
+        /// <item><term>Automatic</term><description>The number of days since January 1, 2000.</description></item>
+        /// <item><term>Date</term><description>A five-digit number indicating the current date. 
+        /// The 1st digit is the last number of the year, the 2nd and 3rd digits indicate the month, and the last 2 digits indicate the day.</description></item>
+        /// <item><term>DateIncrement</term><description>The number of days since <see cref="StartDate"/></description></item>
+        /// </list>
+        /// </remarks>
 		public string BuildType
 		{
 			get { return _buildTypeEnum.ToString(); }
@@ -170,11 +195,20 @@ namespace MSBuild.Community.Tasks
         private RevisionTypeEnum _revisionTypeEnum;
 
 		/// <summary>
-        /// Gets or sets the type of the revision. Possible values are None, Automatic, Increment, NonIncrement.
+        /// Gets or sets the method used to generate a <see cref="Revision"/> number
 		/// </summary>
 		/// <remarks>
-		/// Possible values include None, Automatic, Increment, NonIncrement.
-		/// </remarks>
+        /// If value is not provided, None is assumed.
+        /// The Revision number is set according to the following table:
+        /// <list type="table">
+        /// <listheader><term>RevisionType</term><description>Description</description></listheader>
+        /// <item><term>None</term><description>The number is not modified.</description></item>
+        /// <item><term>Automatic</term><description>The number of seconds elapsed since midnight.</description></item>
+        /// <item><term>Increment</term><description>Increases the previous Revision value by 1. If <see cref="BuildType"/> is <c>DateIncrement</c>,
+        /// the value is only incremented if the Build number has not changed. If the Build number has changed, 0 is returned.</description></item>
+        /// <item><term>NonIncrement</term><description>The number is not modified.</description></item>
+        /// </list>
+        /// </remarks>
 		public string RevisionType
 		{
 			get { return _revisionTypeEnum.ToString(); }
@@ -187,7 +221,7 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         /// <value>The starting date for calculation of the revision.</value>
         /// <remarks>
-        /// This value is used in conjunction with the BuildType of Date. <seealso cref="BuildType"/> This parameter defaults to 2000-01-01.
+        /// This value is used in conjunction with the BuildType of Date. <seealso cref="BuildType"/> This parameter defaults to January 1, 2000.
         /// </remarks>
         public string StartDate {
             get { return _startDate.ToString(); }
@@ -205,7 +239,8 @@ namespace MSBuild.Community.Tasks
 		/// </returns>
 		public override bool Execute()
 		{
-			ReadVersionFromFile();
+            _originalValues = new System.Version(_major, _major, _build, _revision);
+            ReadVersionFromFile();
 			CalculateBuildNumber();
 			CalculateRevisionNumber();
 			return WriteVersionToFile();
@@ -218,6 +253,7 @@ namespace MSBuild.Community.Tasks
 		{
 			string textVersion = null;
 			System.Version version = null;
+            if (String.IsNullOrEmpty(_versionFile)) return;
 
 			if (!System.IO.File.Exists(_versionFile))
 			{
@@ -265,6 +301,7 @@ namespace MSBuild.Community.Tasks
 
 		private bool WriteVersionToFile()
 		{
+            if (String.IsNullOrEmpty(_versionFile)) return true;
 			System.Version version = new System.Version(_major, _minor, _build, _revision);
 
 			try
@@ -301,7 +338,7 @@ namespace MSBuild.Community.Tasks
 			DateTime dDate = DateTime.Now;
 			int _month = dDate.Month * 100;
 			int _day = dDate.Day;
-			int _year = (dDate.Year % 2000) * 10000;
+			int _year = (dDate.Year % 10) * 10000;
 
 			return (_year + _month + _day);
 		}
@@ -354,7 +391,11 @@ namespace MSBuild.Community.Tasks
 
         private int CalculateBuildDateIncrememtRevision() 
         {
-            if (_build != _originalValues.Build && _originalValues.Revision > 0) return 0; else return _revision + 1;
+            if (_build == _originalValues.Build)
+            {
+                return _revision + 1;
+            }
+            return 0;
         }
 		#endregion Private Methods
 
