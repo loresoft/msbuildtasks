@@ -34,10 +34,24 @@ Console.WriteLine(x);
 		</CodeWithAssembly>
 	</PropertyGroup>
 
+  <PropertyGroup>
+    <CodeWithReturnValue>
+      <![CDATA[
+public static string ScriptMain(){
+return "Hello World";
+}			]]>
+    </CodeWithReturnValue>
+  </PropertyGroup>
 
-	<Target Name="DoScript">
+
+  <Target Name="DoScript">
 		<Script Language="C#" Code="$(Code)" />
 		<Script Language="C#" Code="$(CodeWithAssembly)" References="System.Web" />
+    <Script Language="C#" Code="$(CodeWithReturnValue)">
+      <Output TaskParameter="ReturnValue" PropertyName="ReturnedValue" />
+    </Script>
+    <Error Condition="'$(ReturnedValue)' != 'Hello World'" Text="ReturnValue should have been set." />
+    <Message Text="$(ReturnedValue)" />
 	</Target>
   
 </Project>

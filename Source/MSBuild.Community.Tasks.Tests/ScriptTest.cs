@@ -56,5 +56,30 @@ throw new InvalidOperationException(""This is the actual exception."");
 }";
             Assert.IsTrue(task.Execute(), "Task should have succeeded.");
         }
+
+        [Test]
+        public void SetsReturnValue()
+        {
+            Script task = new Script();
+            task.BuildEngine = new MockBuild();
+            task.Code = @"public static string ScriptMain(){
+return ""Hello World"";
+}";
+            Assert.IsTrue(task.Execute(), "Task should have succeeded.");
+            Assert.AreEqual("Hello World", task.ReturnValue, "ReturnValue should have been set.");
+        }
+
+        [Test]
+        public void AttemptsToReturnANonStringValue()
+        {
+            Script task = new Script();
+            task.BuildEngine = new MockBuild();
+            task.Code = @"public static int ScriptMain(){
+return 4;
+}";
+            Assert.IsTrue(task.Execute(), "Task should have succeeded.");
+            Assert.IsNull(task.ReturnValue, "ReturnValue should only be set when it is a string.");
+        }
+
     }
 }

@@ -61,11 +61,31 @@ namespace MSBuild.Community.Tasks
     ///     </HelloCode>
     /// </PropertyGroup>
     /// <Target Name="Hello">
-    ///     <Script Language="C#" Code="$(HelloCode)" />
+    ///     <Script Language="C#" Code="$(HelloCode)" Imports="System" />
     /// </Target>
     /// ]]></code>
 	/// </example>
-	public class Script : Task
+    /// <example>
+    /// <para>Script that returns a value.</para>
+    /// <code><![CDATA[
+    /// <PropertyGroup>
+    ///     <GetProgramFilesCode>
+    ///         <![CDATA[
+    ///         public static string ScriptMain() {
+    ///             return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+    ///         }
+    ///         ]] >
+    ///     </GetProgramFilesCode>
+    /// </PropertyGroup>
+    /// <Target Name="GetProgramFilesFolder">
+    ///     <Script Language="C#" Code="$(GetProgramFilesCode)">
+    ///         <Output TaskParameter="ReturnValue" PropertyName="ProgramFilesFolder" />
+    ///     </Script>
+    ///     <Message Text="Program files are in: $(ProgramFilesFolder)" />
+    /// </Target>
+    /// ]]></code>
+    /// </example>
+    public class Script : Task
 	{
 		#region Fields
 		private static readonly string[] _defaultNamespaces = {
@@ -87,7 +107,7 @@ namespace MSBuild.Community.Tasks
 		/// </summary>
 		public ITaskItem[] References
 		{
-			get { return _references; }
+            get { return _references; }
 			set { _references = value; }
 		}
 
@@ -137,8 +157,13 @@ namespace MSBuild.Community.Tasks
 		private string _code;
 
 		/// <summary>
-		/// THe code to compile and execute
+		/// The code to compile and execute
 		/// </summary>
+        /// <remarks>
+        /// The code must include a static (Shared in VB) method named ScriptMain.
+        /// It cannot accept any parameters. If you define the method return a <see cref="String"/>,
+        /// the returned value will be available in the <see cref="ReturnValue"/> output property.
+        /// </remarks>
 		public string Code
 		{
 			get { return _code; }
@@ -146,6 +171,18 @@ namespace MSBuild.Community.Tasks
 		}
 
 		#endregion Input Parameters
+
+        string _returnValue;
+        
+        /// <summary>
+        /// The string returned from the custom ScriptMain method.
+        /// </summary>
+        [Output]
+        public string ReturnValue
+        {
+            get { return _returnValue; }
+        }
+
 
 		#region Task Overrides
 		/// <summary>
@@ -274,14 +311,16 @@ namespace MSBuild.Community.Tasks
 			 * */
 
 			// invoke Main method
+            object invokeResult = null;
             try
             {
-                entry.Invoke(null, new object[] { });
+                invokeResult = entry.Invoke(null, new object[] { });
             }
             catch (TargetInvocationException targetInvocationException)
             {
                 throw targetInvocationException.InnerException;
             }
+            _returnValue = invokeResult as string;
 
 			return true;
 		}
