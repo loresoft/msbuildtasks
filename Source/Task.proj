@@ -237,6 +237,21 @@
 
   </Target>
   
+  <Target Name="GacUtil">
+    <GacUtil 
+      Command="Install" 
+      Assemblies="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks\bin\Debug\MSBuild.Community.Tasks.dll" 
+      Force="true" 
+    />
+
+    <GacUtil 
+      Command="Uninstall" 
+      Assemblies="MSBuild.Community.Tasks" 
+      Force="true" 
+    />
+
+  </Target>
+  
   <Target Name="All" 
           DependsOnTargets="AssemblyInfo;Mail;Zip;Unzip;Math;Version;NDoc;Registry;FTP;XML;NUnit;FileUpdate;Service;WebDownload">
     

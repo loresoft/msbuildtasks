@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="All"  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<!-- $Id: Task.proj 135 2006-03-19 01:02:09Z pwelter34 $ -->
+  <!-- $Id: Task.proj 135 2006-03-19 01:02:09Z pwelter34 $ -->
 
   <PropertyGroup>
     <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\Build</MSBuildCommunityTasksPath>
@@ -11,23 +11,23 @@
     <VssRepo>D:\Test\vss\</VssRepo>
     <TestOutput>D:\Test</TestOutput>
   </PropertyGroup>
-  
+
   <Import Project="$(MSBuildProjectDirectory)\Build\MSBuild.Community.Tasks.Targets"/>
 
-	<Target Name="AssemblyInfo">
-		<MakeDir Directories="$(TestOutput)" />
+  <Target Name="AssemblyInfo">
+    <MakeDir Directories="$(TestOutput)" />
 
-		<AssemblyInfo CodeLanguage="CS"  
+    <AssemblyInfo CodeLanguage="CS"  
 			OutputFile="$(TestOutput)\VersionInfo.cs" 
 			AssemblyVersion="1.0.0.0" 
 			AssemblyFileVersion="1.0.0.0" />
 
-		<AssemblyInfo CodeLanguage="VB"  
+    <AssemblyInfo CodeLanguage="VB"  
 			OutputFile="$(TestOutput)\VersionInfo.vb" 
 			AssemblyVersion="1.0.0.0" 
 			AssemblyFileVersion="1.0.0.0"/>
 
-		<AssemblyInfo CodeLanguage="CS"  
+    <AssemblyInfo CodeLanguage="CS"  
 			OutputFile="$(TestOutput)\GlobalInfo.cs" 
 			AssemblyTitle="AssemblyInfoTask" 
 			AssemblyDescription="AssemblyInfo Description"
@@ -42,126 +42,126 @@
 			AssemblyVersion="1.0.0.0" 
 			AssemblyFileVersion="1.0.0.0" />
 
-	</Target>
+  </Target>
 
-	<Target Name="Mail">
-		<Mail SmtpServer="localhost"
+  <Target Name="Mail">
+    <Mail SmtpServer="localhost"
 			To="user@email.com"
 			From="from@email.com"
 			Subject="Test Mail Task"
 			Body="This is a test of the mail task." />
-	</Target>
+  </Target>
 
-	<ItemGroup>
-		<DefaultExclude Include="**\.svn\**" />
-		<DefaultExclude Include="**\bin\**" />
-		<DefaultExclude Include="**\obj\**" />
-		<DefaultExclude Include="**\Test\**" />
-		<DefaultExclude Include="**\doc\**" />
-		<DefaultExclude Include="**\Backup\**" />
-		<DefaultExclude Include="*.user" />
-		<DefaultExclude Include="*.zip" />
-	</ItemGroup>
+  <ItemGroup>
+    <DefaultExclude Include="**\.svn\**" />
+    <DefaultExclude Include="**\bin\**" />
+    <DefaultExclude Include="**\obj\**" />
+    <DefaultExclude Include="**\Test\**" />
+    <DefaultExclude Include="**\doc\**" />
+    <DefaultExclude Include="**\Backup\**" />
+    <DefaultExclude Include="*.user" />
+    <DefaultExclude Include="*.zip" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<ZipFiles Include="**\*.*" Exclude="@(DefaultExclude)" />
-	</ItemGroup>
+  <ItemGroup>
+    <ZipFiles Include="**\*.*" Exclude="@(DefaultExclude)" />
+  </ItemGroup>
 
-	<Target Name="Zip">
-		<MakeDir Directories="$(TestOutput)" />
+  <Target Name="Zip">
+    <MakeDir Directories="$(TestOutput)" />
 
-		<Zip Files="@(ZipFiles)" 
+    <Zip Files="@(ZipFiles)" 
 			ZipFileName="$(TestOutput)\MSBuild.Community.Tasks.zip" />
 
-	</Target>
+  </Target>
 
-	<Target Name="Unzip" DependsOnTargets="Zip">
-		<Unzip ZipFileName="$(TestOutput)\MSBuild.Community.Tasks.zip" 
+  <Target Name="Unzip" DependsOnTargets="Zip">
+    <Unzip ZipFileName="$(TestOutput)\MSBuild.Community.Tasks.zip" 
 			TargetDirectory="$(TestOutput)\Backup"/>
-	</Target>
+  </Target>
 
-	<Target Name="Math">
-		<Math.Add Numbers="4;3">
-			<Output TaskParameter="Result" PropertyName="Result" />
-		</Math.Add>
-		<Message Text="Add 4+3= $(Result)"/>
+  <Target Name="Math">
+    <Math.Add Numbers="4;3">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Add>
+    <Message Text="Add 4+3= $(Result)"/>
 
-		<Math.Add Numbers="4;3;7">
-			<Output TaskParameter="Result" PropertyName="Result" />
-		</Math.Add>
-		<Message Text="Add 4+3+7= $(Result)"/>
+    <Math.Add Numbers="4;3;7">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Add>
+    <Message Text="Add 4+3+7= $(Result)"/>
 
-		<Math.Subtract Numbers="10;3">
-			<Output TaskParameter="Result" PropertyName="Result" />
-		</Math.Subtract>
-		<Message Text="Subtract 10-3= $(Result)"/>
+    <Math.Subtract Numbers="10;3">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Subtract>
+    <Message Text="Subtract 10-3= $(Result)"/>
 
-		<Math.Multiple Numbers="10;3">
-			<Output TaskParameter="Result" PropertyName="Result" />
-		</Math.Multiple>
-		<Message Text="Multiple 10*3= $(Result)"/>
+    <Math.Multiple Numbers="10;3">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Multiple>
+    <Message Text="Multiple 10*3= $(Result)"/>
 
-		<Math.Divide Numbers="1;2">
-			<Output TaskParameter="Result" PropertyName="Result" />
-		</Math.Divide>
-		<Message Text="Divide 1/2= $(Result)"/>
+    <Math.Divide Numbers="1;2">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Divide>
+    <Message Text="Divide 1/2= $(Result)"/>
 
-		<Math.Divide Numbers="7;3" TruncateResult="true">
-			<Output TaskParameter="Result" PropertyName="Result" />
-		</Math.Divide>
-		<Message Text="Divide 7/3= $(Result)"/>
+    <Math.Divide Numbers="7;3" TruncateResult="true">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Divide>
+    <Message Text="Divide 7/3= $(Result)"/>
 
-		<Math.Modulo Numbers="7;3">
-			<Output TaskParameter="Result" PropertyName="Result" />
-		</Math.Modulo>
-		<Message Text="Modulo 7/3= $(Result)"/>
+    <Math.Modulo Numbers="7;3">
+      <Output TaskParameter="Result" PropertyName="Result" />
+    </Math.Modulo>
+    <Message Text="Modulo 7/3= $(Result)"/>
 
-	</Target>
+  </Target>
 
-	<Target Name="Version">
-		<MakeDir Directories="$(TestOutput)" />
-		<Version VersionFile="$(TestOutput)\version.txt" RevisionType="Increment">
-			<Output TaskParameter="Major" PropertyName="Major" />
-			<Output TaskParameter="Minor" PropertyName="Minor" />
-			<Output TaskParameter="Build" PropertyName="Build" />
-			<Output TaskParameter="Revision" PropertyName="Revision" />
-		</Version>
+  <Target Name="Version">
+    <MakeDir Directories="$(TestOutput)" />
+    <Version VersionFile="$(TestOutput)\version.txt" RevisionType="Increment">
+      <Output TaskParameter="Major" PropertyName="Major" />
+      <Output TaskParameter="Minor" PropertyName="Minor" />
+      <Output TaskParameter="Build" PropertyName="Build" />
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </Version>
 
-		<Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
-	</Target>
+    <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+  </Target>
 
-	<Target Name="NDoc">
-		<NDoc Documenter="MSDN-CHM" 
+  <Target Name="NDoc">
+    <NDoc Documenter="MSDN-CHM" 
 			ProjectFilePath="MSBuild.Community.Tasks.ndoc" 
       WorkingDirectory="$(MSBuildProjectDirectory)\Documentation"
       ToolPath="$(MSBuildProjectDirectory)\Documentation\ndoc" />
 
-		<RemoveDir Directories="$(MSBuildProjectDirectory)\Documentation\doc" />
-	</Target>
+    <RemoveDir Directories="$(MSBuildProjectDirectory)\Documentation\doc" />
+  </Target>
 
-	<Target Name="Registry">
-		<RegistryRead 
+  <Target Name="Registry">
+    <RegistryRead 
 			KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework" 
 			ValueName="InstallRoot">
-			<Output TaskParameter="Value" PropertyName="InstallRoot" />
-		</RegistryRead>
-		<Message Text="InstallRoot: $(InstallRoot)"/>
+      <Output TaskParameter="Value" PropertyName="InstallRoot" />
+    </RegistryRead>
+    <Message Text="InstallRoot: $(InstallRoot)"/>
 
-		<RegistryWrite 
+    <RegistryWrite 
 			KeyName="HKEY_CURRENT_USER\SOFTWARE\MSBuildTasks"
 			ValueName="RegistryWrite"
 			Value="Test Write" />
 
-	</Target>
+  </Target>
 
-	<Target Name="FTP" DependsOnTargets="Zip">
-		<FtpUpload 
+  <Target Name="FTP" DependsOnTargets="Zip">
+    <FtpUpload 
 			LocalFile="$(TestOutput)\MSBuild.Community.Tasks.zip" 
 			RemoteUri="ftp://localhost/MSBuild.Community.Tasks.zip" />
 
-	</Target>
+  </Target>
 
-	<Target Name="XML">
+  <Target Name="XML">
     <MakeDir Directories="$(TestOutput)" />
     <Copy SourceFiles="Source\Subversion.proj" DestinationFolder="$(TestOutput)" />
 
@@ -169,9 +169,9 @@
 			Namespace="http://schemas.microsoft.com/developer/msbuild/2003" 
 			XPath="/n:Project/n:Target/@Name"
 			XmlFileName="$(TestOutput)\Subversion.proj">
-			<Output TaskParameter="Value" PropertyName="BuildTargets" />
-		</XmlRead>
-		<Message Text="Build Targets: $(BuildTargets)"/>
+      <Output TaskParameter="Value" PropertyName="BuildTargets" />
+    </XmlRead>
+    <Message Text="Build Targets: $(BuildTargets)"/>
 
     <XmlUpdate Prefix="n"
 			Namespace="http://schemas.microsoft.com/developer/msbuild/2003" 
@@ -179,37 +179,37 @@
 			XmlFileName="$(TestOutput)\Subversion.proj"
 			Value="Test from $(MSBuildProjectFile)"/>
 
-	</Target>
+  </Target>
 
-	<ItemGroup>
-		<TestAssembly Include="$(MSBuildProjectDirectory)\Libraries\mock.test.dll" />
-	</ItemGroup>
-  
-	<Target Name="NUnit">
-		<NUnit Assemblies="@(TestAssembly)" />
-	</Target>
+  <ItemGroup>
+    <TestAssembly Include="$(MSBuildProjectDirectory)\Libraries\mock.test.dll" />
+  </ItemGroup>
 
-	<Target Name="FileUpdate" DependsOnTargets="Version">
-		<FileUpdate Files="$(TestOutput)\version.txt"
+  <Target Name="NUnit">
+    <NUnit Assemblies="@(TestAssembly)" />
+  </Target>
+
+  <Target Name="FileUpdate" DependsOnTargets="Version">
+    <FileUpdate Files="$(TestOutput)\version.txt"
 			Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
 			ReplacementText="$1.$2.$3.123" />
-	</Target>
+  </Target>
 
-	<Target Name="Service">
-		<ServiceQuery ServiceName="w3svc">
-			<Output TaskParameter="Status" PropertyName="Status" />
-		</ServiceQuery>
-		<Message Text="Web Server: $(Status)"/>
+  <Target Name="Service">
+    <ServiceQuery ServiceName="w3svc">
+      <Output TaskParameter="Status" PropertyName="Status" />
+    </ServiceQuery>
+    <Message Text="Web Server: $(Status)"/>
 
-		<ServiceController ServiceName="w3svc" Action="Restart" />
+    <ServiceController ServiceName="w3svc" Action="Restart" />
 
-	</Target>
+  </Target>
 
-	<Target Name="WebDownload">
+  <Target Name="WebDownload">
     <MakeDir Directories="$(TestOutput)" />
     <WebDownload FileUri="http://www.microsoft.com/default.aspx" 
 			FileName="$(TestOutput)\microsoft.html" />
-	</Target>
+  </Target>
 
   <Target Name="TaskSchema">
 
@@ -258,13 +258,28 @@
     <Message Text="Sleep: 200"/>
     <Sleep Milliseconds="200" />
   </Target>
-  
-  <Target Name="Install">
-	<MSBuild Projects="Source\MSBuild.Community.Tasks.Tests\Install\InstallTest.proj" Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)" />
+
+  <Target Name="GacUtil">
+    <GacUtil 
+      Command="Install" 
+      Assemblies="$(MSBuildProjectDirectory)\Build\MSBuild.Community.Tasks.dll;$(MSBuildProjectDirectory)\Build\ICSharpCode.SharpZipLib.dll" 
+      Force="true" 
+    />
+
+    <GacUtil 
+      Command="Uninstall" 
+      Assemblies="MSBuild.Community.Tasks;ICSharpCode.SharpZipLib" 
+      Force="true" 
+    />
+    
   </Target>
   
+  <Target Name="Install">
+    <MSBuild Projects="Source\MSBuild.Community.Tasks.Tests\Install\InstallTest.proj" Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath)" />
+  </Target>
+
   <Target Name="All">
-    
+
     <CallTarget Targets="AssemblyInfo" />
     <CallTarget Targets="Mail" />
     <CallTarget Targets="Zip" />
