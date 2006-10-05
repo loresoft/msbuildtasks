@@ -1,0 +1,2 @@
+CREATE DATABASE ExecuteDDLTest ON ( NAME = 'ExecuteDDLTest', FILENAME = '${filename}' )
+				LOG ON ( NAME = 'ExecuteDDLTest_log', FILENAME = '${logfilename}' );

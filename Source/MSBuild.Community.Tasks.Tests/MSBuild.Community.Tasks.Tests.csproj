@@ -65,7 +65,9 @@
     <Compile Include="ServiceQueryTest.cs" />
     <Compile Include="ServiceControllerTest.cs" />
     <Compile Include="Solution\GetSolutionProjectsTest.cs" />
+    <Compile Include="SqlServer\ExecuteDDLTest.cs" />
     <Compile Include="Subversion\SvnInfoTest.cs" />
+    <Compile Include="TemplateFile\TemplateFileTest.cs" />
     <Compile Include="Time\TimeTest.cs" />
     <Compile Include="WebDownloadTest.cs" />
     <Compile Include="XmlUpdateTest.cs" />
@@ -113,6 +115,10 @@
     <None Include="Install\InstallTest.proj" />
     <None Include="Regex\RegexTest.proj" />
     <None Include="Solution\GetSolutionProjectsTest.proj" />
+    <None Include="SqlServer\createDb.sql.template" />
+    <None Include="SqlServer\dropDb.sql" />
+    <None Include="SqlServer\SqlServer.proj" />
+    <None Include="TemplateFile\TemplateFile.proj" />
     <None Include="Time\TimeTest.proj" />
     <None Include="Xml\XmlMassUpdateTest.proj" />
     <None Include="Xml\XmlQueryTest.proj" />

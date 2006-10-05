@@ -78,7 +78,10 @@
     <Compile Include="Schema\TaskSchemaAnalyser.cs" />
     <Compile Include="Schema\TaskVisitorBase.cs" />
     <Compile Include="Solution\GetSolutionProjects.cs" />
+    <Compile Include="SqlServer\ExecuteDDL.cs" />
+    <Compile Include="SqlServer\ServerConnectionWrapper.cs" />
     <Compile Include="Subversion\SvnInfo.cs" />
+    <Compile Include="TemplateFile\TemplateFile.cs" />
     <Compile Include="Time\Time.cs" />
     <Compile Include="Xml\XmlNodeTaskItem.cs" />
     <Compile Include="Xml\XmlQuery.cs" />

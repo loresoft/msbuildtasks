@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <!-- $Id$
+    -->
+
+	<PropertyGroup>
+		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+	</PropertyGroup>
+
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+	<ItemGroup>
+		<Tokens Include="Name">
+			<ReplacementValue>MSBuild Community Tasks</ReplacementValue>
+		</Tokens>
+	</ItemGroup>
+	
+	 <Target Name="TemplateFile">
+		 <WriteLinesToFile File="$(testDir)\Template.txt" Lines="${Name}" />
+		 <TemplateFile Tokens="@(Tokens)" Template="$(testDir)\Template.txt" OutputFilename="$(testDir)\Template.replaced"/>
+	 </Target>
+
+	<Target Name="test" DependsOnTargets="TemplateFile" Condition="'$(testDir)' != '' ">
+	</Target>
+	
+</Project>

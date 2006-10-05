@@ -143,6 +143,10 @@
 		<nunitContent Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\ILMerge\keypair.snk" >
 			<subDirectory>MSBuild.Community.Tasks.Tests</subDirectory>
 		</nunitContent>
+
+		<nunitContent Include="$(srcRoot)\MSBuild.Community.Tasks.Tests\SqlServer\*.sql*" >
+			<subDirectory>MSBuild.Community.Tasks.Tests</subDirectory>
+		</nunitContent>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -275,6 +279,7 @@
 	<!-- If ILMerge is available on the testing machine,
 		 call with "/p:withILMerge=true" in order to include ILMerge tests
 		 call with "/p:withIIS=true" in order to include IIS tests 
+		 call with "/p:withSqlServer=true" in order to include SqlServer / SqlExpress tests 
 		 call with "/p:admin=false" in order to exclude tests that require local administrator rights
 		 -->
 	<!-- If a Vault server is available in the test environment call with "/p:withVault=true"
@@ -320,7 +325,14 @@
 
 		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Xml\XmlMassUpdateTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests"/>
-    </Target>
+
+		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\SqlServer\SqlServer.proj"
+		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests;withSqlServer=$(withSqlServer)"/>
+
+		<MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\TemplateFile\TemplateFile.proj"
+		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests"/>
+
+	</Target>
 
 	<!-- Execute and report the NUnit and msbuild .proj tests -->
 	<Target Name="test" DependsOnTargets="test-nunit; test-proj">

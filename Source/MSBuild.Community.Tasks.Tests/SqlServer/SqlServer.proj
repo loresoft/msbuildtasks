@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- $Id$
+	-->
+
+	<PropertyGroup>
+		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+	</PropertyGroup>
+
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+	<PropertyGroup>
+		<ConnectionString>Server=localhost;Integrated Security=True</ConnectionString>
+		<CreateScript>$(testdir)\CreateDb.sql.template</CreateScript>
+		<DropScript>$(testdir)\DropDb.sql</DropScript>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<CreateDb Include="$(CreateScript)" />
+		<DropDb Include="$(DropScript)" />
+		<DbTokens Include="filename" >
+			<ReplacementValue>$(testdir)\ExecuteDDLTest.mdf</ReplacementValue>
+		</DbTokens>
+		<DbTokens Include="logfilename" >
+			<ReplacementValue>$(testdir)\ExecuteDDLTest.ldf</ReplacementValue>
+		</DbTokens>
+	</ItemGroup>
+
+	<Target Name="ExecuteDDL">
+		<TemplateFile Template="@(CreateDb)" OutputFilename="CreateDb.sql" Tokens="@(DbTokens)">
+			<Output TaskParameter="OutputFile" ItemName="CreateDbOutputFile" />
+		</TemplateFile>
+		<Message Text="Executing script @(CreateDbOutputFile)...." />
+		<ExecuteDDL ConnectionString="$(ConnectionString)" Files="@(CreateDbOutputFile)" ContinueOnError="false" />
+
+		<Message Text="Executing script $(DropScript)...." />
+		<ExecuteDDL ConnectionString="$(ConnectionString)" Files="@(DropDb)" ContinueOnError="false" />
+	</Target>
+
+	<Target Name="test" DependsOnTargets="ExecuteDDL" Condition="'$(withSqlServer)'!='' AND '$(testDir)' != '' ">
+	</Target>
+	
+</Project>
