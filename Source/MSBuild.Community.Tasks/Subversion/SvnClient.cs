@@ -51,7 +51,7 @@ namespace MSBuild.Community.Tasks.Subversion
 		private const string _switchStringFormat = " --{0} \"{1}\"";
 		private const string _switchValueFormat = " --{0} {1}";
 
-		private static readonly Regex _revisionParse = new Regex(@"[Rr]evision (?<Rev>\d+)", RegexOptions.Compiled);
+		private static readonly Regex _revisionParse = new Regex(@"\b(?<Rev>\d+)", RegexOptions.Compiled);
 
 		#endregion Fields
 
@@ -63,6 +63,7 @@ namespace MSBuild.Community.Tasks.Subversion
 			LocalPath,
 			Targets,
 			Revision,
+            Xml,
 			Default = SvnSwitches.RepositoryPath | SvnSwitches.LocalPath | SvnSwitches.Revision,
 			All = SvnSwitches.Default | SvnSwitches.Targets
 		}
@@ -171,7 +172,8 @@ namespace MSBuild.Community.Tasks.Subversion
 		/// Gets or sets the repository path.
 		/// </summary>
 		/// <value>The repository path.</value>
-		public string RepositoryPath
+		[Output]
+        public string RepositoryPath
 		{
 			get { return _repositoryPath; }
 			set { _repositoryPath = value; }
@@ -245,6 +247,11 @@ namespace MSBuild.Community.Tasks.Subversion
 
 
 			builder.Append(_command);
+            if ((CommandSwitchs & SvnSwitches.Xml) == SvnSwitches.Xml)
+            {
+                builder.AppendFormat(_switchBooleanFormat, "xml");
+            }
+
 			if (!string.IsNullOrEmpty(_repositoryPath) && (CommandSwitchs & SvnSwitches.RepositoryPath) == SvnSwitches.RepositoryPath)
 				builder.AppendFormat(" \"{0}\"", _repositoryPath);
 

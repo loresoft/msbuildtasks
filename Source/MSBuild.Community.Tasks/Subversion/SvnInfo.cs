@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Build.Framework;
+using System.Xml;
 
 // $Id: SvnCheckout.cs 102 2006-01-09 18:01:13Z iko $
 
@@ -20,7 +21,7 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <summary>
         /// Node is a directory
         /// </summary>
-        directory,
+        dir,
         /// <summary>
         /// Unknown node type
         /// </summary>
@@ -66,6 +67,7 @@ namespace MSBuild.Community.Tasks.Subversion
         private int m_nLastChangedRev;
         private System.DateTime m_LastChangedDate;
         private Schedule m_eSchedule;
+        private StringBuilder _outputBuffer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:SvnInfo"/> class.
@@ -73,7 +75,9 @@ namespace MSBuild.Community.Tasks.Subversion
         public SvnInfo()
         {
             base.Command = "info";
+            base.CommandSwitchs |= SvnSwitches.Xml;
             ResetMemberVariables();
+            _outputBuffer = new StringBuilder();
         }
 
         /// <summary>
@@ -115,8 +119,12 @@ namespace MSBuild.Community.Tasks.Subversion
         public override bool Execute()
         {
             bool bSuccess = base.Execute();
-
-            if (!bSuccess)
+            
+            if (bSuccess)
+            {
+                ParseOutput();
+            }
+            else
             {
                 ResetMemberVariables();
             }
@@ -124,40 +132,107 @@ namespace MSBuild.Community.Tasks.Subversion
             return bSuccess;
         }
 
-        /// <summary>
-        /// "svn.exe info" prints out key/value pairs separated by a colon. 
-        /// </summary>
-        /// <param name="strLine">A line of text printed out by svn.exe</param>
-        /// <param name="strKey">The key string. empty if no key/value found.</param>
-        /// <param name="strValue">The value string. empty of no key/value found.</param>
-        /// <returns>true if a key/value pair found. false if not</returns>
-        private bool ExtractKeyValuePair(string strLine, out string strKey, out string strValue)
+        private void ParseOutput()
         {
-            // Here is a sample output:
-            //
-            //Path: .
-            //URL: svn://cmumford/CoreMSBuildTasks
-            //Repository Root: svn://cmumford
-            //Repository UUID: 48e252eb-c463-fd45-8db3-81f6beb5f896
-            //Revision: 225
-            //Node Kind: directory
-            //Schedule: normal
-            //Last Changed Author: cmumford
-            //Last Changed Rev: 223
-            //Last Changed Date: 2006-02-09 14:36:05 -0600 (Thu, 09 Feb 2006)
+            XmlDocument xmlDoc = new XmlDocument();
+            Console.WriteLine(_outputBuffer.ToString());
 
-            int nColonIdx = strLine.IndexOf(':');
-            if (nColonIdx == -1)
+            xmlDoc.LoadXml(_outputBuffer.ToString());
+            XmlNode entryNode = xmlDoc.SelectSingleNode("/info/entry");
+            if (entryNode == null) return;
+            string foundValue;
+
+            foundValue = getAttributeValue(entryNode, "revision");
+            if (!String.IsNullOrEmpty(foundValue))
             {
-                strKey = string.Empty;
-                strValue = string.Empty;
-                return false;
+                Revision = Int32.Parse(foundValue);
             }
 
-            strKey = strLine.Substring(0, nColonIdx);
-            strValue = strLine.Substring(nColonIdx + 2);
+            foundValue = getAttributeValue(entryNode, "kind");
+            if (!String.IsNullOrEmpty(foundValue))
+            {
+                if (foundValue == Subversion.NodeKind.dir.ToString())
+                {
+                    m_eNodeKind = Subversion.NodeKind.dir;
+                }
+                else if (foundValue == Subversion.NodeKind.file.ToString())
+                {
+                    m_eNodeKind = Subversion.NodeKind.file;
+                }
+                else
+                {
+                    Log.LogError("Unknown node kind: " + foundValue);
+                }
+            }
+            string nodeText;
 
-            return true;
+            nodeText = getNodeText(entryNode, "url");
+            if (!String.IsNullOrEmpty(nodeText))
+            {
+                RepositoryPath = nodeText;
+            }
+
+            nodeText = getNodeText(entryNode, "repository/root");
+            if (!String.IsNullOrEmpty(nodeText))
+            {
+                m_strRepositoryRoot = nodeText;
+            }
+
+            nodeText = getNodeText(entryNode, "repository/uuid");
+            if (!String.IsNullOrEmpty(nodeText))
+            {
+                m_Guid = new Guid(nodeText);
+            }
+
+            XmlNode childNode;
+            childNode = entryNode.SelectSingleNode("commit");
+            if (childNode != null)
+            {
+                foundValue = getAttributeValue(childNode, "revision");
+                if (!String.IsNullOrEmpty(foundValue))
+                {
+                    m_nLastChangedRev = Int32.Parse(foundValue);
+                }
+
+                nodeText = getNodeText(childNode, "author");
+                if (!String.IsNullOrEmpty(nodeText))
+                {
+                    m_strLastChangedAuthor = nodeText;
+                }
+
+                nodeText = getNodeText(childNode, "date");
+                if (!String.IsNullOrEmpty(nodeText))
+                {
+                    m_LastChangedDate = DateTime.Parse(nodeText);
+                }
+            }
+
+            nodeText = getNodeText(entryNode, "wc-info/schedule");
+            if (!String.IsNullOrEmpty(nodeText))
+            {
+                if (nodeText == Subversion.Schedule.normal.ToString())
+                {
+                    m_eSchedule = Subversion.Schedule.normal;
+                }
+                else
+                {
+                    Log.LogError("Unknown schedule: " + nodeText);
+                }
+            }
+        }
+
+        private string getAttributeValue(XmlNode node, string attributeName)
+        {
+            XmlAttribute attribute = node.Attributes[attributeName];
+            if (attribute == null) return null;
+            return attribute.Value;
+        }
+
+        private string getNodeText(XmlNode parentNode, string xpath)
+        {
+            XmlNode node = parentNode.SelectSingleNode(xpath);
+            if (node == null) return null;
+            return node.InnerText;
         }
 
         /// <summary>
@@ -246,96 +321,11 @@ namespace MSBuild.Community.Tasks.Subversion
             }
         }
 
-        /// <summary>
-        /// Parse a subversion date/time value. They print out a date that
-        /// looks like this "2006-02-09 14:36:05 -0600 (Thu, 09 Feb 2006)" which
-        /// isn't directly parsable by the DateTime class.
-        /// </summary>
-        /// <param name="datetime"></param>
-        /// <returns></returns>
-        private System.DateTime ParseSvnDate(string datetime)
+        protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
         {
-            int idx = datetime.IndexOf('(');
-            if (idx == -1)
-            {
-                return System.DateTime.Parse(datetime);
-            }
-            else
-            {
-                return System.DateTime.Parse(datetime.Substring(0, idx));
-            }
+            base.LogEventsFromTextOutput(singleLine, messageImportance);
+            _outputBuffer.Append(singleLine);
         }
-
-        /// <summary>
-        /// Parse the text output from the command and log the lines.
-        /// </summary>
-        /// <param name="singleLine">One line of text output from the tool being run.</param>
-        /// <param name="messageImportance">The message importance.</param>
-        protected override void LogEventsFromTextOutput(string singleLine, Microsoft.Build.Framework.MessageImportance messageImportance)
-        {
-            // The base implementation just seems to log out the lines which is really chatty.
-            // base.LogEventsFromTextOutput(singleLine, messageImportance);
-
-            string key;
-            string value;
-
-            if (ExtractKeyValuePair(singleLine, out key, out value))
-            {
-                if (key == "URL")
-                {
-                    RepositoryPath = value;
-                }
-                else if (key == "Repository Root")
-                {
-                    m_strRepositoryRoot = value;
-                }
-                else if (key == "Repository UUID")
-                {
-                    m_Guid = new Guid(value);
-                }
-                else if (key == "Revision")
-                {
-                    Revision = int.Parse(value);
-                }
-                else if (key == "Last Changed Rev")
-                {
-                    m_nLastChangedRev = int.Parse(value);
-                }
-                else if (key == "Last Changed Author")
-                {
-                    m_strLastChangedAuthor = value;
-                }
-                else if (key == "Last Changed Date")
-                {
-                    m_LastChangedDate = ParseSvnDate(value);
-                }
-                else if (key == "Schedule")
-                {
-                    if (value == Subversion.Schedule.normal.ToString())
-                    {
-                        m_eSchedule = Subversion.Schedule.normal;
-                    }
-                    else
-                    {
-                        Log.LogError("Unknown schedule: " + value);
-                    }
-                }
-                else if (key == "Node Kind")
-                {
-                    if (value == Subversion.NodeKind.directory.ToString())
-                    {
-                        m_eNodeKind = Subversion.NodeKind.directory;
-                    }
-                    else if (value == Subversion.NodeKind.file.ToString())
-                    {
-                        m_eNodeKind = Subversion.NodeKind.file;
-                    }
-                    else
-                    {
-                        Log.LogError("Unknown node kind: " + value);
-                    }
-                }
-            }
-        }
+        
     }
 }

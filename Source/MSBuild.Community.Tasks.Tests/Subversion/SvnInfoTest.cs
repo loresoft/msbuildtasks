@@ -44,7 +44,7 @@ namespace MSBuild.Community.Tasks.Tests.Subversion
             // could also be svn://
             Assert.AreEqual(0, val.IndexOf("http://"));
             Assert.Greater(val.IndexOf("Source/MSBuild.Community.Tasks.Tests"), 0);
-            Assert.AreEqual(NodeKind.directory, info.NodeKind);
+            Assert.AreEqual(NodeKind.dir, info.NodeKind);
             Assert.AreEqual("http://msbuildtasks.tigris.org/svn/msbuildtasks", info.RepositoryRoot);
             Assert.AreNotEqual(Guid.Empty, info.RepositoryUuid);
         }
