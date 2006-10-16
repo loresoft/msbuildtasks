@@ -28,6 +28,10 @@ namespace MSBuild.Community.Tasks.Tfs.Proxies
         {
             MethodInfo getLocalWorkspaceInfoMethod = _type.GetMethod("GetLocalWorkspaceInfo", new Type[] { typeof(string) });
             object workspaceInfoInstance = getLocalWorkspaceInfoMethod.Invoke(_instance, new object[] { localPath });
+            if (workspaceInfoInstance == null)
+            {
+                throw new TeamFoundationServerException(String.Format("The local path {0} is not associated with a TFS Workspace.", localPath));
+            }
             WorkspaceInfo workspaceInfo = new WorkspaceInfo(_assembly, workspaceInfoInstance);
             return workspaceInfo;
         }
