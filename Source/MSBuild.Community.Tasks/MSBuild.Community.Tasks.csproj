@@ -66,7 +66,9 @@
     <Compile Include="Tfs\Proxies\VersionControlServer.cs" />
     <Compile Include="Tfs\Proxies\VersionSpec.cs" />
     <Compile Include="Tfs\Proxies\Workspace.cs" />
+    <Compile Include="Tfs\Proxies\WorkspaceInfo.cs" />
     <Compile Include="Tfs\Proxies\WorkspaceVersionSpec.cs" />
+    <Compile Include="Tfs\Proxies\Workstation.cs" />
     <Compile Include="Tfs\TeamFoundationServer.cs" />
     <Compile Include="Tfs\TeamFoundationServerException.cs" />
     <Compile Include="Tfs\TfsVersion.cs" />

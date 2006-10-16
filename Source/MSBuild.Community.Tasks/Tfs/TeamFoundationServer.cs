@@ -1,3 +1,4 @@
+// $Id$
 using System;
 using System.Net;
 using System.Reflection;
@@ -41,14 +42,17 @@ namespace MSBuild.Community.Tasks.Tfs
         /// <summary>
         /// Retrieves the latest changeset ID associated with a path
         /// </summary>
-        /// <param name="server">The Team Foundation Server URL</param>
         /// <param name="localPath">A path on the local filesystem</param>
         /// <param name="credentials">Credentials used to authenticate against the serer</param>
         /// <returns></returns>
-        public int GetLatestChangesetId(string server, string localPath, ICredentials credentials)
+        public int GetLatestChangesetId(string localPath, ICredentials credentials)
         {
             int latestChangesetId = 0;
-            
+            string server;
+
+            Workstation workstation = new Workstation(versionControlClientAssembly);
+            WorkspaceInfo workspaceInfo = workstation.GetLocalWorkspaceInfo(localPath);
+            server = workspaceInfo.ServerUri.ToString();
             VersionControlServer sourceControl = new VersionControlServer(clientAssembly, versionControlClientAssembly, server, credentials);
 
             Workspace workspace = sourceControl.GetWorkspace(localPath);

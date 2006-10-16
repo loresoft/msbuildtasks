@@ -1,3 +1,4 @@
+// $Id$
 using System;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
@@ -11,19 +12,6 @@ namespace MSBuild.Community.Tasks.Tfs
     public class TfsVersion : Task
     {
         private string _localPath;
-
-        private string _server;
-
-        /// <summary>
-        /// The URI of your Team Foundation Server
-        /// </summary>
-        /// <remarks>Should be in the form: http://servername:8080</remarks>
-        [Required]
-        public string Server
-        {
-            get { return _server; }
-            set { _server = value; }
-        }
 
         private string _username;
 
@@ -104,7 +92,8 @@ namespace MSBuild.Community.Tasks.Tfs
             ICredentials credentials = BuildCredentials();
             try
             {
-                _changeset = tfsServer.GetLatestChangesetId(_server, _localPath, credentials);
+                _changeset = tfsServer.GetLatestChangesetId(_localPath, credentials);
+                Log.LogMessage("Latest changset in {0} is {1}", _localPath, _changeset);
             }
             catch (TeamFoundationServerException tfsException)
             {
