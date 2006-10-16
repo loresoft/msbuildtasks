@@ -321,6 +321,11 @@ namespace MSBuild.Community.Tasks.Subversion
             }
         }
 
+		/// <summary>
+		/// Logs the events from text output.
+		/// </summary>
+		/// <param name="singleLine">The single line.</param>
+		/// <param name="messageImportance">The message importance.</param>
         protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
         {
             base.LogEventsFromTextOutput(singleLine, messageImportance);
