@@ -1163,7 +1163,9 @@ namespace MSBuild.Community.Tasks.IIS
 
 		private bool CreateVirtualDirectory()
 		{
-			bool bSuccess = false;
+            const string WebDirectoryClassName = "IIsWebDirectory";
+            const string VirtualDirectoryClassName = "IIsWebVirtualDir";
+            bool bSuccess = false;
 
 			try
 			{
@@ -1172,20 +1174,31 @@ namespace MSBuild.Community.Tasks.IIS
 				
 				DirectoryEntry siteRoot = new DirectoryEntry(IISServerPath);
 				siteRoot.RefreshCache();
-				DirectoryEntry newVirDir;
+				DirectoryEntry newVirDir = null;
 
-				try
-				{
-					// Determine if the virtual directory already exists
-					DirectoryEntry existingVirDir = siteRoot.Children.Find(VirtualDirectoryName, siteRoot.SchemaClassName);
-					newVirDir = existingVirDir;
-				}
-				catch
-				{
-					// Create the virtual directory
-					newVirDir = siteRoot.Children.Add(VirtualDirectoryName, siteRoot.SchemaClassName);
-					newVirDir.CommitChanges();
-				}
+                try
+                {
+                    // If a Web Directory with this name already exists, delete it.
+                    DirectoryEntry existingWebDir = siteRoot.Children.Find(VirtualDirectoryName, WebDirectoryClassName);
+                    if (existingWebDir != null)
+                    {
+                        existingWebDir.DeleteTree();
+                    }
+                }
+                catch (System.IO.DirectoryNotFoundException) { /* Web Directory does not exist - that's good */}
+                try
+                {
+                    // If a Virtual Directory with this name already exists, use it. Otherwise, add it.
+                    DirectoryEntry existingVirDir = siteRoot.Children.Find(VirtualDirectoryName, VirtualDirectoryClassName);
+                    newVirDir = existingVirDir;
+                }
+                catch (System.IO.DirectoryNotFoundException) { }
+                if (newVirDir == null)
+                {
+                    // Create the virtual directory
+                    newVirDir = siteRoot.Children.Add(VirtualDirectoryName, VirtualDirectoryClassName);
+                    newVirDir.CommitChanges();
+                }
 
 				// Set Required Properties
 				newVirDir.Properties["Path"].Value = VirtualDirectoryPhysicalPath;
