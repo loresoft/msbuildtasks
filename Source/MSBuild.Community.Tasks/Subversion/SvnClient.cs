@@ -361,13 +361,46 @@ namespace MSBuild.Community.Tasks.Subversion
 		/// <returns>
 		/// The fully qualified path to the executable file.
 		/// </returns>
-		protected override string GenerateFullPathToTool()
-		{
-			base.ToolPath = Path.Combine(
-			   Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-			   @"Subversion\bin");
-			return Path.Combine(ToolPath, ToolName);
-		}
+        protected override string GenerateFullPathToTool()
+        {
+            string svnPath = null;
+            // 1) check registry
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\" + ToolName, false);
+            if (key != null)
+            {
+                string possiblePath = key.GetValue(null) as string;
+                if (File.Exists(possiblePath))
+                {
+                    svnPath = Path.GetDirectoryName(possiblePath);
+                    Log.LogMessage(MessageImportance.Low, "Found Subversion client location using App Paths in the registry.");
+                }
+            }
+            // 2) search the path
+            if (svnPath == null)
+            {
+                string pathEnvironmentVariable = Environment.GetEnvironmentVariable("PATH");
+                string[] paths = pathEnvironmentVariable.Split(Path.PathSeparator);
+                foreach (string path in paths)
+                {
+                    string fullPathToClient = Path.Combine(path, ToolName);
+                    if (File.Exists(fullPathToClient))
+                    {
+                        svnPath = path;
+                        Log.LogMessage(MessageImportance.Low, "Found Subversion client location in the PATH.");
+                        break;
+                    }
+                }
+            }
+            // 3) try default install location
+            if (svnPath == null)
+            {
+                svnPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Subversion\bin");
+                Log.LogMessage(MessageImportance.Low, "Did not find Subversion client in registry or PATH - using default install location.");
+            }
+
+            base.ToolPath = svnPath;
+            return Path.Combine(ToolPath, ToolName);
+        }
 
         /// <summary>
         /// Logs the starting point of the run to all registered loggers.
@@ -397,27 +430,7 @@ namespace MSBuild.Community.Tasks.Subversion
 		{
             get
             {
-                RegistryKey hklm = Registry.CurrentUser;
-                RegistryKey key = hklm.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\svn.exe", false);
-                if (key != null)
-                {
-                    object obj = key.GetValue(null);	// Default value
-                    return (string)obj;
-                }
-                else
-                {
-                    // Not in the registry
-                    const string defaultPath = "C:\\Program Files\\Subversion\\bin\\svn.exe";
-                    if (File.Exists(defaultPath))
-                    {
-                        return defaultPath;
-                    }
-                    else
-                    {
-                        // Let's hope it's in the path
-                        return "svn.exe";
-                    }
-                }
+                return "svn.exe";
             }
 		}
 

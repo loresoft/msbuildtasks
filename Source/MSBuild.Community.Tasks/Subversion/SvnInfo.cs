@@ -135,7 +135,6 @@ namespace MSBuild.Community.Tasks.Subversion
         private void ParseOutput()
         {
             XmlDocument xmlDoc = new XmlDocument();
-            Console.WriteLine(_outputBuffer.ToString());
 
             xmlDoc.LoadXml(_outputBuffer.ToString());
             XmlNode entryNode = xmlDoc.SelectSingleNode("/info/entry");
@@ -328,7 +327,10 @@ namespace MSBuild.Community.Tasks.Subversion
 		/// <param name="messageImportance">The message importance.</param>
         protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
         {
-            base.LogEventsFromTextOutput(singleLine, messageImportance);
+            if (messageImportance == MessageImportance.High)
+            {
+                base.LogEventsFromTextOutput(singleLine, messageImportance);
+            }
             _outputBuffer.Append(singleLine);
         }
         

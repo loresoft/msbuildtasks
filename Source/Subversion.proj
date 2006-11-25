@@ -6,6 +6,12 @@
     <LastUpdate>Dienstag, 10. Januar 2006</LastUpdate>
     <TestUpdate>Test from Task.proj</TestUpdate>
   </PropertyGroup>
+  
+  <PropertyGroup>
+	<TestRepositoryPath>http://msbuildtasks.tigris.org/svn/msbuildtasks/trunk/Source/MSBuild.Community.Tasks.Tests/Subversion</TestRepositoryPath>
+	<TestWorkingFolder>$(MSBuildProjectDirectory)\Test\Checkout</TestWorkingFolder>
+	<LocalTestRepositoryPath>file:///d:/svn/repo/Test/trunk</LocalTestRepositoryPath>
+  </PropertyGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
 
@@ -21,7 +27,7 @@
     <MakeDir Directories="$(MSBuildProjectDirectory)\Test" />
     <RemoveDir Directories="$(MSBuildProjectDirectory)\Test\Export" />
 
-    <SvnExport RepositoryPath="file:///d:/svn/repo/Test/trunk" 
+    <SvnExport RepositoryPath="$(TestRepositoryPath)"
                LocalPath="$(MSBuildProjectDirectory)\Test\Export">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnExport>
@@ -30,10 +36,10 @@
   </Target>
 
   <Target Name="Checkout">
-    <RemoveDir Directories="$(MSBuildProjectDirectory)\Test\Checkout" />
+    <RemoveDir Directories="$(TestWorkingFolder)" />
 
-    <SvnCheckout RepositoryPath="file:///d:/svn/repo/Test/trunk" 
-                 LocalPath="$(MSBuildProjectDirectory)\Test\Checkout">
+    <SvnCheckout RepositoryPath="$(TestRepositoryPath)" 
+                 LocalPath="$(TestWorkingFolder)">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnCheckout>
 
@@ -41,30 +47,37 @@
   </Target>
 
   <Target Name="Update" DependsOnTargets="Checkout">
-    <SvnUpdate LocalPath="$(MSBuildProjectDirectory)\Test\Checkout">
+    <Delete Files="$(TestWorkingFolder)\SvnClientTest.cs" />
+    <SvnUpdate LocalPath="$(TestWorkingFolder)">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnUpdate>
     <Message Text="Revision: $(Revision)" />
   </Target>
 
   <ItemGroup>
-    <CommitFiles Include="$(MSBuildProjectDirectory)\Test\Checkout\test.txt" />
-    <CommitFiles Include="$(MSBuildProjectDirectory)\Test\Checkout\Blah.txt" />
+    <CommitFiles Include="$(TestWorkingFolder)\test.txt" />
+    <CommitFiles Include="$(TestWorkingFolder)\Blah.txt" />
   </ItemGroup>
 
-  <Target Name="Commit" DependsOnTargets="Checkout">
-    <WriteLinesToFile File="$(MSBuildProjectDirectory)\Test\Checkout\test.txt" Lines="This is a test append." />
-    <WriteLinesToFile File="$(MSBuildProjectDirectory)\Test\Checkout\Blah.txt" Lines="This is a test append." />
+  <Target Name="Commit">
+	<RemoveDir Directories="$(TestWorkingFolder)" />
+    <SvnCheckout RepositoryPath="$(LocalTestRepositoryPath)" 
+                 LocalPath="$(TestWorkingFolder)">
+		<Output TaskParameter="Revision" PropertyName="Revision" />
+    </SvnCheckout>
+    <Message Text="Checked out revision: $(Revision)" />
+
+	<WriteLinesToFile File="%(CommitFiles.FullPath)" Lines="This is a test append." />
 
     <SvnCommit Targets="@(CommitFiles)" Message="Auto commit from MSBuild.">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnCommit>
 
-    <Message Text="Revision: $(Revision)" />
+    <Message Text="Committed revision: $(Revision)" />
   </Target>
 
   <Target Name="Info" DependsOnTargets="Checkout">
-    <SvnInfo LocalPath=".">
+    <SvnInfo LocalPath="$(TestWorkingFolder)">
       <Output TaskParameter="RepositoryRoot" PropertyName="RepositoryRoot" />
       <Output TaskParameter="LastChangedAuthor" PropertyName="LastChangedAuthor" />
       <Output TaskParameter="LastChangedRevision" PropertyName="LastChangedRevision" />
@@ -87,6 +100,6 @@
     <CallTarget Targets="Export" />
     <CallTarget Targets="Checkout" />
     <CallTarget Targets="Update" />
-    <CallTarget Targets="Commit" />
+    <CallTarget Targets="Info" />
   </Target>
 </Project>
