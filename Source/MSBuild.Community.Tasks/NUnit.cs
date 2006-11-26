@@ -92,10 +92,10 @@ namespace MSBuild.Community.Tasks
 		private string _includeCategory;
 
 		/// <summary>
-		/// Gets or sets the include category.
+		/// Gets or sets the categories to include.
 		/// </summary>
-		/// <value>The include category.</value>
-		public string IncludeCategory
+        /// <remarks>Multiple values must be separated by a comma ","</remarks>
+        public string IncludeCategory
 		{
 			get { return _includeCategory; }
 			set { _includeCategory = value; }
@@ -104,9 +104,9 @@ namespace MSBuild.Community.Tasks
 		private string _excludeCategory;
 
 		/// <summary>
-		/// Gets or sets the exclude category.
+		/// Gets or sets the categories to exclude.
 		/// </summary>
-		/// <value>The exclude category.</value>
+        /// <remarks>Multiple values must be separated by a comma ","</remarks>
 		public string ExcludeCategory
 		{
 			get { return _excludeCategory; }
@@ -149,6 +149,18 @@ namespace MSBuild.Community.Tasks
 			set { _outputXmlFile = value; }
 		}
 
+        private string _errorOutputFile;
+
+        /// <summary>
+        /// The file to receive test error details.
+        /// </summary>
+        public string ErrorOutputFile
+        {
+            get { return _errorOutputFile; }
+            set { _errorOutputFile = value; }
+        }
+
+
 		private string _workingDirectory;
 
 		/// <summary>
@@ -164,6 +176,44 @@ namespace MSBuild.Community.Tasks
 			set { _workingDirectory = value; }
 		}
 
+        private bool _disableShadowCopy;
+
+        /// <summary>
+        /// Determines whether assemblies are copied to a shadow folder during testing.
+        /// </summary>
+        /// <remarks>Shadow copying is enabled by default. If you want to test the assemblies "in place",
+        /// you must set this property to <c>True</c>.</remarks>
+        public bool DisableShadowCopy
+        {
+            get { return _disableShadowCopy; }
+            set { _disableShadowCopy = value; }
+        }
+
+
+        private string _projectConfiguration;
+
+        /// <summary>
+        /// The project configuration to run.
+        /// </summary>
+        /// <remarks>Only applies when a project file is used. The default is the first configuration, usually Debug.</remarks>
+        public string ProjectConfiguration
+        {
+            get { return _projectConfiguration; }
+            set { _projectConfiguration = value; }
+        }
+
+        private bool _testInNewThread;
+
+        /// <summary>
+        /// Allows tests to be run in a new thread, allowing you to take advantage of ApartmentState and ThreadPriority settings in the config file.
+        /// </summary>
+        public bool TestInNewThread
+        {
+            get { return _testInNewThread; }
+            set { _testInNewThread = value; }
+        }
+
+
 		#endregion
 
 		#region Task Overrides
@@ -175,28 +225,33 @@ namespace MSBuild.Community.Tasks
 		/// </returns>
 		protected override string GenerateCommandLineCommands()
 		{
-			StringBuilder builder = new StringBuilder();
-			foreach (ITaskItem item in _assemblies)
-			{
-				builder.AppendFormat(" \"{0}\"", item.ItemSpec);
-			}
+            CommandLineBuilder builder = new CommandLineBuilder();
+            builder.AppendSwitch("/nologo");
+            if (DisableShadowCopy)
+            {
+                builder.AppendSwitch("/noshadow");
+            }
+            if (TestInNewThread)
+            {
+                builder.AppendSwitch("/thread");
+            }
+            builder.AppendFileNamesIfNotNull(_assemblies, " ");
 
-			if (!string.IsNullOrEmpty(_fixture))
-				builder.AppendFormat(" /fixture={0}", _fixture);
+            builder.AppendSwitchIfNotNull("/config=", _projectConfiguration);
 
-			if (!string.IsNullOrEmpty(_includeCategory))
-				builder.AppendFormat(" /include={0}", _includeCategory);
+            builder.AppendSwitchIfNotNull("/fixture=", _fixture);
 
-			if (!string.IsNullOrEmpty(_excludeCategory))
-				builder.AppendFormat(" /exclude={0}", _excludeCategory);
+            builder.AppendSwitchIfNotNull("/include=", _includeCategory);
 
-			if (!string.IsNullOrEmpty(_xsltTransformFile))
-				builder.AppendFormat(" /transform={0}", _xsltTransformFile);
+            builder.AppendSwitchIfNotNull("/exclude=", _excludeCategory);
 
-			if (!string.IsNullOrEmpty(_outputXmlFile))
-				builder.AppendFormat(" /xml={0}", _outputXmlFile);
+            builder.AppendSwitchIfNotNull("/transform=", _xsltTransformFile);
 
-			return builder.ToString();
+            builder.AppendSwitchIfNotNull("/xml=", _outputXmlFile);
+
+            builder.AppendSwitchIfNotNull("/err=", _errorOutputFile);
+
+            return builder.ToString();
 		}
 
 		private void CheckToolPath()
