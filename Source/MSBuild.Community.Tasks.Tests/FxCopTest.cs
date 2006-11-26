@@ -59,6 +59,7 @@ namespace MSBuild.Community.Tasks.Tests
             task.TargetAssemblies = new TaskItem[] { new TaskItem("ABC.dll"), new TaskItem("DEF.dll") };
             task.ImportFiles = new TaskItem[] { new TaskItem("import.xml") };
             task.RuleLibraries = new TaskItem[] { new TaskItem("a-rules.dll"), new TaskItem("b-rules.dll") };
+            task.Rules = new TaskItem[] { new TaskItem("Microsoft.Design#CA1012"), new TaskItem("-Microsoft.Design#CA2210") };
             task.IncludeSummaryReport = true;
             task.TypeList = "TypeA,TypeB";
             task.Verbose = true;
@@ -67,7 +68,9 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.AreEqual("/aXsl /c /cXsl:\"console-transform.xsl\" /d:\"depDir1\" /d:\"depDir2\" " +
                                              "/f:\"ABC.dll\" /f:\"DEF.dll\" /i:\"import.xml\" /o:\"report.xml\" " +
                                              "/oXsl:\"transform.xsl\" /plat:\"c:\\platform\" /p:\"c:\\project.fxcop\" " +
-                                             "/r:\"c:\\fxcop\\Rules\\a-rules.dll\" /r:\"c:\\fxcop\\Rules\\b-rules.dll\" /s /t:TypeA,TypeB " +
+                                             "/r:\"c:\\fxcop\\Rules\\a-rules.dll\" /r:\"c:\\fxcop\\Rules\\b-rules.dll\" " +
+                                             "/rid:Microsoft.Design#CA1012 /rid:-Microsoft.Design#CA2210 " +
+                                             "/s /t:TypeA,TypeB " +
                                              "/u /v ",
                                              (string)typeof(FxCop).InvokeMember("GenerateCommandLineCommands", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod, null, task, null));
         }

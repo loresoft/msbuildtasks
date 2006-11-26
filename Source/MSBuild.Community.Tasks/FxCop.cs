@@ -53,6 +53,7 @@ namespace MSBuild.Community.Tasks
     /// <FxCop 
     ///   TargetAssemblies="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll"
     ///   RuleLibraries="@(FxCopRuleAssemblies)" 
+    ///   Rules="Microsoft.Design#CA1012;-Microsoft.Performance#CA1805"
     ///   AnalysisReportFileName="Test.html"
     ///   DependencyDirectories="$(MSBuildCommunityTasksPath)"
     ///   FailOnError="False"
@@ -145,12 +146,26 @@ namespace MSBuild.Community.Tasks
         private ITaskItem[] _ruleLibraries;
 
         /// <summary>
-        /// Specifies the filename(s) of FxCop project file(s).
+        /// Specifies the filename(s) of FxCop rule assemblies
         /// </summary>
         public ITaskItem[] RuleLibraries
         {
             get { return _ruleLibraries; }
             set { _ruleLibraries = value; }
+        }
+
+        private ITaskItem[] _rules;
+
+        /// <summary>
+        /// The list of rules to run
+        /// </summary>
+        /// <remarks>Rule names should be provided using the format Library#RuleNumber. For example <c>Microsoft.Design#CA1012</c>
+        /// <para>Place a single hyphen (-) in front of the rule name to exclude it. For example <c>-Microsoft.Performance#CA1805</c></para>
+        /// </remarks>
+        public ITaskItem[] Rules
+        {
+            get { return _rules; }
+            set { _rules = value; }
         }
 
         private string _analysisReportFileName;
@@ -415,6 +430,14 @@ namespace MSBuild.Community.Tasks
                 {
                     _programArguments.AppendFormat("/r:\"{0}\" ",
                         Path.Combine(Path.Combine(ToolPath, "Rules"), item.ItemSpec));
+                }
+            }
+
+            if (Rules != null)
+            {
+                foreach (ITaskItem item in Rules)
+                {
+                    _programArguments.AppendFormat("/rid:{0} ", item.ItemSpec);
                 }
             }
 
