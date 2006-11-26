@@ -144,7 +144,20 @@ namespace MSBuild.Community.Tasks
         {
             get { return _replacementText; }
             set { _replacementText = value; }
-        } 
+        }
+
+        private Encoding _encoding = System.Text.Encoding.UTF8;
+        /// <summary>
+        /// The character encoding used to read and write the file.
+        /// </summary>
+        /// <remarks>Any value returned by <see cref="System.Text.Encoding.WebName"/> is valid input.
+        /// <para>The default is <c>utf-8</c></para></remarks>
+        public string Encoding
+        {
+            get { return _encoding.WebName; }
+            set { _encoding = System.Text.Encoding.GetEncoding(value); }
+        }
+
         #endregion
 
         /// <summary>
@@ -180,9 +193,9 @@ namespace MSBuild.Community.Tasks
 				{
 					string fileName = item.ItemSpec;
 					Log.LogMessage("Updating File \"{0}\".", fileName);
-					string buffer = File.ReadAllText(fileName);
+					string buffer = File.ReadAllText(fileName, _encoding);
 					buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);
-					File.WriteAllText(fileName, buffer);
+					File.WriteAllText(fileName, buffer, _encoding);
 					Log.LogMessage("  Replaced matches with \"{0}\".", _replacementText);
 				}
             }
