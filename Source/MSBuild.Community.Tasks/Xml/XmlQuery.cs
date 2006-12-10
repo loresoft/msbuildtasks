@@ -11,61 +11,7 @@ namespace MSBuild.Community.Tasks.Xml
     /// <summary>
     /// Reads a value or values from lines of XML
     /// </summary>
-    /// <remarks>Use the Lines property (possibly populated from the the ReadLinesFromFile task) if you want to perform multiple
-    /// queries against some XML in memory. Use the XmlFileName property to query a large XML file.
-    /// <para>An XPath expression can return multiple nodes in the <see cref="Values"/> collection.
-    /// The number of nodes returned is availabe in the <see cref="ValuesCount"/> output TaskParameter.</para>
-    /// <para>When the XPath expression resolves to an element node, all of the
-    /// attributes of the element are added as metadata to the returned <see cref="ITaskItem"/>.
-    /// In addition, some reserved metadata properties are available on all element nodes.
-    /// They are all prefixed with the <see cref="ReservedMetaDataPrefix"/>, 
-    /// which is a single underscore (_) by default.
-    /// <list type="table">
-    /// <listheader><term>Reserved Property</term></listheader>
-    /// <item><term>_value</term><description>The value of the node (non-xml text between the opening and closing tags).</description></item>
-    /// <item><term>_innerXml</term><description>The markup representing the children of this node.</description></item>
-    /// <item><term>_outerXml</term><description>The markup representing this node and all its child nodes.</description></item>
-    /// </list>
-    /// </para></remarks>
-    /// <example>Read an attribute value by selecting it with an XPath expression:
-    /// <code><![CDATA[
-    /// <ReadLinesFromFile File="web.config">
-	///     <Output TaskParameter="Lines" ItemName="FileContents" />
-    /// </ReadLinesFromFile>
-    ///
-    /// <XmlQuery Lines="@(FileContents)"
-    ///     XPath = "/configuration/system.web/compilation/@defaultLanguage">
-	///		<Output TaskParameter="Values" PropertyName="CompilationLanguage" />
-	///	</XmlQuery>
-    /// 
-    /// <Message Text="The default language is $(CompilationLanguage)." />
-    /// ]]></code>
-    /// </example>
-    /// <example>Read attribute values (from an XML file) using item metadata on a selected element node:
-    /// <code><![CDATA[
-    /// <XmlQuery XmlFileName="$(MSBuildProjectDirectory)\web.config"
-    ///     XPath = "/configuration/system.web/compilation">
-    ///		<Output TaskParameter="Values" ItemName="CompilationElement" />
-    ///	</XmlQuery>
-    /// 
-    /// <Message Text="The default language is: $(CompilationElement.defaultLanguage)." />
-    /// <Message Text="Debug is enabled: $(CompilationElement.debug)." />
-    /// ]]></code>
-    /// </example>
-    /// <example>Read an element value (requires use of the reserved metadata property "_value"):
-    /// <code><![CDATA[
-    /// <ReadLinesFromFile File="web.config">
-    ///     <Output TaskParameter="Lines" ItemName="FileContents" />
-    /// </ReadLinesFromFile>
-    ///
-    /// <XmlQuery Lines="@(FileContents)"
-    ///     XPath = "/configuration/singleValue/LastName">
-    ///		<Output TaskParameter="Values" PropertyName="LastNameElement" />
-    ///	</XmlQuery>
-    /// 
-    /// <Message Text="The last name is %(LastNameElement._value)" />
-    /// ]]></code>
-    /// </example>
+    /// <include file='..\AdditionalDocumentation.xml' path='docs/task[@name="XmlQuery"]/*'/>
     public class XmlQuery : Task
     {
         private ITaskItem[] lines;
@@ -96,14 +42,7 @@ namespace MSBuild.Community.Tasks.Xml
         /// <summary>
         /// A collection of prefix=namespace definitions used to query the XML document
         /// </summary>
-        /// <example>Defining multiple namespaces:
-        /// <code><![CDATA[
-        /// <XmlQuery Lines="@(FileContents)"
-		///	    XPath = "/x:transform/x:template/soap:Header"
-		/// 	NamespaceDefinitions = "soap=http://www.w3.org/2001/12/soap-envelope;x=http://www.w3.org/1999/XSL/Transform">
-		/// 	<Output TaskParameter="Values" ItemName="SoapEnvelopeNode" />
-		/// </XmlQuery>]]></code>
-        /// </example>
+        /// <include file='..\AdditionalDocumentation.xml' path='docs/task[@name="XmlQuery.NamespaceDefinitions"]/*'/>
         public ITaskItem[] NamespaceDefinitions
         {
             get { return namespaceDefinitions; }

@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MSBuild.Community.Tasks.snk" />
+    <None Include="AdditionalDocumentation.xml" />
     <Content Include="MSBuild.Community.Tasks.Targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

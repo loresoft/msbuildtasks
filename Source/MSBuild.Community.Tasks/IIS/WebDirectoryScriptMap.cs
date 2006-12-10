@@ -10,6 +10,16 @@ namespace MSBuild.Community.Tasks.IIS
     /// <summary>
     /// Sets an application mapping for a filename extension on an existing web directory.
     /// </summary>
+    /// <example>Map the .axd extension to the lastest version of ASP.NET:
+    /// <code><![CDATA[
+    /// <WebDirectoryScriptMap VirtualDirectoryName="MyWeb" Extension=".axd" MapToAspNet="True" VerifyFileExists="False" />
+    /// ]]></code>
+    /// </example>
+    /// <example>Map GET requests to the .rss extension to a specific executable:
+    /// <code><![CDATA[
+    /// <WebDirectoryScriptMap VirtualDirectoryName="MyWeb" Extension=".rss" Verbs="GET" ExecutablePath="$(WINDIR)\Microsoft.Net\Framework\1.0.3705\aspnet_isapi.dll" />
+    /// ]]></code>
+    /// </example>
     public class WebDirectoryScriptMap : WebBase
     {
         private string mVirtualDirectoryName;

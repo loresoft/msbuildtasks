@@ -48,43 +48,7 @@ namespace MSBuild.Community.Tasks
 	/// <summary>
 	/// Executes code contained within the task.
 	/// </summary>
-	/// <example>
-	/// <para>Simple script that writes to the console</para>
-    /// <code><![CDATA[
-    /// <PropertyGroup>
-    ///     <HelloCode>
-    ///         <![CDATA[
-    ///         public static void ScriptMain() {
-    ///             Console.WriteLine("Hello MSBuild Community Scripting World.");
-    ///         }
-    ///         ]] >
-    ///     </HelloCode>
-    /// </PropertyGroup>
-    /// <Target Name="Hello">
-    ///     <Script Language="C#" Code="$(HelloCode)" Imports="System" />
-    /// </Target>
-    /// ]]></code>
-	/// </example>
-    /// <example>
-    /// <para>Script that returns a value.</para>
-    /// <code><![CDATA[
-    /// <PropertyGroup>
-    ///     <GetProgramFilesCode>
-    ///         <![CDATA[
-    ///         public static string ScriptMain() {
-    ///             return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-    ///         }
-    ///         ]] >
-    ///     </GetProgramFilesCode>
-    /// </PropertyGroup>
-    /// <Target Name="GetProgramFilesFolder">
-    ///     <Script Language="C#" Code="$(GetProgramFilesCode)">
-    ///         <Output TaskParameter="ReturnValue" PropertyName="ProgramFilesFolder" />
-    ///     </Script>
-    ///     <Message Text="Program files are in: $(ProgramFilesFolder)" />
-    /// </Target>
-    /// ]]></code>
-    /// </example>
+    /// <include file='AdditionalDocumentation.xml' path='docs/task[@name="Script"]/*'/>
     public class Script : Task
 	{
 		#region Fields

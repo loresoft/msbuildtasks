@@ -21,25 +21,7 @@ namespace MSBuild.Community.Tasks.Install
     /// <see href="http://msdn2.microsoft.com/system.configuration.install.installer.aspx">Installer</see>
     /// classes contained within specified assemblies.
     /// </remarks>
-    /// <example>Install multiple assemblies by specifying the file names:
-    /// <code><![CDATA[
-    /// <InstallAssembly AssemblyFiles="Engine.dll;Presenter.dll" />
-    /// ]]></code>
-    /// </example>
-    /// <example>Install an assembly using the assembly name. Also disable the log file by setting it to a single space:
-    /// <code><![CDATA[
-    /// <InstallAssembly AssemblyNames="Engine,Version=1.5.0.0,Culture=neutral" LogFile=" "/>
-    /// ]]></code>
-    /// </example>
-    /// <example>You can easily chain an install to the result of a build:
-    /// <code><![CDATA[
-	/// <MSBuild Projects="Project1.csproj;Project2.csproj">
-	///	 <Output TaskParameter="TargetOutputs" ItemName="ProjectBinaries" />
-	/// </MSBuild>
-    /// <InstallAssembly AssemblyFiles="@(ProjectBinaries)" />
-    /// ]]></code>
-    /// </example>
-
+    /// <include file='..\AdditionalDocumentation.xml' path='docs/task[@name="InstallAssembly"]/*'/>
     public class InstallAssembly : ToolTask
     {
         private Hashtable bag = new Hashtable();

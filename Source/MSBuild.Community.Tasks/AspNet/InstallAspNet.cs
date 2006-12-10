@@ -8,31 +8,7 @@ namespace MSBuild.Community.Tasks.AspNet
     /// Installs and register script mappings for ASP.NET
     /// </summary>
     /// <remarks>Uses the aspnet_regiis.exe tool included with the .NET Framework.</remarks>
-    /// <example>Install the latest version of ASP.NET on the server:
-    /// <code><![CDATA[
-    /// <InstallAspNet />
-    /// ]]></code>
-    /// </example>
-    /// <example>Install the latest version of ASP.NET on the server, but do not update script maps:
-    /// <code><![CDATA[
-    /// <InstallAspNet ApplyScriptMaps="Never" />
-    /// ]]></code>
-    /// </example>
-    /// <example>Install the script maps for ASP.NET 2.0 on a web directory on the default website:
-    /// <code><![CDATA[
-    /// <InstallAspNet Path="MyApplication" Version="Version20" />
-    /// ]]></code>
-    /// </example>
-    /// <example>Install the script maps for ASP.NET 1.1 on a web directory on a non-default website:
-    /// <code><![CDATA[
-    /// <InstallAspNet Path="MyApplication" Version="W3SVC/3/Root/Version11" />
-    /// ]]></code>
-    /// </example>
-    /// <example>Install client side script only for the latest version:
-    /// <code><![CDATA[
-    /// <InstallAspNet ClientScriptsOnly="True" />
-    /// ]]></code>
-    /// </example>
+    /// <include file='..\AdditionalDocumentation.xml' path='docs/task[@name="InstallAspNet"]/*'/>
     public class InstallAspNet : ToolTask
     {
         private enum ScriptMapScenarios

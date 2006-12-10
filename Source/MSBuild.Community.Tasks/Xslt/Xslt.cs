@@ -15,86 +15,10 @@ using Microsoft.Build.Utilities;
 namespace MSBuild.Community.Tasks
 {
 	/// <summary>
-	/// A task to merge and transform
-	/// a set of xml files.
+	/// A task to merge and transform a set of xml files.
 	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// The xml files of parameter <see cref="Inputs"/>
-	/// are merged into one xml document,
-	/// wrapped with a root tag <see cref="RootTag"/>
-	/// </p>
-	/// <p>
-	/// If only one input file is provided,
-	/// merging and wrapping can be omitted
-	/// by setting <see cref="RootTag"/> to an empty string.
-	/// </p>
-	/// <p>
-	/// The root tag can be given any number of attributes
-	/// by providing a list of semicolon-delimited name/value pairs
-	/// to parameter <see cref="RootAttributes"/>.
-	/// For example: <code>RootAttributes="foo=bar;date=$(buildDate)"</code>
-	/// </p>
-	/// <p>
-	/// Parameter <see cref="RootAttributes"/> defaults to
-	/// one attribute with a name specified by <see cref="CREATED_ATTRIBUTE"/>,
-	/// and a local time stamp as value.
-	/// To suppress the default value, an empty parameter
-	/// <code>RootAttributes=""</code>
-	/// must be specified explicitely.
-	/// </p>
-	/// <p>
-	/// The xsl transformation file 
-	/// specified by parameter <see cref="Xsl"/>
-	/// is applied on the input.
-	/// </p>
-	/// <p>
-	/// The <see cref="ITaskItem"/> <see cref="Xsl"/>
-	/// can be given any number of metadata,
-	/// which will be handed to the xsl transformation
-	/// as parameters.
-	/// </p>
-	/// <p>
-	/// The output is written to the file
-	/// specified by parameter <see cref="Output"/>.
-	/// </p>
-	/// </remarks>
-	/// <example>
-	/// This example for generating a report
-	/// from a set of NUnit xml results:
-	/// <code><![CDATA[
-	/// <ItemGroup>
-	///     <nunitReportXslFile Include="$(MSBuildCommunityTasksPath)\$(nunitReportXsl)">
-	///         <project>$(project)</project>
-	///         <configuration>$(configuration)</configuration>
-	///         <msbuildFilename>$(MSBuildProjectFullPath)</msbuildFilename>
-	///         <msbuildBinpath>$(MSBuildBinPath)</msbuildBinpath>
-	///         <xslFile>$(MSBuildCommunityTasksPath)\$(nunitReportXsl)</xslFile>
-	///     </nunitReportXslFile>
-	/// </ItemGroup>
-	///
-	/// <Target Name="test-report" >
-	///     <Xslt Inputs="@(nunitFiles)"
-	///         RootTag="mergedroot"
-	///         Xsl="@(nunitReportXslFile)" 
-	///         Output="$(testDir)\TestReport.html" />
-	/// </Target>]]></code>
-	/// 
-	/// This examples shows all available task attributes:
-	/// <code><![CDATA[
-	/// <Time Format="yyyyMMddHHmmss">
-	///     <Output TaskParameter="LocalTimestamp" PropertyName="buildDate" />
-	/// </Time>
-	/// 
-	/// <Xslt
-	///      Inputs="@(xmlfiles)"
-	///      RootTag="mergedroot"
-	///      RootAttributes="foo=bar;date=$(buildDate)"
-	///      Xsl="transformation.xsl"
-	///      Output="report.html"
-	/// />]]></code>
-	/// </example>
-	public class Xslt : Task
+    /// <include file='AdditionalDocumentation.xml' path='docs/task[@name="Xslt"]/*'/>
+    public class Xslt : Task
 	{
 		#region Constants
 

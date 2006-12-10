@@ -9,6 +9,7 @@ namespace MSBuild.Community.Tasks.Xml
     /// <summary>
     /// Performs multiple updates on an XML file
     /// </summary>
+    /// <include file='..\AdditionalDocumentation.xml' path='docs/task[@name="XmlMassUpdate"]/*'/>
     public class XmlMassUpdate : Task
     {
         private ITaskItem contentFile;
@@ -78,13 +79,7 @@ namespace MSBuild.Community.Tasks.Xml
         /// <summary>
         /// A collection of prefix=namespace definitions used to query the XML documents
         /// </summary>
-        /// <example>Defining multiple namespaces:
-        /// <code><![CDATA[
-        /// <XmlMassUpdate ContentFile="web.config"
-        ///	    SubstitutionsRoot="/configuration/substitutions"
-        /// 	NamespaceDefinitions = "soap=http://www.w3.org/2001/12/soap-envelope;x=http://www.w3.org/1999/XSL/Transform">
-        /// 	/>]]></code>
-        /// </example>
+        /// <include file='..\AdditionalDocumentation.xml' path='docs/task[@name="XmlQuery.NamespaceDefinitions"]/*'/>
         public ITaskItem[] NamespaceDefinitions
         {
             get { return namespaceDefinitions; }

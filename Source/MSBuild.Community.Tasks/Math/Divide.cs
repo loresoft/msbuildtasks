@@ -38,26 +38,7 @@ namespace MSBuild.Community.Tasks.Math
     /// <summary>
     /// Divide numbers
     /// </summary>
-    /// <example>
-    /// <code><![CDATA[
-    /// <Math.Divide Numbers="1;2">
-    ///     <Output TaskParameter="Result" PropertyName="Result" />
-    /// </Math.Divide>
-    /// <Message Text="Divide 1/2= $(Result)"/>
-    /// ]]></code>
-    /// Above example will display:
-    /// <code>Divide 1/2= 0.5</code>
-    /// </example>
-    /// <example>Truncate the result to always return an integer:
-    /// <code><![CDATA[
-    /// <Math.Divide Numbers="7;3" TruncateResult="true">
-    ///     <Output TaskParameter="Result" PropertyName="Result" />
-    /// </Math.Divide>
-    /// <Message Text="Divide 7/3= $(Result)"/>
-    /// ]]></code>
-    /// Above example will display:
-    /// <code>Divide 7/3= 2</code>
-    /// </example>
+    /// <include file='..\AdditionalDocumentation.xml' path='docs/task[@name="Math.Divide"]/*'/>
     public class Divide : MathBase
     {
         private bool truncateResult;
