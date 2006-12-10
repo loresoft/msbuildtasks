@@ -47,17 +47,19 @@ namespace MSBuild.Community.Tasks.Subversion
     /// Run the "svn info" command and parse the output
     /// </summary>
     /// <example>
-    /// This example will determine the Subversion repository root for the.
-    /// current directory and print it out.
+    /// This example will determine the Subversion repository root for
+    /// a working directory and print it out.
     /// <code><![CDATA[
     /// <Target Name="printinfo">
-    ///   <SvnInfo LocalPath=".">
+    ///   <SvnInfo LocalPath="c:\code\myapp">
     ///     <Output TaskParameter="RepositoryRoot" PropertyName="root" />
     ///   </SvnInfo>
     ///   <Message Text="root: $(root)" />
     /// </Target>
     /// ]]></code>
     /// </example>
+    /// <remarks>You can retrieve Subversion information for a <see cref="SvnClient.LocalPath"/> or <see cref="SvnClient.RepositoryPath"/>.
+    /// If you do not provide a value for <see cref="SvnClient.LocalPath"/> or <see cref="SvnClient.RepositoryPath"/>, the current directory is assumed.</remarks>
     public class SvnInfo : SvnClient
     {
         private string m_strRepositoryRoot;
@@ -93,23 +95,6 @@ namespace MSBuild.Community.Tasks.Subversion
             m_nLastChangedRev = 0;
             m_LastChangedDate = DateTime.Now;
             m_eSchedule = Subversion.Schedule.unknown;
-        }
-
-
-        /// <summary>
-        /// Indicates whether all task paratmeters are valid.
-        /// </summary>
-        /// <returns>
-        /// true if all task parameters are valid; otherwise, false.
-        /// </returns>
-        protected override bool ValidateParameters()
-        {
-            if (string.IsNullOrEmpty(base.LocalPath))
-            {
-                Log.LogError(Properties.Resources.ParameterRequired, "SvnInfo", "LocalPath");
-                return false;
-            }
-            return base.ValidateParameters();
         }
 
         /// <summary>
