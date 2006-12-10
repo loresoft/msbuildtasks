@@ -51,6 +51,10 @@ namespace MSBuild.Community.Tasks
     /// <Message Text="InstallRoot: $(InstallRoot)"/>
     /// ]]></code>
     /// </example>
+    /// <remarks>The <see cref="Value"/> parameter is set according to the following rules:
+    /// <list type="table"><item><description>If a <see cref="DefaultValue"/> is provided, it will be used if the <see cref="KeyName"/> or <see cref="ValueName"/> does not exist.</description></item>
+    /// <item><description>If a <see cref="DefaultValue"/> is not provided, the <see cref="KeyName"/> exists, but the <see cref="ValueName"/> does not exist, <see cref="Value"/> will be set to an empty string.</description></item>
+    /// <item><description>If a <see cref="DefaultValue"/> is not provided, and the <see cref="KeyName"/> does not exist, the task will fail.</description></item></list></remarks>
     public class RegistryRead : Task
     {
         /// <summary>
@@ -58,7 +62,6 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public RegistryRead()
         {
-            _defaultValue = string.Empty;
         }
 
         #region Properties
@@ -123,8 +126,14 @@ namespace MSBuild.Community.Tasks
         /// </returns>
         public override bool Execute()
         {
-            _value = Registry.GetValue(_keyName, _valueName, _defaultValue).ToString();
-            _value = _value ?? string.Empty;
+            string defaultValueForCall = _defaultValue ?? String.Empty;
+            object key = Registry.GetValue(_keyName, _valueName, defaultValueForCall);
+            if (key == null)
+            {
+                _value = _defaultValue;
+                return !String.IsNullOrEmpty(_defaultValue);
+            }
+            _value = key.ToString() ?? string.Empty;
 
             Log.LogMessage(Properties.Resources.RegistryRead);
             Log.LogMessage(MessageImportance.Low, "[{0}]", _keyName);
