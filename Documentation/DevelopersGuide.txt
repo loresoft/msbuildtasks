@@ -3,7 +3,7 @@ $Id$
 Developer's Guide for http://msbuildtasks.tigris.org/
 =====================================================
 
-Build Environment Prerequisits
+Build Environment Prerequisites
 ------------------------------
 
 - .NET2.0
