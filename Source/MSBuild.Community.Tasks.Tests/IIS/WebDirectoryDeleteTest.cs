@@ -12,16 +12,12 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	public class WebDirectoryDeleteTest
 	{
 		private string mVirtualDirectoryName = "VirDirTest";
-		private string mServer = "fenway";
-		// private string mWAMUsername = "testuser";
-		// private string mWAMPassword = "password";
 
 		[Test]
 		public void WebDirectoryDeleteLocal()
 		{
 			// Local machine test
-			mServer = "localhost";
-            if (!TaskUtility.IsMinimumIISVersionInstalled(mServer, 5, 0))
+            if (!TaskUtility.IsMinimumIISVersionInstalled("localhost", 5, 0))
 			{
 				Assert.Ignore(@"IIS 5.0 was not found on the machine.  IIS 5.0 is required to run this test.");
 			}
@@ -35,6 +31,12 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 		[Test]
 		public void WebDirectoryDeleteRemote()
 		{
+		    string mServer = "fenway";
+            if (!TaskUtility.IsAdminOnRemoteMachine(mServer))
+            {
+                Assert.Ignore(String.Format("Unable to connect as administrator to {0}", mServer));
+            }
+
 			// Remote machine test
             if (!TaskUtility.IsMinimumIISVersionInstalled(mServer, 5, 0))
 			{

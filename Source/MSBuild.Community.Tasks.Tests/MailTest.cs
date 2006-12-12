@@ -19,7 +19,7 @@ namespace MSBuild.Community.Tasks.Tests
             //
         }
 
-        [Test]
+        [Test, Explicit]
         public void MailExecute()
         {
             Mail task = new Mail();

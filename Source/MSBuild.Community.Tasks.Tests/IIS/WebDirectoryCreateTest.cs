@@ -13,16 +13,12 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 	{
 		private string mVirtualDirectoryName = "VirDirTest";
 		private string mVirtualDirectoryPhysicalPath = @"C:\Inetpub\MSBuildDir";
-		private string mServer = "fenway";
-		// private string mWAMUsername = "testuser";
-		// private string mWAMPassword = "password";
 		
 		[Test]
 		public void WebDirectoryCreateLocal()
 		{
 			// Local machine test
-			mServer = "localhost";
-            if (!TaskUtility.IsMinimumIISVersionInstalled(mServer, 5, 0))
+            if (!TaskUtility.IsMinimumIISVersionInstalled("localhost", 5, 0))
 			{
 				Assert.Ignore(@"IIS 5.0 was not found on the machine.  IIS 5.0 is required to run this test.");
 			}
@@ -37,6 +33,11 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 		[Test]
 		public void WebDirectoryCreateRemote()
 		{
+		    string mServer = "fenway";
+            if (!TaskUtility.IsAdminOnRemoteMachine(mServer))
+            {
+                Assert.Ignore(String.Format("Unable to connect as administrator to {0}", mServer));
+            }
 			// Remote machine test
             if (!TaskUtility.IsMinimumIISVersionInstalled(mServer, 5, 0))
 			{
@@ -48,8 +49,6 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			task.ServerName = mServer;
 			task.VirtualDirectoryName = mVirtualDirectoryName;
 			task.VirtualDirectoryPhysicalPath = mVirtualDirectoryPhysicalPath;
-			// task.Username = mWAMUsername;
-			// task.Password = mWAMPassword;
 			Assert.IsTrue(task.Execute(), "Execute Failed!");
 		}
 	}

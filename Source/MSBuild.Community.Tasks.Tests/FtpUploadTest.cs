@@ -13,7 +13,7 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]
     public class FtpUploadTest
     {
-        [Test(Description="Upload zip file to localhost")]
+        [Test(Description="Upload zip file to localhost"), Explicit]
         public void FtpExecute()
         {
             ZipTest zip = new ZipTest();

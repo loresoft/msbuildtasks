@@ -21,9 +21,10 @@ namespace MSBuild.Community.Tasks.Tests
 
             NDoc task = new NDoc();
             task.BuildEngine = new MockBuild();
+            task.ToolPath = Path.Combine(workingDir, "ndoc");
             task.ProjectFilePath = Path.Combine(workingDir, @"MSBuild.Community.Tasks.ndoc");
             task.WorkingDirectory = workingDir;
-            task.Documenter = "MSDN";
+            task.Documenter = "XML";
             Assert.IsTrue(task.Execute(), "Execute Failed");
         }
     }

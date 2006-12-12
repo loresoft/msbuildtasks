@@ -141,7 +141,7 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             };
 
             Assert.IsTrue(task.Execute(), "Should have executed successfully.");
-            Assert.AreEqual("3", task.Values[0].ToString());
+            Assert.AreEqual("6", task.Values[0].ToString());
 
         }
 

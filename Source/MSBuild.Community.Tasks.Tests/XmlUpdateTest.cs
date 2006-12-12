@@ -13,6 +13,28 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]
     public class XmlUpdateTest
     {
+        string prjRootPath;
+        string testFile;
+
+        public XmlUpdateTest()
+        {
+            prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            testFile = Path.Combine(prjRootPath, @"Source\Test\Subversion.proj");
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            string sourceFile = Path.Combine(prjRootPath, @"Source\Subversion.proj");
+            File.Copy(sourceFile, testFile, true);
+        }
+
+        [TearDown]
+        public void Cleanup()
+        {
+            File.Delete(testFile);
+        }
+
         [Test(Description="Update an XML file with XPath navigation")]
         public void XmlUpdateExecute()
         {
@@ -21,8 +43,7 @@ namespace MSBuild.Community.Tasks.Tests
             
             task.Prefix = "n";
             task.Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
-            task.XmlFileName = Path.Combine(prjRootPath, @"Source\MSBuild.Community.Tasks\Subversion.proj");
+            task.XmlFileName = testFile;
             task.XPath = "/n:Project/n:PropertyGroup/n:LastUpdate";
             task.Value = DateTime.Now.ToLongDateString();
             

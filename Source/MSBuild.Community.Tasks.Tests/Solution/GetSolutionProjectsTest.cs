@@ -59,26 +59,7 @@ namespace MSBuild.Community.Tasks.Tests
         {
             GetSolutionProjects task = new GetSolutionProjects();
             task.BuildEngine = new MockBuild();
-
-            string testDir;
-            string assemblyDir = TaskUtility.AssemblyDirectory;
-            TaskUtility.logEnvironmentInfo(task.Log);
-            if (TaskUtility.CalledInBuildDirectory)
-            {
-                task.Log.LogMessage("Called in build directory");
-
-                // get the files from where msbuild but them
-                testDir = TaskUtility.TestDirectory;
-            }
-            else
-            {
-                task.Log.LogMessage("Not called in build directory");
-
-                // get the files from where Visual Studio put them
-                testDir = Path.Combine(TaskUtility.AssemblyDirectory, "Solution");
-            }
-
-            task.Solution = Path.Combine(testDir, "TestSolution.sln");
+            task.Solution = Path.Combine(TaskUtility.getProjectRootDirectory(true), @"Source\MSBuild.Community.Tasks.Tests\Solution\TestSolution.sln");
 
             Assert.IsTrue(task.Execute());
 

@@ -4,6 +4,7 @@ using System;
 using System.Text;
 using System.ServiceProcess;
 using NUnit.Framework;
+using System.Security.Principal;
 
 namespace MSBuild.Community.Tasks.Tests
 {
@@ -14,6 +15,11 @@ namespace MSBuild.Community.Tasks.Tests
         public void Setup()
         {
             //TODO: NUnit setup
+            IPrincipal currentUser = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+            if (!currentUser.IsInRole(WindowsBuiltInRole.Administrator.ToString()))
+            {
+                Assert.Ignore("{0} is not an administrator and so cannot run the ServiceController tests.", currentUser.Identity.Name);
+            }
         }
 
         [TearDown()]

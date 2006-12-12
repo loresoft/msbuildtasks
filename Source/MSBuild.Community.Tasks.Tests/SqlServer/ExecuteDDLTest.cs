@@ -31,9 +31,17 @@ namespace MSBuild.Community.Tasks.Tests.SqlServer
 			ServiceQuery squery = new ServiceQuery();
 			squery.BuildEngine = buildEngine;
 			squery.ServiceName = "MSSQLSERVER";
-			Assert.IsTrue(squery.Execute(), "ServiceQuery for SqlServer failed.");
-			Assert.IsTrue(squery.Exists, "MS SqlServer is not installed");
-			StringAssert.AreEqualIgnoringCase(squery.Status, "RUNNING");
+            if (!squery.Execute())
+            {
+                Assert.Ignore("ServiceQuery for SqlServer failed.");
+            }
+            if (!squery.Exists){
+                Assert.Ignore("MS SqlServer is not installed");
+            }
+            if (!squery.Status.Equals("Running", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Assert.Ignore("MS SqlServer is not running");
+            }
 		}
 		
 		[TestFixtureTearDown]

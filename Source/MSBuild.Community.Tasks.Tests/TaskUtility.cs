@@ -175,7 +175,17 @@ namespace MSBuild.Community.Tasks.Tests
             System.Version installedVersion = GetInstalledIISVersion(machineName);
             return installedVersion.CompareTo(new System.Version(iisMajorVersion, iisMinorVersion)) >= 0;
 		}
-    	
+
+        public static bool IsAdminOnRemoteMachine(string machineName)
+        {
+            bool isAdminIfCdriveShareFound = false;
+            try
+            {
+                isAdminIfCdriveShareFound = Directory.Exists(String.Format(@"\\{0}\c$", machineName));
+            }
+            catch { }
+            return isAdminIfCdriveShareFound;
+        }
         #endregion NUnit Environment Info
     }
 }

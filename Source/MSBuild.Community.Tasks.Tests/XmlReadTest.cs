@@ -40,7 +40,7 @@ namespace MSBuild.Community.Tasks.Tests
             task.Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
             task.Prefix = "n";
             Assert.IsTrue(task.Execute(), "Execute failed.");
-            Assert.AreEqual("3", task.Value);
+            Assert.AreEqual("6", task.Value);
         }
 
         [Test]
