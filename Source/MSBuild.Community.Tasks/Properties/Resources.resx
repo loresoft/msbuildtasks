@@ -328,7 +328,7 @@
     <value>Restoring working folder for {0} to {1}.</value>
   </data>
   <data name="VersionFileNotFound" xml:space="preserve">
-    <value>Version file "{0}" not found .</value>
+    <value>Version file "{0}" not found - creating new file.</value>
   </data>
   <data name="VersionRead" xml:space="preserve">
     <value>Version "{0}" read from file "{1}".</value>

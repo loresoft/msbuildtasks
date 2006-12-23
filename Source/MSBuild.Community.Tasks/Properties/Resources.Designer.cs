@@ -677,7 +677,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version file &quot;{0}&quot; not found ..
+        ///   Looks up a localized string similar to Version file &quot;{0}&quot; not found - creating new file..
         /// </summary>
         internal static string VersionFileNotFound {
             get {

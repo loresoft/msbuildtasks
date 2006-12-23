@@ -169,7 +169,7 @@ namespace MSBuild.Community.Tasks
 			set { _versionFile = value; }
 		}
 
-        private BuildTypeEnum _buildTypeEnum;
+        private BuildTypeEnum _buildTypeEnum = BuildTypeEnum.None;
 
 		/// <summary>
         /// Gets or sets the method used to generate a <see cref="Build"/> number
@@ -189,10 +189,41 @@ namespace MSBuild.Community.Tasks
 		public string BuildType
 		{
 			get { return _buildTypeEnum.ToString(); }
-			set {_buildTypeEnum = ((value == string.Empty) || (value == null)) ? BuildTypeEnum.None : (BuildTypeEnum)Enum.Parse(typeof(BuildTypeEnum), value);}
+            set 
+            {
+                object parsedBuildType;
+                if (EnumTryParse("BuildType", typeof(BuildTypeEnum), value, out parsedBuildType))
+                {
+                    _buildTypeEnum = (BuildTypeEnum)parsedBuildType;
+                }
+                else
+                {
+                    validParameters = false;
+                }
+            }
 		}
 
-        private RevisionTypeEnum _revisionTypeEnum;
+        private bool validParameters = true;
+
+        //TODO: figure out how to factor this out to be used by all tasks
+        private bool EnumTryParse(string propertyName, Type enumType, string valueToParse, out object parsedValue)
+        {
+            bool success = false;
+            parsedValue = null;
+            try
+            {
+                parsedValue = Enum.Parse(enumType, valueToParse);
+                success = true;
+            }
+            catch (ArgumentException)
+            {
+                Log.LogError("The {0} value '{1}' is invalid. Valid values are: {2}", propertyName, valueToParse,
+                    String.Join(", ", Enum.GetNames(enumType)));
+            }
+            return success;
+        }
+
+        private RevisionTypeEnum _revisionTypeEnum = RevisionTypeEnum.None;
 
 		/// <summary>
         /// Gets or sets the method used to generate a <see cref="Revision"/> number
@@ -212,7 +243,18 @@ namespace MSBuild.Community.Tasks
 		public string RevisionType
 		{
 			get { return _revisionTypeEnum.ToString(); }
-			set { _revisionTypeEnum = ((value == string.Empty) || (value == null)) ? RevisionTypeEnum.None : (RevisionTypeEnum)Enum.Parse(typeof(RevisionTypeEnum), value);}
+            set
+            {
+                object parsedRevisionType;
+                if (EnumTryParse("RevisionType", typeof(RevisionTypeEnum), value, out parsedRevisionType))
+                {
+                    _revisionTypeEnum = (RevisionTypeEnum)parsedRevisionType;
+                }
+                else
+                {
+                    validParameters = false;
+                }
+            }
 		}
 
         private DateTime _startDate = new DateTime(2000, 1, 1);
@@ -239,6 +281,10 @@ namespace MSBuild.Community.Tasks
 		/// </returns>
 		public override bool Execute()
 		{
+            if (!validParameters)
+            {
+                return false;
+            }
             _originalValues = new System.Version(_major, _major, _build, _revision);
             ReadVersionFromFile();
 			CalculateBuildNumber();
@@ -276,7 +322,7 @@ namespace MSBuild.Community.Tasks
 				return;
 			}
 
-			Log.LogMessage(Properties.Resources.VersionRead,
+			Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionRead,
 				textVersion, _versionFile);
 
 			try
@@ -319,23 +365,22 @@ namespace MSBuild.Community.Tasks
 				return false;
 			}
 
-			Log.LogMessage(Properties.Resources.VersionWrote,
+			Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionWrote,
 				version.ToString(), _versionFile);
 
 			return true;
 		}
 
-		private int CalculateDaysSinceMilenium()
+		private int CalculateDaysSinceMillenium()
 		{
-			DateTime today = DateTime.Now;
 			DateTime startDate = new DateTime(2000, 1, 1);
-			TimeSpan span = today.Subtract(startDate);
+			TimeSpan span = DateTime.Today.Subtract(startDate);
 			return (int)span.TotalDays;
 		}
 
 		private int CalculateBuildDate()
 		{
-			DateTime dDate = DateTime.Now;
+			DateTime dDate = DateTime.Today;
 			int _month = dDate.Month * 100;
 			int _day = dDate.Day;
 			int _year = (dDate.Year % 10) * 10000;
@@ -349,7 +394,7 @@ namespace MSBuild.Community.Tasks
             switch (_buildTypeEnum) 
             {
                 case BuildTypeEnum.Automatic:
-                    _build = CalculateDaysSinceMilenium();
+                    _build = CalculateDaysSinceMillenium();
                     break;
                 case BuildTypeEnum.Increment:
                     _build++;
@@ -366,7 +411,7 @@ namespace MSBuild.Community.Tasks
 		}
 
         private int CalculateBuildDateIncrememt() {
-            TimeSpan diff = DateTime.Now.Subtract(_startDate);
+            TimeSpan diff = DateTime.Today.Subtract(_startDate);
             return diff.Days;
 
         }
