@@ -309,7 +309,7 @@ namespace MSBuild.Community.Tasks
 
 			try
 			{
-				Log.LogMessage(MessageImportance.Normal, Properties.Resources.TimeGettingCurrentDate);
+				Log.LogMessage(MessageImportance.Low, Properties.Resources.TimeGettingCurrentDate);
 				GetDate();
 			}
 			catch (FormatException ex)

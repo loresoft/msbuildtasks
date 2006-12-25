@@ -330,8 +330,14 @@
   <data name="VersionFileNotFound" xml:space="preserve">
     <value>Version file "{0}" not found - creating new file.</value>
   </data>
+  <data name="VersionModifiedValue" xml:space="preserve">
+    <value>Updated to version {0}</value>
+  </data>
+  <data name="VersionOriginalValue" xml:space="preserve">
+    <value>Initialized to version {0}</value>
+  </data>
   <data name="VersionRead" xml:space="preserve">
-    <value>Version "{0}" read from file "{1}".</value>
+    <value>Reading version from file "{0}".</value>
   </data>
   <data name="VersionReadException" xml:space="preserve">
     <value>Unable to read version number from "{0}". {1}</value>
@@ -340,7 +346,7 @@
     <value>Unable to write version number to "{0}". {1}"</value>
   </data>
   <data name="VersionWrote" xml:space="preserve">
-    <value>Version "{0}" wrote to file "{1}".</value>
+    <value>Wrote version to file "{0}".</value>
   </data>
   <data name="WebDirectoryInvalidDirectory" xml:space="preserve">
     <value>Web directory {0} does not exist on {1}.</value>

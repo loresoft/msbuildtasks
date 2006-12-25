@@ -70,15 +70,13 @@ namespace MSBuild.Community.Tasks
         private enum BuildTypeEnum {
             None,
             Automatic,
-            Increment,
-            Date,
-            DateIncrement
+            Increment
         }
         private enum RevisionTypeEnum {
             None,
             Automatic,
             Increment,
-            NonIncrement
+            BuildIncrement
         }
         #endregion
 
@@ -191,6 +189,7 @@ namespace MSBuild.Community.Tasks
 			get { return _buildTypeEnum.ToString(); }
             set 
             {
+                if (attemptedUseOfObsoleteBuildType(value)) return;
                 object parsedBuildType;
                 if (EnumTryParse("BuildType", typeof(BuildTypeEnum), value, out parsedBuildType))
                 {
@@ -202,6 +201,23 @@ namespace MSBuild.Community.Tasks
                 }
             }
 		}
+
+        private bool attemptedUseOfObsoleteBuildType(string buildType)
+        {
+            if (buildType.Equals("DateIncrement", StringComparison.CurrentCultureIgnoreCase))
+            {
+                Log.LogError("DateIncrement is no longer a valid BuildType. Use Automatic instead.");
+                validParameters = false;
+                return true;
+            }
+            if (buildType.Equals("Date", StringComparison.CurrentCultureIgnoreCase))
+            {
+                Log.LogError("Date is no longer a valid BuildType. Use the Time task instead. See http://msbuildtasks.tigris.org/ReleaseNotes.html#v12_Version");
+                validParameters = false;
+                return true;
+            }
+            return false;
+        }
 
         private bool validParameters = true;
 
@@ -259,11 +275,11 @@ namespace MSBuild.Community.Tasks
 
         private DateTime _startDate = new DateTime(2000, 1, 1);
         /// <summary>
-        /// Gets or sets the starting date used to calculate the revision.
+        /// Gets or sets the starting date used to calculate the build number.
         /// </summary>
-        /// <value>The starting date for calculation of the revision.</value>
+        /// <value>The starting date for calculation of the build number.</value>
         /// <remarks>
-        /// This value is used in conjunction with the BuildType of Date. <seealso cref="BuildType"/> This parameter defaults to January 1, 2000.
+        /// This value is used in conjunction with the BuildType of Automatic. <seealso cref="BuildType"/> This parameter defaults to January 1, 2000.
         /// </remarks>
         public string StartDate {
             get { return _startDate.ToString(); }
@@ -286,54 +302,52 @@ namespace MSBuild.Community.Tasks
                 return false;
             }
             _originalValues = new System.Version(_major, _major, _build, _revision);
-            ReadVersionFromFile();
-			CalculateBuildNumber();
+            if (!ReadVersionFromFile()) return false;
+
+            Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionOriginalValue, _originalValues.ToString());
+            CalculateBuildNumber();
 			CalculateRevisionNumber();
-			return WriteVersionToFile();
+
+            return WriteVersionToFile();
 		}
 
 		#endregion Task Overrides
 
 		#region Private Methods
-		private void ReadVersionFromFile()
+		private bool ReadVersionFromFile()
 		{
 			string textVersion = null;
 			System.Version version = null;
-            if (String.IsNullOrEmpty(_versionFile)) return;
+            if (String.IsNullOrEmpty(_versionFile)) return true;
 
 			if (!System.IO.File.Exists(_versionFile))
 			{
 				Log.LogWarning(Properties.Resources.VersionFileNotFound, _versionFile);
-                _originalValues = new System.Version(_major, _minor, _build, _revision);
-				return;
+				return true;
 			}
 
+            Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionRead, _versionFile);
 			try
 			{
-				using (StreamReader reader = new StreamReader(_versionFile))
-				{
-					textVersion = reader.ReadToEnd();
-				}
+                textVersion = File.ReadAllText(_versionFile);
 			}
 			catch (Exception ex)
 			{
 				Log.LogError(Properties.Resources.VersionReadException,
 					_versionFile, ex.Message);
-				return;
+				return false;
 			}
 
-			Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionRead,
-				textVersion, _versionFile);
-
-			try
-			{
-				version = new System.Version(textVersion);
-			}
-			catch (Exception ex)
-			{
-				Log.LogErrorFromException(ex);
-				return;
-			}
+            try
+            {
+                version = new System.Version(textVersion);
+            }
+            catch (Exception ex)
+            {
+                Log.LogError(Properties.Resources.VersionReadException,
+                    _versionFile, ex.Message);
+                return false;
+            }
 
 			if (version != null)
 			{
@@ -343,20 +357,19 @@ namespace MSBuild.Community.Tasks
 				_revision = version.Revision;
                 _originalValues = version;
 			}
+            return true;
 		}
 
 		private bool WriteVersionToFile()
 		{
-            if (String.IsNullOrEmpty(_versionFile)) return true;
 			System.Version version = new System.Version(_major, _minor, _build, _revision);
+            Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionModifiedValue, version.ToString());
 
-			try
-			{
-				using (StreamWriter writer = System.IO.File.CreateText(_versionFile))
-				{
-					writer.Write(version.ToString());
-					writer.Flush();
-				}
+            if (String.IsNullOrEmpty(_versionFile)) return true;
+            
+            try
+            {
+                File.WriteAllText(_versionFile, version.ToString());
 			}
 			catch (Exception ex)
 			{
@@ -365,27 +378,9 @@ namespace MSBuild.Community.Tasks
 				return false;
 			}
 
-			Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionWrote,
-				version.ToString(), _versionFile);
+			Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionWrote, _versionFile);
 
 			return true;
-		}
-
-		private int CalculateDaysSinceMillenium()
-		{
-			DateTime startDate = new DateTime(2000, 1, 1);
-			TimeSpan span = DateTime.Today.Subtract(startDate);
-			return (int)span.TotalDays;
-		}
-
-		private int CalculateBuildDate()
-		{
-			DateTime dDate = DateTime.Today;
-			int _month = dDate.Month * 100;
-			int _day = dDate.Day;
-			int _year = (dDate.Year % 10) * 10000;
-
-			return (_year + _month + _day);
 		}
 
 		private void CalculateBuildNumber()
@@ -394,47 +389,49 @@ namespace MSBuild.Community.Tasks
             switch (_buildTypeEnum) 
             {
                 case BuildTypeEnum.Automatic:
-                    _build = CalculateDaysSinceMillenium();
+                    _build = CalculateDaysSinceStartDate();
                     break;
                 case BuildTypeEnum.Increment:
                     _build++;
                     break;
-                case BuildTypeEnum.Date:
-                    _build = CalculateBuildDate();
-                    break;
-                case BuildTypeEnum.DateIncrement:
-                    _build = CalculateBuildDateIncrememt();
-                    break;
+                case BuildTypeEnum.None:
                 default:
                     break;
             }
 		}
 
-        private int CalculateBuildDateIncrememt() {
-            TimeSpan diff = DateTime.Today.Subtract(_startDate);
-            return diff.Days;
-
+        private int CalculateDaysSinceStartDate()
+        {
+            return DateTime.Today.Subtract(_startDate).Days;
         }
 
 		private void CalculateRevisionNumber()
 		{
             switch (_revisionTypeEnum) {
                 case RevisionTypeEnum.Automatic:
-                    _revision = (int)DateTime.Now.TimeOfDay.TotalSeconds;
+                    _revision = CalculateFractionalPartOfDay();
                     break;
                 case RevisionTypeEnum.Increment:
-                    if (_buildTypeEnum == BuildTypeEnum.DateIncrement) _revision = CalculateBuildDateIncrememtRevision(); else _revision++;
+                    _revision++;
                     break;
-                case RevisionTypeEnum.NonIncrement:
+                case RevisionTypeEnum.BuildIncrement:
+                    _revision = CalculateBuildIncrementRevision();
                     break;
                 case RevisionTypeEnum.None:
-                    break;
                 default:
                     break;
             }
 		}
 
-        private int CalculateBuildDateIncrememtRevision() 
+        private int CalculateFractionalPartOfDay()
+        {
+            //break down a day into fractional seconds
+            float factor = (float)(UInt16.MaxValue - 1) / (24 * 60 * 60);
+
+            return (int)(DateTime.Now.TimeOfDay.TotalSeconds * factor);
+        }
+
+        private int CalculateBuildIncrementRevision() 
         {
             if (_build == _originalValues.Build)
             {

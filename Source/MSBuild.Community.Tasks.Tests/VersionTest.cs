@@ -72,6 +72,14 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
         [Test]
+        public void SpecifyFile_FileDoesNotContainValidVersion_TaskFails()
+        {
+            File.AppendAllText(versionFile, "1234");
+            task.VersionFile = versionFile;
+            Assert.IsFalse(task.Execute(), "Task should have failed");
+        }
+
+        [Test]
         public void BuildType_Increment()
         {
             task.Build = 7;
@@ -82,7 +90,7 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
         [Test]
-        public void BuildType_Automatic_DaysSinceMillenium()
+        public void BuildType_Automatic_NoStartDate_DaysSinceMillenium()
         {
             task.BuildType = "Automatic";
             Assert.IsTrue(task.Execute(), "Execute Failed");
@@ -92,30 +100,30 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
         [Test]
-        public void BuildType_Date_ReturnSixDigitDate()
-        {
-            task.BuildType = "Date";
-            Assert.IsTrue(task.Execute(), "Execute Failed");
-
-            DateTime dDate = DateTime.Now;
-            int _month = dDate.Month * 100;
-            int _day = dDate.Day;
-            int _year = (dDate.Year % 2000) * 10000;
-            int buildDate = _year + _month + _day;
-
-            Assert.AreEqual(buildDate, task.Build);
-        }
-
-        [Test]
-        public void BuildType_DateIncrement()
+        public void BuildType_Automatic_WithStartDate_DaysSinceStartDate()
         {
             DateTime startDate = new DateTime(2002, 12, 5);
             int daysSinceStartDate = DateTime.Today.Subtract(startDate).Days;
 
             task.StartDate = startDate.ToString();
-            task.BuildType = "DateIncrement";
+            task.BuildType = "Automatic";
             Assert.IsTrue(task.Execute(), "Execute Failed");
             Assert.AreEqual(task.Build, daysSinceStartDate);
+        }
+
+
+        [Test]
+        public void BuildType_Date_CausesError()
+        {
+            task.BuildType = "Date";
+            Assert.IsFalse(task.Execute(), "Task should have failed.");
+        }
+
+        [Test]
+        public void BuildType_DateIncrement_CausesError()
+        {
+            task.BuildType = "DateIncrement";
+            Assert.IsFalse(task.Execute(), "Task should have failed.");
         }
 
         [Test]
@@ -129,12 +137,13 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
         [Test]
-        public void RevisionType_Automatic_SecondsSinceMidnight()
+        public void RevisionType_Automatic_IncreasingSinceMidnight()
         {
             task.RevisionType = "Automatic";
             Assert.IsTrue(task.Execute(), "Execute Failed");
-
-            int expected = (int)DateTime.Now.TimeOfDay.TotalSeconds;
+            
+            float factor = (float)(UInt16.MaxValue - 1) / (24 * 60 * 60);
+            int expected = (int)(DateTime.Now.TimeOfDay.TotalSeconds * factor);
             // task should execute within a second
             Assert.Greater(task.Revision, expected - 2);
             Assert.Less(task.Revision, expected + 2);
@@ -144,35 +153,45 @@ namespace MSBuild.Community.Tasks.Tests
         [Test]
         public void RevisionType_Increment()
         {
+            task.Build = 1;
             task.Revision = 4;
+            task.BuildType = "Automatic";
             task.RevisionType = "Increment";
             Assert.IsTrue(task.Execute(), "Execute Failed");
             Assert.AreEqual(5, task.Revision);
         }
 
         [Test]
-        public void RevisionType_Increment_WithBuildDateIncrement_SameDay_IncrementsRevision()
+        public void RevisionType_Increment_WithBuildChanged_StillIncrements()
         {
             task.StartDate = DateTime.Today.ToString();
-            task.Build = 0;
+            task.Build = 1;
             task.Revision = 4;
-            task.BuildType = "DateIncrement";
+            task.BuildType = "Automatic";
             task.RevisionType = "Increment";
             Assert.IsTrue(task.Execute(), "Execute Failed");
             Assert.AreEqual(5, task.Revision);
         }
 
-        [Test]
-        public void RevisionType_Increment_WithBuildDateIncrement_DifferentDay_ResetsRevision()
-        {
-            DateTime startDate = new DateTime(2006, 12, 1);
-            int daysSinceStartDate = DateTime.Today.Subtract(startDate).Days;
 
-            task.StartDate = startDate.ToString();
-            task.Build = daysSinceStartDate + 1;
+        [Test]
+        public void RevisionType_BuildIncrement_BuildUnChanged_RevisionIncrements()
+        {
             task.Revision = 4;
-            task.BuildType = "DateIncrement";
-            task.RevisionType = "Increment";
+            task.Build = 7;
+            task.BuildType = "None";
+            task.RevisionType = "BuildIncrement";
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+            Assert.AreEqual(5, task.Revision);
+        }
+
+        [Test]
+        public void RevisionType_BuildIncrement_BuildChanged_RevisionResetToZero()
+        {
+            task.Revision = 4;
+            task.Build = 7;
+            task.BuildType = "Increment";
+            task.RevisionType = "BuildIncrement";
             Assert.IsTrue(task.Execute(), "Execute Failed");
             Assert.AreEqual(0, task.Revision);
         }
@@ -185,6 +204,13 @@ namespace MSBuild.Community.Tasks.Tests
 
             Assert.IsTrue(task.Execute(), "Execute Failed");
             Assert.AreEqual(24, task.Revision);
+        }
+
+        [Test]
+        public void RevisionType_NonIncrement_CausesError()
+        {
+            task.RevisionType = "NonIncrement";
+            Assert.IsFalse(task.Execute(), "Task should have failed.");
         }
 
         [Test]

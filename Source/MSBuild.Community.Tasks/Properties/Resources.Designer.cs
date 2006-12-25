@@ -686,7 +686,25 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version &quot;{0}&quot; read from file &quot;{1}&quot;..
+        ///   Looks up a localized string similar to Updated to version {0}.
+        /// </summary>
+        internal static string VersionModifiedValue {
+            get {
+                return ResourceManager.GetString("VersionModifiedValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Initialized to version {0}.
+        /// </summary>
+        internal static string VersionOriginalValue {
+            get {
+                return ResourceManager.GetString("VersionOriginalValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reading version from file &quot;{0}&quot;..
         /// </summary>
         internal static string VersionRead {
             get {
@@ -713,7 +731,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version &quot;{0}&quot; wrote to file &quot;{1}&quot;..
+        ///   Looks up a localized string similar to Wrote version to file &quot;{0}&quot;..
         /// </summary>
         internal static string VersionWrote {
             get {
