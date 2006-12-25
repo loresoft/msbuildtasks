@@ -54,7 +54,7 @@ namespace MSBuild.Community.Tasks
 	/// </example>
     /// <example>Specify Major and Minor version information and generate Build and Revision.
     /// <code><![CDATA[
-    /// <Version BuildType="Date" RevisionType="Automatic" Major="1" Minor="3" >
+    /// <Version BuildType="Automatic" RevisionType="Automatic" Major="1" Minor="3" >
     ///     <Output TaskParameter="Major" PropertyName="Major" />
     ///     <Output TaskParameter="Minor" PropertyName="Minor" />
     ///     <Output TaskParameter="Build" PropertyName="Build" />
@@ -124,6 +124,7 @@ namespace MSBuild.Community.Tasks
 		/// <summary>
 		/// Gets or sets the build version number.
 		/// </summary>
+        /// <seealso cref="BuildType"/>
 		/// <value>The build version number.</value>
 		[Output]
 		public int Build
@@ -137,6 +138,7 @@ namespace MSBuild.Community.Tasks
 		/// <summary>
 		/// Gets or sets the revision version number.
 		/// </summary>
+        /// <seealso cref="RevisionType"/>
 		/// <value>The revision version number.</value>
 		[Output]
 		public int Revision
@@ -174,14 +176,12 @@ namespace MSBuild.Community.Tasks
 		/// </summary>
 		/// <remarks>
 		/// If value is not provided, None is assumed.
-        /// The Build number is set according to the following table:
+        /// The <see cref="Build"/> number is set according to the following table:
         /// <list type="table">
         /// <listheader><term>BuildType</term><description>Description</description></listheader>
         /// <item><term>None</term><description>The number is not modified.</description></item>
-        /// <item><term>Automatic</term><description>The number of days since January 1, 2000.</description></item>
-        /// <item><term>Date</term><description>A five-digit number indicating the current date. 
-        /// The 1st digit is the last number of the year, the 2nd and 3rd digits indicate the month, and the last 2 digits indicate the day.</description></item>
-        /// <item><term>DateIncrement</term><description>The number of days since <see cref="StartDate"/></description></item>
+        /// <item><term>Automatic</term><description>The number of days since <see cref="StartDate"/>.</description></item>
+        /// <item><term>Increment</term><description>Increases the previous <see cref="Build"/> value by 1.</description></item>
         /// </list>
         /// </remarks>
 		public string BuildType
@@ -246,14 +246,13 @@ namespace MSBuild.Community.Tasks
 		/// </summary>
 		/// <remarks>
         /// If value is not provided, None is assumed.
-        /// The Revision number is set according to the following table:
+        /// The <see cref="Revision"/> number is set according to the following table:
         /// <list type="table">
         /// <listheader><term>RevisionType</term><description>Description</description></listheader>
         /// <item><term>None</term><description>The number is not modified.</description></item>
-        /// <item><term>Automatic</term><description>The number of seconds elapsed since midnight.</description></item>
-        /// <item><term>Increment</term><description>Increases the previous Revision value by 1. If <see cref="BuildType"/> is <c>DateIncrement</c>,
-        /// the value is only incremented if the Build number has not changed. If the Build number has changed, 0 is returned.</description></item>
-        /// <item><term>NonIncrement</term><description>The number is not modified.</description></item>
+        /// <item><term>Automatic</term><description>A number that starts at 0 at midnight, and constantly increases throughout the day (changing roughly every 1.3 seconds). Guaranteed to be safe for components of the AssemblyVersion attribute.</description></item>
+        /// <item><term>Increment</term><description>Increases the previous <see cref="Revision"/> value by 1.</description></item>
+        /// <item><term>BuildIncrement</term><description>Increases the previous <see cref="Revision"/> value by 1 when the value of <see cref="Build"/> is unchanged. If the value of <see cref="Build"/> has changed, <see cref="Revision"/> is reset to zero.</description></item>
         /// </list>
         /// </remarks>
 		public string RevisionType
@@ -275,11 +274,12 @@ namespace MSBuild.Community.Tasks
 
         private DateTime _startDate = new DateTime(2000, 1, 1);
         /// <summary>
-        /// Gets or sets the starting date used to calculate the build number.
+        /// Gets or sets the starting date used to calculate the <see cref="Build"/> number when <see cref="BuildType"/> is Automatic.
         /// </summary>
         /// <value>The starting date for calculation of the build number.</value>
         /// <remarks>
-        /// This value is used in conjunction with the BuildType of Automatic. <seealso cref="BuildType"/> This parameter defaults to January 1, 2000.
+        /// This value is only used when the <see cref="BuildType"/> is Automatic.
+        /// <para>This default value is January 1, 2000.</para>
         /// </remarks>
         public string StartDate {
             get { return _startDate.ToString(); }
