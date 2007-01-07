@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
   <Product Id="2474E106-59D0-45F5-AD19-6F3E2723C550" UpgradeCode="F289AA13-BBAF-4EA2-97C8-BAEC7E5B743E"
-           Name="MSBuild Community Tasks" Language="1033" Version="1.1.0" Manufacturer="MSBuild Community Tasks">
+           Name="MSBuild Community Tasks" Language="1033" Version="1.2.0" Manufacturer="MSBuild Community Tasks">
 
     <Package Id="????????-????-????-????-????????????" Description="MSBuild Community Tasks" 
              Comments="MSBuild Community Tasks" InstallerVersion="200" Compressed="yes" />
