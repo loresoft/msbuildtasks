@@ -144,6 +144,33 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compressed by {0}, from {1} to {2} byte(s).
+        /// </summary>
+        internal static string JSCompressCompressed {
+            get {
+                return ResourceManager.GetString("JSCompressCompressed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compressing JavaScript in &quot;{0}&quot;..
+        /// </summary>
+        internal static string JSCompressCompressing {
+            get {
+                return ResourceManager.GetString("JSCompressCompressing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writing compressed JavaScript back to &quot;{0}&quot; using {1}..
+        /// </summary>
+        internal static string JSCompressWriting {
+            get {
+                return ResourceManager.GetString("JSCompressWriting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Emailing &quot;{0}&quot;..
         /// </summary>
         internal static string MailEmailing {

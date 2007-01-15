@@ -51,6 +51,7 @@
     <Compile Include="ILMerge\ILMergeTest.cs" />
     <Compile Include="Install\InstallAssemblyTest.cs" />
     <Compile Include="Install\UninstallAssemblyTest.cs" />
+    <Compile Include="JavaScript\JSCompressTest.cs" />
     <Compile Include="Math\ModuloTest.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="FileUpdateTest.cs" />
@@ -113,6 +114,7 @@
     <None Include="IIS\IISTest.proj" />
     <None Include="ILMerge\ILMergeTest.proj" />
     <None Include="Install\InstallTest.proj" />
+    <None Include="JavaScript\JavaScriptTest.proj" />
     <None Include="Regex\RegexTest.proj" />
     <None Include="Solution\GetSolutionProjectsTest.proj" />
     <None Include="SqlServer\createDb.sql.template" />

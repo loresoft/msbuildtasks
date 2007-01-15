@@ -60,6 +60,10 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attrib.cs" />
     <Compile Include="GacUtil.cs" />
+    <Compile Include="JavaScript\JavaScriptCompressor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JavaScript\JSCompress.cs" />
     <Compile Include="Tfs\IServer.cs" />
     <Compile Include="Tfs\Proxies\Changeset.cs" />
     <Compile Include="Tfs\Proxies\RecursionType.cs" />

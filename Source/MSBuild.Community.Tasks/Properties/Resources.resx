@@ -146,6 +146,15 @@
   <data name="FtpUriInvalid" xml:space="preserve">
     <value>The URI "{0}" scheme is not valid.</value>
   </data>
+  <data name="JSCompressCompressed" xml:space="preserve">
+    <value>Compressed by {0}, from {1} to {2} byte(s)</value>
+  </data>
+  <data name="JSCompressCompressing" xml:space="preserve">
+    <value>Compressing JavaScript in "{0}".</value>
+  </data>
+  <data name="JSCompressWriting" xml:space="preserve">
+    <value>Writing compressed JavaScript back to "{0}" using {1}.</value>
+  </data>
   <data name="MailEmailing" xml:space="preserve">
     <value>Emailing "{0}".</value>
   </data>
