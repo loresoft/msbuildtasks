@@ -59,11 +59,11 @@ namespace MSBuild.Community.Tasks.Subversion
 		[Flags]
 		internal enum SvnSwitches
 		{
-			RepositoryPath,
-			LocalPath,
-			Targets,
-			Revision,
-            Xml,
+			RepositoryPath = 0x01,
+            LocalPath = 0x02,
+            Targets = 0x04,
+            Revision = 0x08,
+            Xml = 0x10,
 			Default = SvnSwitches.RepositoryPath | SvnSwitches.LocalPath | SvnSwitches.Revision,
 			All = SvnSwitches.Default | SvnSwitches.Targets
 		}
