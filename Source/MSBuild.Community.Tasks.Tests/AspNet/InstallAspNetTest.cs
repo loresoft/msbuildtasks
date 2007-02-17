@@ -5,21 +5,15 @@ using MSBuild.Community.Tasks.AspNet;
 
 namespace MSBuild.Community.Tasks.Tests.AspNet
 {
-    internal class InstallAspNetTestWrapper : InstallAspNet
-    {
-        public string CommandArguments { get { return this.GenerateCommandLineCommands(); } }
-        public string CommandPath { get { return this.GenerateFullPathToTool(); } }
-    }
-
     [TestFixture]
     public class InstallAspNetTest
     {
-        InstallAspNetTestWrapper aspnetTask;
+        InstallAspNet aspnetTask;
 
         [SetUp]
         public void CreateTask()
         {
-            aspnetTask = new InstallAspNetTestWrapper();
+            aspnetTask = new InstallAspNet();
             aspnetTask.BuildEngine = new MockBuild();
         }
 
@@ -36,7 +30,7 @@ namespace MSBuild.Community.Tasks.Tests.AspNet
         {
             aspnetTask.ClientScriptsOnly = true;
             string expectedCommand = "-c";
-            Assert.AreEqual(expectedCommand, aspnetTask.CommandArguments);
+            Assert.AreEqual(expectedCommand, TaskUtility.GetToolTaskCommand(aspnetTask));
         }
 
         [Test]
@@ -67,7 +61,7 @@ namespace MSBuild.Community.Tasks.Tests.AspNet
         public void InstallAspNetOnServerUsingDefaultBehavior()
         {
             string expectedCommand = "-i";
-            Assert.AreEqual(expectedCommand, aspnetTask.CommandArguments);
+            Assert.AreEqual(expectedCommand, TaskUtility.GetToolTaskCommand(aspnetTask));
         }
 
         [Test]
@@ -75,7 +69,7 @@ namespace MSBuild.Community.Tasks.Tests.AspNet
         {
             aspnetTask.ApplyScriptMaps = "Never";
             string expectedCommand = "-ir";
-            Assert.AreEqual(expectedCommand, aspnetTask.CommandArguments);
+            Assert.AreEqual(expectedCommand, TaskUtility.GetToolTaskCommand(aspnetTask));
         }
 
         [Test]
@@ -83,7 +77,7 @@ namespace MSBuild.Community.Tasks.Tests.AspNet
         {
             aspnetTask.ApplyScriptMaps = "IfNoneExist";
             string expectedCommand = "-iru";
-            Assert.AreEqual(expectedCommand, aspnetTask.CommandArguments);
+            Assert.AreEqual(expectedCommand, TaskUtility.GetToolTaskCommand(aspnetTask));
         }
 
         [Test]
@@ -91,7 +85,7 @@ namespace MSBuild.Community.Tasks.Tests.AspNet
         {
             aspnetTask.ApplyScriptMaps = "Always";
             string expectedCommand = "-r";
-            Assert.AreEqual(expectedCommand, aspnetTask.CommandArguments);
+            Assert.AreEqual(expectedCommand, TaskUtility.GetToolTaskCommand(aspnetTask));
         }
 
         [Test]
@@ -106,7 +100,7 @@ namespace MSBuild.Community.Tasks.Tests.AspNet
         {
             aspnetTask.Path = "W3SVC/2/Root/test";
             string expectedCommand = "-s W3SVC/2/Root/test";
-            Assert.AreEqual(expectedCommand, aspnetTask.CommandArguments);
+            Assert.AreEqual(expectedCommand, TaskUtility.GetToolTaskCommand(aspnetTask));
         }
 
         [Test]
@@ -115,7 +109,7 @@ namespace MSBuild.Community.Tasks.Tests.AspNet
             aspnetTask.Path = "W3SVC/2/Root/test";
             aspnetTask.Recursive = false;
             string expectedCommand = "-sn W3SVC/2/Root/test";
-            Assert.AreEqual(expectedCommand, aspnetTask.CommandArguments);
+            Assert.AreEqual(expectedCommand, TaskUtility.GetToolTaskCommand(aspnetTask));
         }
 
         [Test]
@@ -123,7 +117,7 @@ namespace MSBuild.Community.Tasks.Tests.AspNet
         {
             aspnetTask.Path = "test";
             string expectedCommand = "-s W3SVC/1/Root/test";
-            Assert.AreEqual(expectedCommand, aspnetTask.CommandArguments);
+            Assert.AreEqual(expectedCommand, TaskUtility.GetToolTaskCommand(aspnetTask));
         }
 
         [Test]
@@ -134,14 +128,14 @@ namespace MSBuild.Community.Tasks.Tests.AspNet
                 Assert.Ignore(".NET Framework 1.1 is not installed.");
             }
             aspnetTask.Version = "Version11";
-            Assert.IsTrue(aspnetTask.CommandPath.Contains("v1.1.4322"), "Should have used executable in v1.1 folder.");
+            Assert.IsTrue(TaskUtility.GetToolTaskToolPath(aspnetTask).Contains("v1.1.4322"), "Should have used executable in v1.1 folder.");
         }
 
         [Test]
         public void InstallAspNet20()
         {
             aspnetTask.Version = "Version20";
-            Assert.IsTrue(aspnetTask.CommandPath.Contains("v2.0.50727"), "Should have used executable in v2.0 folder.");
+            Assert.IsTrue(TaskUtility.GetToolTaskToolPath(aspnetTask).Contains("v2.0.50727"), "Should have used executable in v2.0 folder.");
         }
 
 

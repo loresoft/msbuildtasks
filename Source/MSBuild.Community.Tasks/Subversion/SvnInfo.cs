@@ -77,7 +77,7 @@ namespace MSBuild.Community.Tasks.Subversion
         public SvnInfo()
         {
             base.Command = "info";
-            base.CommandSwitchs |= SvnSwitches.Xml;
+            base.CommandSwitches = SvnSwitches.NonInteractive | SvnSwitches.NoAuthCache | SvnSwitches.Xml;
             ResetMemberVariables();
             _outputBuffer = new StringBuilder();
         }

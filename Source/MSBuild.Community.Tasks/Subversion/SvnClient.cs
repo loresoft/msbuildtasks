@@ -59,27 +59,13 @@ namespace MSBuild.Community.Tasks.Subversion
 		[Flags]
 		internal enum SvnSwitches
 		{
-			RepositoryPath = 0x01,
-            LocalPath = 0x02,
-            Targets = 0x04,
-            Revision = 0x08,
-            Xml = 0x10,
-			Default = SvnSwitches.RepositoryPath | SvnSwitches.LocalPath | SvnSwitches.Revision,
-			All = SvnSwitches.Default | SvnSwitches.Targets
+            None = 0,
+            NonInteractive = 0x01,
+            NoAuthCache = 0x02,
+            Xml = 0x04
 		}
 
 		#endregion Enums
-
-		#region Constructor
-		/// <summary>
-		/// Initializes a new instance of the <see cref="T:SvnClient"/> class.
-		/// </summary>
-		public SvnClient()
-		{
-
-		}
-
-		#endregion Constructor
 
 		#region Input Parameters
 		private string _command;
@@ -222,16 +208,16 @@ namespace MSBuild.Community.Tasks.Subversion
 		#endregion Output Parameters
 
 		#region Internal Properties
-		private SvnSwitches _commandSwitchs = SvnSwitches.Default;
+		private SvnSwitches _commandSwitches = SvnSwitches.None;
 
 		/// <summary>
 		/// Gets or sets the command switchs.
 		/// </summary>
 		/// <value>The command switchs.</value>
-		internal SvnSwitches CommandSwitchs
+		internal SvnSwitches CommandSwitches
 		{
-			get { return _commandSwitchs; }
-			set { _commandSwitchs = value; }
+			get { return _commandSwitches; }
+			set { _commandSwitches = value; }
 		}
 
 		#endregion Internal Properties
@@ -247,29 +233,25 @@ namespace MSBuild.Community.Tasks.Subversion
 
 
 			builder.Append(_command);
-            if ((CommandSwitchs & SvnSwitches.Xml) == SvnSwitches.Xml)
-            {
-                builder.AppendFormat(_switchBooleanFormat, "xml");
-            }
 
-			if (!string.IsNullOrEmpty(_repositoryPath) && (CommandSwitchs & SvnSwitches.RepositoryPath) == SvnSwitches.RepositoryPath)
+			if (!string.IsNullOrEmpty(_repositoryPath))
 				builder.AppendFormat(" \"{0}\"", _repositoryPath);
 
-			if (!string.IsNullOrEmpty(_localPath) && (CommandSwitchs & SvnSwitches.LocalPath) == SvnSwitches.LocalPath)
+			if (!string.IsNullOrEmpty(_localPath))
 				builder.AppendFormat(" \"{0}\"", _localPath);
 
-			if (_revision > 0 && (CommandSwitchs & SvnSwitches.Revision) == SvnSwitches.Revision)
+			if (_revision >=0)
 				builder.AppendFormat(_switchValueFormat, "revision", _revision);
 
-			if (_targets != null && (CommandSwitchs & SvnSwitches.Targets) == SvnSwitches.Targets)
+			if (_targets != null)
 			{
 				foreach (ITaskItem fileTarget in _targets)
 				{
 					builder.AppendFormat(" \"{0}\"", fileTarget.ItemSpec);
 				}
 			}
-
-			return builder.ToString();
+          
+            return builder.ToString();
 		}
 
 
@@ -301,11 +283,21 @@ namespace MSBuild.Community.Tasks.Subversion
 			if (!string.IsNullOrEmpty(_arguments))
 				builder.AppendFormat(" {0}", _arguments);
 
-			// all commands should be non interactive
-			builder.AppendFormat(_switchBooleanFormat, "non-interactive");
-			builder.AppendFormat(_switchBooleanFormat, "no-auth-cache");
+            if ((CommandSwitches & SvnSwitches.Xml) == SvnSwitches.Xml)
+            {
+                builder.AppendFormat(_switchBooleanFormat, "xml");
+            }
 
-			return builder.ToString();
+            if ((CommandSwitches & SvnSwitches.NonInteractive) == SvnSwitches.NonInteractive)
+            {
+                builder.AppendFormat(_switchBooleanFormat, "non-interactive");
+            }
+            if ((CommandSwitches & SvnSwitches.NoAuthCache) == SvnSwitches.NoAuthCache)
+            {
+                builder.AppendFormat(_switchBooleanFormat, "no-auth-cache");
+            }
+            
+            return builder.ToString();
 		}
 
 		#endregion Protected Methods

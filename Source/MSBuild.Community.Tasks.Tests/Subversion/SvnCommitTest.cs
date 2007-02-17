@@ -1,30 +1,24 @@
 // $Id$
 
-using System;
-using System.Text;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 using MSBuild.Community.Tasks.Subversion;
 using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests.Subversion
 {
-    /// <summary>
-    /// Summary description for SvnCommitTest
-    /// </summary>
     [TestFixture]
     public class SvnCommitTest
     {
-        public SvnCommitTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
         [Test]
         public void SvnCommitExecute()
         {
             SvnCommit commit = new SvnCommit();
-            commit.BuildEngine = new MockBuild();
+            commit.Targets = new ITaskItem[] {new TaskItem("a.txt"), new TaskItem("b.txt")};
+            commit.Message = "Test";
+            string expectedCommand = "commit \"a.txt\" \"b.txt\" --message \"Test\" --non-interactive --no-auth-cache";
+            string actualCommand = TaskUtility.GetToolTaskCommand(commit);
+            Assert.AreEqual(expectedCommand, actualCommand);
         }
     }
 }

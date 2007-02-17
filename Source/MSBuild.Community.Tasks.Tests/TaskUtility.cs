@@ -26,6 +26,28 @@ namespace MSBuild.Community.Tasks.Tests
             return taskItems;
         }
 
+        /// <summary>
+        /// Returns the command line with arguments that a ToolTask will execute
+        /// </summary>
+        /// <param name="task">The ToolTask</param>
+        /// <returns></returns>
+        public static string GetToolTaskCommand(ToolTask task)
+        {
+            MethodInfo method = task.GetType().GetMethod("GenerateCommandLineCommands", BindingFlags.Instance | BindingFlags.NonPublic);
+            return (string) method.Invoke(task, null);
+        }
+
+        /// <summary>
+        /// Returns the full path to the command that will be executed by a ToolTask
+        /// </summary>
+        /// <param name="task">The ToolTask</param>
+        /// <returns></returns>
+        public static string GetToolTaskToolPath(ToolTask task)
+        {
+            MethodInfo method = task.GetType().GetMethod("GenerateFullPathToTool", BindingFlags.Instance | BindingFlags.NonPublic);
+            return (string) method.Invoke(task, null);
+        }
+
         #region NUnit Environment Info
         /// <summary>
         /// Log NUnit environment information.

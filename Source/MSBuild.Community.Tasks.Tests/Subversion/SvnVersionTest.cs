@@ -1,8 +1,6 @@
 // $Id$
 
-using System;
 using System.IO;
-using System.Text;
 using MSBuild.Community.Tasks.Subversion;
 using NUnit.Framework;
 

@@ -46,7 +46,7 @@ namespace MSBuild.Community.Tasks.Subversion
         public SvnUpdate()
         {
             base.Command = "update";
-            base.CommandSwitchs &= ~SvnSwitches.RepositoryPath;
+            base.CommandSwitches = SvnSwitches.NonInteractive | SvnSwitches.NoAuthCache;
         }
 
         /// <summary>

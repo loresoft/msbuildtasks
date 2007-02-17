@@ -59,6 +59,7 @@ namespace MSBuild.Community.Tasks.Subversion
         public SvnExport()
         {
             base.Command = "export";
+            base.CommandSwitches = SvnSwitches.NonInteractive | SvnSwitches.NoAuthCache;
         }
 
         /// <summary>
