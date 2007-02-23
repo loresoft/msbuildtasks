@@ -67,6 +67,7 @@
     <Compile Include="ServiceControllerTest.cs" />
     <Compile Include="Solution\GetSolutionProjectsTest.cs" />
     <Compile Include="SqlServer\ExecuteDDLTest.cs" />
+    <Compile Include="Subversion\SvnCopyTest.cs" />
     <Compile Include="Subversion\SvnInfoTest.cs" />
     <Compile Include="TemplateFile\TemplateFileTest.cs" />
     <Compile Include="Time\TimeTest.cs" />
