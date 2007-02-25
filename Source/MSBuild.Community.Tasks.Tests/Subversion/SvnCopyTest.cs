@@ -5,24 +5,20 @@ using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests.Subversion
 {
-    /// <summary>
-    /// Summary description for SvnCopyTest
-    /// </summary>
     [TestFixture]
     public class SvnCopyTest
     {
-        public SvnCopyTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
 
-        [Test(Description = "Test SVN Copy to make sure it executes")]
+        [Test]
         public void SvnCopyExecute()
         {
-            SvnCopy copy = new SvnCopy();
-            copy.BuildEngine = new MockBuild();
+            SvnCopy task = new SvnCopy();
+            task.Message = "Tagging";
+            task.SourcePath = "file:///d:/svn/trunk/path";
+            task.DestinationPath = "file:///d:/svn/tags/release/path";
+            string expectedCommand = "copy \"file:///d:/svn/trunk/path\" \"file:///d:/svn/tags/release/path\" --message \"Tagging\" --non-interactive --no-auth-cache";
+            string actualCommand = TaskUtility.GetToolTaskCommand(task);
+            Assert.AreEqual(expectedCommand, actualCommand);
         }
     }
 }

@@ -261,6 +261,15 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The parameter &quot;{1}&quot; does not apply to the current use of task &quot;{0}&quot;..
+        /// </summary>
+        internal static string ParameterNotUsed {
+            get {
+                return ResourceManager.GetString("ParameterNotUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &quot;{0}&quot; task was not given a value for the required parameter &quot;{1}&quot;..
         /// </summary>
         internal static string ParameterRequired {

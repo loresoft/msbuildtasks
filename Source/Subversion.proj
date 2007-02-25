@@ -118,10 +118,21 @@
     <Message Text="RepositoryUuid: $(RepositoryUuid)" />
   </Target>
 
+  <Target Name="Copy" DependsOnTargets="Checkout">
+    <SvnCopy SourcePath="$(TestWorkingFolder)\SvnCopyTest.cs"
+                DestinationPath="$(TestWorkingFolder)\SvnCopyTest.cs.bak" />
+  </Target>
+
+  <Target Name="Revert" DependsOnTargets="Copy">
+    <SvnClient Command="revert" LocalPath="$(TestWorkingFolder)\SvnCopyTest.cs.bak" />
+  </Target>
+
   <Target Name="All">
     <CallTarget Targets="Version" />
     <CallTarget Targets="Export" />
     <CallTarget Targets="Checkout" />
+    <CallTarget Targets="Copy" />
+    <CallTarget Targets="Revert" />
     <CallTarget Targets="Update" />
     <CallTarget Targets="Info" />
     <CallTarget Targets="RemoteInfo" />

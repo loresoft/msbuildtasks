@@ -164,17 +164,6 @@ namespace MSBuild.Community.Tasks.Subversion
 			set { _repositoryPath = value; }
 		}
 
-        private string _destPath;
-
-        /// <summary>
-        /// The repository path where a complete server-side operation will take place.
-        /// </summary>
-        public string DestinationPath
-        {
-            get { return this._destPath; }
-            set { this._destPath = value; }
-        }
-
 		private string _localPath;
 
 		/// <summary>
@@ -249,9 +238,6 @@ namespace MSBuild.Community.Tasks.Subversion
 
 			if (!string.IsNullOrEmpty(_localPath))
 				builder.AppendFormat(" \"{0}\"", _localPath);
-
-            if (!string.IsNullOrEmpty(_destPath))
-                builder.AppendFormat(" \"{0}\"", _destPath);
 
 			if (_revision >=0)
 				builder.AppendFormat(_switchValueFormat, "revision", _revision);

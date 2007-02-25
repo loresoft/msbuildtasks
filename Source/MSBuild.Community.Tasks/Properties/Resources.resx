@@ -185,6 +185,9 @@
   <data name="NUnitNotFound" xml:space="preserve">
     <value>Could not find the NUnit Project File open command. Please make sure NUnit is installed.</value>
   </data>
+  <data name="ParameterNotUsed" xml:space="preserve">
+    <value>The parameter "{1}" does not apply to the current use of task "{0}".</value>
+  </data>
   <data name="ParameterRequired" xml:space="preserve">
     <value>The "{0}" task was not given a value for the required parameter "{1}".</value>
   </data>

@@ -34,19 +34,18 @@ using System;
 namespace MSBuild.Community.Tasks.Subversion
 {
     /// <summary>
-    /// Create a copy a remote path.
-    /// This can be used for branching and tagging.
+    /// Copy a file or folder in Subversion
     /// </summary>
-    /// <example>Create a tag of the trunk with the current revision number
+    /// <remarks>
+    /// This is most useful for automatically tagging your source code during a build. 
+    /// You can create a tag by copying a path from one server location to another.
+    /// </remarks>
+    /// <example>Create a tag of the trunk with the current Cruise Control build number:
     /// <code><![CDATA[
-    /// <Target Name="Copy">
-    ///   <SvnInfo RepositoryPath="file:///d:/svn/repo/Test/trunk">
-	///		<Output TaskParameter="LastChangedRevision" PropertyName="RemoteSvnRevisionNumber"  />
-	///	  </SvnInfo>
-    ///   <SvnCopy RepositoryPath="file:///d:/svn/repo/Test/trunk"
-    ///            DestinationPath="file:///d:/svn/repo/Test/tags/REV-$(RemoteSvnRevisionNumber)">      
-    ///   </SvnCopy>
-    ///   <Message Text="Revision: $(RemoteSvnRevisionNumber)"/>
+    /// <Target Name="TagTheBuild">
+    ///   <SvnCopy SourcePath="file:///d:/svn/repo/Test/trunk"
+    ///            DestinationPath="file:///d:/svn/repo/Test/tags/BUILD-$(CCNetLabel)" 
+    ///            Message="Automatic build of $(CCNetProject)" />      
     /// </Target>
     /// ]]></code>
     /// </example>
@@ -57,8 +56,38 @@ namespace MSBuild.Community.Tasks.Subversion
         /// </summary>
         public SvnCopy()
         {
-            base.Command = "copy";
-            base.CommandSwitches = SvnSwitches.NonInteractive | SvnSwitches.NoAuthCache;
+            Command = "copy";
+            CommandSwitches = SvnSwitches.NonInteractive | SvnSwitches.NoAuthCache;
+        }
+
+        private string sourcePath;
+        /// <summary>
+        /// The path of the source file or folder that should be copied
+        /// </summary>
+        public string SourcePath
+        {
+            get { return sourcePath; }
+            set { sourcePath = value; }
+        }
+
+        private string destinationPath;
+        /// <summary>
+        /// The path to which the SourcePath should be copied
+        /// </summary>
+        public string DestinationPath
+        {
+            get { return destinationPath; }
+            set { destinationPath = value; }
+        }
+
+
+        /// <summary>
+        /// Generates the SVN command.
+        /// </summary>
+        /// <returns></returns>
+        protected override string GenerateSvnCommand()
+        {
+            return String.Format("{0} \"{1}\" \"{2}\"", base.GenerateSvnCommand(), sourcePath, destinationPath);
         }
 
         /// <summary>
@@ -69,17 +98,30 @@ namespace MSBuild.Community.Tasks.Subversion
         /// </returns>
         protected override bool ValidateParameters()
         {
-            if (string.IsNullOrEmpty(base.RepositoryPath))
+            if (string.IsNullOrEmpty(sourcePath))
             {
-                Log.LogError(Properties.Resources.ParameterRequired, "SvnCopy", "RepositoryPath");
+                Log.LogError(Properties.Resources.ParameterRequired, "SvnCopy", "SourcePath");
                 return false;
             }
 
-            if (String.IsNullOrEmpty(base.DestinationPath))
+            if (String.IsNullOrEmpty(destinationPath))
             {
                 Log.LogError(Properties.Resources.ParameterRequired, "SvnCopy", "DestinationPath");
                 return false;
             }
+
+            if (!String.IsNullOrEmpty(RepositoryPath))
+            {
+                Log.LogError(Properties.Resources.ParameterNotUsed, "SvnCopy", "RepositoryPath");
+                return false;
+            }
+
+            if (!String.IsNullOrEmpty(LocalPath))
+            {
+                Log.LogError(Properties.Resources.ParameterNotUsed, "SvnCopy", "LocalPath");
+                return false;
+            }
+
             return base.ValidateParameters();
         }
     }
