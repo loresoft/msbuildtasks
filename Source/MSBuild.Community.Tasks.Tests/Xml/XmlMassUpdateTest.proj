@@ -24,6 +24,10 @@
     <XmlMassUpdate ContentFile="Test_XmlQuery.xml" MergedFile="$(testDir)\web.config.keyed.xml" ContentRoot="/configuration" SubstitutionsRoot="/configuration/substitutions/keyed" />
   </Target>
 
+  <Target Name="UpdateElementValue" DependsOnTargets="DebuggerHook">
+    <XmlMassUpdate ContentFile="Test_XmlQuery.xml" MergedFile="$(testDir)\web.config.value.xml" ContentRoot="/configuration" SubstitutionsRoot="/configuration/substitutions/value" />
+  </Target>
+
   <Target Name="SubstituteFromProperty" DependsOnTargets="DebuggerHook">
     <XmlMassUpdate ContentFile="Test_XmlQueryWithNS.xml" SubstitutionsFile="$(MSBuildProjectFullPath)" MergedFile="$(testDir)\web.config.prop.xml" ContentRoot="/xsl:transform" SubstitutionsRoot="/msb:Project/msb:PropertyGroup/msb:Substitutions"
                    NamespaceDefinitions="msb=http://schemas.microsoft.com/developer/msbuild/2003;xsl=http://www.w3.org/1999/XSL/Transform;soap=http://www.w3.org/2001/12/soap-envelope;other=urn:test:msbuild:community"/>
@@ -41,5 +45,6 @@
                                         ContentAndSubstitutionsDifferent;
                                         SubstituteFromProperty;
                                         UpdateKeyedElement;
+                                        UpdateElementValue;
                                         RemoveElement" />
 </Project>

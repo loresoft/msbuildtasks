@@ -48,5 +48,10 @@
         <trace xmu:action="remove" />
       </system.web>
     </remove>
+    <value>
+      <singleValue>
+        <LastName>Smith</LastName>
+      </singleValue>
+    </value>
   </substitutions>
 </configuration>

@@ -276,6 +276,10 @@ namespace MSBuild.Community.Tasks.Xml
                         addAllChildNodes(mergedDocument, mergedNode, substitutionNode);
                     }
                 }
+                else if (substitutionNode.NodeType == XmlNodeType.Text)
+                {
+                    contentParentNode.InnerText = substitutionNode.Value;
+                }
                 substitutionNode = substitutionNode.NextSibling;
             }
         }

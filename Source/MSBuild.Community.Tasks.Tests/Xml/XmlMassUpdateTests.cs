@@ -231,6 +231,20 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             Assert.IsNull(bNode, "The B element should not exist.");
         }
 
+        [Test]
+        public void UpdateNodeValue()
+        {
+            setupTask();
+            task.ContentFile = new TaskItem("test.xml");
+            task.ContentRoot = "/configuration";
+            task.SubstitutionsRoot = "/configuration/substitutions/prod";
+            task.ContentXml = contentXmlWithNodeValues;
+            bool executeSucceeded = task.Execute();
+            Assert.IsTrue(executeSucceeded, "Task should have succeeded.");
+            assertXml("unchanged", "/configuration/applicationSettings/ExampleProject.Settings/setting[@name='id']/value/text()", "Should not have changed unmentioned node.");
+            assertXml("after change", "/configuration/applicationSettings/ExampleProject.Settings/setting[@name='key']/value/text()", "Should have changed node text");
+        }
+
         private string getInitialValue(string xpath)
         {
             XmlDocument original = new XmlDocument();
@@ -328,6 +342,31 @@ namespace MSBuild.Community.Tasks.Tests.Xml
       </appSettings>
     </removeKeyedElement>
 </substitutions>
+</configuration>";
+
+        const string contentXmlWithNodeValues = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+  <applicationSettings>
+    <ExampleProject.Settings>
+      <setting name=""id"" serializeAs=""String"">
+        <value>unchanged</value>
+      </setting>    
+      <setting name=""key"" serializeAs=""String"">
+        <value>before change</value>
+      </setting>    
+    </ExampleProject.Settings>
+  </applicationSettings>
+  <substitutions xmlns:xmu=""urn:msbuildcommunitytasks-xmlmassupdate"">
+    <prod>
+      <applicationSettings>
+        <ExampleProject.Settings>
+          <setting xmu:key=""name"" name=""key"" serializeAs=""String"">
+            <value>after change</value>
+          </setting>    
+        </ExampleProject.Settings>
+      </applicationSettings>
+    </prod>
+  </substitutions>
 </configuration>";
 
         const string substitutionsXmlWithNamespaces = @"<?xml version=""1.0"" encoding=""utf-8""?>
