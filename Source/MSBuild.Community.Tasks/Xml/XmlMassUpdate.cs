@@ -264,21 +264,28 @@ namespace MSBuild.Community.Tasks.Xml
             XmlNode substitutionNode = substitutionsParentNode.FirstChild;
             while (substitutionNode != null)
             {
-                if (substitutionNode.NodeType == XmlNodeType.Element)
+                switch(substitutionNode.NodeType)
                 {
-                    if (shouldDeleteElement(substitutionNode))
-                    {
-                        removeChildNode(mergedDocument, contentParentNode, substitutionNode);
-                    } 
-                    else
-                    {
-                        XmlNode mergedNode = addChildNode(mergedDocument, contentParentNode, substitutionNode);
-                        addAllChildNodes(mergedDocument, mergedNode, substitutionNode);
-                    }
-                }
-                else if (substitutionNode.NodeType == XmlNodeType.Text)
-                {
-                    contentParentNode.InnerText = substitutionNode.Value;
+                    case XmlNodeType.Element:
+                        if (shouldDeleteElement(substitutionNode))
+                        {
+                            removeChildNode(mergedDocument, contentParentNode, substitutionNode);
+                        }
+                        else
+                        {
+                            XmlNode mergedNode = addChildNode(mergedDocument, contentParentNode, substitutionNode);
+                            addAllChildNodes(mergedDocument, mergedNode, substitutionNode);
+                        }
+                        break;
+                    case XmlNodeType.Text:
+                        contentParentNode.InnerText = substitutionNode.Value;
+                        break;
+                    case XmlNodeType.CDATA:
+                        contentParentNode.RemoveAll();
+                        contentParentNode.AppendChild(mergedDocument.CreateCDataSection(substitutionNode.Value));
+                        break;
+                    default:
+                        break;
                 }
                 substitutionNode = substitutionNode.NextSibling;
             }

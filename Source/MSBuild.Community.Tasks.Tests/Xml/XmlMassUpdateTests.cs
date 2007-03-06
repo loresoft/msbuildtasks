@@ -245,6 +245,19 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             assertXml("after change", "/configuration/applicationSettings/ExampleProject.Settings/setting[@name='key']/value/text()", "Should have changed node text");
         }
 
+        [Test]
+        public void UpdateCDataValue()
+        {
+            setupTask();
+            task.ContentFile = new TaskItem("test.xml");
+            task.ContentRoot = "/configuration";
+            task.SubstitutionsRoot = "/configuration/substitutions/stage";
+            task.ContentXml = contentXmlWithNodeValues;
+            bool executeSucceeded = task.Execute();
+            Assert.IsTrue(executeSucceeded, "Task should have succeeded.");
+            assertXml(" if (x > 20) {return y*2;} ", "/configuration/applicationSettings/ExampleProject.Settings/code/text()", "Should have changed CDATA.");
+        }
+
         private string getInitialValue(string xpath)
         {
             XmlDocument original = new XmlDocument();
@@ -353,7 +366,10 @@ namespace MSBuild.Community.Tasks.Tests.Xml
       </setting>    
       <setting name=""key"" serializeAs=""String"">
         <value>before change</value>
-      </setting>    
+      </setting>
+      <code>
+        <![CDATA[ if (x > 3) {return y;} ]]> 
+      </code>
     </ExampleProject.Settings>
   </applicationSettings>
   <substitutions xmlns:xmu=""urn:msbuildcommunitytasks-xmlmassupdate"">
@@ -362,10 +378,19 @@ namespace MSBuild.Community.Tasks.Tests.Xml
         <ExampleProject.Settings>
           <setting xmu:key=""name"" name=""key"" serializeAs=""String"">
             <value>after change</value>
-          </setting>    
+          </setting>
         </ExampleProject.Settings>
       </applicationSettings>
     </prod>
+    <stage>
+      <applicationSettings>
+        <ExampleProject.Settings>
+          <code>
+            <![CDATA[ if (x > 20) {return y*2;} ]]> 
+          </code>
+        </ExampleProject.Settings>
+      </applicationSettings>
+    </stage>
   </substitutions>
 </configuration>";
 

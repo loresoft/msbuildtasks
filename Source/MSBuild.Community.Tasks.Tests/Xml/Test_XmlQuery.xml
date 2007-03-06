@@ -13,6 +13,7 @@
   <singleValue>
     <FirstName>John</FirstName>
     <LastName>Doe</LastName>
+    <expression><![CDATA[paper > rock > scissors]]></expression>
   </singleValue>
   <system.web>
     <compilation defaultLanguage="c#" debug="true" />
@@ -53,5 +54,10 @@
         <LastName>Smith</LastName>
       </singleValue>
     </value>
+    <cdata>
+      <singleValue>
+        <expression><![CDATA[rock > scissors > paper]]></expression>
+      </singleValue>
+    </cdata>
   </substitutions>
 </configuration>
