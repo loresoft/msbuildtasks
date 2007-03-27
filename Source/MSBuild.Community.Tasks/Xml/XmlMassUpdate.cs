@@ -302,12 +302,21 @@ namespace MSBuild.Community.Tasks.Xml
 
             foreach (XmlAttribute sourceAttribute in nodeToAdd.Attributes)
             {
-                if (sourceAttribute.NamespaceURI != updateControlNamespace)
+                if (!isUpdateControlAttribute(sourceAttribute))
                 {
                     setAttributeValue(mergedDocument, newNode, sourceAttribute.Name, sourceAttribute.Value);
                 }
             }
             return newNode;
+        }
+
+        private static bool isUpdateControlAttribute(XmlAttribute attribute)
+        {
+            // check for the control namespace declaration
+            if ((attribute.Prefix == "xmlns") && (attribute.Value == updateControlNamespace)) return true;
+            // check for attributes within the control namespace
+            if (attribute.NamespaceURI == updateControlNamespace) return true;
+            return false;
         }
 
         private bool shouldDeleteElement(XmlNode sourceNode)

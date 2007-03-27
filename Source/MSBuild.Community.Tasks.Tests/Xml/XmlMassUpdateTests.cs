@@ -122,12 +122,6 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             assertXml("false", "/configuration/system.web/compilation/@debug", "Should have changed debug value");
         }
 
-        private void setupContent()
-        {
-            task.ContentFile = new TaskItem("test.xml");
-            task.ContentXml = contentXmlWithMultipleItems;
-            task.ContentRoot = "/configuration";
-        }
 
         [Test]
         public void UpdateKeyedElementOnly()
@@ -165,6 +159,29 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             assertXml("Red", "/configuration/appSettings/add[@key='A']/@value", "A should have changed");
             assertXml(originalB, "/configuration/appSettings/add[@key='B']/@value", "B should not have changed");
             assertXml("Green", "/configuration/appSettings/add[@key='C']/@value", "C should have changed");
+        }
+
+        [Test]
+        public void UpdateKeyedElementsWithoutCopyingUpdateControlNamespaceDeclaration()
+        {
+            setupTask();
+            task.ContentFile = new TaskItem("test.xml");
+            task.ContentXml = contentXmlWithMultipleItems; 
+            task.SubstitutionsFile = new TaskItem("test2.xml");
+            task.SubstitutionsXml = substitutionsXmlWithUpdateControlNamespace;
+            string originalB = getInitialValue("/configuration/appSettings/add[@key='B']/@value");
+
+            bool executeSucceeded = task.Execute();
+            Assert.IsTrue(executeSucceeded, "Task should have succeeded.");
+
+            // Make sure update succeeded
+            Assert.AreNotEqual("40", originalB, "Make sure the original value is different from the value it will be set to.");
+            assertXml("40", "/configuration/appSettings/add[@key='B']/@value", "B should have changed");
+            // Make sure namespace declaration was not copied
+
+            XmlNode configurationNode = task.MergedXmlDocument.SelectSingleNode("/configuration");
+            Assert.IsNotNull(configurationNode, "The configuration node should exist.");
+            Assert.AreEqual(0, configurationNode.Attributes.Count, "The configuration node should not have any attributes.");
         }
 
         [Test]
@@ -256,6 +273,13 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             bool executeSucceeded = task.Execute();
             Assert.IsTrue(executeSucceeded, "Task should have succeeded.");
             assertXml(" if (x > 20) {return y*2;} ", "/configuration/applicationSettings/ExampleProject.Settings/code/text()", "Should have changed CDATA.");
+        }
+
+        private void setupContent()
+        {
+            task.ContentFile = new TaskItem("test.xml");
+            task.ContentXml = contentXmlWithMultipleItems;
+            task.ContentRoot = "/configuration";
         }
 
         private string getInitialValue(string xpath)
@@ -405,6 +429,12 @@ namespace MSBuild.Community.Tasks.Tests.Xml
   </PropertyGroup>
 </Project>
 ";
+        private const string substitutionsXmlWithUpdateControlNamespace = @"<configuration xmlns:xmu=""urn:msbuildcommunitytasks-xmlmassupdate"">
+  <appSettings>
+    <add xmu:key=""key"" key=""B"" value=""40"" />
+    <add xmu:key=""key"" key=""C"" value=""60"" />
+  </appSettings>
+</configuration>";
     }
 
     /// <summary>
