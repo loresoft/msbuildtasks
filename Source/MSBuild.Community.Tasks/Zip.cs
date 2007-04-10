@@ -219,7 +219,7 @@ namespace MSBuild.Community.Tasks
                             && name.StartsWith(_workingDirectory, true, CultureInfo.InvariantCulture))
                             name = name.Remove(0, _workingDirectory.Length);
 
-                        name = ZipEntry.CleanName(name, true);
+                        name = ZipEntry.CleanName(name);
 
                         ZipEntry entry = new ZipEntry(name);
                         entry.DateTime = file.LastWriteTime;

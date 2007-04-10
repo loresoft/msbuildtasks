@@ -31,7 +31,7 @@ namespace MSBuild.Community.Tasks.Tests.Xml
         {
             get
             {
-                base.FailureMessage.AddExpectedLine(this.Expectation);
+                base.FailureMessage.DisplayExpectedValue(this.Expectation);
                 base.FailureMessage.DisplayActualValue(this.actualValue);
                 return base.FailureMessage.ToString();
             }
@@ -47,8 +47,7 @@ namespace MSBuild.Community.Tasks.Tests.Xml
 
         public override bool Test()
         {
-            if (expectedValue != actualValue) return false;
-            return base.Test();
+            return (expectedValue == actualValue);           
         }
 
     }

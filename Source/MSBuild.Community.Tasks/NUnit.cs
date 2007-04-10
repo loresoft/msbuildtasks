@@ -40,12 +40,12 @@ using Microsoft.Win32;
 namespace MSBuild.Community.Tasks
 {
 	/// <summary>
-	/// Run NUnit on a group of assemblies.
+	/// Run NUnit 2.4 on a group of assemblies.
 	/// </summary>
 	/// <example>Run NUnit tests.
 	/// <code><![CDATA[
 	/// <ItemGroup>
-	///     <TestAssembly Include="C:\Program Files\NUnit 2.2.7\bin\*.tests.dll" />
+    ///     <TestAssembly Include="C:\Program Files\NUnit 2.4\bin\*.tests.dll" />
 	/// </ItemGroup>
 	/// <Target Name="NUnit">
 	///     <NUnit Assemblies="@(TestAssembly)" />
@@ -58,9 +58,10 @@ namespace MSBuild.Community.Tasks
 
 		/// <summary>
 		/// The default relative path of the NUnit installation.
-		/// The value is <c>@"NUnit-Net-2.0 2.2.7\bin"</c>.
+        /// The value is <c>@"NUnit 2.4\bin"</c>.
 		/// </summary>
-		public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit-Net-2.0 2.2.7\bin";
+		public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit 2.4\bin";
+        public const string InstallDirKey = @"HKEY_CURRENT_USER\Software\nunit.org\Nunit\2.4";
 
 		#endregion Constants
 
@@ -202,14 +203,15 @@ namespace MSBuild.Community.Tasks
             set { _projectConfiguration = value; }
         }
 
-        private bool _testInNewThread;
+        // make this nullable so we have a thrid state, not set
+        private bool? _testInNewThread = null;
 
         /// <summary>
         /// Allows tests to be run in a new thread, allowing you to take advantage of ApartmentState and ThreadPriority settings in the config file.
         /// </summary>
         public bool TestInNewThread
         {
-            get { return _testInNewThread; }
+            get { return _testInNewThread.HasValue ? _testInNewThread.Value : true; }
             set { _testInNewThread = value; }
         }
 
@@ -231,9 +233,9 @@ namespace MSBuild.Community.Tasks
             {
                 builder.AppendSwitch("/noshadow");
             }
-            if (TestInNewThread)
+            if (_testInNewThread.HasValue && !_testInNewThread.Value)
             {
-                builder.AppendSwitch("/thread");
+                builder.AppendSwitch("/nothread");
             }
             builder.AppendFileNamesIfNotNull(_assemblies, " ");
 
@@ -257,34 +259,27 @@ namespace MSBuild.Community.Tasks
 		private void CheckToolPath()
 		{
 			string nunitPath = ToolPath == null ? String.Empty : ToolPath.Trim();
-			if (String.IsNullOrEmpty(nunitPath))
-			{
-				nunitPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-				nunitPath = Path.Combine(nunitPath, DEFAULT_NUNIT_DIRECTORY);
+            if (!String.IsNullOrEmpty(nunitPath))
+            {
+                ToolPath = nunitPath;
+                return;
+            }
 
-				try
-				{
-					using (RegistryKey buildKey = Registry.ClassesRoot.OpenSubKey(@"NUnitTestProject\shell\open\command"))
-					{
-						if (buildKey == null)
-						{
-							Log.LogError(Properties.Resources.NUnitNotFound);
-						}
-						else
-						{
-							nunitPath = buildKey.GetValue(null, nunitPath).ToString();
-							Regex nunitRegex = new Regex("(.+)nunit-gui\\.exe", RegexOptions.IgnoreCase);
-							Match pathMatch = nunitRegex.Match(nunitPath);
-							nunitPath = pathMatch.Groups[1].Value.Replace("\"", "");
-						}
-					}
-				}
-				catch (Exception ex)
-				{
-					Log.LogErrorFromException(ex);
-				}
-				ToolPath = nunitPath;
+			nunitPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+			nunitPath = Path.Combine(nunitPath, DEFAULT_NUNIT_DIRECTORY);
+
+			try
+			{
+                string value = Registry.GetValue(InstallDirKey, "InstallDir", nunitPath) as string;
+                if (!string.IsNullOrEmpty(value))
+                    nunitPath = Path.Combine(value, "bin");
 			}
+			catch (Exception ex)
+			{
+				Log.LogErrorFromException(ex);
+			}
+			ToolPath = nunitPath;
+			
 		}
 		
 		/// <summary>
