@@ -61,7 +61,7 @@ namespace MSBuild.Community.Tasks
         /// The value is <c>@"NUnit 2.4\bin"</c>.
 		/// </summary>
 		public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit 2.4\bin";
-        public const string InstallDirKey = @"HKEY_CURRENT_USER\Software\nunit.org\Nunit\2.4";
+        private const string InstallDirKey = @"HKEY_CURRENT_USER\Software\nunit.org\Nunit\2.4";
 
 		#endregion Constants
 

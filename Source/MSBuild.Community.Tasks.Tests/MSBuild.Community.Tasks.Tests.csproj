@@ -92,9 +92,7 @@
     <Compile Include="UnzipTest.cs" />
     <Compile Include="VersionTest.cs" />
     <Compile Include="XmlReadTest.cs" />
-    <Compile Include="Xml\XmlMassUpdateTests.cs" />
     <Compile Include="Xml\XmlQueryTests.cs" />
-    <Compile Include="Xml\XPathAsserter.cs" />
     <Compile Include="Xslt\XsltTest.cs" />
     <Compile Include="ZipTest.cs" />
   </ItemGroup>
