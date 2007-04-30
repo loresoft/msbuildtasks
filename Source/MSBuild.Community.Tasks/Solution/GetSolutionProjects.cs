@@ -29,8 +29,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 //$Id$
 
-using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
 using Microsoft.Build.Utilities;
@@ -39,10 +37,10 @@ using Microsoft.Build.Framework;
 namespace MSBuild.Community.Tasks
 {
     /// <summary>
-    /// Task to get paths to projects and project names from VS2005 solution file
+    /// Retrieves the list of Projects contained within a Visual Studio Solution (.sln) file 
     /// </summary>
     /// <example>
-    /// Returns project name and relative path from test solution
+    /// Returns project name, GUID, and relative path from test solution
     /// <code><![CDATA[
     ///   <Target Name="Test">
     ///       <GetSolutionProjects Solution="TestSolution.sln">
@@ -50,21 +48,25 @@ namespace MSBuild.Community.Tasks
     ///       </GetSolutionProjects>
     /// 
     ///     <Message Text="Solution Project paths:" />
-    ///     <Message Text="%(ProjectFiles.ProjectName) : @(ProjectFiles)" />
+    ///     <Message Text="%(ProjectFiles.ProjectName) : @(ProjectFiles) %(ProjectFiles.ProjectGUID)" />
     ///   </Target>
     /// ]]></code>
     /// </example>
     public class GetSolutionProjects : Task
     {
-        private const string ExtractProjectsFromSolutionRegex = @"""[\w\.]+"", ""[\w\.\\]+""";
-        private readonly char[] SplitCharacters = new char[] { '\"', ',', ' '};
+        private const string ExtractProjectsFromSolutionRegex = @"=\s*""(?<ProjectName>.+?)""\s*,\s*""(?<ProjectFile>.+?)""\s*,\s*""(?<ProjectGUID>.+?)""";
         private string solutionFile = "";
         private ITaskItem[] output = null;
 
         /// <summary>
-        /// Output list contains TaskItems of project filenames contained within the given solution.
-        /// Metadata tag "ProjectName" contains name of project.
+        /// A list of the project files found in <see cref="Solution" />
         /// </summary>
+        /// <remarks>
+        /// The name of the project can be retrieved by reading metadata tag ProjectName.
+        /// <para>
+        /// The project's GUID can be retrieved by reading metadata tag ProjectGUID.
+        /// </para>
+        /// </remarks>
         [Output]
         public ITaskItem[] Output
         {
@@ -91,34 +93,25 @@ namespace MSBuild.Community.Tasks
             if (!File.Exists(solutionFile))
             {
                 Log.LogError(Properties.Resources.SolutionNotFound, solutionFile);
+                return false;
             }
-            else
+
+            string solutionText = File.ReadAllText(solutionFile);
+            MatchCollection matches = Regex.Matches(solutionText, ExtractProjectsFromSolutionRegex);
+            output = new TaskItem[matches.Count];
+            for(int i=0; i<matches.Count; i++)
             {
-                try
-                {
-                    string solutionText = "";
-                    using (StreamReader sr = new StreamReader(solutionFile))
-                    {
-                        solutionText = sr.ReadToEnd();
-                    }
+                string projectFile = matches[i].Groups["ProjectFile"].Value;
+                string projectName = matches[i].Groups["ProjectName"].Value;
+                string projectGUID = matches[i].Groups["ProjectGUID"].Value;
 
-                    Regex regex = new Regex(ExtractProjectsFromSolutionRegex);
-                    MatchCollection matches = regex.Matches(solutionText);
-                    output = new TaskItem[matches.Count];
-                    for(int ndx=0; ndx<matches.Count; ndx++)
-                    {
-                        string[] parts = matches[ndx].Value.Split(SplitCharacters, StringSplitOptions.RemoveEmptyEntries);
-                        output[ndx] = new TaskItem(parts[1]); 
-                        output[ndx].SetMetadata("ProjectName", parts[0]);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.LogErrorFromException(ex); 
-                }
+                ITaskItem project = new TaskItem(projectFile);
+                project.SetMetadata("ProjectName", projectName);
+                project.SetMetadata("ProjectGUID", projectGUID);
+                output[i] = project;
             }
 
-            return !Log.HasLoggedErrors;
+            return true;
         }
 
 

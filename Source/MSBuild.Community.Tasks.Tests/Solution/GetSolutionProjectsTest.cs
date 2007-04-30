@@ -64,13 +64,36 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.IsTrue(task.Execute());
 
             ITaskItem[] items = task.Output;
+            string expectedFileName;
+            string actualFileName;
+            string expectedProjectName;
+            string actualProjectName;
             
-            Assert.AreEqual(3, items.Length);
-            for (int ndx = 1; ndx < 4; ndx++)
+            Assert.AreEqual(4, items.Length);
+            for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(string.Format("TestProject{0}\\TestProject{0}.csproj", ndx), items[ndx - 1].ItemSpec);
-                Assert.AreEqual(string.Concat("TestProject", ndx.ToString()), items[ndx-1].GetMetadata("ProjectName"));
+                expectedFileName = string.Format("TestProject{0}\\TestProject{0}.csproj", i + 1);
+                actualFileName = items[i].ItemSpec;
+                expectedProjectName = string.Format("TestProject{0}", i + 1);
+                actualProjectName = items[i].GetMetadata("ProjectName");
+
+                Assert.AreEqual(expectedFileName, actualFileName);
+                Assert.AreEqual(expectedProjectName, actualProjectName);
             }
+
+            //Added test to check handling of projects with spaces in the name
+            expectedFileName = "Test Project4\\Test Project4.csproj";
+            actualFileName =    items[3].ItemSpec;
+            expectedProjectName = "Test Project4";
+            actualProjectName = items[3].GetMetadata("ProjectName");
+
+            Assert.AreEqual(expectedFileName, actualFileName);
+            Assert.AreEqual(expectedProjectName, actualProjectName);
+
+            //Added test for reading the GUID attribute
+            string expectedGUID = "{D6CFCEDB-15CF-4EB6-87FB-8A5113727718}";
+            string actualGUID = items[3].GetMetadata("ProjectGUID");
+            Assert.AreEqual(expectedGUID, actualGUID);
         }
 
 

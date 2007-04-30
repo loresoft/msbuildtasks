@@ -12,13 +12,17 @@
   </PropertyGroup>
 
   <Import Project="$(MSBuildCommunityTasksPath)/MSBuild.Community.Tasks.Targets" />
-  
+
+  <PropertyGroup>
+    <TargetSolution>TestSolution.sln</TargetSolution>
+  </PropertyGroup>
   <Target Name="Test">
-      <GetSolutionProjects Solution="TestSolution.sln">
+      <GetSolutionProjects Solution="$(TargetSolution)">
           <Output ItemName="ProjectFiles" TaskParameter="Output"/>
       </GetSolutionProjects>
 
     <Message Text="Solution Project paths:" />
-    <Message Text="%(ProjectFiles.ProjectName) : @(ProjectFiles)" />
+    <Message Text="%(ProjectFiles.ProjectName) : @(ProjectFiles) %(ProjectFiles.ProjectGUID)" />
+
   </Target>
 </Project>
