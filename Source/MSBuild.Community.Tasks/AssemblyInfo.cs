@@ -325,8 +325,8 @@ namespace MSBuild.Community.Tasks
                 Log.LogError("No assembly parameter were set for file \"{0}\".", _OutputFile);
                 return false;
             }
-
-            using (StreamWriter writer = File.CreateText(_OutputFile))
+            Encoding utf8WithSignature = new UTF8Encoding(true);
+            using (StreamWriter writer = new StreamWriter(_OutputFile, false, utf8WithSignature))
             {
                 GenerateFile(writer);
                 writer.Flush();

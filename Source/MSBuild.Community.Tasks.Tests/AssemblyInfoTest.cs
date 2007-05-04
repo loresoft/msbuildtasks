@@ -84,5 +84,26 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.IsTrue(File.Exists(outputFile), "File missing: " + outputFile);
 
         }
+
+        [Test]
+        public void AssemblyInfoFileShouldHaveUtf8ByteOrderMark()
+        {
+            AssemblyInfo task = new AssemblyInfo();
+            task.BuildEngine = new MockBuild();
+            task.CodeLanguage = "cs";
+            string outputFile = Path.Combine(testDirectory, "AssemblyInfoBOM.cs");
+            task.OutputFile = outputFile;
+            task.AssemblyTitle = "AssemblyInfoTask";
+            task.AssemblyCopyright = "Copyright © Ignaz Kohlbecker 2006";
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+
+            byte[] firstBytesOfFile = new byte[3];
+            File.OpenRead(outputFile).Read(firstBytesOfFile, 0, 3);
+
+            byte[] utf8Bom = UTF8Encoding.UTF8.GetPreamble();
+            
+            Assert.AreEqual(utf8Bom, firstBytesOfFile, "The expected UTF8 BOM marker was not found on the generated file.");
+            
+        }
     }
 }
