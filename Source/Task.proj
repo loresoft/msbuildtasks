@@ -252,6 +252,17 @@
 
   </Target>
   
+  <Target Name="RoboCopy">
+    <RoboCopy 
+      SourceFolder="$(MSBuildProjectDirectory)" 
+      DestinationFolder="$(MSBuildProjectDirectory)\Test" 
+      Mirror="true"
+      ExcludeFolders=".svn;bin;obj;Test"
+      ExcludeFiles="*.resx;*.csproj;*.webinfo;*.log"
+      NoJobHeader="true"
+    />  
+  </Target>
+  
   <Target Name="All" 
           DependsOnTargets="AssemblyInfo;Mail;Zip;Unzip;Math;Version;NDoc;Registry;FTP;XML;NUnit;FileUpdate;Service;WebDownload">
     
@@ -271,6 +282,7 @@
     <CallTarget Targets="WebDownload" />
     <CallTarget Targets="TaskSchema" />
     <CallTarget Targets="WebDownload" />
+    <CallTarget Targets="RoboCopy" />
 
   </Target>
 </Project>
