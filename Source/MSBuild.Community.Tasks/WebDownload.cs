@@ -48,16 +48,18 @@ namespace MSBuild.Community.Tasks
     ///     FileName="microsoft.html" />
     /// ]]></code>
     /// </example>
+    /// <example>Download a page from your local intranet protected by Windows Authentication
+    /// <code><![CDATA[
+    /// <WebDownload FileUri="http://intranet/default.aspx" FileName="page.html" UseDefaultCredentials="True" />
+    /// ]]></code>
+    /// </example>
+    /// <example>Download a page from a password protected website
+    /// <code><![CDATA[
+    /// <WebDownload FileUri="http://example.com/myscore.aspx" FileName="page.html" Username="joeuser" Password="password123" />
+    /// ]]></code>
+    /// </example>
     public class WebDownload : Task
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:WebDownload"/> class.
-        /// </summary>
-        public WebDownload()
-        {
-
-        }
-
         #region Properties
         private string _fileName;
 
@@ -73,6 +75,10 @@ namespace MSBuild.Community.Tasks
         }
 
         private string _fileUri;
+        private bool useDefaultCredentials;
+        private string username;
+        private string password;
+        private string domain;
 
         /// <summary>
         /// Gets or sets the URI from which to download data.
@@ -83,7 +89,46 @@ namespace MSBuild.Community.Tasks
         {
             get { return _fileUri; }
             set { _fileUri = value; }
-        } 
+        }
+
+        /// <summary>
+        /// When true, the current user's credentials are used to authenticate against the remote web server
+        /// </summary>
+        /// <remarks>
+        /// This value is ignored if the <see cref="Username"/> property is set to a non-empty value.</remarks>
+        public bool UseDefaultCredentials
+        {
+            get { return useDefaultCredentials; }
+            set { useDefaultCredentials = value; }
+        }
+
+        /// <summary>
+        /// The username used to authenticate against the remote web server
+        /// </summary>
+        public string Username
+        {
+            get { return username; }
+            set { username = value; }
+        }
+
+        /// <summary>
+        /// The password used to authenticate against the remote web server. A value for <see cref="Username"/> must also be provided.
+        /// </summary>
+        public string Password
+        {
+            get { return password; }
+            set { password = value; }
+        }
+
+        /// <summary>
+        /// The domain of the user being used to authenticate against the remote web server. A value for <see cref="Username"/> must also be provided.
+        /// </summary>
+        public string Domain
+        {
+            get { return domain; }
+            set { domain = value; }
+        }
+
         #endregion
 
 
@@ -101,6 +146,7 @@ namespace MSBuild.Community.Tasks
             {
                 using (WebClient client = new WebClient())
                 {
+                    client.Credentials = GetConfiguredCredentials();
                     client.DownloadFile(_fileUri, _fileName);
                 }
             }
@@ -112,6 +158,23 @@ namespace MSBuild.Community.Tasks
 
             Log.LogMessage("Successfully Downloaded File \"{0}\" from \"{1}\"", _fileName, _fileUri);
             return true;
+        }
+
+        /// <summary>
+        /// Determines which credentials to pass with the web request
+        /// </summary>
+        /// <returns></returns>
+        public ICredentials GetConfiguredCredentials()
+        {
+            if (!String.IsNullOrEmpty(username))
+            {
+                return new NetworkCredential(username, password, domain);
+            }
+            if (useDefaultCredentials)
+            {
+                return CredentialCache.DefaultCredentials;
+            }
+            return null;
         }
     }
 }
