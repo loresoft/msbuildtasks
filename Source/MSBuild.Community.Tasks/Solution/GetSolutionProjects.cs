@@ -40,15 +40,21 @@ namespace MSBuild.Community.Tasks
     /// Retrieves the list of Projects contained within a Visual Studio Solution (.sln) file 
     /// </summary>
     /// <example>
-    /// Returns project name, GUID, and relative path from test solution
+    /// Returns project name, GUID, and path information from test solution
     /// <code><![CDATA[
     ///   <Target Name="Test">
     ///       <GetSolutionProjects Solution="TestSolution.sln">
     ///           <Output ItemName="ProjectFiles" TaskParameter="Output"/>
     ///       </GetSolutionProjects>
     /// 
-    ///     <Message Text="Solution Project paths:" />
-    ///     <Message Text="%(ProjectFiles.ProjectName) : @(ProjectFiles) %(ProjectFiles.ProjectGUID)" />
+    ///     <Message Text="Project names:" />
+    ///     <Message Text="%(ProjectFiles.ProjectName)" />
+    ///     <Message Text="Relative project paths:" />
+    ///     <Message Text="%(ProjectFiles.ProjectPath)" />
+    ///     <Message Text="Project GUIDs:" />
+    ///     <Message Text="%(ProjectFiles.ProjectGUID)" />
+    ///     <Message Text="Full paths to project files:" />
+    ///     <Message Text="%(ProjectFiles.FullPath)" />
     ///   </Target>
     /// ]]></code>
     /// </example>
@@ -62,9 +68,12 @@ namespace MSBuild.Community.Tasks
         /// A list of the project files found in <see cref="Solution" />
         /// </summary>
         /// <remarks>
-        /// The name of the project can be retrieved by reading metadata tag ProjectName.
+        /// The name of the project can be retrieved by reading metadata tag <c>ProjectName</c>.
         /// <para>
-        /// The project's GUID can be retrieved by reading metadata tag ProjectGUID.
+        /// The path to the project as it is is stored in the solution file retrieved by reading metadata tag <c>ProjectPath</c>.
+        /// </para>
+        /// <para>
+        /// The project's GUID can be retrieved by reading metadata tag <c>ProjectGUID</c>.
         /// </para>
         /// </remarks>
         [Output]
@@ -95,17 +104,21 @@ namespace MSBuild.Community.Tasks
                 Log.LogError(Properties.Resources.SolutionNotFound, solutionFile);
                 return false;
             }
+            string solutionFolder = Path.GetDirectoryName(solutionFile);
 
             string solutionText = File.ReadAllText(solutionFile);
             MatchCollection matches = Regex.Matches(solutionText, ExtractProjectsFromSolutionRegex);
             output = new TaskItem[matches.Count];
             for(int i=0; i<matches.Count; i++)
             {
-                string projectFile = matches[i].Groups["ProjectFile"].Value;
+                string projectPathRelativeToSolution = matches[i].Groups["ProjectFile"].Value;
+                string projectPathOnDisk = Path.Combine(solutionFolder, projectPathRelativeToSolution);
+                string projectFile = projectPathRelativeToSolution;
                 string projectName = matches[i].Groups["ProjectName"].Value;
                 string projectGUID = matches[i].Groups["ProjectGUID"].Value;
 
-                ITaskItem project = new TaskItem(projectFile);
+                ITaskItem project = new TaskItem(projectPathOnDisk);
+                project.SetMetadata("ProjectPath", projectFile);
                 project.SetMetadata("ProjectName", projectName);
                 project.SetMetadata("ProjectGUID", projectGUID);
                 output[i] = project;
