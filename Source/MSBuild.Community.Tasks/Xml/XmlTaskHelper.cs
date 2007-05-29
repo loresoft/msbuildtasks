@@ -8,6 +8,7 @@ namespace MSBuild.Community.Tasks.Xml
     /// <summary>
     /// Provides methods used by all of the XML tasks
     /// </summary>
+    /// <exclude />
     public class XmlTaskHelper
     {
         /// <summary>

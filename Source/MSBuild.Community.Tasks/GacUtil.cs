@@ -39,7 +39,7 @@ using Microsoft.Build.Framework;
 namespace MSBuild.Community.Tasks
 {
     /// <summary>
-    /// The list of the commans available to the GacUtil Task
+    /// The list of the commands available to the GacUtil Task
     /// </summary>
     public enum GacUtilCommands
     {

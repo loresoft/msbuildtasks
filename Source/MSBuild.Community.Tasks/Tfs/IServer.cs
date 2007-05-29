@@ -5,6 +5,7 @@ namespace MSBuild.Community.Tasks.Tfs
     /// <summary>
     /// Describes the behavior of a Team Foundation Server
     /// </summary>
+    /// <exclude />
     public interface IServer
     {
         /// <summary>

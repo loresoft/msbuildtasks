@@ -243,6 +243,7 @@ namespace MSBuild.Community.Tasks.AspNet
         /// Determines if the current property values can be used together
         /// </summary>
         /// <returns><see langword="true"/> when properties can be used together.</returns>
+        /// <exclude />
         public bool IsValidPropertyCombinations()
         {
             if (clientScriptsOnly)

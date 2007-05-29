@@ -6,6 +6,7 @@ namespace MSBuild.Community.Tasks.Tfs
     /// <summary>
     /// Exceptions returned by the Team Foundation Server
     /// </summary>
+    /// <exclude />
     public class TeamFoundationServerException : Exception
     {
         /// <summary>

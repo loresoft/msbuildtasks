@@ -202,6 +202,7 @@ namespace MSBuild.Community.Tasks.Xml
         /// </summary>
         /// <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
         /// <returns></returns>
+        /// <exclude />
         protected virtual XmlDocument LoadSubstitutionsDocument()
         {
             XmlDocument substitutionsDocument;
@@ -227,6 +228,7 @@ namespace MSBuild.Community.Tasks.Xml
         /// </summary>
         /// <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
         /// <returns></returns>
+        /// <exclude />
         protected virtual XmlDocument LoadContentDocument()
         {
             if (!System.IO.File.Exists(contentPathUsedByTask))
@@ -245,6 +247,7 @@ namespace MSBuild.Community.Tasks.Xml
         /// <param name="mergedDocument">The XML to save to a file</param>
         /// <remarks>This method is not intended for use by consumers. It is exposed for testing purposes.</remarks>
         /// <returns></returns>
+        /// <exclude />
         protected virtual bool SaveMergedDocument(XmlDocument mergedDocument)
         {
             try

@@ -10,6 +10,7 @@ namespace MSBuild.Community.Tasks.Xml
     /// <summary>
     /// Represents a single XmlNode selected using an XML task.
     /// </summary>
+    /// <exclude />
     public class XmlNodeTaskItem : ITaskItem
     {
         Dictionary<string, string> metaData = new Dictionary<string, string>();
