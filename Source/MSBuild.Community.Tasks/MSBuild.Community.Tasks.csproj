@@ -59,11 +59,15 @@
     <Compile Include="AspNet\InstallAspNet.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attrib.cs" />
+    <Compile Include="Services\FileSystem.cs" />
     <Compile Include="GacUtil.cs" />
     <Compile Include="JavaScript\JavaScriptCompressor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="JavaScript\JSCompress.cs" />
+    <Compile Include="Oracle\AddTnsName.cs" />
+    <Compile Include="Oracle\TnsEntry.cs" />
+    <Compile Include="Oracle\TnsParser.cs" />
     <Compile Include="RoboCopy.cs" />
     <Compile Include="Subversion\SvnCopy.cs" />
     <Compile Include="Tfs\IServer.cs" />
@@ -78,6 +82,7 @@
     <Compile Include="Tfs\TeamFoundationServer.cs" />
     <Compile Include="Tfs\TeamFoundationServerException.cs" />
     <Compile Include="Tfs\TfsVersion.cs" />
+    <Compile Include="Services\Win32Registry.cs" />
     <Compile Include="Xml\XmlMassUpdate.cs" />
     <Compile Include="IIS\WebDirectoryScriptMap.cs" />
     <Compile Include="IIS\WebDirectorySetting.cs" />

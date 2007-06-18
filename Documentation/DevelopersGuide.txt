@@ -144,7 +144,7 @@ Writing your own task
 6.  Implement NUnit tests for your task in <MyTask>Test.cs;
     this is important to have something for debugging.
     
-    - Provide a description to every test, e.g.
+    - Provide descriptive test method names or use the Description attribute.
       [Test(Description = "Test the weather forecast task in rainy season")].
    
     - From within your NUnit test,
@@ -159,6 +159,11 @@ Writing your own task
       such as URLs, logins and paths
       located in a config file
       rather than hard coded in the test code.
+      
+    - If possible, try to mock out any environmental services that your
+      task depends on. For example, make use of the IRegistry and IFileSystem
+      interfaces in your task, and provide concrete implementations via dependency injection.
+      In your unit tests, you can use Rhino.Mocks to inject mock implementations.
 
 7.  Add an entry to 
     <msbuildtasks>\Source\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets

@@ -468,6 +468,33 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adding TNSNAMES entry &quot;{0}&quot; to &quot;{1}&quot;.
+        /// </summary>
+        internal static string TnsnameAdded {
+            get {
+                return ResourceManager.GetString("TnsnameAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TNSNAME entry &quot;{0}&quot; already exists in &quot;{1}&quot; and AllowUpdates=false..
+        /// </summary>
+        internal static string TnsnameUpdateAborted {
+            get {
+                return ResourceManager.GetString("TnsnameUpdateAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating TNSNAMES entry &quot;{0}&quot; in &quot;{1}&quot;.
+        /// </summary>
+        internal static string TnsnameUpdated {
+            get {
+                return ResourceManager.GetString("TnsnameUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;{2}&quot; refers to {0} item(s), and &quot;{3}&quot; refers to {1} item(s). They must have the same number of items..
         /// </summary>
         internal static string TwoVectorsMustHaveSameLength {

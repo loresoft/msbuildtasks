@@ -256,6 +256,15 @@
     <value>Getting current date.</value>
     <comment>Log message</comment>
   </data>
+  <data name="TnsnameAdded" xml:space="preserve">
+    <value>Adding TNSNAMES entry "{0}" to "{1}"</value>
+  </data>
+  <data name="TnsnameUpdateAborted" xml:space="preserve">
+    <value>TNSNAME entry "{0}" already exists in "{1}" and AllowUpdates=false.</value>
+  </data>
+  <data name="TnsnameUpdated" xml:space="preserve">
+    <value>Updating TNSNAMES entry "{0}" in "{1}"</value>
+  </data>
   <data name="TwoVectorsMustHaveSameLength" xml:space="preserve">
     <value>"{2}" refers to {0} item(s), and "{3}" refers to {1} item(s). They must have the same number of items.</value>
   </data>
