@@ -17,8 +17,6 @@ namespace MSBuild.Community.Tasks.Oracle
     /// </example>
     public class AddTnsName : Task
     {
-        private const string ORACLE_REGISTRY = @"SOFTWARE\ORACLE";
-        private const string TNSNAMES_PATH = @"NETWORK\ADMIN\tnsnames.ora";
         private IRegistry registry;
         private IFilesSystem fileSystem;
 
@@ -147,12 +145,12 @@ namespace MSBuild.Community.Tasks.Oracle
             {
                 return tnsNamesFile;
             }
-            //TODO: Implement Win32Registry to support locating the TNSNAMES.ORA file in the current Oracle home
             string[] oracleHomes = registry.GetSubKeys(RegistryHive.LocalMachine, ORACLE_REGISTRY);
             foreach(string home in oracleHomes)
             {
-                string homePathKey = String.Format(@"HKEY_LOCAL_MACHINE\{1}\{0}\ORACLE_HOME", home, ORACLE_REGISTRY);
-                string homePath = registry.GetValue(homePathKey) as string;
+                string homePathKey = String.Format(@"HKEY_LOCAL_MACHINE\{0}\{1}", ORACLE_REGISTRY, home);
+                string homePath = registry.GetValue(homePathKey, ORACLE_HOME) as string;
+                if (homePath == null) continue;
                 string tnsNamesPath = Path.Combine(homePath, TNSNAMES_PATH);
                 if (fileSystem.FileExists(tnsNamesPath))
                 {
@@ -162,6 +160,9 @@ namespace MSBuild.Community.Tasks.Oracle
             }
             return tnsNamesFile;
         }
+        private const string ORACLE_REGISTRY = @"SOFTWARE\ORACLE";
+        private const string ORACLE_HOME = "ORACLE_HOME";
+        private const string TNSNAMES_PATH = @"NETWORK\ADMIN\tnsnames.ora";
 
         private string tnsNamesFile;
         private string originalFileText;

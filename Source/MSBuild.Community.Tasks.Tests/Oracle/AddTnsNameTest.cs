@@ -51,7 +51,7 @@ namespace MSBuild.Community.Tasks.Tests.Oracle
             using (mocks.Record())
             {
                 SetupResult.For(registry.GetSubKeys(RegistryHive.LocalMachine, @"SOFTWARE\ORACLE")).Return(oracleSubKeys);
-                SetupResult.For(registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\ORACLE\OraHome\ORACLE_HOME")).Return(lastUsedOracleHome);
+                SetupResult.For(registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\ORACLE\OraHome", "ORACLE_HOME")).Return(lastUsedOracleHome);
                 SetupResult.For(fileSystem.FileExists(tnsnamesFileInOracleHome)).Return(true);
             }
             string fileBeingUpdated = task.GetEffectivePathToTnsNamesFile();
