@@ -11,8 +11,12 @@ namespace MSBuild.Community.Tasks.Oracle
     /// <summary>
     /// Defines a database host within the Oracle TNSNAMES.ORA file.
     /// </summary>
-    /// <example>Adding an entry to a specific file.
-    /// <code><![CDATA[ <AddTnsName TnsNamesFile="c:\oracle\network\admin\tnsnames.ora" EntryName="northwind.world" EntryText="(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = northwinddb01)(PORT = 1521))) (CONNECT_DATA = (SERVICE_NAME = northwind.world)))"  /> ]]>
+    /// <example>Add an entry to the system default TNSNAMES.ORA file and update any entry that already exists:
+    /// <code><![CDATA[ <AddTnsName AllowUpdates="True" EntryName="northwind.world" EntryText="(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = northwinddb01)(PORT = 1521))) (CONNECT_DATA = (SERVICE_NAME = northwind.world)))"  /> ]]>
+    /// </code>
+    /// </example>
+    /// <example>Add an entry to a specific file and fail if the entry already exists:
+    /// <code><![CDATA[ <AddTnsName TnsNamesFile="c:\oracle\network\admin\tnsnames.ora" AllowUpdates="False" EntryName="northwind.world" EntryText="(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = northwinddb01)(PORT = 1521))) (CONNECT_DATA = (SERVICE_NAME = northwind.world)))"  /> ]]>
     /// </code>
     /// </example>
     public class AddTnsName : Task
@@ -76,6 +80,7 @@ namespace MSBuild.Community.Tasks.Oracle
         /// <summary>
         /// The path to a specific TNSNAMES.ORA file to update.
         /// </summary>
+        /// <remarks>If not specified, the default is %ORACLE_HOME%\network\admin\tnsnames.ora</remarks>
         public string TnsNamesFile
         {
             set { tnsNamesFile = value; }
@@ -102,6 +107,7 @@ namespace MSBuild.Community.Tasks.Oracle
         /// <summary>
         /// The name of the host entry to add.
         /// </summary>
+        /// <remarks>To be properly recognized by Oracle, the value must contain a period, followed by a suffix. For example: mydatabase.world</remarks>
         [Required]
         public string EntryName
         {
@@ -120,6 +126,7 @@ namespace MSBuild.Community.Tasks.Oracle
         /// <summary>
         /// The definition of the host entry to add.
         /// </summary>
+        /// <remarks>To be properly recognized by Oracle, the value must be surrounded by parentheses.</remarks>
         public string EntryText
         {
             set { entryText = value; }
