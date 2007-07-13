@@ -102,6 +102,7 @@
 		<content Include="$(libRoot)\ICSharpCode.SharpZipLib.dll" />
 		<content Include="$(libRoot)\Microsoft.VisualStudio.SourceSafe.Interop.dll" />
 		<content Include="$(libRoot)\nunit.framework.dll" />
+    <content Include="$(libRoot)\rhino.mocks.dll" />
 
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
 		<content Include="$(srcRoot)\MSBuild.Community.Tasks\$(nunitReportXsl)" />

@@ -26,6 +26,11 @@ namespace MSBuild.Community.Tasks.Tests
         public void Setup()
         {
             string sourceFile = Path.Combine(prjRootPath, @"Source\Subversion.proj");
+            string testFileFolder = Path.GetDirectoryName(testFile);
+            if (!Directory.Exists(testFileFolder))
+            {
+                Directory.CreateDirectory(testFileFolder);
+            }
             File.Copy(sourceFile, testFile, true);
         }
 
