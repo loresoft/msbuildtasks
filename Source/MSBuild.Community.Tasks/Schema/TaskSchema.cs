@@ -46,61 +46,8 @@ namespace MSBuild.Community.Tasks.Schema
     ///     Includes="Microsoft.Build.Commontypes.xsd"/>
     /// ]]></code>
     /// </example>
-    public class TaskSchema : MarshalByRefObject, ITask
+    public class TaskSchema : AppDomainIsolatedTask
     {
-        #region ITask Members
-
-        private IBuildEngine _BuildEngine;
-
-        /// <summary>
-        /// Gets or sets the build engine associated with the task.
-        /// </summary>
-        /// <value></value>
-        /// <returns>The build engine associated with the task.</returns>
-        public IBuildEngine BuildEngine
-        {
-            get { return _BuildEngine; }
-            set { _BuildEngine = value; }
-        }
-
-        private ITaskHost _HostObject;
-
-        /// <summary>
-        /// Gets or sets any host object that is associated with the task.
-        /// </summary>
-        /// <value></value>
-        /// <returns>The host object associated with the task.</returns>
-        public ITaskHost HostObject
-        {
-            get { return _HostObject; }
-            set { _HostObject = value; }
-        }
-
-        #endregion
-
-        #region Property - Log
-
-        private TaskLoggingHelper log;
-
-        /// <summary>
-        /// Gets or sets the logger for the task.
-        /// </summary>
-        /// <value>The logger.</value>
-        public TaskLoggingHelper Log
-        {
-            get
-            {
-                if (log == null)
-                {
-                    log = new TaskLoggingHelper(this);
-                }
-                return log;
-            }
-            set { log = value; }
-        }
-
-        #endregion
-
         private ITaskItem[] assemblies;
         private ITaskItem[] schemas;
         private ITaskItem[] taskLists;
@@ -137,7 +84,6 @@ namespace MSBuild.Community.Tasks.Schema
         public ITaskItem[] Schemas
         {
             get { return this.schemas; }
-            private set { this.schemas = value; }
         }
 
         /// <summary>
@@ -178,7 +124,6 @@ namespace MSBuild.Community.Tasks.Schema
         public ITaskItem[] TaskLists
         {
             get { return this.taskLists; }
-            private set { this.taskLists = value; }
         }
 
         /// <summary>
@@ -235,12 +180,12 @@ namespace MSBuild.Community.Tasks.Schema
         }
 
         /// <summary>
-        /// Executes the task.
+        /// When overridden in a derived class, executes the task.
         /// </summary>
         /// <returns>
         /// true if the task successfully executed; otherwise, false.
         /// </returns>
-        public bool Execute()
+        public override bool Execute()
         {
             if (!String.IsNullOrEmpty(this.OutputPath) && !Directory.Exists(this.OutputPath))
             {
@@ -262,91 +207,25 @@ namespace MSBuild.Community.Tasks.Schema
             return true;
         }
 
-
         private bool AnalyseAssembly(ITaskItem taskAssemblyFile, int i)
         {
             string assemblyFullName = taskAssemblyFile.GetMetadata("FullPath");
             this.Log.LogMessage("Analysing {0}", assemblyFullName);
-            bool result = false;
-
-            // Need to set the ApplicationBase of the new AppDomain to be the MSBuildCommunityTasks directory
-            // so that when a TaskSchemaSandboxLoader is instantiated in the sandbox domain, its dependencies
-            // (that is, MSBuild.Community.Tasks.dll) are found.
-            AppDomainSetup sandboxOptions = new AppDomainSetup();
-            sandboxOptions.ApplicationBase = GetCommunityTasksInstallationPath();
-
-            AppDomain sandboxDomain = AppDomain.CreateDomain("TaskSchemaSandbox", null, sandboxOptions);
-            try
-            {
-                // Instantiate a new TaskSchema object in the new AppDomain
-                TaskSchema sandboxTask = (TaskSchema) sandboxDomain.CreateInstanceAndUnwrap(
-                                                          typeof (TaskSchema).Assembly.GetName().FullName,
-                                                          typeof (TaskSchema).FullName);
-                // Since only the default constructor was called on the object, we need to copy
-                // all of these properties over to the remote object
-                this.PrepareClone(sandboxTask);
-                // And now we initiate the processing in the other AppDomain
-                result = sandboxTask.AnalyzeAssemblyInSeparateAppDomain(
-                    this.Log,
-                    taskAssemblyFile,
-                    i);
-            }
-            finally
-            {
-                AppDomain.Unload(sandboxDomain);
-            }
-
-            return result;
-        }
-
-        private string GetCommunityTasksInstallationPath()
-        {
-            return Path.GetDirectoryName(GetType().Assembly.Location);
-        }
-
-        private bool AnalyzeAssemblyInSeparateAppDomain(TaskLoggingHelper logger, ITaskItem assemblyItem, int i)
-        {
-            Assembly taskAssembly = ReflectionHelper.LoadAssembly(logger, assemblyItem);
+            Assembly taskAssembly = ReflectionHelper.LoadAssembly(this.Log, taskAssemblyFile);
             if (taskAssembly == null)
                 return false;
 
-            logger.LogMessage(MessageImportance.High, "Loaded DLL: {0}", taskAssembly.Location);
+            TaskSchemaAnalyser analyzer = new TaskSchemaAnalyser(this, taskAssembly);
+            analyzer.CreateSchema();
+            this.schemas[i] = analyzer.WriteSchema(GetSchemaFileName(taskAssembly));
 
-            try
+            if (this.CreateTaskList)
             {
-                TaskSchemaAnalyser analyzer = new TaskSchemaAnalyser(this, taskAssembly);
-                analyzer.CreateSchema();
-                this.schemas[i] = analyzer.WriteSchema(GetSchemaFileName(taskAssembly));
-
-                if (this.CreateTaskList)
-                {
-                    analyzer.CreateUsingDocument();
-                    this.taskLists[i] = analyzer.WriteUsingDocument(GetTaskListName(taskAssembly));
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogErrorFromException(ex);
-                return false;
+                analyzer.CreateUsingDocument();
+                this.taskLists[i] = analyzer.WriteUsingDocument(GetTaskListName(taskAssembly));
             }
 
             return true;
-        }
-
-        private void PrepareClone(TaskSchema remote)
-        {
-            remote.Assemblies = this.Assemblies;
-            remote.BuildEngine = this.BuildEngine;
-            remote.CreateTaskList = this.CreateTaskList;
-            remote.HostObject = this.HostObject;
-            remote.IgnoreDocumentation = this.IgnoreDocumentation;
-            remote.IgnoreMsBuildSchema = this.IgnoreMsBuildSchema;
-            remote.Includes = this.Includes;
-            remote.Log = this.Log;
-            remote.OutputPath = this.OutputPath;
-            remote.Schemas = this.Schemas;
-            remote.TaskListAssemblyFormat = this.TaskListAssemblyFormat;
-            remote.TaskLists = this.TaskLists;
         }
     }
 }
