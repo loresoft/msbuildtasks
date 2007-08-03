@@ -38,7 +38,7 @@ namespace MSBuild.Community.Tasks.Oracle
         /// <summary>
         /// Creates a new instance of the AddTnsName task using the default system services.
         /// </summary>
-        public AddTnsName() : this(new Win32Registry(), new FileSystem()) {}
+        public AddTnsName() : this(new Win32Registry(), new FileSystem()) { }
 
         ///<summary>
         ///When overridden in a derived class, executes the task.
@@ -52,11 +52,11 @@ namespace MSBuild.Community.Tasks.Oracle
             modifiedFile = GetEffectivePathToTnsNamesFile();
             if (String.IsNullOrEmpty(ModifiedFile))
             {
-                Log.LogError("Unable to locate a TNSNAMES.ORA file. Please specify a value for TnsNamesFile.");
+                Log.LogError(Properties.Resources.TnsNamesFileNotFound);
                 return false;
             }
             originalFileText = fileSystem.ReadTextFromFile(modifiedFile);
-            
+
             TnsParser parser = new TnsParser(originalFileText);
             TnsEntry targetEntry = parser.FindEntry(entryName);
             if (targetEntry == null)
@@ -158,19 +158,20 @@ namespace MSBuild.Community.Tasks.Oracle
                 return tnsNamesFile;
             }
             string[] oracleHomes = registry.GetSubKeys(RegistryHive.LocalMachine, ORACLE_REGISTRY);
-            foreach(string home in oracleHomes)
+            foreach (string home in oracleHomes)
             {
                 string homePathKey = String.Format(@"HKEY_LOCAL_MACHINE\{0}\{1}", ORACLE_REGISTRY, home);
+                Log.LogMessage(MessageImportance.Low, Properties.Resources.OracleHomeCheck, homePathKey);
                 string homePath = registry.GetValue(homePathKey, ORACLE_HOME) as string;
                 if (homePath == null) continue;
                 string tnsNamesPath = Path.Combine(homePath, TNSNAMES_PATH);
+                Log.LogMessage(MessageImportance.Low, Properties.Resources.TnsNamesFileCheck, tnsNamesPath);
                 if (fileSystem.FileExists(tnsNamesPath))
                 {
                     return tnsNamesPath;
                 }
-
             }
-            return tnsNamesFile;
+            return null;
         }
         private const string ORACLE_REGISTRY = @"SOFTWARE\ORACLE";
         private const string ORACLE_HOME = "ORACLE_HOME";

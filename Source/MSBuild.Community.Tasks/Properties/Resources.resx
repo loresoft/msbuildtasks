@@ -185,6 +185,9 @@
   <data name="NUnitNotFound" xml:space="preserve">
     <value>Could not find the NUnit Project File open command. Please make sure NUnit is installed.</value>
   </data>
+  <data name="OracleHomeCheck" xml:space="preserve">
+    <value>Checking Oracle Home: {0}</value>
+  </data>
   <data name="ParameterNotUsed" xml:space="preserve">
     <value>The parameter "{1}" does not apply to the current use of task "{0}".</value>
   </data>
@@ -258,6 +261,12 @@
   </data>
   <data name="TnsnameAdded" xml:space="preserve">
     <value>Adding TNSNAMES entry "{0}" to "{1}"</value>
+  </data>
+  <data name="TnsNamesFileCheck" xml:space="preserve">
+    <value>Looking for {0}</value>
+  </data>
+  <data name="TnsNamesFileNotFound" xml:space="preserve">
+    <value>Unable to locate a TNSNAMES.ORA file. Please specify a value for TnsNamesFile.</value>
   </data>
   <data name="TnsnameUpdateAborted" xml:space="preserve">
     <value>TNSNAME entry "{0}" already exists in "{1}" and AllowUpdates=false.</value>
