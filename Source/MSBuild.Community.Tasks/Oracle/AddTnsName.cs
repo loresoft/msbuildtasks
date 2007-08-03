@@ -50,6 +50,11 @@ namespace MSBuild.Community.Tasks.Oracle
         public override bool Execute()
         {
             modifiedFile = GetEffectivePathToTnsNamesFile();
+            if (String.IsNullOrEmpty(ModifiedFile))
+            {
+                Log.LogError("Unable to locate a TNSNAMES.ORA file. Please specify a value for TnsNamesFile.");
+                return false;
+            }
             originalFileText = fileSystem.ReadTextFromFile(modifiedFile);
             
             TnsParser parser = new TnsParser(originalFileText);

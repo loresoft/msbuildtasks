@@ -59,6 +59,17 @@ namespace MSBuild.Community.Tasks.Tests.Oracle
         }
 
         [Test]
+        public void The_task_should_fail_when_no_TnsNamesFile_can_be_found()
+        {
+            using (mocks.Record())
+            {
+                SetupResult.For(registry.GetSubKeys(RegistryHive.LocalMachine, @"SOFTWARE\ORACLE")).Return(new string[0]);
+            }
+            bool success = task.Execute();
+            Assert.IsFalse(success, "Task should have failed when no file could be found.");
+        }
+
+        [Test]
         public void ModifiedFile_is_populated()
         {
             string specifiedFile = @"c:\data\tnsnames.ora";
