@@ -438,4 +438,10 @@
   <data name="ZipSuccessfully" xml:space="preserve">
     <value>Created zip file "{0}" successfully.</value>
   </data>
+  <data name="CouldNotResolveServerHostName" xml:space="preserve">
+    <value>Couldn't resolve server host name {0}.</value>
+  </data>
+  <data name="CouldNotConnectToRemoteServer" xml:space="preserve">
+    <value>Couldn't connect to remove server.</value>
+  </data>
 </root>

@@ -59,6 +59,22 @@
     <Compile Include="AspNet\InstallAspNet.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attrib.cs" />
+    <Compile Include="Ftp\FtpClientTaskBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Ftp\FtpCreateRemoteDirectory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Ftp\FtpDirectoryExists.cs" />
+    <Compile Include="Ftp\FtpException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Ftp\FtpFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Ftp\FtpReply.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Services\FileSystem.cs" />
     <Compile Include="GacUtil.cs" />
     <Compile Include="JavaScript\JavaScriptCompressor.cs">
