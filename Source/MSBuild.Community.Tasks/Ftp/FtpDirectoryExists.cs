@@ -80,37 +80,44 @@ namespace MSBuild.Community.Tasks.Ftp
         {
             try
             {
-                Connect();
-                Log.LogMessage( MessageImportance.Low, "Connected to remote server." );
-            }
-            catch(FtpException caught)
-            {
-                Log.LogErrorFromException( caught, false );
-                Log.LogError( "Could not connect to remote server. {0}", caught.Message );
-                return false;
-            }
+                try
+                {
+                    Connect();
+                    Log.LogMessage( MessageImportance.Low, "Connected to remote server." );
+                }
+                catch(FtpException caught)
+                {
+                    Log.LogErrorFromException( caught, false );
+                    Log.LogError( "Could not connect to remote server. {0}", caught.Message );
+                    return false;
+                }
 
-            try
-            {
-                Login();
-                Log.LogMessage( MessageImportance.Low, "Login succesfully." );
-            }
-            catch(FtpException caught)
-            {
-                Log.LogErrorFromException( caught, false );
-                Log.LogError( "Could not login. {0}", caught.Message );
-                return false;
-            }
+                try
+                {
+                    Login();
+                    Log.LogMessage( MessageImportance.Low, "Login succesfully." );
+                }
+                catch(FtpException caught)
+                {
+                    Log.LogErrorFromException( caught, false );
+                    Log.LogError( "Could not login. {0}", caught.Message );
+                    return false;
+                }
 
-            try
-            {
-                _exists = DirectoryExists(RemoteDirectory);
+                try
+                {
+                    _exists = DirectoryExists( RemoteDirectory );
+                }
+                catch(FtpException caught)
+                {
+                    Log.LogErrorFromException( caught, false );
+                    Log.LogError( "Could determ whether the remote directory exists or not. {0}", caught.Message );
+                    return false;
+                }
             }
-            catch(FtpException caught)
+            finally
             {
-                Log.LogErrorFromException( caught, false );
-                Log.LogError( "Could determ whether the remote directory exists or not. {0}", caught.Message );
-                return false;
+                Close();
             }
 
             return true;
