@@ -75,6 +75,7 @@
     <Compile Include="Ftp\FtpReply.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Ftp\FtpUploadDirectoryContent.cs" />
     <Compile Include="Services\FileSystem.cs" />
     <Compile Include="GacUtil.cs" />
     <Compile Include="JavaScript\JavaScriptCompressor.cs">
@@ -182,6 +183,9 @@
     <Compile Include="Zip.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Microsoft.Build.Commontypes.xsx">
+      <DependentUpon>Microsoft.Build.Commontypes.xsd</DependentUpon>
+    </None>
     <None Include="MSBuild.Community.Tasks.snk" />
     <None Include="AdditionalDocumentation.xml" />
     <Content Include="MSBuild.Community.Tasks.Targets">

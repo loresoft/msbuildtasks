@@ -499,23 +499,23 @@ namespace MSBuild.Community.Tasks.Ftp
         }
 
         /// <summary>
-        /// Stores the specified localfile .
+        /// Stores the specified localFile.
         /// </summary>
-        /// <param name="localfile">The localfile.</param>
-        /// <param name="remotefile">The remotefile.</param>
-        public void Store( String localfile, String remotefile )
+        /// <param name="localFile">The localfile.</param>
+        /// <param name="remoteFileName">The remotefile.</param>
+        public void Store( String localFile, String remoteFileName )
         {
             // Make sure the file exists.
-            if(!File.Exists( localfile ))
+            if(!File.Exists( localFile ))
             {
-                throw new FileNotFoundException( "Couldn't find local file.", localfile );
+                throw new FileNotFoundException( "Couldn't find local file.", localFile );
             }
 
             // Create local file stream and data stream to remote server.
-            using(FileStream localFileStream = File.OpenRead( localfile ))
+            using(FileStream localFileStream = File.OpenRead( localFile ))
             {
                 // Send STOR command and create data stream.
-                using(Stream remoteDataStream = CreateDataStreamAndSendCommand( "STOR " + remotefile ))
+                using(Stream remoteDataStream = CreateDataStreamAndSendCommand( "STOR " + remoteFileName ))
                 {
                     // Create and buffer and read the first chunk of the local file.
                     byte[] buffer = new byte[BufferSize];
