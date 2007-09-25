@@ -83,6 +83,18 @@ namespace MSBuild.Community.Tasks.Subversion
 			set { _localPath = value; }
 		}
 
+        private bool _useLastCommittedRevision;
+
+        /// <summary>
+        /// Specifies whether to use the last committed revision number as
+        /// opposed to the last updated revision number.
+        /// </summary>
+        public bool UseLastCommittedRevision
+        {
+            get { return _useLastCommittedRevision; }
+            set { _useLastCommittedRevision = value; }
+        }
+
 		#endregion Input Parameters
 
 		#region Output Parameters
@@ -200,11 +212,12 @@ namespace MSBuild.Community.Tasks.Subversion
 		/// <returns>
 		/// A string value containing the command line arguments to pass directly to the executable file.
 		/// </returns>
-		protected override string GenerateCommandLineCommands()
-		{
-			DirectoryInfo localPath = new DirectoryInfo(_localPath);
-			return string.Format("--no-newline \"{0}\"", localPath.FullName.Replace('\\', '/'));
-		}
+        protected override string GenerateCommandLineCommands()
+        {
+            DirectoryInfo localPath = new DirectoryInfo(_localPath);
+            string commandLineFormat = _useLastCommittedRevision ? "-c --no-newline \"{0}\"" : "--no-newline \"{0}\"";
+            return string.Format(commandLineFormat, localPath.FullName.Replace('\\', '/'));
+        }
 
 		/// <summary>
 		/// Runs the exectuable file with the specified task parameters.
