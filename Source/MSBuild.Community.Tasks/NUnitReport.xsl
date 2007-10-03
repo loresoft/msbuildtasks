@@ -479,13 +479,29 @@
 	<!-- Write a list of all packages with an hyperlink to the anchor       -->
 	<!-- of the package name.                                               -->
 	<!-- ================================================================== -->
-	<xsl:template name="packagelist">   
+	<xsl:template name="packagelist">
 		<xsl:variable name="testTotal" select="sum(./test-results/@total)"/>
 		<xsl:variable name="errorTotal" select="sum(./test-results/@errors)"/>
 		<xsl:variable name="failureTotal" select="sum(./test-results/@failures)"/>
 		<xsl:variable name="notRunTotal" select="sum(./test-results/@not-run)"/>
 		<xsl:variable name="timeTotal" select="sum(./test-results/test-suite/@time)"/>
-		<xsl:variable name="successRate" select="($testTotal - $failureTotal - $errorTotal) div $testTotal"/>
+		<xsl:variable name="runTotal" select="$testTotal - $notRunTotal"/>
+		<xsl:variable name="executionRate">
+			<xsl:choose>
+				<xsl:when test="$testTotal = 0">0</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$runTotal div $testTotal"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="successRate">
+			<xsl:choose>
+				<xsl:when test="$runTotal = 0">0</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="($runTotal - $errorTotal - $failureTotal) div ($runTotal)"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<h2>Summary</h2>
 		<xsl:text>
@@ -559,7 +575,12 @@
 			
 			<!-- add a row with success rate -->
 			<tr valign="top">
-				<td colspan="7" align="right">Success Rate:
+				<td colspan="7" align="right">Execution Rate:
+					<b>
+						<xsl:call-template name="display-percent">
+							<xsl:with-param name="value" select="$executionRate"/>
+						</xsl:call-template>
+					</b>, Success Rate:
 					<b>
 						<xsl:call-template name="display-percent">
 							<xsl:with-param name="value" select="$successRate"/>
