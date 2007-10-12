@@ -480,12 +480,12 @@
 	<!-- of the package name.                                               -->
 	<!-- ================================================================== -->
 	<xsl:template name="packagelist">
-		<xsl:variable name="testTotal" select="sum(./test-results/@total)"/>
+		<xsl:variable name="runTotal" select="sum(./test-results/@total)"/>
 		<xsl:variable name="errorTotal" select="sum(./test-results/@errors)"/>
 		<xsl:variable name="failureTotal" select="sum(./test-results/@failures)"/>
 		<xsl:variable name="notRunTotal" select="sum(./test-results/@not-run)"/>
 		<xsl:variable name="timeTotal" select="sum(./test-results/test-suite/@time)"/>
-		<xsl:variable name="runTotal" select="$testTotal - $notRunTotal"/>
+		<xsl:variable name="testTotal" select="$runTotal + $notRunTotal"/>
 		<xsl:variable name="executionRate">
 			<xsl:choose>
 				<xsl:when test="$testTotal = 0">0</xsl:when>
@@ -515,12 +515,13 @@
 			<!-- list all packages recursively -->
 			<xsl:for-each select="./test-results[not(./@name = preceding-sibling::test-suite/@name)]">
 				<xsl:sort select="@name"/>
-				<xsl:variable name="testCount" select="sum(../test-results[./@name = current()/@name]/@total)"/>
+				<xsl:variable name="runCount" select="sum(../test-results[./@name = current()/@name]/@total)"/>
 				<xsl:variable name="errorCount" select="sum(../test-results[./@name = current()/@name]/@errors)"/>
 				<xsl:variable name="failureCount" select="sum(../test-results[./@name = current()/@name]/@failures)"/>
 				<xsl:variable name="notRunCount" select="sum(../test-results[./@name = current()/@name]/@not-run)"/>
 				<xsl:variable name="timeCount" select="sum(../test-results/test-suite[./@name = current()/@name]/@time)"/>
-				
+				<xsl:variable name="testCount" select="$runCount + $notRunCount"/>
+
 				<!-- write a summary for the package -->
 				<tr valign="top">
 					<!-- set a nice color depending if there is an error/failure -->
