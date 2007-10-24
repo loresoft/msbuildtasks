@@ -53,6 +53,12 @@ namespace MSBuild.Community.Tasks.SqlServer
 			get { return (string)_type.GetProperty("BatchSeparator").GetValue(_instance, null); }
 			set { _type.GetProperty("BatchSeparator").SetValue(_instance, value, null); }
 		}
+
+		public int StatementTimeout
+		{
+			get { return (int)_type.GetProperty("StatementTimeout").GetValue(_instance, null); }
+			set { _type.GetProperty("StatementTimeout").SetValue(_instance, value, null); }
+		}
 		
 		public event SqlInfoMessageEventHandler InfoMessage
 		{
@@ -70,20 +76,62 @@ namespace MSBuild.Community.Tasks.SqlServer
 		
 		public void Connect()
 		{
-			_type.InvokeMember("Connect", BindingFlags.Instance | BindingFlags.Public | BindingFlags.InvokeMethod,
-				null, _instance, null);	
+			InternalInvoke<object>("Connect", null);	
 		}
 		
 		public void Disconnect()
 		{
-			_type.InvokeMember("Disconnect", BindingFlags.Instance | BindingFlags.Public | BindingFlags.InvokeMethod, 
-				null, _instance, null);
+			InternalInvoke<object>("Disconnect", null);
 		}
 		
 		public int ExecuteNonQuery(string command)
 		{
-			return (int)_type.InvokeMember("ExecuteNonQuery", BindingFlags.Instance | BindingFlags.Public | BindingFlags.InvokeMethod, 
-				null, _instance, new object[] { command } );
+			return InternalInvoke<int>("ExecuteNonQuery", new object[] { command } );
+		}
+
+		private T InternalInvoke<T>(string name, object[] args)
+		{
+			object result = null;
+			try
+			{
+				result = _type.InvokeMember(name, BindingFlags.Instance | BindingFlags.Public |
+					BindingFlags.InvokeMethod, null, _instance, args);
+			}
+			catch (TargetInvocationException e)
+			{
+				HandleReflectionException(e);
+			}
+			return (T)result;
+		}
+
+		private static object CreateInstance(Type type, params object[] args)
+		{
+			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | 
+				BindingFlags.CreateInstance | BindingFlags.Instance;
+			object instance = null;
+			try
+			{
+				instance = Activator.CreateInstance(type, flags, null, args, null, null);
+			}
+			catch (TargetInvocationException e)
+			{
+				HandleReflectionException(e);
+			}
+			return instance;
+		}
+		
+		private static void HandleReflectionException(TargetInvocationException e)
+		{
+			Exception inner = e.InnerException;
+			if (inner != null)
+			{
+				throw (Exception)CreateInstance(e.InnerException.GetType(),
+					e.InnerException.Message, e.InnerException);
+			}
+			else
+			{
+				throw (Exception)CreateInstance(e.GetType(), e.Message, e);
+			}
 		}
 	}
 }

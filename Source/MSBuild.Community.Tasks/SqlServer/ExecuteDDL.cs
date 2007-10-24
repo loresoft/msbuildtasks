@@ -27,6 +27,7 @@ namespace MSBuild.Community.Tasks.SqlServer
 	public class ExecuteDDL : Task
 	{
 		private string _batchSeparator = "GO";
+		private int _statementTimeout = 30;
 		private ServerConnectionWrapper _conn = null;
 		private string _connStr = null;
 		private ITaskItem[] _files;
@@ -63,6 +64,16 @@ namespace MSBuild.Community.Tasks.SqlServer
 		{
 			get { return _results.ToArray(); }
 		}
+
+		/// <summary>
+		/// Timeout to execute a DDL statement.
+		/// </summary>
+		/// <remarks>Defaults to 30 seconds. Set to 0 for an infinite timeout period.</remarks>
+		public int StatementTimeout
+		{
+			get { return _statementTimeout; }
+			set { _statementTimeout = value; }
+		}
 		
 		#endregion
 		
@@ -76,6 +87,7 @@ namespace MSBuild.Community.Tasks.SqlServer
 					_conn.ConnectionString =_connStr;
 					_conn.BatchSeparator = _batchSeparator;
 					_conn.InfoMessage += InfoMessage;
+					_conn.StatementTimeout = _statementTimeout;
 					_conn.Connect();
 				}
 				return _conn;
@@ -128,15 +140,24 @@ namespace MSBuild.Community.Tasks.SqlServer
 				}
 				catch (Exception ex)
 				{
-					if (ex.GetType().ToString() == "Microsoft.SqlServer.Management.Common.ConnectionException")
+					if (ex.GetType().ToString().Contains("Microsoft.SqlServer.Management.Common"))
 					{
-						Log.LogError(ex.Message, new object[0]);
-						if (ex.InnerException is SqlException)
+						Log.LogError(ex.Message);
+						Exception inner = ex.InnerException;
+						while (inner != null)
 						{
-							foreach (SqlException error in ((SqlException)ex.InnerException).Errors)
+							if (inner is SqlException)
 							{
-								Log.LogError("{1}: Error # {0} on Line {2}: {3}", error.Number, error.Server, error.LineNumber, error.Message);
+								foreach (SqlError error in ((SqlException)inner).Errors)
+								{
+									Log.LogError("{1}: Error # {0} on Line {2}: {3}", error.Number, error.Server, error.LineNumber, error.Message);
+								}
 							}
+							else
+							{
+								Log.LogError("Error {0}", inner.Message);
+							}
+							inner = inner.InnerException;
 						}
 					}
 					else
