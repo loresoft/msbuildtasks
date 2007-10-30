@@ -106,8 +106,8 @@ namespace MSBuild.Community.Tasks
             }
             
             FastZipEvents events = new FastZipEvents();
-			events.ProcessDirectory = new ProcessDirectoryDelegate(ProcessDirectory);
-			events.ProcessFile = new ProcessFileDelegate(ProcessFile);
+			events.ProcessDirectory = new ProcessDirectoryHandler(ProcessDirectory);
+			events.ProcessFile = new ProcessFileHandler(ProcessFile);
 
             FastZip zip = new FastZip(events);
             zip.CreateEmptyDirectories = false;
