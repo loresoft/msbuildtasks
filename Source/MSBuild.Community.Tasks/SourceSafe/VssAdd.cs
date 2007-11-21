@@ -73,9 +73,11 @@ namespace MSBuild.Community.Tasks.SourceSafe
         {
             try
             {
+                ConnectToDatabase();
+
                 foreach (ITaskItem item in Files)
                 {
-                    //TODO: actually do the add!
+                    Item.Add(item.ItemSpec, Comment, 0);
                     Log.LogMessage(
                         MessageImportance.Normal,
                         "Added {0} to {1}",
