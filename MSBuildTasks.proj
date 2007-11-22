@@ -337,6 +337,9 @@
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests"/>
 
         <MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\User\UserTest.proj"
+		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests"/>
+
+        <MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\Computer\ComputerTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests"/>		   
     </Target>
 

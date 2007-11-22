@@ -49,6 +49,7 @@
     <Compile Include="AspNet\InstallAspNetTest.cs" />
     <Compile Include="AssemblyInfoTest.cs" />
     <Compile Include="AttribTest.cs" />
+    <Compile Include="Computer\ComputerTest.cs" />
     <Compile Include="FxCopTest.cs" />
     <Compile Include="IIS\WebDirectoryScriptMapTest.cs" />
     <Compile Include="IIS\WebDirectorySettingTest.cs" />
@@ -118,6 +119,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="AspNet\AspNetTest.proj" />
+    <None Include="Computer\ComputerTest.proj" />
     <None Include="IIS\IISTest.proj" />
     <None Include="ILMerge\ILMergeTest.proj" />
     <None Include="Install\InstallTest.proj" />

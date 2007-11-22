@@ -59,6 +59,7 @@
     <Compile Include="AspNet\InstallAspNet.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attrib.cs" />
+    <Compile Include="Computer\Computer.cs" />
     <Compile Include="Ftp\FtpClientTaskBase.cs">
       <SubType>Code</SubType>
     </Compile>

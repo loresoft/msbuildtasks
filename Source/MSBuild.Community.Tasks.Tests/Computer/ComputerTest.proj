@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--	
+	Copyright © 2007 Pinal Patel
+	MSBuild file to test Computer task
+  $Id$
+-->
+
+<Project DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildCommunityTasksPath)/MSBuild.Community.Tasks.Targets" />
+
+  <Target Name="Test">
+    <Computer>
+      <Output TaskParameter="Name" PropertyName="BuildMachineName" />
+      <Output TaskParameter="IPAddress" PropertyName="BuildMachineIPAddress" />
+      <Output TaskParameter="OSPlatform" PropertyName="BuildMachineOSPlatform" />
+      <Output TaskParameter="OSVersion" PropertyName="BuildMachineOSVersion" />
+    </Computer>    
+
+    <Message Text="Build computer: $(BuildMachineName) ($(BuildMachineIPAddress))" />
+    <Message Text="                $(BuildMachineOSPlatform) $(BuildMachineOSVersion)" />
+  </Target>
+
+</Project>
+
