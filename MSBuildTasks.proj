@@ -336,6 +336,8 @@
         <MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\JavaScript\JavaScriptTest.proj"
 		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests"/>
 
+        <MSBuild Projects="$(srcRoot)\MSBuild.Community.Tasks.Tests\User\UserTest.proj"
+		   Properties="MSBuildCommunityTasksPath=$(MSBuildCommunityTasksPath);testDir=$(testDir)\MSBuild.Community.Tasks.Tests"/>		   
     </Target>
 
 	<!-- Execute and report the NUnit and msbuild .proj tests -->

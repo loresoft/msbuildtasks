@@ -444,4 +444,7 @@
   <data name="CouldNotConnectToRemoteServer" xml:space="preserve">
     <value>Couldn't connect to remove server.</value>
   </data>
+  <data name="ActiveDirectoryLookupException" xml:space="preserve">
+    <value>Failed to lookup information for {0} in Active Directory.</value>
+  </data>
 </root>

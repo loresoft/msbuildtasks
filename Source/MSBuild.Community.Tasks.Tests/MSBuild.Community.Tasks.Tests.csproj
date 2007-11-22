@@ -78,6 +78,7 @@
     <Compile Include="Subversion\SvnInfoTest.cs" />
     <Compile Include="TemplateFile\TemplateFileTest.cs" />
     <Compile Include="Time\TimeTest.cs" />
+    <Compile Include="User\UserTest.cs" />
     <Compile Include="WebDownloadTest.cs" />
     <Compile Include="XmlUpdateTest.cs" />
     <Compile Include="FtpUploadTest.cs" />
@@ -128,6 +129,7 @@
     <None Include="SqlServer\SqlServer.proj" />
     <None Include="TemplateFile\TemplateFile.proj" />
     <None Include="Time\TimeTest.proj" />
+    <None Include="User\UserTest.proj" />
     <None Include="Xml\XmlMassUpdateTest.proj" />
     <None Include="Xml\XmlQueryTest.proj" />
   </ItemGroup>

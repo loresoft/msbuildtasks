@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--	
+	Copyright © 2007 Pinal Patel
+	MSBuild file to test User task
+  $Id$
+-->
+
+<Project DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildCommunityTasksPath)/MSBuild.Community.Tasks.Targets" />
+
+  <Target Name="Test">
+    <User>
+      <Output TaskParameter="UserNameWithDomain" PropertyName="BuildUserID" />
+      <Output TaskParameter="FullName" PropertyName="BuildUserName" />
+      <Output TaskParameter="Email" PropertyName="BuildUserEmail" />
+      <Output TaskParameter="Phone" PropertyName="BuildUserPhone" />
+    </User>
+
+    <Message Text="Build user: $(BuildUserID)" />
+    <Message Text="            $(BuildUserName)" Condition="'$(BuildUserName)' != ''" />
+    <Message Text="            $(BuildUserEmail); $(BuildUserPhone)" Condition="'$(BuildUserEmail)' != '' And '$(BuildUserPhone)' != ''" />
+  </Target>
+
+</Project>
+

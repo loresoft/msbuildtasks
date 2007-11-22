@@ -100,6 +100,7 @@
     <Compile Include="Tfs\TeamFoundationServerException.cs" />
     <Compile Include="Tfs\TfsVersion.cs" />
     <Compile Include="Services\Win32Registry.cs" />
+    <Compile Include="User\User.cs" />
     <Compile Include="Xml\XmlMassUpdate.cs" />
     <Compile Include="IIS\WebDirectoryScriptMap.cs" />
     <Compile Include="IIS\WebDirectorySetting.cs" />
