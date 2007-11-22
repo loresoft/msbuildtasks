@@ -38,20 +38,20 @@ using System.IO;
 
 namespace MSBuild.Community.Tasks
 {
-	/// <summary>
-	/// Generates version information based on various algorithms
-	/// </summary>
-	/// <example>Get version information from file and increment revision.
-	/// <code><![CDATA[
-	/// <Version VersionFile="number.txt" BuildType="Automatic" RevisionType="Increment">
-	///     <Output TaskParameter="Major" PropertyName="Major" />
-	///     <Output TaskParameter="Minor" PropertyName="Minor" />
-	///     <Output TaskParameter="Build" PropertyName="Build" />
-	///     <Output TaskParameter="Revision" PropertyName="Revision" />
-	/// </Version>
-	/// <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
-	/// ]]></code>
-	/// </example>
+    /// <summary>
+    /// Generates version information based on various algorithms
+    /// </summary>
+    /// <example>Get version information from file and increment revision.
+    /// <code><![CDATA[
+    /// <Version VersionFile="number.txt" BuildType="Automatic" RevisionType="Increment">
+    ///     <Output TaskParameter="Major" PropertyName="Major" />
+    ///     <Output TaskParameter="Minor" PropertyName="Minor" />
+    ///     <Output TaskParameter="Build" PropertyName="Build" />
+    ///     <Output TaskParameter="Revision" PropertyName="Revision" />
+    /// </Version>
+    /// <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+    /// ]]></code>
+    /// </example>
     /// <example>Specify Major and Minor version information and generate Build and Revision.
     /// <code><![CDATA[
     /// <Version BuildType="Automatic" RevisionType="Automatic" Major="1" Minor="3" >
@@ -67,95 +67,110 @@ namespace MSBuild.Community.Tasks
     {
 
         #region Enumerators
-        private enum BuildTypeEnum {
+        private enum MajorTypeEnum
+        {
             None,
-            Automatic,
-            Increment
+            Increment,
         }
-        private enum RevisionTypeEnum {
+        private enum MinorTypeEnum
+        {
+            None,
+            Increment,
+            Reset
+        }
+        private enum BuildTypeEnum
+        {
             None,
             Automatic,
             Increment,
-            BuildIncrement
+            Reset
+        }
+        private enum RevisionTypeEnum
+        {
+            None,
+            Automatic,
+            Increment,
+            BuildIncrement,
+            Reset
         }
         #endregion
 
         #region Constructor
         /// <summary>
-		/// Initializes a new instance of the <see cref="T:Version"/> class.
-		/// </summary>
-		public Version()
-		{
-		}
+        /// Initializes a new instance of the <see cref="T:Version"/> class.
+        /// </summary>
+        public Version()
+        {
+        }
 
-		#endregion Constructor
+        #endregion Constructor
 
         private System.Version _originalValues;
 
-		#region Output Parameters
-		private int _major = 1;
+        #region Output Parameters
+        private int _major = 1;
 
-		/// <summary>
-		/// Gets or sets the major version number.
-		/// </summary>
-		/// <value>The major version number.</value>
-		[Output]
-		public int Major
-		{
-			get { return _major; }
-			set { _major = value; }
-		}
+        /// <summary>
+        /// Gets or sets the major version number.
+        /// </summary>
+        /// <value>The major version number.</value>
+        [Output]
+        public int Major
+        {
+            get { return _major; }
+            set { _major = value; }
+        }
 
-		private int _minor;
+        private int _minor;
 
-		/// <summary>
-		/// Gets or sets the minor version number.
-		/// </summary>
-		/// <value>The minor version number.</value>
-		[Output]
-		public int Minor
-		{
-			get { return _minor; }
-			set { _minor = value; }
-		}
+        /// <summary>
+        /// Gets or sets the minor version number.
+        /// </summary>
+        /// <value>The minor version number.</value>
+        [Output]
+        public int Minor
+        {
+            get { return _minor; }
+            set { _minor = value; }
+        }
 
-		private int _build;
+        private int _build;
 
-		/// <summary>
-		/// Gets or sets the build version number.
-		/// </summary>
+        /// <summary>
+        /// Gets or sets the build version number.
+        /// </summary>
         /// <seealso cref="BuildType"/>
-		/// <value>The build version number.</value>
-		[Output]
-		public int Build
-		{
-			get { return _build; }
-			set { _build = value; }
-		}
+        /// <value>The build version number.</value>
+        [Output]
+        public int Build
+        {
+            get { return _build; }
+            set { _build = value; }
+        }
 
-		private int _revision;
+        private int _revision;
 
-		/// <summary>
-		/// Gets or sets the revision version number.
-		/// </summary>
+        /// <summary>
+        /// Gets or sets the revision version number.
+        /// </summary>
         /// <seealso cref="RevisionType"/>
-		/// <value>The revision version number.</value>
-		[Output]
-		public int Revision
-		{
-			get { return _revision; }
-			set { _revision = value; }
-		}
+        /// <value>The revision version number.</value>
+        [Output]
+        public int Revision
+        {
+            get { return _revision; }
+            set { _revision = value; }
+        }
 
-		#endregion Output Parameters
+        #endregion Output Parameters
 
-		#region Input Parameters
-		private string _versionFile;
+        #region Input Parameters
+        private string _versionFile;
 
-		/// <summary>
-		/// Gets or sets the file used to initialize and persist the version.
-		/// </summary>
-		/// <value>The version file.</value>
+        /// <summary>
+        /// Gets or sets the file used to initialize and persist the version.
+        /// </summary>
+        /// <value>The version file.</value>
         /// <remarks>
         /// When specified, the task will attempt to load the previous version information from the file.
         /// After updating the version, the new value will be saved to the file.
@@ -163,31 +178,95 @@ namespace MSBuild.Community.Tasks
         /// If you do not specify a value for this property, the version will be calculated
         /// based on the values passed to the <see cref="Major"/>, <see cref="Minor"/>,
         /// <see cref="Build"/>, and <see cref="Revision"/> properties. The new version will not be persisted.</para></remarks>
-		public string VersionFile
-		{
-			get { return _versionFile; }
-			set { _versionFile = value; }
-		}
+        public string VersionFile
+        {
+            get { return _versionFile; }
+            set { _versionFile = value; }
+        }
+
+        private MajorTypeEnum _majorTypeEnum = MajorTypeEnum.None;
+
+        /// <summary>
+        /// Gets or sets the method used to generate a <see cref="Major"/> number
+        /// </summary>
+        /// <remarks>
+        /// If value is not provided, None is assumed.
+        /// The <see cref="Major"/> number is set according to the following table:
+        /// <list type="table">
+        /// <listheader><term>MajorType</term><description>Description</description></listheader>
+        /// <item><term>None</term><description>The number is not modified.</description></item>
+        /// <item><term>Increment</term><description>Increases the previous <see cref="Major"/> value by 1.</description></item>
+        /// </list>
+        /// </remarks>
+        public string MajorType
+        {
+            get { return _majorTypeEnum.ToString(); }
+            set
+            {
+                object parsedMajorType;
+                if (EnumTryParse("MajorType", typeof(MajorTypeEnum), value, out parsedMajorType))
+                {
+                    _majorTypeEnum = (MajorTypeEnum)parsedMajorType;
+                }
+                else
+                {
+                    validParameters = false;
+                }
+            }
+        }
+
+        private MinorTypeEnum _minorTypeEnum = MinorTypeEnum.None;
+
+        /// <summary>
+        /// Gets or sets the method used to generate a <see cref="Minor"/> number
+        /// </summary>
+        /// <remarks>
+        /// If value is not provided, None is assumed.
+        /// The <see cref="Minor"/> number is set according to the following table:
+        /// <list type="table">
+        /// <listheader><term>MinorType</term><description>Description</description></listheader>
+        /// <item><term>None</term><description>The number is not modified.</description></item>
+        /// <item><term>Increment</term><description>Increases the previous <see cref="Minor"/> value by 1.</description></item>
+        /// <item><term>Reset</term><description>Resets the previous <see cref="Minor"/> value to 0.</description></item>
+        /// </list>
+        /// </remarks>
+        public string MinorType
+        {
+            get { return _minorTypeEnum.ToString(); }
+            set
+            {
+                object parsedMinorType;
+                if (EnumTryParse("MinorType", typeof(MinorTypeEnum), value, out parsedMinorType))
+                {
+                    _minorTypeEnum = (MinorTypeEnum)parsedMinorType;
+                }
+                else
+                {
+                    validParameters = false;
+                }
+            }
+        }
 
         private BuildTypeEnum _buildTypeEnum = BuildTypeEnum.None;
 
-		/// <summary>
+        /// <summary>
         /// Gets or sets the method used to generate a <see cref="Build"/> number
-		/// </summary>
-		/// <remarks>
-		/// If value is not provided, None is assumed.
+        /// </summary>
+        /// <remarks>
+        /// If value is not provided, None is assumed.
         /// The <see cref="Build"/> number is set according to the following table:
         /// <list type="table">
         /// <listheader><term>BuildType</term><description>Description</description></listheader>
         /// <item><term>None</term><description>The number is not modified.</description></item>
         /// <item><term>Automatic</term><description>The number of days since <see cref="StartDate"/>.</description></item>
         /// <item><term>Increment</term><description>Increases the previous <see cref="Build"/> value by 1.</description></item>
+        /// <item><term>Reset</term><description>Resets the previous <see cref="Build"/> value to 0.</description></item>
         /// </list>
         /// </remarks>
-		public string BuildType
-		{
-			get { return _buildTypeEnum.ToString(); }
-            set 
+        public string BuildType
+        {
+            get { return _buildTypeEnum.ToString(); }
+            set
             {
                 if (attemptedUseOfObsoleteBuildType(value)) return;
                 object parsedBuildType;
@@ -200,7 +279,7 @@ namespace MSBuild.Community.Tasks
                     validParameters = false;
                 }
             }
-		}
+        }
 
         private bool attemptedUseOfObsoleteBuildType(string buildType)
         {
@@ -241,10 +320,10 @@ namespace MSBuild.Community.Tasks
 
         private RevisionTypeEnum _revisionTypeEnum = RevisionTypeEnum.None;
 
-		/// <summary>
+        /// <summary>
         /// Gets or sets the method used to generate a <see cref="Revision"/> number
-		/// </summary>
-		/// <remarks>
+        /// </summary>
+        /// <remarks>
         /// If value is not provided, None is assumed.
         /// The <see cref="Revision"/> number is set according to the following table:
         /// <list type="table">
@@ -252,12 +331,13 @@ namespace MSBuild.Community.Tasks
         /// <item><term>None</term><description>The number is not modified.</description></item>
         /// <item><term>Automatic</term><description>A number that starts at 0 at midnight, and constantly increases throughout the day (changing roughly every 1.3 seconds). Guaranteed to be safe for components of the AssemblyVersion attribute.</description></item>
         /// <item><term>Increment</term><description>Increases the previous <see cref="Revision"/> value by 1.</description></item>
-        /// <item><term>BuildIncrement</term><description>Increases the previous <see cref="Revision"/> value by 1 when the value of <see cref="Build"/> is unchanged. If the value of <see cref="Build"/> has changed, <see cref="Revision"/> is reset to zero.</description></item>
+        /// <item><term>BuildIncrement</term><description>Increases the previous <see cref="Revision"/> value by 1 when the value of <see cref="Build"/> is unchanged. If the value of <see cref="Build"/> has changed, <see cref="Revision"/> is reset to 0.</description></item>
+        /// <item><term>Reset</term><description>Resets the previous <see cref="Revision"/> value to 0.</description></item>
         /// </list>
         /// </remarks>
-		public string RevisionType
-		{
-			get { return _revisionTypeEnum.ToString(); }
+        public string RevisionType
+        {
+            get { return _revisionTypeEnum.ToString(); }
             set
             {
                 object parsedRevisionType;
@@ -270,7 +350,7 @@ namespace MSBuild.Community.Tasks
                     validParameters = false;
                 }
             }
-		}
+        }
 
         private DateTime _startDate = new DateTime(2000, 1, 1);
         /// <summary>
@@ -281,62 +361,65 @@ namespace MSBuild.Community.Tasks
         /// This value is only used when the <see cref="BuildType"/> is Automatic.
         /// <para>This default value is January 1, 2000.</para>
         /// </remarks>
-        public string StartDate {
+        public string StartDate
+        {
             get { return _startDate.ToString(); }
             set { _startDate = DateTime.Parse(value); }
         }
 
-		#endregion Input Parameters
+        #endregion Input Parameters
 
-		#region Task Overrides
-		/// <summary>
-		/// When overridden in a derived class, executes the task.
-		/// </summary>
-		/// <returns>
-		/// true if the task successfully executed; otherwise, false.
-		/// </returns>
-		public override bool Execute()
-		{
+        #region Task Overrides
+        /// <summary>
+        /// When overridden in a derived class, executes the task.
+        /// </summary>
+        /// <returns>
+        /// true if the task successfully executed; otherwise, false.
+        /// </returns>
+        public override bool Execute()
+        {
             if (!validParameters)
             {
                 return false;
             }
-            _originalValues = new System.Version(_major, _major, _build, _revision);
+            _originalValues = new System.Version(_major, _minor, _build, _revision);
             if (!ReadVersionFromFile()) return false;
 
             Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionOriginalValue, _originalValues.ToString());
+            CalculateMajorNumber();
+            CalculateMinorNumber();
             CalculateBuildNumber();
-			CalculateRevisionNumber();
+            CalculateRevisionNumber();
 
             return WriteVersionToFile();
-		}
+        }
 
-		#endregion Task Overrides
+        #endregion Task Overrides
 
-		#region Private Methods
-		private bool ReadVersionFromFile()
-		{
-			string textVersion = null;
-			System.Version version = null;
+        #region Private Methods
+        private bool ReadVersionFromFile()
+        {
+            string textVersion = null;
+            System.Version version = null;
             if (String.IsNullOrEmpty(_versionFile)) return true;
 
-			if (!System.IO.File.Exists(_versionFile))
-			{
-				Log.LogWarning(Properties.Resources.VersionFileNotFound, _versionFile);
-				return true;
-			}
+            if (!System.IO.File.Exists(_versionFile))
+            {
+                Log.LogWarning(Properties.Resources.VersionFileNotFound, _versionFile);
+                return true;
+            }
 
             Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionRead, _versionFile);
-			try
-			{
+            try
+            {
                 textVersion = File.ReadAllText(_versionFile);
-			}
-			catch (Exception ex)
-			{
-				Log.LogError(Properties.Resources.VersionReadException,
-					_versionFile, ex.Message);
-				return false;
-			}
+            }
+            catch (Exception ex)
+            {
+                Log.LogError(Properties.Resources.VersionReadException,
+                    _versionFile, ex.Message);
+                return false;
+            }
 
             try
             {
@@ -349,44 +432,72 @@ namespace MSBuild.Community.Tasks
                 return false;
             }
 
-			if (version != null)
-			{
-				_major = version.Major;
-				_minor = version.Minor;
-				_build = version.Build;
-				_revision = version.Revision;
+            if (version != null)
+            {
+                _major = version.Major;
+                _minor = version.Minor;
+                _build = version.Build;
+                _revision = version.Revision;
                 _originalValues = version;
-			}
+            }
             return true;
-		}
+        }
 
-		private bool WriteVersionToFile()
-		{
-			System.Version version = new System.Version(_major, _minor, _build, _revision);
+        private bool WriteVersionToFile()
+        {
+            System.Version version = new System.Version(_major, _minor, _build, _revision);
             Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionModifiedValue, version.ToString());
 
             if (String.IsNullOrEmpty(_versionFile)) return true;
-            
+
             try
             {
                 File.WriteAllText(_versionFile, version.ToString());
-			}
-			catch (Exception ex)
-			{
-				Log.LogError(Properties.Resources.VersionWriteException,
-					_versionFile, ex.Message);
-				return false;
-			}
+            }
+            catch (Exception ex)
+            {
+                Log.LogError(Properties.Resources.VersionWriteException,
+                    _versionFile, ex.Message);
+                return false;
+            }
 
-			Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionWrote, _versionFile);
+            Log.LogMessage(MessageImportance.Low, Properties.Resources.VersionWrote, _versionFile);
 
-			return true;
-		}
+            return true;
+        }
 
-		private void CalculateBuildNumber()
-		{
+        private void CalculateMajorNumber()
+        {
+            switch (_majorTypeEnum)
+            {
+                case MajorTypeEnum.Increment:
+                    _major++;
+                    break;
+                case MajorTypeEnum.None:
+                default:
+                    break;
+            }
+        }
 
-            switch (_buildTypeEnum) 
+        private void CalculateMinorNumber()
+        {
+            switch (_minorTypeEnum)
+            {
+                case MinorTypeEnum.Increment:
+                    _minor++;
+                    break;
+                case MinorTypeEnum.Reset:
+                    _minor = 0;
+                    break;
+                case MinorTypeEnum.None:
+                default:
+                    break;
+            }
+        }
+
+        private void CalculateBuildNumber()
+        {
+            switch (_buildTypeEnum)
             {
                 case BuildTypeEnum.Automatic:
                     _build = CalculateDaysSinceStartDate();
@@ -394,20 +505,24 @@ namespace MSBuild.Community.Tasks
                 case BuildTypeEnum.Increment:
                     _build++;
                     break;
+                case BuildTypeEnum.Reset:
+                    _build = 0;
+                    break;
                 case BuildTypeEnum.None:
                 default:
                     break;
             }
-		}
+        }
 
         private int CalculateDaysSinceStartDate()
         {
             return DateTime.Today.Subtract(_startDate).Days;
         }
 
-		private void CalculateRevisionNumber()
-		{
-            switch (_revisionTypeEnum) {
+        private void CalculateRevisionNumber()
+        {
+            switch (_revisionTypeEnum)
+            {
                 case RevisionTypeEnum.Automatic:
                     _revision = CalculateFractionalPartOfDay();
                     break;
@@ -417,11 +532,14 @@ namespace MSBuild.Community.Tasks
                 case RevisionTypeEnum.BuildIncrement:
                     _revision = CalculateBuildIncrementRevision();
                     break;
+                case RevisionTypeEnum.Reset:
+                    _revision = 0;
+                    break;
                 case RevisionTypeEnum.None:
                 default:
                     break;
             }
-		}
+        }
 
         private int CalculateFractionalPartOfDay()
         {
@@ -431,7 +549,7 @@ namespace MSBuild.Community.Tasks
             return (int)(DateTime.Now.TimeOfDay.TotalSeconds * factor);
         }
 
-        private int CalculateBuildIncrementRevision() 
+        private int CalculateBuildIncrementRevision()
         {
             if (_build == _originalValues.Build)
             {
@@ -439,7 +557,7 @@ namespace MSBuild.Community.Tasks
             }
             return 0;
         }
-		#endregion Private Methods
+        #endregion Private Methods
 
-	}
+    }
 }
