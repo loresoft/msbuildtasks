@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <!-- Version -->
+  <?ifndef MajorVersion?>
+  <?define MajorVersion = "1" ?>
+  <?endif?>
+  <?ifndef MinorVersion?>
+  <?define MinorVersion = "3" ?>
+  <?endif?>
+  <?ifndef BindMinorVersion?>
+  <?define BindMinorVersion = "3" ?>
+  <?endif?>
+  <?ifndef BuildVersion?>
+  <?define BuildVersion = "0" ?>
+  <?endif?>
+  <?ifndef BindBuildVersion?>
+  <?define BindBuildVersion = "0" ?>
+  <?endif?>
+  <?ifndef RevisionVersion?>
+  <?define RevisionVersion = "0" ?>
+  <?endif?>
+  <?ifndef BindRevisionVersion?>
+  <?define BindRevisionVersion = "0" ?>
+  <?endif?>
+
+  <?ifndef Configuration?>
+  <?define Configuration = "Release" ?>
+  <?endif?>
+
+  <?if $(var.Configuration) = "Debug" ?>
+  <?define SpaceParenDebug = " (Debug)" ?>
+  <?else ?>
+  <?define SpaceParenDebug = "" ?>
+  <?endif ?>
+
+  <!-- General -->
+  <?define VersionNumberInternal = "$(var.MajorVersion).$(var.MinorVersion).$(var.BuildVersion)" ?>
+  <?define VersionNumberUserVisible = "$(var.MajorVersion).$(var.MinorVersion).$(var.BuildVersion).$(var.RevisionVersion)" ?>
+  <?define BindVersionNumber = "$(var.MajorVersion).$(var.BindMinorVersion).$(var.BindBuildVersion).$(var.BindRevisionVersion)" ?>
+
+  <?define ProductName = "MSBuild Community Tasks" ?>
+  <?define ProductVersionedName = "MSBuild Community Tasks $(var.MajorVersion).$(var.MinorVersion)$(var.SpaceParenDebug)" ?>
+
+  <?ifndef PackageDir?>
+  <?define PackageDir = "..\..\..\..\Build\" ?>
+  <?endif?>
+
+  <?define PackageDescription = "MSBuild Community Tasks is an open source project for MSBuild tasks." ?>
+  <?define PackageComments = "MSBuild Community Tasks $(var.VersionNumberUserVisible)$(var.SpaceParenDebug)" ?>
+  <?define PackageUrl = "http://msbuildtasks.tigris.org/"?>
+  <?define PackageManufacturer = "MSBuild Community Tasks" ?>
+
+  <!-- GUIDs -->
+  <?define UpgradeGuid = "F289AA13-BBAF-4EA2-97C8-BAEC7E5B743E" ?>
+
+</Include>

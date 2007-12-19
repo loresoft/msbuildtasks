@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?include Variables.wxi ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <Product Id="*"
+           Name="$(var.ProductVersionedName)"
+           Language="1033"
+           Version="$(var.VersionNumberInternal)"
+           Manufacturer="$(var.PackageManufacturer)"
+           UpgradeCode="$(var.UpgradeGuid)">
+
+    <Package InstallerVersion="300"
+             Manufacturer="$(var.PackageManufacturer)"
+             Description="$(var.PackageDescription)"
+             Comments="$(var.PackageComments)"
+             Languages="1033"
+             Compressed="yes"
+             ShortNames="no"
+             SummaryCodepage="1252" />
+
+    <!-- Major upgrade -->
+    <Upgrade Id="$(var.UpgradeGuid)">
+      <UpgradeVersion Property="NEWERVERSIONDETECTED"
+                      Minimum="$(var.VersionNumberInternal)"
+                      OnlyDetect="yes" />
+      <UpgradeVersion Property="OLDERVERSIONBEINGUPGRADED"
+                      Minimum="1.0.0.0"
+                      IncludeMinimum="yes"
+                      Maximum="$(var.VersionNumberInternal)"
+                      IncludeMaximum="no" />
+    </Upgrade>
+
+    <Condition Message="An administrator must approve or install [ProductName].">
+      Privileged
+    </Condition>
+    <Condition Message="A later version of [ProductName] is already installed.">
+      NOT NEWERVERSIONDETECTED
+    </Condition>
+
+    <Media Id="1" Cabinet="MSBuildTasks.cab" EmbedCab="yes" />
+
+    <!-- Icons -->
+    <Icon Id="MSBuildIcon" SourceFile="MSBuild.ico" />
+
+    <!-- Properties -->
+    <Property Id="ARPHELPLINK" Value="$(var.PackageUrl)" />
+    <Property Id="ARPPRODUCTICON" Value="MSBuildIcon" />
+    <Property Id="ARPURLINFOABOUT" Value="$(var.PackageUrl)" />
+    <Property Id="ARPURLUPDATEINFO" Value="$(var.PackageUrl)" />
+
+    <Property Id="VS2005_SCHEMAS_MSBUILD_DIR">
+      <RegistrySearch Id="VS2005SearchForCommonPath" Type="raw" Root="HKLM"
+                Key="SOFTWARE\Microsoft\VisualStudio\8.0\Setup\VS" Name="ProductDir" >
+        <DirectorySearch Id="VS2005SearchForXmlPath" Path="Xml" Depth="1">
+          <DirectorySearch Id="VS2005SearchForXmlSchemasPath" Path="Schemas" Depth="1">
+            <DirectorySearch Id="VS2005SearchForXmlSchemasLangPath" Path="1033" Depth="1">
+              <DirectorySearch Id="VS2005SearchForXmlSchemasMSBuildPath" Path="MSBuild" Depth="1" />
+            </DirectorySearch>
+          </DirectorySearch>
+        </DirectorySearch>
+      </RegistrySearch>
+    </Property>
+
+    <Property Id="VS2005_MSBUILD_SCHEMA">
+      <RegistrySearch Id="VS2005SearchForCommonPath2" Type="raw" Root="HKLM"
+          Key="SOFTWARE\Microsoft\VisualStudio\8.0\Setup\VS" Name="ProductDir" >
+        <DirectorySearch Id="VS2005SearchForXmlPath2" Path="Xml" Depth="1">
+          <DirectorySearch Id="VS2005SearchForXmlSchemasPath2" Path="Schemas" Depth="1">
+            <DirectorySearch Id="VS2005SearchForXmlSchemasLangPath2" Path="1033" Depth="1">
+              <FileSearch Id ="VS2005SearchForMSBuildSchema" Name="Microsoft.Build.xsd"/>
+            </DirectorySearch>
+          </DirectorySearch>
+        </DirectorySearch>
+      </RegistrySearch>
+    </Property>
+
+    <Property Id="VS2008_SCHEMAS_MSBUILD_DIR">
+      <RegistrySearch Id="VS2008SearchForCommonPath" Type="raw" Root="HKLM"
+                Key="SOFTWARE\Microsoft\VisualStudio\9.0\Setup\VS" Name="ProductDir" >
+        <DirectorySearch Id="VS2008SearchForXmlPath" Path="Xml" Depth="1">
+          <DirectorySearch Id="VS2008SearchForXmlSchemasPath" Path="Schemas" Depth="1">
+            <DirectorySearch Id="VS2008SearchForXmlSchemasLangPath" Path="1033" Depth="1">
+              <DirectorySearch Id="VS2008SearchForXmlSchemasMSBuildPath" Path="MSBuild" Depth="1" />
+            </DirectorySearch>
+          </DirectorySearch>
+        </DirectorySearch>
+      </RegistrySearch>
+    </Property>
+
+    <Property Id="VS2008_MSBUILD_SCHEMA">
+      <RegistrySearch Id="VS2008SearchForCommonPath2" Type="raw" Root="HKLM"
+          Key="SOFTWARE\Microsoft\VisualStudio\9.0\Setup\VS" Name="ProductDir" >
+        <DirectorySearch Id="VS2008SearchForXmlPath2" Path="Xml" Depth="1">
+          <DirectorySearch Id="VS2008SearchForXmlSchemasPath2" Path="Schemas" Depth="1">
+            <DirectorySearch Id="VS2008SearchForXmlSchemasLangPath2" Path="1033" Depth="1">
+              <FileSearch Id ="VS2008SearchForMSBuildSchema" Name="Microsoft.Build.xsd"/>
+            </DirectorySearch>
+          </DirectorySearch>
+        </DirectorySearch>
+      </RegistrySearch>
+    </Property>
+
+    <PropertyRef Id="VS2005DEVENV" />
+    <PropertyRef Id="VS90DEVENV" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="MSBuildDir" Name="MSBuild">
+          <Directory Id="MSBuildTasksDir" Name="MSBuildTasks" />
+        </Directory>
+      </Directory>
+      <Directory Id="GlobalAssemblyCache" />
+    </Directory>
+
+    <DirectoryRef Id="MSBuildTasksDir" FileSource="$(var.PackageDir)">
+      <Component Id="MSBuildTasksFiles" Guid="B01A2889-5041-4D96-A093-421AE3F48E8C">
+        <File Id="MSBuild.Community.Tasks.dll" Name="MSBuild.Community.Tasks.dll" KeyPath="yes" />
+        <File Id="MSBuild.Community.Tasks.xml" Name="MSBuild.Community.Tasks.xml" />
+        <File Id="MSBuild.Community.Tasks.Targets" Name="MSBuild.Community.Tasks.Targets" />
+        <File Id="ICSharpCode.SharpZipLib.dll" Name="ICSharpCode.SharpZipLib.dll" />
+      </Component>
+      <Component Id="MSBuildTasksSchema" Guid="F22319C9-7937-47bb-968B-CA3939299FE1">
+        <File Id="MSBuild.Community.Tasks.xsd" Name="MSBuild.Community.Tasks.xsd" KeyPath="yes" />
+      </Component>
+      <Component Id="MSBuildTasksHelp" Guid="00951D3A-C401-499c-BB5B-7636AC12364D">
+        <File Id="MSBuild.Community.Tasks.chm" Name="MSBuild.Community.Tasks.chm" />
+      </Component>
+      <Component Id="MSBuildTasksVS2005" Guid="15EE7B53-F94D-4c33-839F-02521C896A72">
+        <RegistryKey Root="HKLM" Key="Software\Microsoft\VisualStudio\8.0\MSBuild\SafeImports">
+          <RegistryValue Name="MSBuildCommunityTasks" Value="[INSTALLDIR]MSBuild.Community.Tasks.Targets" Type="string" KeyPath="yes" />
+        </RegistryKey>
+        <CopyFile Id="CopySchema2005"
+                  DestinationProperty="VS2005_SCHEMAS_MSBUILD_DIR"
+                  FileId="MSBuild.Community.Tasks.xsd" />
+
+        <util:XmlConfig Id="MSBuildTasksSchemaIncludeVS2005"
+                        File="[VS2005_MSBUILD_SCHEMA]"
+                        Action="create"
+                        On="install"
+                        ElementPath="//xs:schema"
+                        Name="xs:include"
+                        Node="element"
+                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        Sequence="1">
+        </util:XmlConfig>
+        <util:XmlConfig Id="MSBuildTasksSchemaLocationVS2005"
+                        File="[VS2005_MSBUILD_SCHEMA]"
+                        ElementPath="MSBuildTasksSchemaIncludeVS2005"
+                        Name="schemaLocation"
+                        Value="MSBuild\MSBuild.Community.Tasks.xsd"
+                        Sequence="2">
+        </util:XmlConfig>
+        <util:XmlConfig Id="MSBuildTasksSchemaRemoveVS2005"
+                        File="[VS2005_MSBUILD_SCHEMA]"
+                        Action="delete"
+                        On="uninstall"
+                        ElementPath="//xs:schema/xs:include"
+                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        Sequence="1">
+        </util:XmlConfig>
+      </Component>
+      <Component Id="MSBuildTasksVS2008" Guid="9FA7CCB2-1E57-4588-B4F0-7FFF7163FFE3">
+        <RegistryKey Root="HKLM" Key="Software\Microsoft\VisualStudio\9.0\MSBuild\SafeImports">
+          <RegistryValue Name="MSBuildCommunityTasks" Value="[INSTALLDIR]MSBuild.Community.Tasks.Targets" Type="string" KeyPath="yes" />
+        </RegistryKey>
+        <CopyFile Id="CopySchema2008"
+                  DestinationProperty="VS2008_SCHEMAS_MSBUILD_DIR"
+                  FileId="MSBuild.Community.Tasks.xsd" />
+        <util:XmlConfig Id="MSBuildTasksSchemaIncludeVS2008"
+                        File="[VS2008_MSBUILD_SCHEMA]"
+                        Action="create"
+                        On="install"
+                        ElementPath="//xs:schema"
+                        Name="xs:include"
+                        Node="element"
+                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        Sequence="1">
+        </util:XmlConfig>
+        <util:XmlConfig Id="MSBuildTasksSchemaLocationVS2008"
+                        File="[VS2008_MSBUILD_SCHEMA]"
+                        ElementPath="MSBuildTasksSchemaIncludeVS2008"
+                        Name="schemaLocation"
+                        Value="MSBuild\MSBuild.Community.Tasks.xsd"
+                        Sequence="2">
+        </util:XmlConfig>
+        <util:XmlConfig Id="MSBuildTasksSchemaRemoveVS2008"
+                        File="[VS2008_MSBUILD_SCHEMA]"
+                        Action="delete"
+                        On="uninstall"
+                        ElementPath="//xs:schema/xs:include"
+                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        Sequence="1">
+        </util:XmlConfig>
+      </Component>
+    </DirectoryRef>
+
+    <!-- Global Assembly Cache -->
+    <DirectoryRef Id="GlobalAssemblyCache" FileSource="$(var.PackageDir)">
+      <Component Id="MSBuild.Community.Tasks.dll.gac" Guid="AA8D402A-2CFA-4947-9999-F7963820388C" SharedDllRefCount="yes">
+        <File Id="MSBuild.Community.Tasks.dll1" Name="MSBuild.Community.Tasks.dll" KeyPath="yes" Assembly=".net" />
+      </Component>
+      <Component Id="ICSharpCode.SharpZipLib.dll.gac" Guid="3384E14C-181A-4364-83C6-5AF8CCBE0499" SharedDllRefCount="yes">
+        <File Id="ICSharpCode.SharpZipLib.dll1" Name="ICSharpCode.SharpZipLib.dll" KeyPath="yes" Assembly=".net" />
+      </Component>
+    </DirectoryRef>
+
+    <Feature Id="MSBuildTasksFeature" Level="1"
+             Title="MSBuild Community Tasks"
+             Description="Install the collection of MSBuild Community Tasks."
+             Display="expand"
+             AllowAdvertise="no"
+             Absent="disallow">
+      <ComponentRef Id="MSBuildTasksFiles" />
+      <ComponentRef Id="MSBuildTasksSchema" />
+      <ComponentRef Id="MSBuild.Community.Tasks.dll.gac" />
+      <ComponentRef Id="ICSharpCode.SharpZipLib.dll.gac" />
+
+      <Feature Id="MSBuildTasksHelpFeature"
+               Title="Tasks Help File"
+               Description="Install the help file for the Community Tasks."
+               AllowAdvertise="no"
+               Display="expand"
+               Level="1">
+        <ComponentRef Id="MSBuildTasksHelp" />
+      </Feature>
+
+      <Feature Id="MSBuildTasksVS2005Feature"
+               Title="Visual Studio 2005 Integration"
+               Description="Integrate MSBuild Community Tasks with Visual Studio 2005."
+               AllowAdvertise="no"
+               Display="expand"
+               Level="0">
+        <Condition Level="1">VS2005DEVENV</Condition>
+        <ComponentRef Id="MSBuildTasksVS2005" />
+      </Feature>
+
+      <Feature Id="MSBuildTasksVS2008Feature"
+               Title="Visual Studio 2008 Integration"
+               Description="Integrate MSBuild Community Tasks with Visual Studio 2008."
+               AllowAdvertise="no"
+               Display="expand"
+               Level="0">
+        <Condition Level="1">VS90DEVENV</Condition>
+        <ComponentRef Id="MSBuildTasksVS2008" />
+      </Feature>
+    </Feature>
+
+    <!-- Install Sequences -->
+    <InstallExecuteSequence>
+      <AppSearch Sequence="1" />
+      <LaunchConditions After="AppSearch" />
+      <RemoveExistingProducts After="InstallValidate" />
+    </InstallExecuteSequence>
+
+    <!-- UI -->
+    <UI>
+      <UIRef Id="WixUI_FeatureTree"/>
+    </UI>
+  </Product>
+</Wix>

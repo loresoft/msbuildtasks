@@ -1,0 +1,73 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProductVersion>3.0</ProductVersion>
+    <ProjectGuid>{6e293db7-b1e3-4cea-ab94-79a979f91af5}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>MSBuild.Community.Tasks.Setup</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
+    <WixToolPath>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPath>
+    <Name>MSBuildTasks</Name>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <AllowIdenticalRows>False</AllowIdenticalRows>
+    <CabinetCachePath>
+    </CabinetCachePath>
+    <CabinetCreationThreadCount>-1</CabinetCreationThreadCount>
+    <Cultures>en-US</Cultures>
+    <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
+    <LinkerPedantic>False</LinkerPedantic>
+    <ReuseCabinetCache>False</ReuseCabinetCache>
+    <SetMsiAssemblyNameFileVersion>False</SetMsiAssemblyNameFileVersion>
+    <SuppressAclReset>False</SuppressAclReset>
+    <SuppressAssemblies>False</SuppressAssemblies>
+    <SuppressDefaultAdminSequenceActions>False</SuppressDefaultAdminSequenceActions>
+    <SuppressDefaultAdvSequenceActions>False</SuppressDefaultAdvSequenceActions>
+    <SuppressDefaultUISequenceActions>False</SuppressDefaultUISequenceActions>
+    <SuppressDroppingUnrealTables>False</SuppressDroppingUnrealTables>
+    <SuppressFileHashAndInfo>False</SuppressFileHashAndInfo>
+    <SuppressFiles>False</SuppressFiles>
+    <SuppressIces>
+    </SuppressIces>
+    <LinkerSuppressIntermediateFileVersionMatching>False</LinkerSuppressIntermediateFileVersionMatching>
+    <SuppressLayout>False</SuppressLayout>
+    <SuppressMsiAssemblyTableProcessing>False</SuppressMsiAssemblyTableProcessing>
+    <LinkerSuppressSchemaValidation>False</LinkerSuppressSchemaValidation>
+    <LinkerSuppressSpecificWarnings>
+    </LinkerSuppressSpecificWarnings>
+    <SuppressValidation>False</SuppressValidation>
+    <LinkerTreatWarningsAsErrors>False</LinkerTreatWarningsAsErrors>
+    <LinkerVerboseOutput>False</LinkerVerboseOutput>
+    <WixVariables>
+    </WixVariables>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="MSBuildTasks.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Variables.wxi" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="C:\Program Files\Windows Installer XML v3\bin\WixNetFxExtension.dll" />
+    <WixExtension Include="C:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll" />
+    <WixExtension Include="C:\Program Files\Windows Installer XML v3\bin\WixUtilExtension.dll" />
+    <WixExtension Include="C:\Program Files\Windows Installer XML v3\bin\WixVSExtension.dll" />
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>

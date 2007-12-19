@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MSBuildTasks", "MSBuildTasks.wixproj", "{6E293DB7-B1E3-4CEA-AB94-79A979F91AF5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E293DB7-B1E3-4CEA-AB94-79A979F91AF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E293DB7-B1E3-4CEA-AB94-79A979F91AF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E293DB7-B1E3-4CEA-AB94-79A979F91AF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E293DB7-B1E3-4CEA-AB94-79A979F91AF5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
