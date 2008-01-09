@@ -435,23 +435,21 @@ namespace MSBuild.Community.Tasks
         #endregion
 
         /// <summary>
-        /// When overridden in a derived class, executes the task.
+        /// Handles execution errors raised by the executable file.
         /// </summary>
         /// <returns>
-        /// true if the task successfully executed; otherwise, false.
+        /// true if the method runs successfully; otherwise, false.
         /// </returns>
-        public override bool Execute()
+        protected override bool HandleTaskExecutionErrors()
         {
-            
+            //The return code from Robocopy is a bit map, defined as follows:
             //16    Serious error. Robocopy did not copy any files. 
             //8 	Some files or directories could not be copied.
             //4	    Some Mismatched files or directories were detected.
             //2	    Some Extra files or directories were detected.
             //1	    One or more files were copied successfully (that is, new files have arrived).
             //0	    No errors occurred, and no copying was done.
-
-            bool result = base.Execute();
-            return (base.ExitCode != 16 && base.ExitCode != 8);
+            return !(((ExitCode & 16) == 16) || ((ExitCode & 8) == 8));
         }
 
         /// <summary>
