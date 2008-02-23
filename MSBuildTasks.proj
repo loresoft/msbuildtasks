@@ -274,6 +274,8 @@
 			RootTag="mergedroot" 
 			ContinueOnError="true"
 			/>
+
+    <Sound SystemSoundFile="..\Media\tada.wav" />
 	</Target>
 
 	<!-- Execute tests with msbuild .proj files -->

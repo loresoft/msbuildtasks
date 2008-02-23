@@ -11,7 +11,7 @@ Build Environment Prerequisites
 - MSBuild; typically already installed as part of .NET2.0,
   for example in C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe
 
-- NUnit 2.2.X (http://www.nunit.org/);
+- NUnit 2.4.X (http://www.nunit.org/);
   necessary to run the tests
 
 - Microsoft Visual SourceSafe(R) 2005;
@@ -65,7 +65,7 @@ Before writing your own task
       /p:devel=true is necessary when you want to work with 
       the assemblies of your own build, for example because
       you did not run the installer of MSBuildCommunityTasks yet.
-      /p:nunitpath must point to the bin folder of your local installation of NUnit 2.2.x
+      /p:nunitpath must point to the bin folder of your local installation of NUnit 2.4.x
 
     - Open <msbuildtasks>\Debug\test\TestReport.html
       and check the test results.
@@ -82,7 +82,7 @@ Before writing your own task
 
     - Open the properties of MSBuild.Community.Tasks.Tests;
       in Debug/Start Action, set the external program to NUnit,
-      e.g. "C:\Program Files\NUnit 2.2.5\bin\nunit-gui.exe";
+      e.g. "C:\Program Files\NUnit 2.4.6\bin\nunit.exe";
       in Debug/Start Options, set command line arguments to
       "MSBuild.Community.Tasks.Tests.dll".
 
@@ -108,7 +108,7 @@ Writing your own task
 
 2.  Add third party libraries that you are allowed to redistribute to
     <msbuildtasks>\Libraries\<ThirdParyTool>\<ReleaseNumber>\
-    (e.g. <msbuildtasks>\Libraries\NUnit\2.2.5\nunit.framework.dll).
+    (e.g. <msbuildtasks>\Libraries\NUnit\2.4.6\nunit.framework.dll).
    
 3.  For third party libraries that you are not allowed to redistribute,
     add an entry in the prerequisits section of this document

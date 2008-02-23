@@ -49,6 +49,7 @@
     <Compile Include="AspNet\InstallAspNetTest.cs" />
     <Compile Include="AssemblyInfoTest.cs" />
     <Compile Include="AttribTest.cs" />
+    <Compile Include="Beep\BeepTest.cs" />
     <Compile Include="Computer\ComputerTest.cs" />
     <Compile Include="FxCopTest.cs" />
     <Compile Include="IIS\WebDirectoryScriptMapTest.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="ServiceQueryTest.cs" />
     <Compile Include="ServiceControllerTest.cs" />
     <Compile Include="Solution\GetSolutionProjectsTest.cs" />
+    <Compile Include="Sound\SoundTest.cs" />
     <Compile Include="SqlServer\ExecuteDDLTest.cs" />
     <Compile Include="Subversion\SvnCopyTest.cs" />
     <Compile Include="Subversion\SvnInfoTest.cs" />

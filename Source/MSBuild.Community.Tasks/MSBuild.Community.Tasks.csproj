@@ -60,6 +60,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attrib.cs" />
     <Compile Include="Computer\Computer.cs" />
+    <Compile Include="Beep\Beep.cs" />
     <Compile Include="Ftp\FtpClientTaskBase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -87,6 +88,7 @@
     <Compile Include="Oracle\TnsEntry.cs" />
     <Compile Include="Oracle\TnsParser.cs" />
     <Compile Include="RoboCopy.cs" />
+    <Compile Include="Sound\Sound.cs" />
     <Compile Include="Subversion\SvnCopy.cs" />
     <Compile Include="Tfs\IServer.cs" />
     <Compile Include="Tfs\Proxies\Changeset.cs" />
@@ -185,9 +187,6 @@
     <Compile Include="Zip.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Microsoft.Build.Commontypes.xsx">
-      <DependentUpon>Microsoft.Build.Commontypes.xsd</DependentUpon>
-    </None>
     <None Include="MSBuild.Community.Tasks.snk" />
     <None Include="AdditionalDocumentation.xml" />
     <Content Include="MSBuild.Community.Tasks.Targets">

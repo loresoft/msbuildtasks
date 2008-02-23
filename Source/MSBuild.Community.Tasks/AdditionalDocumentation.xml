@@ -24,6 +24,24 @@ Ex:
 -->
 
 <docs>
+  <task name="Beep">
+    <remarks>
+      By default, the beep plays at a frequency of 800 hertz for a duration of 200 milliseconds.
+    </remarks>
+    <example>
+      To play the sound of a beep at a frequency of 800 hertz and for a duration of 200 milliseconds, use
+      <code>
+        <![CDATA[<Beep />]]>
+      </code>
+    </example>
+    <example>
+      To play the sound of a beep at a frequency of 440 hertz and for a duration of 300 milliseconds, use
+      <code>
+        <![CDATA[<Beep Frequency="440" Duration="300" />]]>
+      </code>
+    </example>
+  </task>
+  
   <task name="InstallAspNet">
     <example>
       Install the latest version of ASP.NET on the server:
@@ -205,6 +223,27 @@ Ex:
 </Target>
 ]]>
       </code>
+    </example>
+  </task>
+
+  <task name="Sound">
+    <remarks>
+      You must specify either
+      a file or URL (<see cref="SoundLocation"/>), 
+      a file relative to the <see cref="Environment.SystemDirectory"/> (<see cref="SystemSoundFile"/>),
+      or a file within the <see cref="Environment.SpecialFolder.MyMusic"/> folder (<see cref="MyMusicFile"/>).
+    </remarks>
+    <example>
+      To play the windows XP startup sound, use
+      <code>
+        <![CDATA[<Sound SystemSoundFile="..\Media\Windows XP Startup.wav" />]]>
+      </code>
+    </example>
+    <example>
+      To play a wav file from the "MyMusic" folder, use
+      <code>
+        <![CDATA[<Sound MyMusicFile="25881_acclivity_3beeps1000.wav" />]]>
+    </code>
     </example>
   </task>
 
