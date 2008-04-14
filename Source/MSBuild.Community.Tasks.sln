@@ -2,8 +2,16 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Community.Tasks", "MSBuild.Community.Tasks\MSBuild.Community.Tasks.csproj", "{F88A60A8-564C-4E70-92DC-E92DBB897641}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E57396C8-69C1-45A3-B30A-3EFD0AE03EF6}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		..\Documentation\DevelopersGuide.txt = ..\Documentation\DevelopersGuide.txt
 		..\www\index.html = ..\www\index.html
@@ -11,22 +19,43 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\Master.proj = ..\Master.proj
 		..\MSBuildTasks.proj = ..\MSBuildTasks.proj
 		..\Documentation\Overview.html = ..\Documentation\Overview.html
+		..\Documentation\TaskList.xslt = ..\Documentation\TaskList.xslt
 		..\Test.proj = ..\Test.proj
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuild.Community.Tasks.Tests", "MSBuild.Community.Tasks.Tests\MSBuild.Community.Tasks.Tests.csproj", "{5AC1D006-CA56-4BE1-8250-DBEABBEA0725}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 	ProjectSection(ProjectDependencies) = postProject
 		{1291B270-5E1F-425B-ACA1-5253A0067D26} = {1291B270-5E1F-425B-ACA1-5253A0067D26}
 		{885FC778-671A-4934-B76B-BE28334AD9CB} = {885FC778-671A-4934-B76B-BE28334AD9CB}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "A", "MSBuild.Community.Tasks.Tests\ILMerge\A\A.csproj", "{1291B270-5E1F-425B-ACA1-5253A0067D26}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "B", "MSBuild.Community.Tasks.Tests\ILMerge\B\B.csproj", "{885FC778-671A-4934-B76B-BE28334AD9CB}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests Projects", "Tests Projects", "{FCC5A863-5D5E-4EB9-B3B1-69BBB6655492}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild Scripts", "MSBuild Scripts", "{0D470952-AD01-4FD8-ACAA-9340AF1A6674}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		FxCop.proj = FxCop.proj
 		Sample.proj = Sample.proj

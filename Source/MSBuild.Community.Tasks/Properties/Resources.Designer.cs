@@ -216,6 +216,33 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Merge Complete: {0} files merged into &apos;{1}&apos;..
+        /// </summary>
+        internal static string MergeComplete {
+            get {
+                return ResourceManager.GetString("MergeComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merge Complete: No source files to merge..
+        /// </summary>
+        internal static string MergeCompleteNoSourceFiles {
+            get {
+                return ResourceManager.GetString("MergeCompleteNoSourceFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merging file &apos;{0}&apos; into &apos;{1}&apos;.
+        /// </summary>
+        internal static string MergingFile {
+            get {
+                return ResourceManager.GetString("MergingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating directory &quot;{0}&quot;..
         /// </summary>
         internal static string MoveCreatesDirectory {

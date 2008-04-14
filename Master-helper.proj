@@ -68,7 +68,11 @@
 	</Target>
 
 	<Target Name="Documentation" DependsOnTargets="Compile">
-		<NDoc Documenter="MSDN-CHM" 
+    <TaskSchema Assemblies="Build\MSBuild.Community.Tasks.dll"
+        OutputPath="Build" CreateTaskList="false" IgnoreMsBuildSchema="true"
+        Includes="Microsoft.Build.Commontypes.xsd"/>
+
+    <NDoc Documenter="MSDN-CHM" 
 			  ProjectFilePath="MSBuild.Community.Tasks.ndoc" 
 			  WorkingDirectory="Documentation"
 			  ToolPath="$(MSBuildProjectDirectory)\Documentation\ndoc"/>
@@ -78,10 +82,7 @@
 
 		<RemoveDir Directories="Documentation\doc" />
 
-    <TaskSchema Assemblies="Build\MSBuild.Community.Tasks.dll" 
-        OutputPath="Build" CreateTaskList="false" IgnoreMsBuildSchema="true"
-        Includes="Microsoft.Build.Commontypes.xsd"/>
-
+    
   </Target>
 
 	<Target Name="Zip" DependsOnTargets="Documentation">

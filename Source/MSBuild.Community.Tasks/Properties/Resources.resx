@@ -447,4 +447,13 @@
   <data name="ActiveDirectoryLookupException" xml:space="preserve">
     <value>Failed to lookup information for {0} in Active Directory.</value>
   </data>
+  <data name="MergeCompleteNoSourceFiles" xml:space="preserve">
+    <value>Merge Complete: No source files to merge.</value>
+  </data>
+  <data name="MergeComplete" xml:space="preserve">
+    <value>Merge Complete: {0} files merged into '{1}'.</value>
+  </data>
+  <data name="MergingFile" xml:space="preserve">
+    <value>Merging file '{0}' into '{1}'</value>
+  </data>
 </root>

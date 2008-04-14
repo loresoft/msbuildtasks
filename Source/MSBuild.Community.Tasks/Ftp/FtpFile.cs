@@ -133,6 +133,11 @@ namespace MSBuild.Community.Tasks.Ftp
             return entry;
         }
 
+        /// <summary>
+        /// Parses the dir list.
+        /// </summary>
+        /// <param name="entryLines">The entry lines.</param>
+        /// <returns></returns>
         public static FtpEntry[] ParseDirList( string[] entryLines )
         {
             List<FtpEntry> files = new List<FtpEntry>( entryLines.Length );

@@ -78,6 +78,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Ftp\FtpUploadDirectoryContent.cs" />
+    <Compile Include="Merge.cs" />
     <Compile Include="Services\FileSystem.cs" />
     <Compile Include="GacUtil.cs" />
     <Compile Include="JavaScript\JavaScriptCompressor.cs">
@@ -89,6 +90,7 @@
     <Compile Include="Oracle\TnsParser.cs" />
     <Compile Include="RoboCopy.cs" />
     <Compile Include="Sound\Sound.cs" />
+    <Compile Include="SqlServer\SqlPubWiz.cs" />
     <Compile Include="Subversion\SvnCopy.cs" />
     <Compile Include="Tfs\IServer.cs" />
     <Compile Include="Tfs\Proxies\Changeset.cs" />
