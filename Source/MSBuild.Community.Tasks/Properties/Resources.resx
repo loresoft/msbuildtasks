@@ -161,26 +161,26 @@
   <data name="MathNotNumber" xml:space="preserve">
     <value>"{0}" is not a number.</value>
   </data>
-  <data name="MoveCreatesDirectory" xml:space="preserve">
+  <data name="CreatingDirectory" xml:space="preserve">
     <value>Creating directory "{0}".</value>
   </data>
-  <data name="MoveDestinationIsDirectory" xml:space="preserve">
-    <value>Could not move the file "{0}" to the destination file "{1}", because the destination is a folder instead of a file. To move the source file into a folder, consider using the DestinationFolder parameter instead of DestinationFiles.</value>
+  <data name="TaskDestinationIsDirectory" xml:space="preserve">
+    <value>Could not {0} the file "{1}" to the destination file "{2}", because the destination is a folder instead of a file. To {0} the source file into a folder, consider using the DestinationFolder parameter instead of DestinationFiles.</value>
   </data>
   <data name="MoveError" xml:space="preserve">
     <value>Unable to move file "{0}" to "{1}". {2}</value>
   </data>
-  <data name="MoveExactlyOneTypeOfDestination" xml:space="preserve">
+  <data name="ExactlyOneTypeOfDestination" xml:space="preserve">
     <value>Both "{0}" and "{1}" were specified as input parameters in the project file. Please choose one or the other.</value>
   </data>
   <data name="MoveFileComment" xml:space="preserve">
     <value>Moving file from "{0}" to "{1}".</value>
   </data>
-  <data name="MoveNeedsDestination" xml:space="preserve">
-    <value>No destination specified for Move. Please supply either "{0}" or "{1}".</value>
+  <data name="TaskNeedsDestination" xml:space="preserve">
+    <value>No destination specified for {0}. Please supply either "{1}" or "{2}".</value>
   </data>
-  <data name="MoveSourceIsDirectory" xml:space="preserve">
-    <value>The source file "{0}" is actually a directory.  The "Move" task does not support moving directories.</value>
+  <data name="TaskSourceIsDirectory" xml:space="preserve">
+    <value>The source file "{0}" is actually a directory.  The "{1}" task does not support moving directories.</value>
   </data>
   <data name="NUnitNotFound" xml:space="preserve">
     <value>Could not find the NUnit Project File open command. Please make sure NUnit is installed.</value>

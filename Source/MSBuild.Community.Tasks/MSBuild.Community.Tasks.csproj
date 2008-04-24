@@ -1,8 +1,8 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F88A60A8-564C-4E70-92DC-E92DBB897641}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -11,6 +11,11 @@
     <AssemblyName>MSBuild.Community.Tasks</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MSBuild.Community.Tasks.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +44,7 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
@@ -78,7 +84,29 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Ftp\FtpUploadDirectoryContent.cs" />
+    <Compile Include="HtmlHelp\ChmCompiler.cs" />
+    <Compile Include="HtmlHelp\HxCompiler.cs" />
     <Compile Include="Merge.cs" />
+    <Compile Include="Sandcastle\BuildAssembler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sandcastle\ChmBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sandcastle\DBCSFix.cs" />
+    <Compile Include="Sandcastle\MRefBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sandcastle\Sandcastle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sandcastle\SandcastleEnviroment.cs" />
+    <Compile Include="Sandcastle\SandcastleToolBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sandcastle\XslTransform.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Services\FileSystem.cs" />
     <Compile Include="GacUtil.cs" />
     <Compile Include="JavaScript\JavaScriptCompressor.cs">
@@ -191,6 +219,9 @@
   <ItemGroup>
     <None Include="MSBuild.Community.Tasks.snk" />
     <None Include="AdditionalDocumentation.xml" />
+    <EmbeddedResource Include="Sandcastle\hana.config" />
+    <EmbeddedResource Include="Sandcastle\prototype.config" />
+    <EmbeddedResource Include="Sandcastle\vs2005.config" />
     <Content Include="MSBuild.Community.Tasks.Targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

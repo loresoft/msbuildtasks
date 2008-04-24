@@ -12,7 +12,6 @@ namespace MSBuild.Community.Tasks.Tests
     /// </summary>
     public class MockBuild : IBuildEngine
     {
-
         public MockBuild()
         {
             _errorCount = 0;
@@ -22,6 +21,34 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
 #region Properties
+        private StringBuilder _errorLog = new StringBuilder();
+        
+        public string ErrorLog
+        {
+            get { return _errorLog.ToString(); }
+        }
+
+        private StringBuilder _warningLog = new StringBuilder();
+        
+        public string WarningLog
+        {
+            get { return _warningLog.ToString(); }
+        }
+
+        private StringBuilder _messageLog = new StringBuilder();
+        
+        public string MessageLog
+        {
+            get { return _messageLog.ToString(); }
+        }
+
+        private StringBuilder _customLog = new StringBuilder();
+        
+        public string CustomLog
+        {
+            get { return _customLog.ToString(); }
+        }
+
         private int _errorCount;
 
         public int ErrorCount
@@ -80,24 +107,28 @@ namespace MSBuild.Community.Tasks.Tests
         public void LogCustomEvent(CustomBuildEventArgs e)
         {
             _customCount++;
+            _customLog.AppendLine(e.Message);
             Console.WriteLine("Custom: {0}", e.Message);            
         }
 
         public void LogErrorEvent(BuildErrorEventArgs e)
         {
             _errorCount++;
+            _errorLog.AppendLine(e.Message);
             Console.WriteLine("Error: {0}", e.Message);
         }
 
         public void LogMessageEvent(BuildMessageEventArgs e)
         {
             _messageCount++;
+            _messageLog.AppendLine(e.Message);
             Console.WriteLine("Message: {0}", e.Message);
         }
 
         public void LogWarningEvent(BuildWarningEventArgs e)
         {
             _warningCount++;
+            _warningLog.AppendLine(e.Message);
             Console.WriteLine("Warning: {0}", e.Message);
         }
 

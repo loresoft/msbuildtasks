@@ -4,7 +4,7 @@
     <ProductVersion>3.0</ProductVersion>
     <ProjectGuid>{6e293db7-b1e3-4cea-ab94-79a979f91af5}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>MSBuild.Community.Tasks.Setup</OutputName>
+    <OutputName>MSBuild.Community.Tasks</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
     <WixToolPath>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPath>
@@ -44,10 +44,31 @@
     <LinkerVerboseOutput>False</LinkerVerboseOutput>
     <WixVariables>
     </WixVariables>
+    <LibBindFiles>False</LibBindFiles>
+    <SuppressPdbOutput>False</SuppressPdbOutput>
+    <SuppressSpecificWarnings>
+    </SuppressSpecificWarnings>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <VerboseOutput>False</VerboseOutput>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>False</Pedantic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>$(OutputPath)\</OutputPath>
     <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
+    <Cultures>en-US</Cultures>
+    <DefineConstants>Debug</DefineConstants>
+    <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
+    <LibBindFiles>False</LibBindFiles>
+    <SuppressPdbOutput>False</SuppressPdbOutput>
+    <SuppressSpecificWarnings>
+    </SuppressSpecificWarnings>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <VerboseOutput>False</VerboseOutput>
+    <WixVariables>
+    </WixVariables>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>False</Pedantic>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="MSBuildTasks.wxs" />
@@ -56,10 +77,18 @@
     <Content Include="Variables.wxi" />
   </ItemGroup>
   <ItemGroup>
-    <WixExtension Include="C:\Program Files\Windows Installer XML v3\bin\WixNetFxExtension.dll" />
-    <WixExtension Include="C:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll" />
-    <WixExtension Include="C:\Program Files\Windows Installer XML v3\bin\WixUtilExtension.dll" />
-    <WixExtension Include="C:\Program Files\Windows Installer XML v3\bin\WixVSExtension.dll" />
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixNetFxExtension.dll</HintPath>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll</HintPath>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixUtilExtension.dll</HintPath>
+    </WixExtension>
+    <WixExtension Include="WixVSExtension">
+      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixVSExtension.dll</HintPath>
+    </WixExtension>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

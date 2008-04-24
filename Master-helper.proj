@@ -1,101 +1,126 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<!-- $Id$ -->
+  <!-- $Id$ -->
   <Import Project="Build\MSBuild.Community.Tasks.Targets" />
 
   <PropertyGroup>
-		<Major>1</Major>
-		<Minor>2</Minor>
-		<Build>0</Build>
-		<Revision>0</Revision>
-	</PropertyGroup>
+    <Major>1</Major>
+    <Minor>3</Minor>
+    <Build>0</Build>
+    <Revision>0</Revision>
 
-	<ItemGroup>
-		<DefaultExclude Include="**\.svn\**" />
-		<DefaultExclude Include="**\_svn\**" />
-		<DefaultExclude Include="**\bin\**" />
-		<DefaultExclude Include="**\Bootstrap\**" />
-		<DefaultExclude Include="**\obj\**" />
-		<DefaultExclude Include="**\Release\**" />
-		<DefaultExclude Include="**\Debug\**" />
-		<DefaultExclude Include="**\Test\**" />
+    <BindMinor>3</BindMinor>
+    <BindBuild>0</BindBuild>
+    <BindRevision>0</BindRevision>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <DefaultExclude Include="**\.svn\**" />
+    <DefaultExclude Include="**\_svn\**" />
+    <DefaultExclude Include="**\bin\**" />
+    <DefaultExclude Include="**\Bootstrap\**" />
+    <DefaultExclude Include="**\obj\**" />
+    <DefaultExclude Include="**\Release\**" />
+    <DefaultExclude Include="**\Debug\**" />
+    <DefaultExclude Include="**\Test\**" />
     <DefaultExclude Include="**\TestResults\**" />
-		<DefaultExclude Include="**\doc\**" />
-		<DefaultExclude Include="**\www\**" />
-		<DefaultExclude Include="**\*.user" />
-		<DefaultExclude Include="**\*.suo" />
+    <DefaultExclude Include="**\doc\**" />
+    <DefaultExclude Include="**\www\**" />
+    <DefaultExclude Include="**\*.user" />
+    <DefaultExclude Include="**\*.suo" />
     <DefaultExclude Include="**\Documentation\ndoc\**" />
-		<DefaultExclude Include="*.zip" />
-	</ItemGroup>
+    <DefaultExclude Include="*.zip" />
+  </ItemGroup>
 
 
   <ItemGroup>
-    <CommitFiles Include="www\index.html" />    
+    <CommitFiles Include="www\index.html" />
     <CommitFiles Include="www\MSBuild.Community.Tasks.Nightly.zip" />
   </ItemGroup>
-  
+
   <Target Name="VerifyCalledFromMaster">
-    <Error Text="Do not execute $(MSBuildProjectFile) directly. Build Master.proj instead."  Condition="'$(CalledFromMaster)'!='true'" />
+    <Error Text="Do not execute $(MSBuildProjectFile) directly. Build Master.proj instead."
+           Condition="'$(CalledFromMaster)'!='true'" />
   </Target>
-  
+
   <Target Name="Initialize" DependsOnTargets="VerifyCalledFromMaster">
-	<Message Text="Beginning Build." />
+    <Message Text="Beginning Build." />
   </Target>
-  
-	<Target Name="Version" DependsOnTargets="Initialize">
-		<SvnVersion LocalPath="$(MSBuildProjectDirectory)">
-			<Output TaskParameter="Revision" PropertyName="Revision" />
-		</SvnVersion>
 
-		<Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+  <Target Name="Version" DependsOnTargets="Initialize">
+    <SvnVersion LocalPath="$(MSBuildProjectDirectory)">
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </SvnVersion>
 
-		<AssemblyInfo CodeLanguage="CS"
-				OutputFile="Source\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs" 
+    <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+
+    <Time>
+      <Output TaskParameter="Month" PropertyName="Month" />
+      <Output TaskParameter="Day" PropertyName="Day" />
+      <Output TaskParameter="Year" PropertyName="Year" />
+    </Time>
+
+    <AssemblyInfo CodeLanguage="CS"
+				OutputFile="Source\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs"
 				AssemblyCompany="http://msbuildtasks.tigris.org/"
 				AssemblyProduct="MSBuild.Community.Tasks"
-				AssemblyCopyright="Copyright © 2005 Paul Welter"      
+				AssemblyCopyright="Copyright © $(Year) MSBuild Community Tasks Project"
 				ComVisible="false"
 				CLSCompliant="false"
-				AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)" 
-				AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)" 
-				Condition="$(Revision) != '0' "/>
+				AssemblyVersion="$(Major).$(BindMinor).$(BindBuild).$(BindRevision)"
+        AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)"
+        AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)"
+        Condition="$(Revision) != '0' "/>
 
-	</Target>
+  </Target>
 
-	<Target Name="Compile" DependsOnTargets="Version">
-		<MSBuild Projects="Source\MSBuild.Community.Tasks.sln" 
+  <Target Name="Compile" DependsOnTargets="Version">
+    <MSBuild Projects="Source\MSBuild.Community.Tasks.sln"
 				 Properties="Configuration=Release" />
-	</Target>
+  </Target>
 
-	<Target Name="Documentation" DependsOnTargets="Compile">
+  <ItemGroup>
+    <References Include="Libraries\*.dll" />
+  </ItemGroup>
+
+  <Target Name="Documentation" DependsOnTargets="Compile">
     <TaskSchema Assemblies="Build\MSBuild.Community.Tasks.dll"
         OutputPath="Build" CreateTaskList="false" IgnoreMsBuildSchema="true"
         Includes="Microsoft.Build.Commontypes.xsd"/>
 
-    <NDoc Documenter="MSDN-CHM" 
-			  ProjectFilePath="MSBuild.Community.Tasks.ndoc" 
-			  WorkingDirectory="Documentation"
-			  ToolPath="$(MSBuildProjectDirectory)\Documentation\ndoc"/>
+    <Sandcastle Clean="true" TopicStyle="vs2005"
+                WorkingDirectory="Documentation\Help"
+                Assemblies="Build\MSBuild.Community.Tasks.dll"
+                Comments="Build\MSBuild.Community.Tasks.xml"
+                References="@(References)"
+                ChmName="MSBuildTasks" />
 
-		<Copy SourceFiles="Documentation\doc\MSBuild Community Tasks.chm" 
-			  DestinationFiles="Documentation\MSBuild.Community.Tasks.chm" />
+    <Copy SourceFiles="Documentation\Help\vs2005\chm\MSBuildTasks.chm"
+          DestinationFiles="Documentation\MSBuild.Community.Tasks.chm" />
 
-		<RemoveDir Directories="Documentation\doc" />
+    <Copy SourceFiles="Documentation\Help\vs2005\chm\MSBuildTasks.chm"
+          DestinationFiles="Build\MSBuild.Community.Tasks.chm" />
 
-    
+    <RemoveDir Directories="Documentation\Help" />
+
   </Target>
 
-	<Target Name="Zip" DependsOnTargets="Documentation">
-		<CreateItem Include="**\*.*" Exclude="@(DefaultExclude)" >
-			<Output TaskParameter="Include" ItemName="ZipFiles" />
-		</CreateItem>
-		<Zip Files="@(ZipFiles)" 
+  <Target Name="Zip" DependsOnTargets="Documentation">
+    <CreateItem Include="**\*.*" Exclude="@(DefaultExclude)" >
+      <Output TaskParameter="Include" ItemName="ZipFiles" />
+    </CreateItem>
+    <Zip Files="@(ZipFiles)"
 			 ZipFileName="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).zip" />
-	</Target>
+  </Target>
 
-	<Target Name="Build" DependsOnTargets="Zip">
-		<Message Text="Build Complete"/>
-	</Target>
+  <Target Name="Installer" DependsOnTargets="Compile;Documentation">
+    <MSBuild Projects="Source\MSBuild.Community.Tasks.Setup\MSBuildTasks.wixproj"
+				 Properties="Configuration=Release" />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="Zip;Installer">
+    <Message Text="Build Complete"/>
+  </Target>
 
   <Target Name="Nightly" DependsOnTargets="Build">
     <Copy SourceFiles="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).zip"
@@ -122,7 +147,7 @@
       <Output TaskParameter="Value" PropertyName="CommitPassword" />
     </RegistryRead>
 
-    <SvnCommit Targets="@(CommitFiles)" Message="AutoBuild" 
+    <SvnCommit Targets="@(CommitFiles)" Message="AutoBuild"
                Username="$(CommitUser)" Password="$(CommitPassword)">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnCommit>

@@ -133,12 +133,14 @@ namespace MSBuild.Community.Tasks
             }
             if ((this.destinationFiles == null) && (this.destinationFolder == null))
             {
-                Log.LogError(Resources.MoveNeedsDestination, "DestinationFiles", "DestinationDirectory");
+                Log.LogError(Resources.TaskNeedsDestination, 
+                    "Move", "DestinationFiles", "DestinationDirectory");
                 return false;
             }
             if ((this.destinationFiles != null) && (this.destinationFolder != null))
             {
-                Log.LogError(Resources.MoveExactlyOneTypeOfDestination, "DestinationFiles", "DestinationDirectory");
+                Log.LogError(Resources.ExactlyOneTypeOfDestination, 
+                    "DestinationFiles", "DestinationDirectory");
                 return false;
             }
             if ((this.destinationFiles != null) && (this.destinationFiles.Length != this.sourceFiles.Length))
@@ -236,19 +238,19 @@ namespace MSBuild.Community.Tasks
         {
             if (Directory.Exists(destinationFile))
             {
-                Log.LogError(Resources.MoveDestinationIsDirectory, sourceFile, destinationFile);
+                Log.LogError(Resources.TaskDestinationIsDirectory, sourceFile, destinationFile);
                 return false;
             }
             if (Directory.Exists(sourceFile))
             {
-                Log.LogError(Resources.MoveSourceIsDirectory, sourceFile);
+                Log.LogError(Resources.TaskSourceIsDirectory, sourceFile, "Move");
                 return false;
             }
             
             string directory = Path.GetDirectoryName(destinationFile);
             if (((directory != null) && (directory.Length > 0)) && !Directory.Exists(directory))
             {
-                Log.LogError(Resources.MoveCreatesDirectory, directory);
+                Log.LogError(Resources.CreatingDirectory, directory);
                 Directory.CreateDirectory(directory);
             }
 
