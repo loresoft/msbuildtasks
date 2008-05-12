@@ -47,7 +47,13 @@ namespace MSBuild.Community.Tasks.Sandcastle
             get
             {
                 if (string.IsNullOrEmpty(_sandcastleRoot))
-                    return DefaultLocation;
+                {
+                    _sandcastleRoot = Environment.GetEnvironmentVariable(
+                        "DXROOT", EnvironmentVariableTarget.Machine);
+
+                    if (string.IsNullOrEmpty(_sandcastleRoot))
+                        return DefaultLocation;
+                }
 
                 return _sandcastleRoot;
             }

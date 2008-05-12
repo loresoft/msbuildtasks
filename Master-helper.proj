@@ -36,6 +36,7 @@
   <ItemGroup>
     <CommitFiles Include="www\index.html" />
     <CommitFiles Include="www\MSBuild.Community.Tasks.Nightly.zip" />
+    <CommitFiles Include="www\MSBuild.Community.Tasks.Nightly.msi" />
   </ItemGroup>
 
   <Target Name="VerifyCalledFromMaster">
@@ -89,6 +90,7 @@
         Includes="Microsoft.Build.Commontypes.xsd"/>
 
     <Sandcastle Clean="true" TopicStyle="vs2005"
+                NoWarnMessages="true" NoInfoMessages="true"
                 WorkingDirectory="Documentation\Help"
                 Assemblies="Build\MSBuild.Community.Tasks.dll"
                 Comments="Build\MSBuild.Community.Tasks.xml"
@@ -115,7 +117,7 @@
 
   <Target Name="Installer" DependsOnTargets="Compile;Documentation">
     <MSBuild Projects="Source\MSBuild.Community.Tasks.Setup\MSBuildTasks.wixproj"
-				 Properties="Configuration=Release" />
+				 Properties="Configuration=Release;Major=$(Major);Minor=$(Minor);Build=$(Build);Revision=$(Revision)" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="Zip;Installer">
@@ -125,6 +127,9 @@
   <Target Name="Nightly" DependsOnTargets="Build">
     <Copy SourceFiles="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).zip"
           DestinationFiles="www\MSBuild.Community.Tasks.Nightly.zip" />
+
+    <Copy SourceFiles="Source\MSBuild.Community.Tasks.Setup\bin\Release\MSBuild.Community.Tasks.msi"
+          DestinationFiles="www\MSBuild.Community.Tasks.Nightly.msi" />
 
     <FileUpdate Files="www\index.html"
       Regex="&lt;span id=&quot;version&quot;&gt;(\d+)\.(\d+)\.(\d+)\.(\d+)&lt;/span&gt;"

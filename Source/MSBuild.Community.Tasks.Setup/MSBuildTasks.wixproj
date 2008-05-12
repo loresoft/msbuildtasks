@@ -54,7 +54,7 @@
     <Pedantic>False</Pedantic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>$(OutputPath)\</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
     <Cultures>en-US</Cultures>
     <DefineConstants>Debug</DefineConstants>

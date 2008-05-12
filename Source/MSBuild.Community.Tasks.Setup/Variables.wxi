@@ -27,11 +27,13 @@
   <?define Configuration = "Release" ?>
   <?endif?>
 
+  <?ifndef SpaceParenDebug?>
   <?if $(var.Configuration) = "Debug" ?>
   <?define SpaceParenDebug = " (Debug)" ?>
   <?else ?>
   <?define SpaceParenDebug = "" ?>
   <?endif ?>
+  <?endif?>
 
   <!-- General -->
   <?define VersionNumberInternal = "$(var.MajorVersion).$(var.MinorVersion).$(var.BuildVersion)" ?>
@@ -47,7 +49,7 @@
 
   <?define PackageDescription = "MSBuild Community Tasks is an open source project for MSBuild tasks." ?>
   <?define PackageComments = "MSBuild Community Tasks $(var.VersionNumberUserVisible)$(var.SpaceParenDebug)" ?>
-  <?define PackageUrl = "http://msbuildtasks.tigris.org/"?>
+  <?define PackageUrl = "http://msbuildtasks.tigris.org/"?>  
   <?define PackageManufacturer = "MSBuild Community Tasks" ?>
 
   <!-- GUIDs -->
