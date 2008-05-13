@@ -105,5 +105,61 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.AreEqual(utf8Bom, firstBytesOfFile, "The expected UTF8 BOM marker was not found on the generated file.");
             
         }
+
+        [Test]
+        public void IncludeNeutralResourceLanguage()
+        {
+            AssemblyInfo task = new AssemblyInfo();
+            task.BuildEngine = new MockBuild();
+            task.CodeLanguage = "cs";
+            string outputFile = Path.Combine(testDirectory, "AssemblyInfoNeutralResource.cs");
+            task.OutputFile = outputFile;
+            task.AssemblyTitle = "AssemblyInfoTask";
+            task.AssemblyDescription = "AssemblyInfo Description";
+            task.AssemblyConfiguration = "";
+            task.AssemblyCompany = "Company Name, LLC";
+            task.AssemblyProduct = "AssemblyInfoTask";
+            task.AssemblyCopyright = "Copyright (c) Company Name, LLC 2005";
+            task.NeutralResourcesLanguage = "en-US";
+
+            Assert.IsTrue(task.Execute(), "Execute failed");
+            Assert.IsTrue(File.Exists(outputFile));
+
+            string content = null;
+            using(StreamReader stream = File.OpenText(outputFile))
+            {
+                content = stream.ReadToEnd();
+            }
+            Assert.IsNotNull(content);
+            Assert.That(content.Contains("NeutralResourcesLanguage(\"en-US\","));
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

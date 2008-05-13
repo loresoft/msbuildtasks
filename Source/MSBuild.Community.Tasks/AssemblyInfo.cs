@@ -86,6 +86,7 @@ namespace MSBuild.Community.Tasks
         private Dictionary<string, string> _attributes;
         private string[] _Imports;
         private bool _generateClass = false;
+        private string _languageCode;
 
         #endregion Fields
 
@@ -96,7 +97,7 @@ namespace MSBuild.Community.Tasks
         public AssemblyInfo()
         {
             _attributes = new Dictionary<string, string>();
-            _Imports = new string[] { "System", "System.Reflection", "System.Runtime.CompilerServices", "System.Runtime.InteropServices" };
+            _Imports = new string[] { "System", "System.Reflection", "System.Resources", "System.Runtime.CompilerServices", "System.Runtime.InteropServices" };
             _OutputFile = DEFAULT_OUTPUT_FILE;
         }
 
@@ -292,6 +293,26 @@ namespace MSBuild.Community.Tasks
             get { return _generateClass; }
             set { _generateClass = value; }
         }
+
+
+
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// Gets or sets the neutral language which is used as a fallback language configuration 
+        /// if the locale on the computer isn't supported. Example is setting this to "en-US".
+        /// </summary>
+        public string NeutralResourcesLanguage
+        {
+            get { return _languageCode; }
+            set { _languageCode = value; }
+        }
         
         #endregion Input Parameters
 
@@ -388,6 +409,26 @@ namespace MSBuild.Community.Tasks
                 // add assembly-level argument to code compile unit
                 codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
             }
+            if (_languageCode != null)
+            {
+                var codeAttributeDeclaration = new CodeAttributeDeclaration("NeutralResourcesLanguage");
+                codeAttributeDeclaration.Arguments.Add(
+                    new CodeAttributeArgument(new CodePrimitiveExpression(_languageCode)));
+                codeAttributeDeclaration.Arguments.Add(
+                    new CodeAttributeArgument(
+                        new CodeTypeReferenceExpression("System.Resources.UltimateResourceFallbackLocation.Satellite")));
+                codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
+            }
+
+
+
+
+
+
+
+
+
+
             if (_generateClass)
             {
                 //Create Class Declaration
