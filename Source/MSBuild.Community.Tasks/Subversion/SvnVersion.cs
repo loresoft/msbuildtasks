@@ -171,11 +171,11 @@ namespace MSBuild.Community.Tasks.Subversion
 		/// </returns>
 		protected override string GenerateFullPathToTool()
 		{
-			base.ToolPath = Path.Combine(
-				Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-				@"Subversion\bin");
-			return Path.Combine(ToolPath, ToolName);
-		}
+            string path = SvnClient.FindToolPath(ToolName);
+            base.ToolPath = path;
+
+            return Path.Combine(ToolPath, ToolName);
+        }
 
         /// <summary>
         /// Logs the starting point of the run to all registered loggers.

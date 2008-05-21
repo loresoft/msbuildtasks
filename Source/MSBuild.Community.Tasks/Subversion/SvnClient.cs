@@ -354,43 +354,60 @@ namespace MSBuild.Community.Tasks.Subversion
 		/// </returns>
         protected override string GenerateFullPathToTool()
         {
-            string svnPath = null;
+            string path = SvnClient.FindToolPath(ToolName);
+            base.ToolPath = path;
+
+            return Path.Combine(ToolPath, ToolName);
+        }
+
+        public static string FindToolPath(string toolName)
+        {
+            string toolPath = null;
             // 1) check registry
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\" + ToolName, false);
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\" + toolName, false);
             if (key != null)
             {
                 string possiblePath = key.GetValue(null) as string;
                 if (File.Exists(possiblePath))
                 {
-                    svnPath = Path.GetDirectoryName(possiblePath);
-                    Log.LogMessage(MessageImportance.Low, "Found Subversion client location using App Paths in the registry.");
+                    toolPath = Path.GetDirectoryName(possiblePath);
                 }
             }
             // 2) search the path
-            if (svnPath == null)
+            if (toolPath == null)
             {
                 string pathEnvironmentVariable = Environment.GetEnvironmentVariable("PATH");
                 string[] paths = pathEnvironmentVariable.Split(Path.PathSeparator);
                 foreach (string path in paths)
                 {
-                    string fullPathToClient = Path.Combine(path, ToolName);
+                    string fullPathToClient = Path.Combine(path, toolName);
                     if (File.Exists(fullPathToClient))
                     {
-                        svnPath = path;
-                        Log.LogMessage(MessageImportance.Low, "Found Subversion client location in the PATH.");
+                        toolPath = path;
                         break;
                     }
                 }
             }
             // 3) try default install location
-            if (svnPath == null)
+            if (toolPath == null)
             {
-                svnPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Subversion\bin");
-                Log.LogMessage(MessageImportance.Low, "Did not find Subversion client in registry or PATH - using default install location.");
+                string fullPathToClient = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Subversion\bin"), toolName);
+                if (File.Exists(fullPathToClient))
+                {
+                    toolPath = fullPathToClient;
+                }
+            }
+            // 4) try default CollabNet install location
+            if (toolPath == null)
+            {
+                string fullPathToClient = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion Server"), toolName);
+                if (File.Exists(fullPathToClient))
+                {
+                    toolPath = fullPathToClient;
+                }
             }
 
-            base.ToolPath = svnPath;
-            return Path.Combine(ToolPath, ToolName);
+            return toolPath;
         }
 
         /// <summary>
