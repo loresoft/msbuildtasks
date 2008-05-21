@@ -391,19 +391,21 @@ namespace MSBuild.Community.Tasks.Subversion
             // 3) try default install location
             if (toolPath == null)
             {
-                string fullPathToClient = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Subversion\bin"), toolName);
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Subversion\bin");
+                string fullPathToClient = Path.Combine(path, toolName);
                 if (File.Exists(fullPathToClient))
                 {
-                    toolPath = fullPathToClient;
+                    toolPath = path;
                 }
             }
             // 4) try default CollabNet install location
             if (toolPath == null)
             {
-                string fullPathToClient = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion Server"), toolName);
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion Server");
+                string fullPathToClient = Path.Combine(path, toolName);
                 if (File.Exists(fullPathToClient))
                 {
-                    toolPath = fullPathToClient;
+                    toolPath = path;
                 }
             }
 
