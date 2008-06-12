@@ -33,6 +33,8 @@ using System.IO;
 using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
+using System.Reflection;
+using MSBuild.Community.Tasks.Fusion;
 
 // $Id$
 
@@ -48,7 +50,7 @@ namespace MSBuild.Community.Tasks
         /// <summary>Uninstall the list of assembly names from the GAC.</summary>
         Uninstall,
     }
-    
+
     /// <summary>
     /// MSBuild task to install and uninstall asseblies into the GAC
     /// </summary>
@@ -68,10 +70,8 @@ namespace MSBuild.Community.Tasks
     ///         Force="true" />
     /// ]]></code>
     /// </example>
-    public class GacUtil : ToolTask
+    public class GacUtil : Task
     {
-
-        private string _assemblyListFile;
 
         #region Properties
         private GacUtilCommands _command = GacUtilCommands.Install;
@@ -94,7 +94,40 @@ namespace MSBuild.Community.Tasks
             }
         }
 
-        private bool _force;
+        private string[] _relatedFileExtensions = new string[] { ".pdb", ".xml" };
+
+        /// <summary>
+        /// Gets or sets the related file extensions to copy when <see cref="IncludeRelatedFiles"/> is true.
+        /// </summary>
+        /// <value>The related file extensions.</value>
+        /// <remarks>
+        /// The default extensions are .pdb and .xml.
+        /// </remarks>
+        public string[] RelatedFileExtensions
+        {
+            get { return _relatedFileExtensions; }
+            set { _relatedFileExtensions = value; }
+        }
+
+
+        private bool _includeRelatedFiles = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether related files are included when installing in GAC.
+        /// </summary>
+        /// <value><c>true</c> if related files are included when installing in GAC; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// Setting IncludeRelatedFiles to true will copy the pdb and xml files from the same folder as the
+        /// assembly to the location in the GAC that the assembly was installed to.  This is useful in some  
+        /// debugging scenarios were you need to debug assemblies that are GAC'd.
+        /// </remarks>
+        public bool IncludeRelatedFiles
+        {
+            get { return _includeRelatedFiles; }
+            set { _includeRelatedFiles = value; }
+        }
+
+        private bool _force = false;
 
         /// <summary>
         /// Gets or sets a value indicating whether to force reinstall of an assembly.
@@ -110,85 +143,81 @@ namespace MSBuild.Community.Tasks
 
 
         /// <summary>
-        /// Gets or sets the assembly.
+        /// Gets or sets the assembly name or file.
         /// </summary>
-        /// <value>The assembly.</value>
-         [Required]
+        /// <value>The assembly name or file.</value>
+        /// <remarks>
+        /// When the command is install, Assemblies should be a file path to the assembly
+        /// to install in the GAC.  When command is uninstall, Assemblies should be a 
+        /// the full name of the assembly to uninstall.
+        /// </remarks>
+        [Required]
         public string[] Assemblies
         {
             get { return _assemblies; }
             set { _assemblies = value; }
         }
 
+        private List<ITaskItem> _installedPaths = new List<ITaskItem>();
+
+        /// <summary>
+        /// Gets the installed assembly paths.
+        /// </summary>
+        /// <value>The installed paths.</value>
+        [Output]
+        public ITaskItem[] InstalledPaths
+        {
+            get { return _installedPaths.ToArray(); }
+        }
+
+        private List<string> _installedNames = new List<string>();
+
+        /// <summary>
+        /// Gets the installed assembly names.
+        /// </summary>
+        /// <value>The installed names.</value>
+        [Output]
+        public string[] InstalledNames
+        {
+            get { return _installedNames.ToArray(); }
+        }
+
+        private int _successful = 0;
+
+        /// <summary>
+        /// Gets the number of assemlbies successfully installed/uninstalled.
+        /// </summary>
+        /// <value>The number successful assemblies.</value>
+        [Output]
+        public int Successful
+        {
+            get { return _successful; }
+        }
+
+        private int _failed = 0;
+
+        /// <summary>
+        /// Gets the number of assemlbies that failed to installed/uninstalled.
+        /// </summary>
+        /// <value>The number failed assemblies.</value>
+        [Output]
+        public int Failed
+        {
+            get { return _failed; }
+        }
+
+        private int _skipped = 0;
+
+        /// <summary>
+        /// Gets the number of assemlbies that were skipped during installed/uninstalled.
+        /// </summary>
+        /// <value>The number of skipped assemblies.</value>
+        [Output]
+        public int Skipped
+        {
+            get { return _skipped; }
+        }
         #endregion
-
-        /// <summary>
-        /// Returns the fully qualified path to the executable file.
-        /// </summary>
-        /// <returns>
-        /// The fully qualified path to the executable file.
-        /// </returns>
-        protected override string GenerateFullPathToTool()
-        {
-            return ToolLocationHelper.GetPathToDotNetFrameworkSdkFile(
-                ToolName, TargetDotNetFrameworkVersion.Version20);
-        }
-
-        /// <summary>
-        /// Gets the name of the executable file to run.
-        /// </summary>
-        /// <value></value>
-        /// <returns>The name of the executable file to run.</returns>
-        protected override string ToolName
-        {
-            get { return "gacutil.exe"; }
-        }
-
-        /// <summary>
-        /// Logs the starting point of the run to all registered loggers.
-        /// </summary>
-        /// <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
-        protected override void LogToolCommand(string message)
-        {
-            Log.LogCommandLine(MessageImportance.Low, message);
-        }
-        
-        /// <summary>
-        /// Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
-        /// </summary>
-        /// <value></value>
-        /// <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
-        protected override MessageImportance StandardOutputLoggingImportance
-        {
-            get { return MessageImportance.Normal; }
-        }
-
-        /// <summary>
-        /// Returns a string value containing the command line arguments to pass directly to the executable file.
-        /// </summary>
-        /// <returns>
-        /// A string value containing the command line arguments to pass directly to the executable file.
-        /// </returns>
-        protected override string GenerateCommandLineCommands()
-        {          
-            CommandLineBuilder builder = new CommandLineBuilder();
-            builder.AppendSwitch("/nologo");
-            
-            if (_force)
-                builder.AppendSwitch("/f");
-
-            switch(_command)
-            {
-                case GacUtilCommands.Install:
-                    builder.AppendSwitch("/il");
-                    break;
-                case GacUtilCommands.Uninstall:
-                    builder.AppendSwitch("/ul");
-                    break;
-            }
-            builder.AppendFileNameIfNotNull(_assemblyListFile);
-            return builder.ToString();
-        }
 
         /// <summary>
         /// Runs the exectuable file with the specified task parameters.
@@ -198,18 +227,129 @@ namespace MSBuild.Community.Tasks
         /// </returns>
         public override bool Execute()
         {
-            // write asseblies to text file so we can use /il and /ul switch
-            _assemblyListFile = Path.GetTempFileName();
-            File.WriteAllLines(_assemblyListFile, _assemblies);
-            try
-            {
-                return base.Execute();
-            }
-            finally
-            {
-                File.Delete(_assemblyListFile);  // delete temp file
-            }            
+            if ((_assemblies == null) || (_assemblies.Length == 0))
+                return true;
+
+            if (_command == GacUtilCommands.Uninstall)
+                Uninstall();
+            else
+                Install();
+
+            return (_failed == 0);
         }
-        
+
+        private void Uninstall()
+        {
+            foreach (string name in _assemblies)
+            {
+                try
+                {
+                    UnintallAssembly(name);
+                }
+                catch (Exception ex)
+                {
+                    _failed++;
+                    Log.LogErrorFromException(ex, false);
+                }
+            }
+        } // unintall
+
+        private void UnintallAssembly(string name)
+        {
+            string fullName;
+            string installPath = FusionWrapper.GetAssemblyPath(name, out fullName);
+
+            if (string.IsNullOrEmpty(installPath))
+            {
+                Log.LogWarning("Assembly '{0}' not found in the GAC.", name);
+                _skipped++;
+                return;
+            }
+
+            _installedPaths.Add(new TaskItem(installPath));
+
+            AssemblyName assemblyName = AssemblyName.GetAssemblyName(installPath);
+            _installedNames.Add(assemblyName.FullName);
+
+            Log.LogMessage("Uninstall: {0}", assemblyName.FullName);
+
+            UninstallStatus status = UninstallStatus.None;
+            bool result = FusionWrapper.UninstallAssembly(fullName, _force, out status);
+
+            if (result)
+                _successful++;
+            else
+                _failed++;
+
+            Log.LogMessage("  Status: {0}", status.ToString());
+        }
+
+        private void Install()
+        {
+            foreach (string file in _assemblies)
+            {
+                try
+                {
+                    InstallFile(file);
+                }
+                catch (Exception ex)
+                {
+                    _failed++;
+                    Log.LogErrorFromException(ex, false);
+                }
+            }
+        } // Install
+
+        private void InstallFile(string file)
+        {
+            if (!File.Exists(file))
+            {
+                Log.LogError("Assembly file '{0}' not found.", file);
+                _failed++;
+                return;
+            }
+
+            AssemblyName name = AssemblyName.GetAssemblyName(file);
+            string fullName = FusionWrapper.AppendProccessor(name.FullName, name.ProcessorArchitecture);
+            _installedNames.Add(name.FullName);
+
+            FusionWrapper.InstallAssembly(file, _force);
+            Log.LogMessage("Installed: {0}", name.FullName);
+
+            string installPath = FusionWrapper.GetAssemblyPath(fullName);
+            _installedPaths.Add(new TaskItem(installPath));
+
+            _successful++;
+
+            if (_includeRelatedFiles)
+                CopyRelatedFiles(file, Path.GetDirectoryName(installPath));
+        }
+
+        private void CopyRelatedFiles(string sourceAssembly, string targetDirectory)
+        {
+            if (_relatedFileExtensions == null || _relatedFileExtensions.Length == 0)
+                return;
+
+            foreach (string extension in _relatedFileExtensions)
+            {
+                try
+                {
+                    string relatedFile = Path.ChangeExtension(sourceAssembly, extension);
+                    if (!File.Exists(relatedFile))
+                        continue;
+
+                    string name = Path.GetFileName(relatedFile);
+                    string newFile = Path.Combine(targetDirectory, name);
+
+                    File.Copy(relatedFile, newFile, true);
+                    Log.LogMessage("  Copied File: {0}", name);
+                }
+                catch (Exception ex)
+                {
+                    Log.LogWarningFromException(ex, false);
+                }
+            }
+        }
+
     }
 }
