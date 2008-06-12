@@ -1,6 +1,6 @@
-#region Copyright © 2006 Paul Welter. All rights reserved.
+#region Copyright © 2008 MSBuild Community Task Project. All rights reserved.
 /*
-Copyright © 2006 Paul Welter. All rights reserved.
+Copyright © 2008 MSBuild Community Task Project. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
