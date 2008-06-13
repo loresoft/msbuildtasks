@@ -33,6 +33,16 @@
     </CreateProperty>
   </Target>
 
+  <Target Name="Compile" DependsOnTargets="BoostrapCompile;SetCurrentTargetToCompile">
+    <CallTarget Targets="ContinueBuild" />
+  </Target>
+
+  <Target Name="SetCurrentTargetToCompile">
+    <CreateProperty Value="Compile">
+      <Output TaskParameter="Value" PropertyName="CurrentTarget"/>
+    </CreateProperty>
+  </Target>
+
   <Target Name="BoostrapCompile">
     <RemoveDir Directories="Build" />
     <WriteLinesToFile Lines="//Placeholder" File="$(MSBuildProjectDirectory)\Source\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs" Overwrite="True" />

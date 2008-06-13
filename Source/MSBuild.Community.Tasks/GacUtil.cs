@@ -127,6 +127,19 @@ namespace MSBuild.Community.Tasks
             set { _includeRelatedFiles = value; }
         }
 
+        private bool _quiet = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether warning messages are output.
+        /// </summary>
+        /// <value><c>true</c> to not log warning messages; otherwise, <c>false</c>.</value>
+        public bool Quiet
+        {
+            get { return _quiet; }
+            set { _quiet = value; }
+        }
+
+
         private bool _force = false;
 
         /// <summary>
@@ -235,6 +248,7 @@ namespace MSBuild.Community.Tasks
             else
                 Install();
 
+            Log.LogMessage("GacUtil Successful: {0}  Failed: {1}  Skipped: {2}", _successful, _failed, _skipped);
             return (_failed == 0);
         }
 
@@ -256,12 +270,17 @@ namespace MSBuild.Community.Tasks
 
         private void UnintallAssembly(string name)
         {
+            Log.LogMessage("Uninstall: {0}", name);
+            
             string fullName;
             string installPath = FusionWrapper.GetAssemblyPath(name, out fullName);
 
             if (string.IsNullOrEmpty(installPath))
             {
-                Log.LogWarning("Assembly '{0}' not found in the GAC.", name);
+                Log.LogMessage("  Status: {0}", UninstallStatus.ReferenceNotFound.ToString());
+                if (!_quiet)
+                    Log.LogWarning("Assembly '{0}' not found in the GAC.", name);
+
                 _skipped++;
                 return;
             }
@@ -270,8 +289,6 @@ namespace MSBuild.Community.Tasks
 
             AssemblyName assemblyName = AssemblyName.GetAssemblyName(installPath);
             _installedNames.Add(assemblyName.FullName);
-
-            Log.LogMessage("Uninstall: {0}", assemblyName.FullName);
 
             UninstallStatus status = UninstallStatus.None;
             bool result = FusionWrapper.UninstallAssembly(fullName, _force, out status);
