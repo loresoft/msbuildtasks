@@ -30,6 +30,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Security.Permissions;
 using System.Text;
 using System.CodeDom;
 using System.CodeDom.Compiler;
@@ -69,6 +70,24 @@ namespace MSBuild.Community.Tasks
     ///     AssemblyVersion="1.0.0.0" 
     ///     AssemblyFileVersion="1.0.0.0" />
     /// ]]></code>
+    /// <para>Generates a complete version file for C++/CLI.</para>
+    /// <code><![CDATA[
+    /// <AssemblyInfo CodeLanguage="CPP"  
+    ///     OutputFile="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cpp"
+    ///     AssemblyTitle="MyAssembly" 
+    ///     AssemblyDescription="MyAssembly Description"
+    ///     AssemblyConfiguration="$(Configuration)"
+    ///     AssemblyCompany="Company Name, LLC"
+    ///     AssemblyProduct="MyAssembly"
+    ///     AssemblyCopyright="Copyright (c) Company Name, LLC 2008"
+    ///     AssemblyTrademark=""
+    ///     ComVisible="false"
+    ///     CLSCompliant="true"
+    ///     Guid="d038566a-1937-478a-b5c5-b79c4afb253d"
+    ///     AssemblyVersion="1.0.0.0" 
+    ///     AssemblyFileVersion="1.0.0.0"
+    ///     UnmanagedCode="true" />
+    /// ]]></code>
     /// </example>
     public class AssemblyInfo : Task
     {
@@ -80,31 +99,109 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public const string DEFAULT_OUTPUT_FILE = @"AssemblyInfo.cs";
 
+        private const string CSharp = "CS";
+        private const string VisualBasic = "VB";
+        private const string CPP = "CPP";
+
+        private const string CppCodeProviderAssembly = "CppCodeProvider, "+
+                                                       "Version=8.0.0.0, " +
+                                                       "Culture=neutral, " +
+                                                       "PublicKeyToken=b03f5f7f11d50a3a, " +
+                                                       "processorArchitecture=MSIL";
+
+        private const string CppCodeProviderType = "Microsoft.VisualC.CppCodeProvider";
+
+        private const string CLSCompliantName = "CLSCompliant";
+        private const string ComVisibleName = "ComVisible";
+        private const string GuidName = "Guid";
+        private const string AssemblyTitleName = "AssemblyTitle";
+        private const string AssemblyDescriptionName = "AssemblyDescription";
+        private const string AssemblyConfigurationName = "AssemblyConfiguration";
+        private const string AssemblyCompanyName = "AssemblyCompany";
+        private const string AssemblyProductName = "AssemblyProduct";
+        private const string AssemblyCopyrightName = "AssemblyCopyright";
+        private const string AssemblyTrademarkName = "AssemblyTrademark";
+        private const string AssemblyCultureName = "AssemblyCulture";
+        private const string AssemblyVersionName = "AssemblyVersion";
+        private const string AssemblyFileVersionName = "AssemblyFileVersion";
+        private const string AssemblyInformationalVersionName = "AssemblyInformationalVersion";
+        private const string AssemblyKeyFileName = "AssemblyKeyFile";
+        private const string AssemblyKeyNameName = "AssemblyKeyName";
+        private const string AssemblyDelaySignName = "AssemblyDelaySign";
+        private const string SkipVerificationName = "SkipVerification";
+        private const string UnmanagedCodeName = "UnmanagedCode";
+
         #endregion Constants
 
+        #region Type Constructor
+
+        static AssemblyInfo()
+        {
+            // C#
+            _codeLangMapping["csharp"] = CSharp;
+            _codeLangMapping["cs"] = CSharp;
+            _codeLangMapping["c#"] = CSharp;
+            _codeLangMapping["c sharp"] = CSharp;
+
+            // Visual Basic
+            _codeLangMapping["vb"] = VisualBasic;
+            _codeLangMapping["visualbasic"] = VisualBasic;
+            _codeLangMapping["visual basic"] = VisualBasic;
+
+            // C++/CLI
+            _codeLangMapping["cpp"] = CPP;
+            _codeLangMapping["c++"] = CPP;
+            _codeLangMapping["c++/cli"] = CPP;
+            _codeLangMapping["c plus plus"] = CPP;
+        }
+        #endregion
+
+        #region Type Fields
+
+        private readonly static Dictionary<string, string> _codeLangMapping
+            = new Dictionary<string, string>();
+
+        private static readonly string[] booleanAttributes = { 
+                                                                 CLSCompliantName, 
+                                                                 AssemblyDelaySignName, 
+                                                                 ComVisibleName 
+                                                             };
+        private static readonly string[] securityAttributes = {
+                                                                  SkipVerificationName, 
+                                                                  UnmanagedCodeName
+                                                              };
+        private static readonly string[] nonGeneratedClassAttributes = {
+                                                                           CLSCompliantName,
+                                                                           AssemblyDelaySignName,
+                                                                           ComVisibleName, 
+                                                                           AssemblyKeyFileName
+                                                                       };
+        #endregion
+
         #region Fields
-        private Dictionary<string, string> _attributes;
-        private string[] _Imports;
-        private bool _generateClass = false;
+        private readonly Dictionary<string, string> _attributes;
+        private readonly string[] _imports;
+        private bool _generateClass;
         private string _languageCode;
+        private string _outputFile;
+        private string _codeLanguage;
 
         #endregion Fields
 
         #region Constructor
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:AssemblyInfo"/> class.
+        /// Initializes a new instance of the <see cref="AssemblyInfo"/> class.
         /// </summary>
         public AssemblyInfo()
         {
             _attributes = new Dictionary<string, string>();
-            _Imports = new string[] { "System", "System.Reflection", "System.Resources", "System.Runtime.CompilerServices", "System.Runtime.InteropServices" };
-            _OutputFile = DEFAULT_OUTPUT_FILE;
+            _imports = new string[] { "System", "System.Reflection", "System.Resources", "System.Runtime.CompilerServices", "System.Runtime.InteropServices" };
+            _outputFile = DEFAULT_OUTPUT_FILE;
         }
 
         #endregion Constructor
 
         #region Input Parameters
-        private string _CodeLanguage;
 
         /// <summary>
         /// Gets or sets the code language.
@@ -113,8 +210,8 @@ namespace MSBuild.Community.Tasks
         [Required]
         public string CodeLanguage
         {
-            get { return _CodeLanguage; }
-            set { _CodeLanguage = value; }
+            get { return _codeLanguage; }
+            set { _codeLanguage = value; }
         }
 
         /// <summary>
@@ -123,8 +220,8 @@ namespace MSBuild.Community.Tasks
         /// <value><c>true</c> if [COMVisible]; otherwise, <c>false</c>.</value>
         public bool ComVisible
         {
-            get { return ReadBooleanAttribute("ComVisible"); }
-            set { _attributes["ComVisible"] = value.ToString(); }
+            get { return ReadBooleanAttribute(ComVisibleName); }
+            set { _attributes[ComVisibleName] = value.ToString(); }
         }
 
         /// <summary>
@@ -133,8 +230,8 @@ namespace MSBuild.Community.Tasks
         /// <value><c>true</c> if [CLSCompliant]; otherwise, <c>false</c>.</value>
         public bool CLSCompliant
         {
-            get { return ReadBooleanAttribute("CLSCompliant"); }
-            set { _attributes["CLSCompliant"] = value.ToString(); }
+            get { return ReadBooleanAttribute(CLSCompliantName); }
+            set { _attributes[CLSCompliantName] = value.ToString(); }
         }
 
         /// <summary>
@@ -143,8 +240,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The GUID.</value>
         public string Guid
         {
-            get { return ReadAttribute("Guid"); }
-            set { _attributes["Guid"] = value; }
+            get { return ReadAttribute(GuidName); }
+            set { _attributes[GuidName] = value; }
         }
 
         /// <summary>
@@ -153,8 +250,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly title.</value>
         public string AssemblyTitle
         {
-            get { return ReadAttribute("AssemblyTitle"); }
-            set { _attributes["AssemblyTitle"] = value; }
+            get { return ReadAttribute(AssemblyTitleName); }
+            set { _attributes[AssemblyTitleName] = value; }
         }
 
         /// <summary>
@@ -163,8 +260,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly description.</value>
         public string AssemblyDescription
         {
-            get { return ReadAttribute("AssemblyDescription"); }
-            set { _attributes["AssemblyDescription"] = value; }
+            get { return ReadAttribute(AssemblyDescriptionName); }
+            set { _attributes[AssemblyDescriptionName] = value; }
         }
 
         /// <summary>
@@ -173,8 +270,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly configuration.</value>
         public string AssemblyConfiguration
         {
-            get { return ReadAttribute("AssemblyConfiguration"); }
-            set { _attributes["AssemblyConfiguration"] = value; }
+            get { return ReadAttribute(AssemblyConfigurationName); }
+            set { _attributes[AssemblyConfigurationName] = value; }
         }
 
         /// <summary>
@@ -183,8 +280,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly company.</value>
         public string AssemblyCompany
         {
-            get { return ReadAttribute("AssemblyCompany"); }
-            set { _attributes["AssemblyCompany"] = value; }
+            get { return ReadAttribute(AssemblyCompanyName); }
+            set { _attributes[AssemblyCompanyName] = value; }
         }
 
         /// <summary>
@@ -193,8 +290,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly product.</value>
         public string AssemblyProduct
         {
-            get { return ReadAttribute("AssemblyProduct"); }
-            set { _attributes["AssemblyProduct"] = value; }
+            get { return ReadAttribute(AssemblyProductName); }
+            set { _attributes[AssemblyProductName] = value; }
         }
 
         /// <summary>
@@ -203,8 +300,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly copyright.</value>
         public string AssemblyCopyright
         {
-            get { return ReadAttribute("AssemblyCopyright"); }
-            set { _attributes["AssemblyCopyright"] = value; }
+            get { return ReadAttribute(AssemblyCopyrightName); }
+            set { _attributes[AssemblyCopyrightName] = value; }
         }
 
         /// <summary>
@@ -213,8 +310,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly trademark.</value>
         public string AssemblyTrademark
         {
-            get { return ReadAttribute("AssemblyTrademark"); }
-            set { _attributes["AssemblyTrademark"] = value; }
+            get { return ReadAttribute(AssemblyTrademarkName); }
+            set { _attributes[AssemblyTrademarkName] = value; }
         }
 
         /// <summary>
@@ -223,8 +320,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly culture.</value>
         public string AssemblyCulture
         {
-            get { return ReadAttribute("AssemblyCulture"); }
-            set { _attributes["AssemblyCulture"] = value; }
+            get { return ReadAttribute(AssemblyCultureName); }
+            set { _attributes[AssemblyCultureName] = value; }
         }
 
         /// <summary>
@@ -233,8 +330,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly version.</value>
         public string AssemblyVersion
         {
-            get { return ReadAttribute("AssemblyVersion"); }
-            set { _attributes["AssemblyVersion"] = value; }
+            get { return ReadAttribute(AssemblyVersionName); }
+            set { _attributes[AssemblyVersionName] = value; }
         }
 
         /// <summary>
@@ -243,8 +340,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly file version.</value>
         public string AssemblyFileVersion
         {
-            get { return ReadAttribute("AssemblyFileVersion"); }
-            set { _attributes["AssemblyFileVersion"] = value; }
+            get { return ReadAttribute(AssemblyFileVersionName); }
+            set { _attributes[AssemblyFileVersionName] = value; }
         }
 
         /// <summary>
@@ -253,8 +350,8 @@ namespace MSBuild.Community.Tasks
         /// <value>The assembly informational version.</value>
         public string AssemblyInformationalVersion
         {
-            get { return ReadAttribute("AssemblyInformationalVersion"); }
-            set { _attributes["AssemblyInformationalVersion"] = value; }
+            get { return ReadAttribute(AssemblyInformationalVersionName); }
+            set { _attributes[AssemblyInformationalVersionName] = value; }
         }
 
         /// <summary>
@@ -262,8 +359,8 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public string AssemblyKeyFile
         {
-            get { return ReadAttribute("AssemblyKeyFile"); }
-            set { _attributes["AssemblyKeyFile"] = value; }
+            get { return ReadAttribute(AssemblyKeyFileName); }
+            set { _attributes[AssemblyKeyFileName] = value; }
         }
 
         /// <summary>
@@ -271,8 +368,8 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public string AssemblyKeyName
         {
-            get { return ReadAttribute("AssemblyKeyName"); }
-            set { _attributes["AssemblyKeyName"] = value; }
+            get { return ReadAttribute(AssemblyKeyNameName); }
+            set { _attributes[AssemblyKeyNameName] = value; }
         }
 
         /// <summary>
@@ -280,10 +377,27 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public bool AssemblyDelaySign
         {
-            get { return ReadBooleanAttribute("AssemblyDelaySign"); }
-            set { _attributes["AssemblyDelaySign"] = value.ToString(); }
+            get { return ReadBooleanAttribute(AssemblyDelaySignName); }
+            set { _attributes[AssemblyDelaySignName] = value.ToString(); }
         }
 
+        /// <summary>
+        /// Gets or sets the assembly delay sign value.
+        /// </summary>
+        public bool SkipVerification
+        {
+            get { return ReadBooleanAttribute(SkipVerificationName); }
+            set { _attributes[SkipVerificationName] = value.ToString(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the assembly delay sign value.
+        /// </summary>
+        public bool UnmanagedCode
+        {
+            get { return ReadBooleanAttribute(UnmanagedCodeName); }
+            set { _attributes[UnmanagedCodeName] = value.ToString(); }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether to generate the ThisAssmebly class.
@@ -294,16 +408,6 @@ namespace MSBuild.Community.Tasks
             set { _generateClass = value; }
         }
 
-
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// Gets or sets the neutral language which is used as a fallback language configuration 
         /// if the locale on the computer isn't supported. Example is setting this to "en-US".
@@ -313,11 +417,10 @@ namespace MSBuild.Community.Tasks
             get { return _languageCode; }
             set { _languageCode = value; }
         }
-        
+
         #endregion Input Parameters
 
         #region Input/Output Parameters
-        private string _OutputFile;
 
         /// <summary>
         /// Gets or sets the output file.
@@ -326,8 +429,8 @@ namespace MSBuild.Community.Tasks
         [Output]
         public string OutputFile
         {
-            get { return _OutputFile; }
-            set { _OutputFile = value; }
+            get { return _outputFile; }
+            set { _outputFile = value; }
         }
 
         #endregion Input/Output Parameters
@@ -343,17 +446,20 @@ namespace MSBuild.Community.Tasks
         {
             if (_attributes.Count == 0)
             {
-                Log.LogError("No assembly parameter were set for file \"{0}\".", _OutputFile);
+                Log.LogError("No assembly parameter were set for file \"{0}\".", _outputFile);
                 return false;
             }
+
             Encoding utf8WithSignature = new UTF8Encoding(true);
-            using (StreamWriter writer = new StreamWriter(_OutputFile, false, utf8WithSignature))
+
+            using (StreamWriter writer = new StreamWriter(_outputFile, false, utf8WithSignature))
             {
                 GenerateFile(writer);
                 writer.Flush();
                 writer.Close();
-                Log.LogMessage("Created AssemblyInfo file \"{0}\".", _OutputFile);
+                Log.LogMessage("Created AssemblyInfo file \"{0}\".", _outputFile);
             }
+
             return true;
         }
 
@@ -362,104 +468,243 @@ namespace MSBuild.Community.Tasks
         #region Private Methods
         private void GenerateFile(TextWriter writer)
         {
-            CodeDomProvider provider = null;
+            _codeLanguage = (_codeLanguage ?? String.Empty).ToLower();
 
-            if (string.Compare(_CodeLanguage, "VB", true) == 0)
-            {
-                provider = new Microsoft.VisualBasic.VBCodeProvider();
-                _OutputFile = Path.ChangeExtension(_OutputFile, ".vb");
-            }
-            else
-            {
-                provider = new Microsoft.CSharp.CSharpCodeProvider();
-                _OutputFile = Path.ChangeExtension(_OutputFile, ".cs");
-            }
+            // Get the chosen provider and rename the output file's extension
+            CodeDomProvider provider = GetProviderAndSetExtension(_codeLanguage, ref _outputFile);
 
-            if (provider == null)
-                throw new NotSupportedException("The specified code language is not supported.");
+            SetDefaultsForLanguage(_codeLanguage);
 
             CodeCompileUnit codeCompileUnit = new CodeCompileUnit();
             CodeNamespace codeNamespace = new CodeNamespace();
 
-            foreach (string import in _Imports)
+            foreach (string import in _imports)
             {
                 codeNamespace.Imports.Add(new CodeNamespaceImport(import));
             }
+
             codeCompileUnit.Namespaces.Add(codeNamespace);
 
-            foreach (KeyValuePair<string, string> assemblyAttribute in _attributes)
+            // Add each configured attribute
+            foreach (var attribute in _attributes)
             {
-                // create new assembly-level attribute
-                CodeAttributeDeclaration codeAttributeDeclaration = new CodeAttributeDeclaration(assemblyAttribute.Key);
+                String name = attribute.Key;
+                String value = attribute.Value;
 
-                bool typedValue;
-
-                if ((assemblyAttribute.Key == "CLSCompliant" ||
-                     assemblyAttribute.Key == "AssemblyDelaySign" || 
-                     assemblyAttribute.Key == "ComVisible")
-                    && bool.TryParse(assemblyAttribute.Value, out typedValue))
+                if (Array.Exists(booleanAttributes, name.Equals))
                 {
-                    codeAttributeDeclaration.Arguments.Add(new CodeAttributeArgument(new CodePrimitiveExpression(typedValue)));
+                    // Add the boolean attribute with a strongly typed value
+                    AddBooleanAssemblyAttribute(codeCompileUnit, name, value);
+                }
+                else if (Array.Exists(securityAttributes, name.Equals))
+                {
+                    // Add the security permission request attribute for the given action
+                    AddSecurityPermissionAssemblyAttribute(codeCompileUnit, name, value);
                 }
                 else
                 {
-                    codeAttributeDeclaration.Arguments.Add(new CodeAttributeArgument(new CodePrimitiveExpression(assemblyAttribute.Value)));
+                    // Add the attribute with the text value
+                    AddAttributeToCodeDom(codeCompileUnit, name, value);
                 }
-
-                // add assembly-level argument to code compile unit
-                codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
             }
+
+            // Add an assembly language code attribute to determine the neutral culture
             if (_languageCode != null)
             {
-                var codeAttributeDeclaration = new CodeAttributeDeclaration("NeutralResourcesLanguage");
-                codeAttributeDeclaration.Arguments.Add(
-                    new CodeAttributeArgument(new CodePrimitiveExpression(_languageCode)));
-                codeAttributeDeclaration.Arguments.Add(
-                    new CodeAttributeArgument(
-                        new CodeTypeReferenceExpression("System.Resources.UltimateResourceFallbackLocation.Satellite")));
-                codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
+                AddAssemblyLanguageCodeAttribute(codeCompileUnit);
             }
 
-
-
-
-
-
-
-
-
-
+            // Generate an internally accessible class which has the version information 
+            // available as properties
             if (_generateClass)
             {
-                //Create Class Declaration
-                CodeTypeDeclaration thisAssemblyType = new CodeTypeDeclaration("ThisAssembly");
-                thisAssemblyType.IsClass = true;
-                thisAssemblyType.IsPartial = true;
-                thisAssemblyType.TypeAttributes = TypeAttributes.NotPublic | TypeAttributes.Sealed;
-
-                CodeConstructor privateConstructor = new CodeConstructor();
-                privateConstructor.Attributes = MemberAttributes.Private;
-                thisAssemblyType.Members.Add(privateConstructor);
-                
-                foreach (KeyValuePair<string, string> assemblyAttribute in _attributes)
-                {
-                    if (assemblyAttribute.Key == "CLSCompliant" ||
-                        assemblyAttribute.Key == "AssemblyDelaySign" || 
-                        assemblyAttribute.Key == "ComVisible" || 
-                        assemblyAttribute.Key == "AssemblyKeyFile")
-                    {
-                        continue;
-                    }    
-                    
-                    CodeMemberField field = new CodeMemberField(typeof(string), assemblyAttribute.Key);
-                    field.Attributes = MemberAttributes.Assembly | MemberAttributes.Const;
-                    field.InitExpression = new CodePrimitiveExpression(assemblyAttribute.Value);
-                    thisAssemblyType.Members.Add(field);
-                }
-                
-                codeNamespace.Types.Add(thisAssemblyType);                
+                GenerateThisAssemblyClass(codeNamespace);
             }
+
+            // Generate code with the chosen provider
             provider.GenerateCodeFromCompileUnit(codeCompileUnit, writer, new CodeGeneratorOptions());
+        }
+
+        private CodeDomProvider GetProviderAndSetExtension(string codeLanguage, ref string outputFile)
+        {
+            String codeLang;
+
+            if (!_codeLangMapping.TryGetValue(codeLanguage, out codeLang))
+            {
+                throw new NotSupportedException("The specified code language is not supported: '" +
+                                                _codeLanguage +
+                                                "'");
+            }
+
+            CodeDomProvider provider;
+
+            switch (codeLang)
+            {
+                case CSharp:
+                    provider = new Microsoft.CSharp.CSharpCodeProvider();
+                    outputFile = Path.ChangeExtension(outputFile, ".cs");
+                    break;
+                case VisualBasic:
+                    provider = new Microsoft.VisualBasic.VBCodeProvider();
+                    outputFile = Path.ChangeExtension(outputFile, ".vb");
+                    break;
+                case CPP:
+                    // We load the CppCodeProvider via reflection since a hard reference would 
+                    // require client machines to have the provider installed just to run the task.
+                    // This way relieves us of the dependency.
+                    try
+                    {
+                        Assembly cppCodeProvider = Assembly.Load(CppCodeProviderAssembly);
+                        provider = cppCodeProvider.CreateInstance(CppCodeProviderType) 
+                                        as CodeDomProvider;
+                    }
+                    catch(FileLoadException fileLoadEx)
+                    {
+                        String fusionMessage = String.IsNullOrEmpty(fileLoadEx.FusionLog)
+                                                   ? "Turn on fusion logging to diagnose the problem further. " +
+                                                     "(Check http://blogs.msdn.com/suzcook/archive"+
+                                                     "/2003/05/29/57120.aspx for more info)"
+                                                   : "Check fusion log: " + fileLoadEx.FusionLog;
+                        Log.LogError("The C++/CLI code provider could not be loaded. " +
+                                     fileLoadEx.Message ?? "" +
+                                     (fileLoadEx.InnerException == null 
+                                                    ? "" 
+                                                    : fileLoadEx.InnerException.Message ?? "") +
+                                     fusionMessage);
+                        provider = null;
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        Log.LogError("The C++/CLI code provider wasn't found. "+
+                                     "Make sure you have Visual C++ installed.");
+                        provider = null;
+                    }
+
+                    outputFile = Path.ChangeExtension(outputFile, ".cpp");
+                    break;
+                default:
+                    throw new InvalidOperationException("Shouldn't reach here.");
+            }
+
+            return provider;
+        }
+
+        private void SetDefaultsForLanguage(string codeLanguage)
+        {
+            switch (codeLanguage)
+            {
+                case CSharp:
+                    break;
+                case VisualBasic:
+                    break;
+                case CPP:
+                    if (!_attributes.ContainsKey(UnmanagedCodeName))
+                    {
+                        UnmanagedCode = true;
+                    }
+                    break;
+            }
+        }
+
+        private static void AddAttributeToCodeDom(CodeCompileUnit codeCompileUnit, string name, object value)
+        {
+            var valueExpression = new CodePrimitiveExpression(value);
+            var codeAttributeDeclaration = new CodeAttributeDeclaration(name);
+            codeAttributeDeclaration.Arguments.Add(new CodeAttributeArgument(valueExpression));
+            // add assembly-level argument to code compile unit
+            codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
+        }
+
+        private static void AddBooleanAssemblyAttribute(CodeCompileUnit codeCompileUnit, String name, String value)
+        {
+            bool typedValue;
+
+            if (!bool.TryParse(value, out typedValue))
+            {
+                throw new InvalidOperationException("Boolean attribute " + name + "is not boolean: " +
+                                                    value);
+            }
+
+            AddAttributeToCodeDom(codeCompileUnit, name, typedValue);
+        }
+
+        private static void AddSecurityPermissionAssemblyAttribute(CodeCompileUnit codeCompileUnit, String name, String value)
+        {
+
+            var codeAttributeDeclaration = new CodeAttributeDeclaration("SecurityPermissionAttribute");
+
+            var requestMinimum = new CodeAttributeArgument(
+                new CodeFieldReferenceExpression(
+                    new CodeTypeReferenceExpression(typeof(SecurityAction)), "RequestMinimum"));
+
+            codeAttributeDeclaration.Arguments.Add(requestMinimum);
+
+            bool typedValue;
+            if (!bool.TryParse(value, out typedValue))
+            {
+                throw new InvalidOperationException("Boolean security attribute " + name +
+                                                    "is not boolean: " + value);
+            }
+
+            CodePrimitiveExpression valueExpression = new CodePrimitiveExpression(typedValue);
+
+            codeAttributeDeclaration.Arguments.Add(new CodeAttributeArgument(name, valueExpression));
+
+            // add assembly-level argument to code compile unit
+            codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
+        }
+
+        private void AddAssemblyLanguageCodeAttribute(CodeCompileUnit codeCompileUnit)
+        {
+            var codeAttributeDeclaration = new CodeAttributeDeclaration("NeutralResourcesLanguage");
+            codeAttributeDeclaration.Arguments.Add(
+                new CodeAttributeArgument(
+                    new CodePrimitiveExpression(_languageCode)));
+            codeAttributeDeclaration.Arguments.Add(
+                new CodeAttributeArgument(
+                    new CodeTypeReferenceExpression("System.Resources.UltimateResourceFallbackLocation.Satellite")));
+            codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
+        }
+
+        private void GenerateThisAssemblyClass(CodeNamespace codeNamespace)
+        {
+            //Create Class Declaration
+            CodeTypeDeclaration thisAssemblyType = new CodeTypeDeclaration("ThisAssembly")
+            {
+                IsClass = true,
+                IsPartial = true,
+                TypeAttributes = TypeAttributes.NotPublic |
+                                 TypeAttributes.Sealed
+            };
+
+            CodeConstructor privateConstructor = new CodeConstructor
+            {
+                Attributes = MemberAttributes.Private
+            };
+
+            thisAssemblyType.Members.Add(privateConstructor);
+
+            foreach (var assemblyAttribute in _attributes)
+            {
+                String name = assemblyAttribute.Key;
+                String value = assemblyAttribute.Value;
+
+                if (Array.Exists(nonGeneratedClassAttributes, name.Equals))
+                {
+                    continue;
+                }
+
+                CodeMemberField field = new CodeMemberField(typeof(string), name)
+                {
+                    Attributes = MemberAttributes.Assembly |
+                                 MemberAttributes.Const,
+                    InitExpression = new CodePrimitiveExpression(value)
+                };
+
+                thisAssemblyType.Members.Add(field);
+            }
+
+            codeNamespace.Types.Add(thisAssemblyType);
         }
 
         private string ReadAttribute(string key)
