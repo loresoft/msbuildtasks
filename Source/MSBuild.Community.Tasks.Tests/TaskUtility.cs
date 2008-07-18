@@ -119,6 +119,13 @@ namespace MSBuild.Community.Tasks.Tests
             return testDirectory;
         }
 
+		public static void deleteTestDirectory(IBuildEngine buildEngine) {
+			RemoveDir removeDirTask = new RemoveDir();
+			removeDirTask.BuildEngine = buildEngine;
+			removeDirTask.Directories = StringArrayToItemArray(new string[] { TestDirectory });
+			removeDirTask.Execute();
+		}
+
         /// <summary>
         /// Get the project root directory
         /// </summary>

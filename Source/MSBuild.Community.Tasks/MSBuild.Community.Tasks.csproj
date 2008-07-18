@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30428</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F88A60A8-564C-4E70-92DC-E92DBB897641}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -65,8 +65,12 @@
     <Compile Include="AspNet\InstallAspNet.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attrib.cs" />
+    <Compile Include="ByteDescriptions.cs" />
     <Compile Include="Computer\Computer.cs" />
     <Compile Include="Beep\Beep.cs" />
+    <Compile Include="FtpUpload\FtpUpload.cs" />
+    <Compile Include="FtpUpload\IFtpWebRequest.cs" />
+    <Compile Include="FtpUpload\RealFtpWebRequest.cs" />
     <Compile Include="Ftp\FtpClientTaskBase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -108,6 +112,7 @@
     <Compile Include="HtmlHelp\ChmCompiler.cs" />
     <Compile Include="HtmlHelp\HxCompiler.cs" />
     <Compile Include="Merge.cs" />
+    <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Sandcastle\BuildAssembler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -187,7 +192,7 @@
     <Compile Include="IIS\WebBase.cs" />
     <Compile Include="ServiceController.cs" />
     <Compile Include="SourceSafe\VssClean.cs" />
-    <Compile Include="FtpUpload.cs" />
+    <Compile Include="FtpUpload\FtpRequestCreator.cs" />
     <Compile Include="IIS\AppPoolCreate.cs" />
     <Compile Include="IIS\WebDirectoryCreate.cs" />
     <Compile Include="IIS\AppPoolDelete.cs" />
@@ -202,7 +207,6 @@
     <Compile Include="Move.cs" />
     <Compile Include="NDoc.cs" />
     <Compile Include="NUnit.cs" />
-    <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -243,6 +247,7 @@
     <EmbeddedResource Include="Sandcastle\hana.config" />
     <EmbeddedResource Include="Sandcastle\prototype.config" />
     <EmbeddedResource Include="Sandcastle\vs2005.config" />
+    <Content Include="FtpUpload\SomeDevNotesOnFtpUpload.txt" />
     <Content Include="MSBuild.Community.Tasks.Targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
