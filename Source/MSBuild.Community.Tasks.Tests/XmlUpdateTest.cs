@@ -55,5 +55,22 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.IsTrue(task.Execute(), "Execute Failed");
 
         }
+
+
+        [Test(Description = "Update an XML file with XPath navigation")]
+        public void XmlUpdateDelete()
+        {
+            XmlUpdate task = new XmlUpdate();
+            task.BuildEngine = new MockBuild();
+
+            task.Prefix = "n";
+            task.Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
+            task.XmlFileName = testFile;
+            task.XPath = "/n:Project/n:PropertyGroup/n:LastUpdate";
+            task.Delete = true;
+
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+
+        }
     }
 }

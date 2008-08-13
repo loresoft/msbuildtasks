@@ -104,6 +104,18 @@ namespace MSBuild.Community.Tasks
             set { _value = value; }
         }
 
+        private bool _delete = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the matched node is deleted.
+        /// </summary>
+        /// <value><c>true</c> to delete matched node; otherwise, <c>false</c>.</value>
+        public bool Delete
+        {
+            get { return _delete; }
+            set { _delete = value; }
+        }
+
         private string _namespace;
 
         /// <summary>
@@ -159,7 +171,10 @@ namespace MSBuild.Community.Tasks
                 Log.LogMessage(Properties.Resources.XmlUpdateNodes, nodes.Count);
 
                 while (nodes.MoveNext())
-                    nodes.Current.SetValue(_value);
+                    if (_delete)
+                        nodes.Current.DeleteSelf();
+                    else
+                        nodes.Current.SetValue(_value);
 
                 using (XmlTextWriter writer = new XmlTextWriter(_xmlFileName, Encoding.UTF8))
                 {
