@@ -100,7 +100,7 @@ namespace MSBuild.Community.Tasks.IIS
 			/// The application pool is starting.
 			/// </summary>
 			Starting = 1,
-			
+
 			/// <summary>
 			/// The application pool has started.
 			/// </summary>
@@ -127,11 +127,12 @@ namespace MSBuild.Community.Tasks.IIS
 		private int mServerPort = 80;
 		private string mServerInstance;
 		private string mIISServerPath;
+		private string mIISSiteHostHeaderName;
 		private string mIISApplicationPath;
 		private string mIISAppPoolPath;
 		private string mUsername;
 		private string mPassword;
-		
+
 		#endregion
 
 		#region Properties
@@ -149,6 +150,22 @@ namespace MSBuild.Community.Tasks.IIS
 			set
 			{
 				mServerName = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets host header. Used when you have more than one website in IIS that have the same port but different host headers.
+		/// </summary>
+		/// <value>The name of the host header.</value>
+		public string HostHeaderName
+		{
+			get
+			{
+				return mIISSiteHostHeaderName;
+			}
+			set
+			{
+				mIISSiteHostHeaderName = value;
 			}
 		}
 
@@ -356,9 +373,12 @@ namespace MSBuild.Community.Tasks.IIS
 			{
 				if (site.SchemaClassName == "IIsWebServer")
 				{
-					if (VerifyServerPortExists(site))
+					if (VerifySiteHostHeaderExists(site))
 					{
-						iisExists = true;
+						if (VerifyServerPortExists(site))
+						{
+							iisExists = true;
+						}
 					}
 				}
 
@@ -369,8 +389,45 @@ namespace MSBuild.Community.Tasks.IIS
 
 			if (!iisExists)
 			{
-				throw new Exception(string.Format("Server '{0}:{1}' does not exist or is not reachable.", mServerName, mServerPort));
+				string errorMessage = string.Format("Server '{0}:{1}' does not exist or is not reachable", mServerName, mServerPort);
+				if (HostHeaderName != null)
+				{
+					errorMessage += string.Format(" with specified host header of '{0}'", HostHeaderName);
+				}
+				errorMessage += string.Format(".");
+
+				throw new Exception(errorMessage);
 			}
+		}
+
+		/// <summary>
+		/// Verify that the IIS Website exists if it has been specified.
+		/// </summary>
+		/// <param name="site">DirectoryEntry that meets the IISWebServer schema</param>
+		/// <returns>True if a site is found when specified. True if no site has been specified.</returns>
+		private bool VerifySiteHostHeaderExists(DirectoryEntry site)
+		{
+			bool siteHeaderFound = false;
+
+			if (HostHeaderName == null)
+			{
+				siteHeaderFound = true;
+			}
+			else
+			{
+				//get the serverBinding information
+				foreach (object serverBinding in (PropertyValueCollection)site.Properties["ServerBindings"])
+				{
+					//find the IIS Website that has been specified by the user
+					if (((string)serverBinding).ToLower().IndexOf(HostHeaderName.ToLower()) != -1)
+					{
+						siteHeaderFound = true;
+						break;
+					}
+				}
+			}
+
+			return siteHeaderFound;
 		}
 
 		/// <summary>
@@ -381,20 +438,48 @@ namespace MSBuild.Community.Tasks.IIS
 		/// <exclude/>
 		private bool VerifyServerPortExists(DirectoryEntry site)
 		{
-			string serverBindings = site.Properties["ServerBindings"].Value.ToString();
-			string[] serverBindingsArray = serverBindings.Split(':');
+			bool portServerExists = false;
 
-			if (mServerPort == Convert.ToInt32(serverBindingsArray[1]))
+			//get the serverBinding information
+			foreach (object serverBinding in (PropertyValueCollection)site.Properties["ServerBindings"])
 			{
-				mServerInstance = site.Name;
-				mIISServerPath = string.Format("IIS://{0}/W3SVC/{1}/Root", mServerName, mServerInstance);
-				mIISApplicationPath = string.Format("/LM/W3SVC/{0}/Root", mServerInstance);
-				mIISAppPoolPath = string.Format("IIS://{0}/W3SVC/AppPools", mServerName);
-				return true;
+
+				//look for an integer
+				foreach (string bindingPiece in ((string)serverBinding).Split(':'))
+				{
+					int serverPort;
+					int.TryParse(bindingPiece, out serverPort);
+					if (serverPort != 0)
+					{
+						if (ServerPort == serverPort)
+						{
+							SetIISPrimitives(site.Name);
+							portServerExists = true;
+							break;
+						}
+					}
+				}
+				if (portServerExists)
+				{
+					break;
+				}
 			}
-			return false;
+
+			return portServerExists;
 		}
-		
+
+		/// <summary>
+		/// Sets some of the protected properties for the Virtual Directory Creation Wizard.
+		/// </summary>
+		/// <param name="serverInstance">DirectoryEntry.Name where the Entry is an IISWebServer schema</param>
+		private void SetIISPrimitives(string serverInstance)
+		{
+			mServerInstance = serverInstance;
+			mIISServerPath = string.Format("IIS://{0}/W3SVC/{1}/Root", mServerName, mServerInstance);
+			mIISApplicationPath = string.Format("/LM/W3SVC/{0}/Root", mServerInstance);
+			mIISAppPoolPath = string.Format("IIS://{0}/W3SVC/AppPools", mServerName);
+		}
+
 		#endregion
 	}
 }
