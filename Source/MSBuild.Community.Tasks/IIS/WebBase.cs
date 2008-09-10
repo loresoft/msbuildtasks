@@ -1,6 +1,6 @@
-#region Copyright © 2005 Paul Welter. All rights reserved.
+#region Copyright ï¿½ 2005 Paul Welter. All rights reserved.
 /*
-Copyright © 2005 Paul Welter. All rights reserved.
+Copyright ï¿½ 2005 Paul Welter. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -283,7 +283,7 @@ namespace MSBuild.Community.Tasks.IIS
 				// Windows NT: IIS 4
 				iisVersion = IISVersion.Four;
 			}
-			else
+			else if( osVersion.Major == 5)
 			{
 				switch (osVersion.Minor)
 				{
