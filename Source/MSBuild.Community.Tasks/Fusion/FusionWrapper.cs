@@ -40,7 +40,6 @@ namespace MSBuild.Community.Tasks.Fusion
     /// <summary>
     /// A class wrapping fusion api calls
     /// </summary>
-    [CLSCompliant(false)]
     public static class FusionWrapper
     {
         private static readonly object _lock = new object();
