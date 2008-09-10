@@ -208,7 +208,31 @@ namespace MSBuild.Community.Tasks
                         FileInfo file = new FileInfo(name);
                         if (!file.Exists)
                         {
-                            Log.LogWarning(MSBuild.Community.Tasks.Properties.Resources.FileNotFound, file.FullName);
+                            // maybe a directory
+                            DirectoryInfo directory = new DirectoryInfo(name);
+                            if (directory.Exists)
+                            {
+                                if (!_flatten)
+                                {
+                                    if (!string.IsNullOrEmpty(_workingDirectory)
+                                        && name.StartsWith(_workingDirectory, true, CultureInfo.InvariantCulture))
+                                        name = name.Remove(0, _workingDirectory.Length);
+
+                                    if (!string.IsNullOrEmpty(name))
+                                    {
+                                        name = ZipEntry.CleanName(name);
+                                        ZipEntry directoryEntry = new ZipEntry(name + Path.DirectorySeparatorChar);                                        
+                                        zs.PutNextEntry(directoryEntry);
+                                    }
+
+                                }
+                            }
+                            else
+
+                            {
+                                Log.LogWarning(MSBuild.Community.Tasks.Properties.Resources.FileNotFound, file.FullName);
+                            }
+
                             continue;
                         }
 
