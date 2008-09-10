@@ -1,4 +1,5 @@
 #region Copyright © 2008 MSBuild Community Task Project. All rights reserved.
+
 /*
 Copyright © 2008 MSBuild Community Task Project. All rights reserved.
 
@@ -25,40 +26,76 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 */
+
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 // $Id$
 
 namespace MSBuild.Community.Tasks.Fusion
 {
+    /// <summary>
+    /// A class wrapping fusion api calls
+    /// </summary>
     [CLSCompliant(false)]
     public static class FusionWrapper
     {
-        private static string[] proccessors = new string[] { "MSIL", "x86", "AMD64" };
+        private static readonly object _lock = new object();
+        private static readonly string[] proccessors = new[] {"MSIL", "x86", "AMD64"};
+        private static string _currentProcessorArchitecture;
 
+        internal static string CurrentProcessorArchitecture
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_currentProcessorArchitecture))
+                    lock (_lock)
+                    {
+                        if (string.IsNullOrEmpty(_currentProcessorArchitecture))
+                            _currentProcessorArchitecture = GetProcessorArchitecture();
+                    }
+
+                return _currentProcessorArchitecture;
+            }
+        }
+
+        /// <summary>
+        /// Installs the assembly.
+        /// </summary>
+        /// <param name="assemblyPath">The assembly path.</param>
+        /// <param name="force">if set to <c>true</c> force.</param>
         public static void InstallAssembly(string assemblyPath, bool force)
         {
             IAssemblyCache assemblyCache = null;
 
-            int flags = force ? (int)CommitFlags.Force : (int)CommitFlags.Refresh;
+            int flags = force ? (int) CommitFlags.Force : (int) CommitFlags.Refresh;
 
             ThrowOnError(NativeMethods.CreateAssemblyCache(out assemblyCache, 0));
             ThrowOnError(assemblyCache.InstallAssembly(flags, assemblyPath, null));
         }
 
+        /// <summary>
+        /// Uninstalls the assembly.
+        /// </summary>
+        /// <param name="assemblyName">Name of the assembly.</param>
+        /// <param name="force">if set to <c>true</c> force.</param>
+        /// <returns>Returns <c>true</c> if uninstall successful.</returns>
         public static bool UninstallAssembly(string assemblyName, bool force)
         {
             UninstallStatus result = UninstallStatus.Uninstalled;
             return UninstallAssembly(assemblyName, force, out result);
         }
 
+        /// <summary>
+        /// Uninstalls the assembly.
+        /// </summary>
+        /// <param name="assemblyName">Name of the assembly.</param>
+        /// <param name="force">if set to <c>true</c> force.</param>
+        /// <param name="result">The UninstallStatus result.</param>
+        /// <returns>Returns <c>true</c> if uninstall successful.</returns>
         public static bool UninstallAssembly(string assemblyName, bool force, out UninstallStatus result)
         {
             result = UninstallStatus.None;
@@ -74,7 +111,7 @@ namespace MSBuild.Community.Tasks.Fusion
             IAssemblyCache cache = null;
             ThrowOnError(NativeMethods.CreateAssemblyCache(out cache, 0));
 
-            int flags = force ? (int)CommitFlags.Force : (int)CommitFlags.Refresh;
+            int flags = force ? (int) CommitFlags.Force : (int) CommitFlags.Refresh;
 
             ThrowOnError(cache.UninstallAssembly(flags, fullName, null, out result));
 
@@ -92,6 +129,11 @@ namespace MSBuild.Community.Tasks.Fusion
             return successful;
         }
 
+        /// <summary>
+        /// Gets the assembly path.
+        /// </summary>
+        /// <param name="assemblyName">Name of the assembly.</param>
+        /// <returns>The path to the assembly in the GAC.</returns>
         public static string GetAssemblyPath(string assemblyName)
         {
             string fullName;
@@ -103,21 +145,18 @@ namespace MSBuild.Community.Tasks.Fusion
             IAssemblyCache cache = null;
             ThrowOnError(NativeMethods.CreateAssemblyCache(out cache, 0));
 
-            AssemblyInfo info = new AssemblyInfo
-            {
-                cbAssemblyInfo = (uint)Marshal.SizeOf(typeof(AssemblyInfo))
-            };
+            var info = new AssemblyInfo
+                           {
+                               cbAssemblyInfo = (uint) Marshal.SizeOf(typeof (AssemblyInfo))
+                           };
 
             //ProcessorArchitecture required for this call
             fullName = assemblyName;
 
             if (HasProcessorArchitecture(fullName))
-            {
                 //getting size of string, cchBuf will be the size
                 cache.QueryAssemblyInfo(3, fullName, ref info);
-            }
             else
-            {
                 //try using possible proccessors
                 foreach (string p in proccessors)
                 {
@@ -128,7 +167,6 @@ namespace MSBuild.Community.Tasks.Fusion
                     if (info.cchBuf > 0)
                         break;
                 }
-            }
             //if no size, not found
             if (info.cchBuf == 0)
                 return null;
@@ -140,6 +178,11 @@ namespace MSBuild.Community.Tasks.Fusion
             return info.pszCurrentAssemblyPathBuf;
         }
 
+        /// <summary>
+        /// Gets the name of the assembly.
+        /// </summary>
+        /// <param name="assemblyName">Name of the assembly.</param>
+        /// <returns>An <see cref="AssemblyName"/> instance.</returns>
         public static AssemblyName GetAssemblyName(string assemblyName)
         {
             string filePath = GetAssemblyPath(assemblyName);
@@ -174,41 +217,25 @@ namespace MSBuild.Community.Tasks.Fusion
 
         private static bool HasProcessorArchitecture(string fullName)
         {
-            return fullName.IndexOf("ProcessorArchitecture=", 0, 
-                fullName.Length, StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-
-        private static string _currentProcessorArchitecture;
-        private static object _lock = new object();
-
-        internal static string CurrentProcessorArchitecture
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_currentProcessorArchitecture))
-                {
-                    lock (_lock)
-                    {
-                        if (string.IsNullOrEmpty(_currentProcessorArchitecture))
-                            _currentProcessorArchitecture = GetProcessorArchitecture();
-                    }
-                }
-
-                return _currentProcessorArchitecture;
-            }
+            return fullName.IndexOf("ProcessorArchitecture=", 0,
+                                    fullName.Length, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         private static string GetProcessorArchitecture()
         {
-            SYSTEM_INFO lpSystemInfo = new SYSTEM_INFO();
+            var lpSystemInfo = new SYSTEM_INFO();
             NativeMethods.GetSystemInfo(ref lpSystemInfo);
 
             switch (lpSystemInfo.wProcessorArchitecture)
             {
-                case 0: return "x86";
-                case 6: return "IA64";
-                case 9: return "AMD64";
-                default: return "MSIL";
+                case 0:
+                    return "x86";
+                case 6:
+                    return "IA64";
+                case 9:
+                    return "AMD64";
+                default:
+                    return "MSIL";
             }
         }
     }

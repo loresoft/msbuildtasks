@@ -97,7 +97,6 @@ namespace MSBuild.Community.Tasks
         /// Gets or sets the value to write.
         /// </summary>
         /// <value>The value.</value>
-        [Required]
         public string Value
         {
             get { return _value; }
@@ -174,7 +173,7 @@ namespace MSBuild.Community.Tasks
                     if (_delete)
                         nodes.Current.DeleteSelf();
                     else
-                        nodes.Current.SetValue(_value);
+                        nodes.Current.SetValue(_value ?? string.Empty);
 
                 using (XmlTextWriter writer = new XmlTextWriter(_xmlFileName, Encoding.UTF8))
                 {

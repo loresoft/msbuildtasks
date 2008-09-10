@@ -28,7 +28,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 // $Id$
@@ -36,7 +35,6 @@ using System.Runtime.InteropServices;
 namespace MSBuild.Community.Tasks.Fusion
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    [CLSCompliant(false)]
     internal struct AssemblyInfo
     {
         public uint cbAssemblyInfo;

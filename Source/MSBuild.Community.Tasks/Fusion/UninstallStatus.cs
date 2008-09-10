@@ -33,14 +33,38 @@ using System;
 
 namespace MSBuild.Community.Tasks.Fusion
 {
+    /// <summary>
+    /// The status of an uninstall.
+    /// </summary>
     public enum UninstallStatus
     {
+        /// <summary>
+        /// No status.
+        /// </summary>
         None = 0,
+        /// <summary>
+        /// Uninstalled successfully.
+        /// </summary>
         Uninstalled = 1,
+        /// <summary>
+        /// Assembly is still in use.
+        /// </summary>
         StillInUse = 2,
+        /// <summary>
+        /// Assembly already uninstalled or not found.
+        /// </summary>
         AlreadyUninstalled = 3,
+        /// <summary>
+        /// Assembly delete is pending.
+        /// </summary>
         DeletePending = 4,
+        /// <summary>
+        /// Assembly has a reference to an installed application.
+        /// </summary>
         HasInstallReferences = 5,
+        /// <summary>
+        /// Assembly not found.
+        /// </summary>
         ReferenceNotFound = 6
     }
 }

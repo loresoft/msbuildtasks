@@ -39,7 +39,6 @@ namespace MSBuild.Community.Tasks.Fusion
     [ComImport]
     [Guid("9E3AAEB4-D1CD-11D2-BAB9-00C04F8ECEAE")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [CLSCompliant(false)]
     internal interface IAssemblyCacheItem
     {
         [return: MarshalAs(UnmanagedType.Error)]

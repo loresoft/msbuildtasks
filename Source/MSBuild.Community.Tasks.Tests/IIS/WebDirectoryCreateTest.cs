@@ -5,7 +5,6 @@ using System.Text;
 using Microsoft.Build.Utilities;
 using MSBuild.Community.Tasks.IIS;
 using NUnit.Framework;
-using System.DirectoryServices;
 
 namespace MSBuild.Community.Tasks.Tests.IIS
 {

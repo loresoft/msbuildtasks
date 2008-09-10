@@ -39,7 +39,6 @@ namespace MSBuild.Community.Tasks.Fusion
     [ComImport]
     [Guid("e707dcde-d1cd-11d2-bab9-00c04f8eceae")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    [CLSCompliant(false)]
     internal interface IAssemblyCache
     {
         [PreserveSig]
