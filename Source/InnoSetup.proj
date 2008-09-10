@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="All"  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Required Import to use MSBuild Community Tasks -->
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+  
+  <!-- These are sample targets the demonstrate the use of MSBuild Community Tasks  -->
+  <Target Name="InnoSetup">
+    <InnoSetup 
+             ScriptFile="C:\Archivos de programa\Inno Setup 5\Examples\CodeDll.iss"
+             OutputFileName="MySetup.exe"
+             OutputPath="C:\"
+             Quiet="True" />
+  </Target>
+
+  <Target Name="All">
+    <CallTarget Targets="InnoSetup" />
+  </Target>
+</Project>
