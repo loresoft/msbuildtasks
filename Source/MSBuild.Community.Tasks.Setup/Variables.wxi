@@ -36,7 +36,7 @@
   <?endif?>
 
   <!-- General -->
-  <?define VersionNumberInternal = "$(var.MajorVersion).$(var.MinorVersion).$(var.BuildVersion)" ?>
+  <?define VersionNumberInternal = "$(var.MajorVersion).$(var.MinorVersion).$(var.RevisionVersion)" ?>
   <?define VersionNumberUserVisible = "$(var.MajorVersion).$(var.MinorVersion).$(var.BuildVersion).$(var.RevisionVersion)" ?>
   <?define BindVersionNumber = "$(var.MajorVersion).$(var.BindMinorVersion).$(var.BindBuildVersion).$(var.BindRevisionVersion)" ?>
 
