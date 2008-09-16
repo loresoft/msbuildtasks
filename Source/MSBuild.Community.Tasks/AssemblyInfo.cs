@@ -130,6 +130,7 @@ namespace MSBuild.Community.Tasks
         private const string AssemblyDelaySignName = "AssemblyDelaySign";
         private const string SkipVerificationName = "SkipVerification";
         private const string UnmanagedCodeName = "UnmanagedCode";
+        private const string InternalsVisibleToName = "InternalsVisibleTo";
 
         #endregion Constants
 
@@ -174,7 +175,8 @@ namespace MSBuild.Community.Tasks
                                                                            CLSCompliantName,
                                                                            AssemblyDelaySignName,
                                                                            ComVisibleName, 
-                                                                           AssemblyKeyFileName
+                                                                           AssemblyKeyFileName,
+                                                                           InternalsVisibleToName
                                                                        };
         #endregion
 
@@ -416,6 +418,18 @@ namespace MSBuild.Community.Tasks
         {
             get { return _languageCode; }
             set { _languageCode = value; }
+        }
+
+        /// <summary>
+        /// Makes it possible to make certain assemblies able to use constructs marked as internal.
+        /// Example might be setting this value to "UnitTests" assembly. The typical use case might 
+        /// be constructors in classes which shouldn't be available to other assemblies, but the unit
+        /// tests should be able to use them.
+        /// </summary>
+        public string InternalsVisibleTo
+        {
+            get { return ReadAttribute(InternalsVisibleToName); }
+            set { _attributes[InternalsVisibleToName] = value; }
         }
 
         #endregion Input Parameters

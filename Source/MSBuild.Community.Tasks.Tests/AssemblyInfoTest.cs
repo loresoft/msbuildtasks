@@ -114,7 +114,7 @@ namespace MSBuild.Community.Tasks.Tests
             string outputFile = Path.Combine(testDirectory, "AssemblyInfoBOM.cs");
             task.OutputFile = outputFile;
             task.AssemblyTitle = "AssemblyInfoTask";
-            task.AssemblyCopyright = "Copyright © Ignaz Kohlbecker 2006";
+            task.AssemblyCopyright = "Copyright ï¿½ Ignaz Kohlbecker 2006";
             Assert.IsTrue(task.Execute(), "Execute Failed");
 
             byte[] firstBytesOfFile = new byte[3];
@@ -129,23 +129,14 @@ namespace MSBuild.Community.Tasks.Tests
         [Test]
         public void IncludeNeutralResourceLanguage()
         {
-            AssemblyInfo task = new AssemblyInfo();
-            task.BuildEngine = new MockBuild();
-            task.CodeLanguage = "cs";
             string outputFile = Path.Combine(testDirectory, "AssemblyInfoNeutralResource.cs");
-            task.OutputFile = outputFile;
-            task.AssemblyTitle = "AssemblyInfoTask";
-            task.AssemblyDescription = "AssemblyInfo Description";
-            task.AssemblyConfiguration = "";
-            task.AssemblyCompany = "Company Name, LLC";
-            task.AssemblyProduct = "AssemblyInfoTask";
-            task.AssemblyCopyright = "Copyright (c) Company Name, LLC 2005";
+            AssemblyInfo task = CreateCSAssemblyInfo(outputFile); 
             task.NeutralResourcesLanguage = "en-US";
 
             Assert.IsTrue(task.Execute(), "Execute failed");
             Assert.IsTrue(File.Exists(outputFile));
 
-            string content = null;
+            string content;
             using(StreamReader stream = File.OpenText(outputFile))
             {
                 content = stream.ReadToEnd();
@@ -153,33 +144,40 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.IsNotNull(content);
             Assert.That(content.Contains("NeutralResourcesLanguage(\"en-US\","));
         }
+    
+        [Test(Description="Creates an assembly info which has InternalsVisibleTo attribute")]
+        public void IncludeInternalsVisibleTo()
+       { 
+            string outputFile = Path.Combine(testDirectory, "InternalsVisibleTo.cs");
+            AssemblyInfo task = CreateCSAssemblyInfo(outputFile);
+            task.InternalsVisibleTo = "UnitTests";
 
+            Assert.IsTrue(task.Execute(), "Execute failed");
+            Assert.IsTrue(File.Exists(outputFile));
 
+            string content;
+            using (StreamReader stream = File.OpenText(outputFile))
+            {
+                content = stream.ReadToEnd();
+            }
+            Assert.IsNotNull(content);
+            Assert.That(content.Contains("assembly: InternalsVisibleTo(\"UnitTests\")"));
+        }
 
+        private AssemblyInfo CreateCSAssemblyInfo(string outputFile)
+        {
+            AssemblyInfo task = new AssemblyInfo();
+            task.BuildEngine = new MockBuild();
+            task.CodeLanguage = "cs";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            task.OutputFile = outputFile;
+            task.AssemblyTitle = "AssemblyInfoTask";
+            task.AssemblyDescription = "AssemblyInfo Description";
+            task.AssemblyConfiguration = "";
+            task.AssemblyCompany = "Company Name, LLC";
+            task.AssemblyProduct = "AssemblyInfoTask";
+            task.AssemblyCopyright = "Copyright (c) Company Name, LLC 2005";
+            return task;
+        }
     }
 }
