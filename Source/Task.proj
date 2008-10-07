@@ -273,6 +273,38 @@
   <Target Name="SqlPubWiz">
     <SqlPubWiz Database="Northwind" Output="Northwind.sql" SchemaOnly="true" />
   </Target>
+
+  <ItemGroup>
+    <RegexPatterns Include="TextRegex">
+      <Pattern>\G[^&lt;]+</Pattern>
+      <Options>RegexOptions.Singleline | RegexOptions.Multiline</Options>
+    </RegexPatterns>
+    <RegexPatterns Include="CommentRegex">
+      <Pattern>\G&lt;%--(([^-]*)-)*?-%&gt;</Pattern>
+      <Options>RegexOptions.Singleline | RegexOptions.Multiline</Options>
+    </RegexPatterns>
+    <RegexPatterns Include="CodeRegex">
+      <Pattern>\G&lt;%(?![@%])(?&lt;code&gt;.*?)%&gt;</Pattern>
+      <Options>RegexOptions.Singleline | RegexOptions.Multiline</Options>
+      <Namespace>MSBuild.Community.RegularExpressions</Namespace>
+    </RegexPatterns>
+  </ItemGroup>
+
+  <Target Name="RegexCompiler">
+    <RegexCompiler
+      OutputDirectory="Test"
+      RegularExpressions="@(RegexPatterns)"
+      Namespace="MSBuild.RegularExpressions"
+      AssemblyName="MSBuild.Community.RegularExpressions.dll"
+			AssemblyTitle="MSBuild.Community.RegularExpressions"
+			AssemblyDescription="MSBuild Community Tasks Regular Expressions"
+			AssemblyCompany="Company Name, LLC"
+			AssemblyProduct="MSBuildTasks"
+			AssemblyCopyright="Copyright (c) MSBuildTasks 2008"
+			AssemblyVersion="1.0.0.0"
+			AssemblyFileVersion="1.0.0.0" />
+  </Target>
+
   <Target Name="All"
           DependsOnTargets="AssemblyInfo;Mail;Zip;Unzip;Math;Version;NDoc;Registry;FTP;XML;NUnit;FileUpdate;Service;WebDownload">
 

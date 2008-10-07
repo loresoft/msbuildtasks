@@ -114,6 +114,7 @@
     <Compile Include="InnoSetup.cs" />
     <Compile Include="Merge.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
+    <Compile Include="Regex\RegexCompiler.cs" />
     <Compile Include="Sandcastle\BuildAssembler.cs">
       <SubType>Code</SubType>
     </Compile>

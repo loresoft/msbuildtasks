@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5AC1D006-CA56-4BE1-8250-DBEABBEA0725}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -76,6 +76,7 @@
     <Compile Include="IIS\WebDirectoryCreateTest.cs" />
     <Compile Include="IIS\WebDirectoryDeleteTest.cs" />
     <Compile Include="MoveTest.cs" />
+    <Compile Include="Regex\RegexCompilerTest.cs" />
     <Compile Include="Regex\RegexTest.cs" />
     <Compile Include="RoboCopyTest.cs" />
     <Compile Include="Sandcastle\MRefBuilderTest.cs">

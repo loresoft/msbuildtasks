@@ -43,6 +43,7 @@
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.RegistryWrite" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.RegexMatch" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.RegexReplace" />
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.RegexCompiler" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.RoboCopy" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Script" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.ServiceController" />

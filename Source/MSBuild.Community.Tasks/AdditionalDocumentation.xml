@@ -41,7 +41,7 @@ Ex:
       </code>
     </example>
   </task>
-  
+
   <task name="InstallAspNet">
     <example>
       Install the latest version of ASP.NET on the server:
@@ -104,7 +104,7 @@ Ex:
       </code>
     </example>
   </task>
-  
+
   <task name="Math.Divide">
     <example>
       <code>
@@ -132,7 +132,7 @@ Ex:
       <code>Divide 7/3= 2</code>
     </example>
   </task>
-  
+
   <task name="Math.Modulo">
     <remarks>
       The modulo operation finds the remainder of the division of one number by another.
@@ -229,7 +229,7 @@ Ex:
   <task name="Sound">
     <remarks>
       You must specify either
-      a file or URL (<see cref="SoundLocation"/>), 
+      a file or URL (<see cref="SoundLocation"/>),
       a file relative to the <see cref="Environment.SystemDirectory"/> (<see cref="SystemSoundFile"/>),
       or a file within the <see cref="Environment.SpecialFolder.MyMusic"/> folder (<see cref="MyMusicFile"/>).
     </remarks>
@@ -243,22 +243,25 @@ Ex:
       To play a wav file from the "MyMusic" folder, use
       <code>
         <![CDATA[<Sound MyMusicFile="25881_acclivity_3beeps1000.wav" />]]>
-    </code>
+      </code>
     </example>
   </task>
 
   <task name="XmlMassUpdate">
     <remarks>
       XmlMassUpdate allows to to specify multiple changes to make to an XML file (the <see cref="ContentFile" />. By default, the changes are applied to the <see cref="ContentFile" />, but you can create a new file by providing the <see cref="MergedFile" /> attribute.  The change instructions are specified using XML in the <see cref="SubstitutionsFile" />. If the <see cref="SubstitutionsFile" /> does not mirror the structure of the <see cref="ContentFile" /> exactly, you can specify the <see cref="ContentRoot" /> and <see cref="SubstitutionsRoot" /> XPath expressions which determine how the files should be mapped to each other.
-      <para>Any element within the <see cref="SubstitutionsRoot" /> will find the corresponding element in the <see cref="ContentRoot" />. If it does not exist, it will be created with all of its attributes. If it does exist, the attributes will be added or updated as specified.</para>
+      <para>
+        Any element within the <see cref="SubstitutionsRoot" /> will find the corresponding element in the <see cref="ContentRoot" />. If it does not exist, it will be created with all of its attributes. If it does exist, the attributes will be added or updated as specified.
+      </para>
       <para>
         Any attribute declared within the <see cref="UpdateControlNamespace" /> will not be copied to the modified file. Valid attributes are <c>key</c> and <c>action</c>. The <c>key</c> attribute allows you to define an attribute to use as the identifying attribute when you only want to update a single element, and multiple elements with the same name exist. You can also use the <c>action="remove"</c> attribute to specify that an element should be deleted instead of updated.
       </para>
-  </remarks>
+    </remarks>
     <example>
-      <para>These examples will demonstrate how to make multiple updates to a XML file named web.config. It looks like:
-      <code>
-        <![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+      <para>
+        These examples will demonstrate how to make multiple updates to a XML file named web.config. It looks like:
+        <code>
+          <![CDATA[<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<appSettings>
 		<add key="ItemsPerPage" value="10" />
@@ -272,7 +275,7 @@ Ex:
         <globalization requestEncoding="utf-8" responseEncoding="utf-8" />
     </system.web>
 </configuration> ]]>
-      </code>
+        </code>
       </para>
     </example>
     <example>
@@ -282,7 +285,7 @@ Ex:
       </code>
       The <see cref="SubstitutionsFile" /> is named changes.xml and contains:
       <code>
-      <![CDATA[<system.web>
+        <![CDATA[<system.web>
         <compilation debug="false" />
         <customErrors mode="RemoteOnly" defaultRedirect="Error.htm">
           <error statusCode="401" redirect="AccessDenied.aspx" />
@@ -322,8 +325,8 @@ Ex:
         <add xmu:key="key" key="DefaultSort" value="LastName" />
   </appSettings>
 </configuration> ]]>
-    </code>
-  </example>
+      </code>
+    </example>
     <example>
       Use a changes.xml file with the following contents to demonstrate how to remove an element from the updated file:
       <code>
@@ -553,4 +556,73 @@ Ex:
       </code>
     </example>
   </task>
+  <task name="RegexCompiler">
+    <remarks>
+      <para>
+        When defining the regular expressions in an MSBuild project file, the ItemGroup
+        item must have a metadata tag called 'Pattern' that is the actually regular expression.
+        Other optional metadata tags are the following.
+        <list type="table">
+          <listheader>
+            <term>Metadata Tags</term>
+            <description>Description</description>
+          </listheader>
+          <item>
+            <term>Pattern</term>
+            <description>The actually regular expression pattern to be compiled. (Required)</description>
+          </item>
+          <item>
+            <term>Options</term>
+            <description>The RegexOptions for the expression.</description>
+          </item>
+          <item>
+            <term>Namespace</term>
+            <description>The class namespace for the compile class.</description>
+          </item>
+          <item>
+            <term>IsPublic</term>
+            <description>A flag if the generated expression should be public.</description>
+          </item>
+        </list>
+      </para>
+    </remarks>
+    <example>
+      Creates an assembly with the compiled regular expressions.
+      <code>
+        <![CDATA[
+  <ItemGroup>
+    <RegexPatterns Include="TextRegex">
+      <Pattern>\G[^&lt;]+</Pattern>
+      <Options>RegexOptions.Singleline | RegexOptions.Multiline</Options>
+    </RegexPatterns>
+    <RegexPatterns Include="CommentRegex">
+      <Pattern>\G&lt;%--(([^-]*)-)*?-%&gt;</Pattern>
+      <Options>RegexOptions.Singleline | RegexOptions.Multiline</Options>
+    </RegexPatterns>
+    <RegexPatterns Include="CodeRegex">
+      <Pattern>\G&lt;%(?![@%])(?&lt;code&gt;.*?)%&gt;</Pattern>
+      <Options>RegexOptions.Singleline | RegexOptions.Multiline</Options>
+      <Namespace>MSBuild.Community.RegularExpressions</Namespace>
+    </RegexPatterns>
+  </ItemGroup>
+
+  <Target Name="RegexCompiler">
+    <RegexCompiler
+      OutputDirectory="Test"
+      RegularExpressions="@(RegexPatterns)"
+      Namespace="MSBuild.RegularExpressions"
+      AssemblyName="MSBuild.RegularExpressions.dll"
+      AssemblyTitle="MSBuild.RegularExpressions"
+      AssemblyDescription="MSBuild Community Tasks Regular Expressions"
+      AssemblyCompany="Company Name, LLC"
+      AssemblyProduct="MSBuildTasks"
+      AssemblyCopyright="Copyright (c) MSBuildTasks 2008"
+      AssemblyVersion="1.0.0.0"
+      AssemblyFileVersion="1.0.0.0" />
+  </Target>
+]]>
+      </code>
+    </example>
+  </task>
+
 </docs>

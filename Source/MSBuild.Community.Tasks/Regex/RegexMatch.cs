@@ -71,7 +71,7 @@ namespace MSBuild.Community.Tasks
         /// otherwise <see langword="false"/>.</returns>
         public override bool Execute()
         {
-            Regex regex = new System.Text.RegularExpressions.Regex(Expression.ItemSpec, ExpressionOptions);
+            var regex = new System.Text.RegularExpressions.Regex(Expression.ItemSpec, ExpressionOptions);
 
             List<ITaskItem> returnItems = new List<ITaskItem>();
 
