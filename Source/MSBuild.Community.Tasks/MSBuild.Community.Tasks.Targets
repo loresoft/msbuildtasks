@@ -118,6 +118,8 @@
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.HtmlHelp.ChmCompiler" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.HtmlHelp.HxCompiler" />
 
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.SymbolServer.SymStore" />
+
   <ItemGroup>
     <FxCopRuleAssemblies Include="UsageRules.dll"/>
     <FxCopRuleAssemblies Include="SecurityRules.dll"/>

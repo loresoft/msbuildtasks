@@ -51,6 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs">
+      <Link>AssemblyInfoCommon.cs</Link>
+    </Compile>
     <Compile Include="AspNet\InstallAspNetTest.cs" />
     <Compile Include="AssemblyInfoTest.cs" />
     <Compile Include="AttribTest.cs" />
@@ -68,7 +71,6 @@
     <Compile Include="Math\ModuloTest.cs" />
     <Compile Include="Oracle\AddTnsNameTest.cs" />
     <Compile Include="Oracle\TnsParserTest.cs" />
-    <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="FileUpdateTest.cs" />
     <Compile Include="IIS\AppPoolControllerTest.cs" />
     <Compile Include="IIS\AppPoolCreateTest.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="SqlServer\SqlPubWizTest.cs" />
     <Compile Include="Subversion\SvnCopyTest.cs" />
     <Compile Include="Subversion\SvnInfoTest.cs" />
+    <Compile Include="SymbolServer\SymStoreTest.cs" />
     <Compile Include="TemplateFile\TemplateFileTest.cs" />
     <Compile Include="Time\TimeTest.cs" />
     <Compile Include="User\UserTest.cs" />

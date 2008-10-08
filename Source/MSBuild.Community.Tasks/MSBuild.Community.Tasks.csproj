@@ -148,6 +148,7 @@
     <Compile Include="Sound\Sound.cs" />
     <Compile Include="SqlServer\SqlPubWiz.cs" />
     <Compile Include="Subversion\SvnCopy.cs" />
+    <Compile Include="SymbolServer\SymStore.cs" />
     <Compile Include="Tfs\IServer.cs" />
     <Compile Include="Tfs\Proxies\Changeset.cs" />
     <Compile Include="Tfs\Proxies\RecursionType.cs" />

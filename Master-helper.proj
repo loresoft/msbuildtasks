@@ -63,7 +63,8 @@
 
     <AssemblyInfo CodeLanguage="CS"
 				OutputFile="Source\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs"
-				AssemblyCompany="http://msbuildtasks.tigris.org/"
+				GenerateClass="true"
+        AssemblyCompany="http://msbuildtasks.tigris.org/"
 				AssemblyProduct="MSBuild.Community.Tasks"
 				AssemblyCopyright="Copyright © $(Year) MSBuild Community Tasks Project"
 				ComVisible="false"
