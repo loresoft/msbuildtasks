@@ -20,8 +20,8 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
 [assembly: AssemblyVersion("1.3.0.0")]
-[assembly: AssemblyFileVersion("1.3.0.416")]
-[assembly: AssemblyInformationalVersion("1.3.0.416")]
+[assembly: AssemblyFileVersion("1.3.0.417")]
+[assembly: AssemblyInformationalVersion("1.3.0.417")]
 
 
 
@@ -35,9 +35,9 @@ internal sealed partial class ThisAssembly {
     
     internal const string AssemblyVersion = "1.3.0.0";
     
-    internal const string AssemblyFileVersion = "1.3.0.416";
+    internal const string AssemblyFileVersion = "1.3.0.417";
     
-    internal const string AssemblyInformationalVersion = "1.3.0.416";
+    internal const string AssemblyInformationalVersion = "1.3.0.417";
     
     private ThisAssembly() {
     }

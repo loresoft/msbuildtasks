@@ -51,6 +51,7 @@ namespace MSBuild.Community.Tasks.Subversion
         private const string _switchValueFormat = " --{0} {1}";
 
         private static readonly Regex _revisionParse = new Regex(@"\b(?<Rev>\d+)", RegexOptions.Compiled);
+        private static readonly Regex _cleanPath = new Regex(@"[\\/:*?""<>|\a\b\t\n\v\f\r]", RegexOptions.Compiled);
 
         #endregion Fields
 
@@ -354,8 +355,8 @@ namespace MSBuild.Community.Tasks.Subversion
         /// </returns>
         protected override string GenerateFullPathToTool()
         {
-            string path = SvnClient.FindToolPath(ToolName);
-            base.ToolPath = path;
+            if (string.IsNullOrEmpty(ToolPath))
+                ToolPath = FindToolPath(ToolName);
 
             return Path.Combine(ToolPath, ToolName);
         }
@@ -381,11 +382,12 @@ namespace MSBuild.Community.Tasks.Subversion
             // 2) search the path
             if (toolPath == null)
             {
-                string pathEnvironmentVariable = Environment.GetEnvironmentVariable("PATH");
+                string pathEnvironmentVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
                 string[] paths = pathEnvironmentVariable.Split(Path.PathSeparator);
                 foreach (string path in paths)
                 {
-                    string fullPathToClient = Path.Combine(path, toolName);
+                    string p = _cleanPath.Replace(path, string.Empty);
+                    string fullPathToClient = Path.Combine(p, toolName);
                     if (File.Exists(fullPathToClient))
                     {
                         toolPath = path;

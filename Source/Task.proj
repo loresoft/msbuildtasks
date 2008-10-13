@@ -23,7 +23,8 @@
 
     <AssemblyInfo CodeLanguage="CS"
 			OutputFile="$(MSBuildProjectDirectory)\Test\GlobalInfo.cs"
-			AssemblyTitle="AssemblyInfoTask"
+			GenerateClass="true"
+      AssemblyTitle="AssemblyInfoTask"
 			AssemblyDescription="AssemblyInfo Description"
 			AssemblyConfiguration=""
 			AssemblyCompany="Company Name, LLC"

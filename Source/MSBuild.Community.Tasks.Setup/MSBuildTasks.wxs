@@ -108,7 +108,7 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="MSBuildDir" Name="MSBuild">
-          <Directory Id="MSBuildTasksDir" Name="MSBuildTasks" />
+          <Directory Id="MSBuildTasksDir" Name="MSBuildCommunityTasks" />
         </Directory>
       </Directory>
       <Directory Id="GlobalAssemblyCache" />
