@@ -48,7 +48,7 @@
 
   <Target Name="Update" DependsOnTargets="Checkout">
     <Delete Files="$(TestWorkingFolder)\SvnClientTest.cs" />
-    <SvnUpdate LocalPath="$(TestWorkingFolder)">
+    <SvnUpdate LocalPath="$(TestWorkingFolder)" Force="true">
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </SvnUpdate>
     <Message Text="Revision: $(Revision)" />

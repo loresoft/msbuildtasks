@@ -116,25 +116,25 @@ namespace MSBuild.Community.Tasks.Subversion
             set { _password = value; }
         }
 
-        private bool? _verbose;
+        private bool _verbose;
 
         /// <summary>
         /// Gets or sets the verbose.
         /// </summary>
         /// <value>The verbose.</value>
-        public bool? Verbose
+        public bool Verbose
         {
             get { return _verbose; }
             set { _verbose = value; }
         }
 
-        private bool? _force;
+        private bool _force;
 
         /// <summary>
         /// Gets or sets the force.
         /// </summary>
         /// <value>The force.</value>
-        public bool? Force
+        public bool Force
         {
             get { return _force; }
             set { _force = value; }
@@ -274,10 +274,10 @@ namespace MSBuild.Community.Tasks.Subversion
             if (!string.IsNullOrEmpty(_message))
                 builder.AppendFormat(_switchStringFormat, "message", _message);
 
-            if (_force.HasValue && _force.Value)
+            if (_force)
                 builder.AppendFormat(_switchBooleanFormat, "force");
 
-            if (_verbose.HasValue && _verbose.Value)
+            if (_verbose)
                 builder.AppendFormat(_switchBooleanFormat, "verbose");
 
             if (!string.IsNullOrEmpty(_arguments))
