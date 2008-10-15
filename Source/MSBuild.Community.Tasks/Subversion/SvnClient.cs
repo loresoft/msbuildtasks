@@ -152,6 +152,22 @@ namespace MSBuild.Community.Tasks.Subversion
             set { _message = value; }
         }
 
+        private string _messageFile;
+
+        /// <summary>
+        /// Gets or sets the message file.
+        /// </summary>
+        /// <value>The message file.</value>
+        /// <remarks>
+        /// Uses the contents of the named file for the specified 
+        /// subcommand, though different subcommands do different 
+        /// things with this content.</remarks>
+        public string MessageFile
+        {
+            get { return _messageFile; }
+            set { _messageFile = value; }
+        }
+
         private string _repositoryPath;
 
         /// <summary>
@@ -271,6 +287,9 @@ namespace MSBuild.Community.Tasks.Subversion
             if (!string.IsNullOrEmpty(_password))
                 builder.AppendFormat(_switchValueFormat, "password", _password);
 
+            if (!string.IsNullOrEmpty(_messageFile) && File.Exists(_messageFile))
+                builder.AppendFormat(_switchStringFormat, "file", _messageFile);
+            
             if (!string.IsNullOrEmpty(_message))
                 builder.AppendFormat(_switchStringFormat, "message", _message);
 
