@@ -33,6 +33,7 @@ using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 using System.Data.SqlClient;
+using System.IO;
 
 // $Id$
 
@@ -41,8 +42,33 @@ namespace MSBuild.Community.Tasks
     /// <summary>
     /// Executes a SQL command.
     /// </summary>
+    /// <remarks>
+    /// Execute a SQL command against a database.  Target attributes to set:
+    /// ConnectionString (required), Command (required, the SQL to execute),
+    /// SelectMode (NonQuery or Scalar, default is NonQuery),
+    /// OutputFile (required when SelectMode is Scalar).
+    /// </remarks>
+    /// <example>
+    /// Example of returning a count of items in a table.  Uses the default SelectMode of NonQuery.
+    /// <code><![CDATA[
+    ///     <SqlExecute ConnectionString="server=MyServer;Database=MyDatabase;Trusted_Connection=yes;"
+    ///         Command="create database MyDatabase" />
+    /// ]]></code>
+    /// 
+    /// Example of returning the items of a table in an xml format.
+    /// <code><![CDATA[
+    ///     <SqlExecute ConnectionString="server=MyServer;Database=MyDatabase;Trusted_Connection=yes;"
+    ///			Command="select * from SomeTable for xml auto"
+    ///			SelectMode="Scalar"
+    ///			OutputFile="SomeTable.xml" />
+    /// ]]></code>
+    /// </example>
     public class SqlExecute : Task
     {
+
+        private const string NONQUERY = "NonQuery";
+        private const string SCALAR = "Scalar";
+
         /// <summary>
         /// When overridden in a derived class, executes the task.
         /// </summary>
@@ -61,9 +87,26 @@ namespace MSBuild.Community.Tasks
                 cmd = new SqlCommand(Command, con);
                 con.Open();
 
-                _result = cmd.ExecuteNonQuery();
-
-                Log.LogMessage("Successfully executed SQL command with result = : " + _result.ToString());
+                switch (SelectMode.ToLower())
+                {
+                    case SCALAR.ToLower():
+                        if (this.OutputFile == null || this.OutputFile == string.Empty)
+                        {
+                            Log.LogError("When using SelectMode=\"{0}\" you must specify an OutputFile.", SCALAR);
+                            return false;
+                        }
+                        object scalar = cmd.ExecuteScalar();
+                        Log.LogMessage("Successfully executed SQL command.");
+                        File.WriteAllText(this.OutputFile, scalar.ToString());
+                        break;
+                    case NONQUERY.ToLower():
+                        _result = cmd.ExecuteNonQuery();
+                        Log.LogMessage("Successfully executed SQL command with result = : " + _result.ToString());
+                        break;
+                    default:
+                        Log.LogError("Unrecognized SelectMode: " + SelectMode);
+                        return false;
+                }
                 return true;
             }
             catch (Exception ex)
@@ -81,7 +124,9 @@ namespace MSBuild.Community.Tasks
         #region private decls
         private string _conStr;
         private string _cmd;
+        private string _mode;
         private int _result;
+        private string _output;
         #endregion
 
         /// <summary>
@@ -105,15 +150,41 @@ namespace MSBuild.Community.Tasks
         }
 
         /// <summary>
+        /// The SQL Selection Mode.  Set to NonQuery or Scalar.  Default is NonQuery.
+        /// </summary>
+        public string SelectMode
+        {
+            get
+            {
+                if (_mode == null)
+                {
+                    return NONQUERY;
+                }
+                else
+                {
+                    return _mode;
+                }
+            }
+            set { _mode = value; }
+        }
+
+        /// <summary>
+        /// The file name to write to
+        /// </summary>
+        public string OutputFile
+        {
+            get { return _output; }
+            set { _output = value; }
+        }
+
+
+        /// <summary>
         /// Output the return count/value
         /// </summary>
         [Output]
         public int Result
         {
-            get
-            {
-                return _result;
-            }
+            get { return _result; }
         }
     }
 }
