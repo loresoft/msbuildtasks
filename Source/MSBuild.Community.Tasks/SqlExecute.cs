@@ -87,9 +87,9 @@ namespace MSBuild.Community.Tasks
                 cmd = new SqlCommand(Command, con);
                 con.Open();
 
-                switch (SelectMode.ToLower())
+                switch (SelectMode)
                 {
-                    case SCALAR.ToLower():
+                    case SCALAR:
                         if (this.OutputFile == null || this.OutputFile == string.Empty)
                         {
                             Log.LogError("When using SelectMode=\"{0}\" you must specify an OutputFile.", SCALAR);
@@ -99,7 +99,7 @@ namespace MSBuild.Community.Tasks
                         Log.LogMessage("Successfully executed SQL command.");
                         File.WriteAllText(this.OutputFile, scalar.ToString());
                         break;
-                    case NONQUERY.ToLower():
+                    case NONQUERY:
                         _result = cmd.ExecuteNonQuery();
                         Log.LogMessage("Successfully executed SQL command with result = : " + _result.ToString());
                         break;
