@@ -306,6 +306,10 @@
 			AssemblyFileVersion="1.0.0.0" />
   </Target>
 
+  <Target Name="DeleteTree">
+    <DeleteTree Directories="**\bin;**\obj" />
+  </Target>
+  
   <Target Name="All"
           DependsOnTargets="AssemblyInfo;Mail;Zip;Unzip;Math;Version;NDoc;Registry;FTP;XML;NUnit;FileUpdate;Service;WebDownload">
 

@@ -10,12 +10,13 @@
     <RootNamespace>MSBuild.Community.Tasks.Tests</RootNamespace>
     <AssemblyName>MSBuild.Community.Tasks.Tests</AssemblyName>
     <WarningLevel>4</WarningLevel>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <AssemblyOriginatorKeyFile>..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,6 +60,7 @@
     <Compile Include="AttribTest.cs" />
     <Compile Include="Beep\BeepTest.cs" />
     <Compile Include="Computer\ComputerTest.cs" />
+    <Compile Include="DeleteTreeTest.cs" />
     <Compile Include="Fusion\FusionWrapperTest.cs" />
     <Compile Include="FxCopTest.cs" />
     <Compile Include="GacUtilTest.cs" />
@@ -132,12 +134,16 @@
     <ProjectReference Include="..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.csproj">
       <Project>{F88A60A8-564C-4E70-92DC-E92DBB897641}</Project>
       <Name>MSBuild.Community.Tasks</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ILMerge\keypair.snk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk">
+      <Link>MSBuild.Community.Tasks.snk</Link>
+    </None>
     <None Include="AspNet\AspNetTest.proj" />
     <None Include="Computer\ComputerTest.proj" />
     <None Include="IIS\IISTest.proj" />

@@ -68,6 +68,7 @@
     <Compile Include="ByteDescriptions.cs" />
     <Compile Include="Computer\Computer.cs" />
     <Compile Include="Beep\Beep.cs" />
+    <Compile Include="DeleteTree.cs" />
     <Compile Include="FtpUpload\FtpUpload.cs" />
     <Compile Include="FtpUpload\IFtpWebRequest.cs" />
     <Compile Include="FtpUpload\RealFtpWebRequest.cs" />
