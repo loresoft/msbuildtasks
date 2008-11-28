@@ -108,9 +108,7 @@ namespace MSBuild.Community.Tasks.Net
                     string responseString = responseReader.ReadToEnd();
                     if (WriteResponseToFile)
                     {
-                        TextWriter tw = new StreamWriter(WriteResponseTo);
-                        tw.Write(responseString);
-                        tw.Close();
+                        File.AppendAllText(WriteResponseTo, responseString);
                     }
                     if (CheckResponseContents)
                     {
