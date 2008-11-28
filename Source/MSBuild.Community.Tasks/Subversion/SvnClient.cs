@@ -414,36 +414,29 @@ namespace MSBuild.Community.Tasks.Subversion
                     }
                 }
             }
-            // 3) try default install location
-            if (toolPath == null)
+
+            // try some typical locations
+            string[] commonSVNLocations = {
+                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Subversion\bin"),
+                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion Server"),
+                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion"),
+                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"VisualSVN\bin")
+                                          };
+
+            foreach (string path in commonSVNLocations) 
             {
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Subversion\bin");
-                string fullPathToClient = Path.Combine(path, toolName);
+                string fullPathToClient = Path.Combine(path, toolName);                
                 if (File.Exists(fullPathToClient))
                 {
                     toolPath = path;
-                }
-            }
-            // 4) try default CollabNet install location
-            if (toolPath == null)
-            {
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion Server");
-                string fullPathToClient = Path.Combine(path, toolName);
-                if (File.Exists(fullPathToClient))
-                {
-                    toolPath = path;
-                }
-            }
-            if (toolPath == null)
-            {
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion");
-                string fullPathToClient = Path.Combine(path, toolName);
-                if (File.Exists(fullPathToClient))
-                {
-                    toolPath = path;
+                    break;
                 }
             }
 
+            if (toolPath == null)
+            {
+                throw new Exception("Could not find svn.exe.  Looked in PATH locations and various common folders inside Program Files.");
+            }
 
             return toolPath;
         }
