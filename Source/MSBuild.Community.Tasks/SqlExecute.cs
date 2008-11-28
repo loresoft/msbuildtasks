@@ -45,8 +45,11 @@ namespace MSBuild.Community.Tasks
     /// <remarks>
     /// Execute a SQL command against a database.  Target attributes to set:
     /// ConnectionString (required), Command (required, the SQL to execute),
-    /// SelectMode (NonQuery or Scalar, default is NonQuery),
-    /// OutputFile (required when SelectMode is Scalar).
+    /// SelectMode (NonQuery, Scalar, or ScalarXml, default is NonQuery),
+    /// OutputFile (required when SelectMode is Scalar or ScalarXml).
+    /// 
+    /// Note: ScalarXml was created because of the 2033 byte limit on the sql return. 
+    /// See http://aspnetresources.com/blog/executescalar_truncates_xml.aspx for details.
     /// </remarks>
     /// <example>
     /// Example of returning a count of items in a table.  Uses the default SelectMode of NonQuery.
@@ -59,7 +62,7 @@ namespace MSBuild.Community.Tasks
     /// <code><![CDATA[
     ///     <SqlExecute ConnectionString="server=MyServer;Database=MyDatabase;Trusted_Connection=yes;"
     ///			Command="select * from SomeTable for xml auto"
-    ///			SelectMode="Scalar"
+    ///			SelectMode="ScalarXml"
     ///			OutputFile="SomeTable.xml" />
     /// ]]></code>
     /// </example>
@@ -68,6 +71,7 @@ namespace MSBuild.Community.Tasks
 
         private const string NONQUERY = "NonQuery";
         private const string SCALAR = "Scalar";
+        private const string SCALARXML = "ScalarXml";
 
         /// <summary>
         /// When overridden in a derived class, executes the task.
@@ -90,14 +94,29 @@ namespace MSBuild.Community.Tasks
                 switch (SelectMode)
                 {
                     case SCALAR:
-                        if (this.OutputFile == null || this.OutputFile == string.Empty)
+                        if (!IsOutputFileSpecified(SCALAR))
                         {
-                            Log.LogError("When using SelectMode=\"{0}\" you must specify an OutputFile.", SCALAR);
                             return false;
                         }
                         object scalar = cmd.ExecuteScalar();
                         Log.LogMessage("Successfully executed SQL command.");
                         File.WriteAllText(this.OutputFile, scalar.ToString());
+                        break;
+                    case SCALARXML:
+                        if (!IsOutputFileSpecified(SCALARXML))
+                        {
+                            return false;
+                        }
+
+                        System.Xml.XmlReader rdr = cmd.ExecuteXmlReader();
+                        using (TextWriter tw = new StreamWriter(OutputFile))
+                        {
+                            while (rdr.Read())
+                            {
+                                tw.Write(rdr.ReadOuterXml());
+                            }
+                            tw.Close();
+                        }
                         break;
                     case NONQUERY:
                         _result = cmd.ExecuteNonQuery();
@@ -150,7 +169,7 @@ namespace MSBuild.Community.Tasks
         }
 
         /// <summary>
-        /// The SQL Selection Mode.  Set to NonQuery or Scalar.  Default is NonQuery.
+        /// The SQL Selection Mode.  Set to NonQuery, Scalar, or ScalarXml.  Default is NonQuery.
         /// </summary>
         public string SelectMode
         {
@@ -175,6 +194,20 @@ namespace MSBuild.Community.Tasks
         {
             get { return _output; }
             set { _output = value; }
+        }
+
+        /// <summary>
+        /// Determines if an output file was specified.
+        /// </summary>
+        private bool IsOutputFileSpecified(string selectionMode)
+        {
+            if (this.OutputFile == null || this.OutputFile == string.Empty)
+            {
+                Log.LogError("When using SelectMode=\"{0}\" you must specify an OutputFile.", selectionMode);
+                return false;
+            }
+
+            return true;
         }
 
 
