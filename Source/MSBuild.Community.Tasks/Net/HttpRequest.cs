@@ -22,7 +22,7 @@ namespace MSBuild.Community.Tasks.Net
     /// <example>
     /// Example of a update request ensuring "Database upgrade check completed successfully." was returned.
     /// <code><![CDATA[
-    ///     <HttpRequest Url="http://easypedigreedb.com/perlore/?checkdb=1" 
+    ///     <HttpRequest Url="http://mydomain.com/index.php?checkdb=1" 
     ///         EnsureResponseContains="Database upgrade check completed successfully." 
     ///         FailOnNon2xxResponse="true" />
     /// ]]></code>
