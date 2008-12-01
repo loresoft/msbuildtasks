@@ -53,6 +53,12 @@ namespace MSBuild.Community.Tasks.Subversion
         private static readonly Regex _revisionParse = new Regex(@"\b(?<Rev>\d+)", RegexOptions.Compiled);
         private static readonly Regex _cleanPath = new Regex(@"[\\/:*?""<>|\a\b\t\n\v\f\r]", RegexOptions.Compiled);
 
+        /// <summary>
+        /// Contains output of SVN command-line client.
+        /// </summary>
+        protected StringBuilder _outputBuffer = new StringBuilder();
+       
+
         #endregion Fields
 
         #region Enums
@@ -209,6 +215,7 @@ namespace MSBuild.Community.Tasks.Subversion
 
         #region Output Parameters
         private int _revision = -1;
+        private string _output;
 
         /// <summary>
         /// Gets or sets the revision.
@@ -219,6 +226,21 @@ namespace MSBuild.Community.Tasks.Subversion
         {
             get { return _revision; }
             set { _revision = value; }
+        }
+
+        /// <summary>
+        /// Gets the output of SVN command-line client.
+        /// </summary>
+        [Output]
+        public string Output
+        {
+            get
+            {
+                if (_output == null)
+                    _output = _outputBuffer.ToString();
+
+                return _output;
+            }
         }
 
         #endregion Output Parameters
@@ -357,6 +379,7 @@ namespace MSBuild.Community.Tasks.Subversion
         protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
         {
             base.LogEventsFromTextOutput(singleLine, messageImportance);
+            _outputBuffer.Append(singleLine);
 
             Match revMatch = _revisionParse.Match(singleLine);
             if (revMatch.Success)

@@ -69,7 +69,6 @@ namespace MSBuild.Community.Tasks.Subversion
         private int m_nLastChangedRev;
         private System.DateTime m_LastChangedDate;
         private Schedule m_eSchedule;
-        private StringBuilder _outputBuffer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:SvnInfo"/> class.
@@ -79,7 +78,6 @@ namespace MSBuild.Community.Tasks.Subversion
             base.Command = "info";
             base.CommandSwitches = SvnSwitches.NonInteractive | SvnSwitches.NoAuthCache | SvnSwitches.Xml;
             ResetMemberVariables();
-            _outputBuffer = new StringBuilder();
         }
 
         /// <summary>
@@ -304,20 +302,5 @@ namespace MSBuild.Community.Tasks.Subversion
                 return m_eSchedule.ToString();
             }
         }
-
-		/// <summary>
-		/// Logs the events from text output.
-		/// </summary>
-		/// <param name="singleLine">The single line.</param>
-		/// <param name="messageImportance">The message importance.</param>
-        protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
-        {
-            if (messageImportance == MessageImportance.High)
-            {
-                base.LogEventsFromTextOutput(singleLine, messageImportance);
-            }
-            _outputBuffer.Append(singleLine);
-        }
-        
     }
 }
