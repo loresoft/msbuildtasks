@@ -28,8 +28,9 @@
 			AssemblyFileVersion="1.0.0.0"/>
 
     <AssemblyInfo CodeLanguage="CS"  
-			OutputFile="$(TestOutput)\GlobalInfo.cs" 
-			AssemblyTitle="AssemblyInfoTask" 
+			OutputFile="$(TestOutput)\GlobalInfo.cs"
+			GenerateClass="true"
+      AssemblyTitle="AssemblyInfoTask" 
 			AssemblyDescription="AssemblyInfo Description"
 			AssemblyConfiguration=""
 			AssemblyCompany="Company Name, LLC"

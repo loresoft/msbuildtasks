@@ -207,6 +207,18 @@ namespace MSBuild.Community.Tasks
             get { return _password; }
             set { _password = value; }
         }
+
+        private bool _enableSsl = false;
+
+        /// <summary>
+        /// Specify whether the Mail task uses SSL to encrypt the connection.
+        /// </summary>
+        /// <value><c>true</c> if the Mail task uses SSL; otherwise <c>false</c>. The default value is <c>false</c>.</value>
+        public bool EnableSsl
+        {
+            get { return _enableSsl; }
+            set { _enableSsl = value; }
+        }
         #endregion
 
         /// <summary>Sends an email message</summary>
@@ -221,6 +233,7 @@ namespace MSBuild.Community.Tasks
             {
                 smtp = new SmtpClient();
                 smtp.Host = _smtpServer;
+                smtp.EnableSsl = _enableSsl;
 
                 if (!string.IsNullOrEmpty(_username))
                     smtp.Credentials = new NetworkCredential(_username, _password);
