@@ -158,6 +158,19 @@ namespace MSBuild.Community.Tasks
             set { _encoding = System.Text.Encoding.GetEncoding(value); }
         }
 
+        //--added for testing
+
+        private bool _warnOnNoUpdate;
+        /// <summary>
+        /// When TRUE, a warning will be generated to show which file was not updated.
+        /// </summary>
+        /// <remarks>N/A</remarks>
+        public bool WarnOnNoUpdate
+        {
+            get { return _warnOnNoUpdate; }
+            set { _warnOnNoUpdate = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -194,9 +207,14 @@ namespace MSBuild.Community.Tasks
 					string fileName = item.ItemSpec;
 					Log.LogMessage("Updating File \"{0}\".", fileName);
 					string buffer = File.ReadAllText(fileName, _encoding);
+                    
+                    if (_warnOnNoUpdate == true)
+                        if (replaceRegex.IsMatch(buffer) != true)
+                            Log.LogWarning(String.Format("No updates were performed on file : {0}.", fileName));
+
 					buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);
 					File.WriteAllText(fileName, buffer, _encoding);
-					Log.LogMessage("  Replaced matches with \"{0}\".", _replacementText);
+
 				}
             }
             catch (Exception ex)
