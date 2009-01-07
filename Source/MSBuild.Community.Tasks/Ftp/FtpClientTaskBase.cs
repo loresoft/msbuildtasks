@@ -644,8 +644,8 @@ namespace MSBuild.Community.Tasks.Ftp
             // Send provided command and read reply.
             reply = SendCommandAndReadResponse( rawCommand );
 
-            // If not 'transfer started' recieved;
-            if(reply.ResultCode != 125)
+            // If not in the 1xx range, throw exception.
+            if (reply.ResultCode < 100 || reply.ResultCode > 199)
             {
                 // throw exception.
                 throw new FtpException( reply.Message );
