@@ -16,12 +16,12 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("http://msbuildtasks.tigris.org/")]
 [assembly: AssemblyProduct("MSBuild.Community.Tasks")]
-[assembly: AssemblyCopyright("Copyright © 2008 MSBuild Community Tasks Project")]
+[assembly: AssemblyCopyright("Copyright © 2009 MSBuild Community Tasks Project")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
 [assembly: AssemblyVersion("1.3.0.0")]
-[assembly: AssemblyFileVersion("1.3.0.417")]
-[assembly: AssemblyInformationalVersion("1.3.0.417")]
+[assembly: AssemblyFileVersion("1.3.0.449")]
+[assembly: AssemblyInformationalVersion("1.3.0.449")]
 
 
 
@@ -31,13 +31,13 @@ internal sealed partial class ThisAssembly {
     
     internal const string AssemblyProduct = "MSBuild.Community.Tasks";
     
-    internal const string AssemblyCopyright = "Copyright © 2008 MSBuild Community Tasks Project";
+    internal const string AssemblyCopyright = "Copyright © 2009 MSBuild Community Tasks Project";
     
     internal const string AssemblyVersion = "1.3.0.0";
     
-    internal const string AssemblyFileVersion = "1.3.0.417";
+    internal const string AssemblyFileVersion = "1.3.0.449";
     
-    internal const string AssemblyInformationalVersion = "1.3.0.417";
+    internal const string AssemblyInformationalVersion = "1.3.0.449";
     
     private ThisAssembly() {
     }

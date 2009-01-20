@@ -132,7 +132,7 @@ namespace MSBuild.Community.Tasks.IIS
             int flags = 0;
             if (enableScriptEngine) flags += 1;
             if (verifyFileExists) flags += 4;
-            if (!extension.StartsWith(".")) extension = "." + extension;
+            if (!extension.StartsWith(".") && extension != "*") extension = "." + extension;
 
             DirectoryEntry targetDirectory = null;
             try

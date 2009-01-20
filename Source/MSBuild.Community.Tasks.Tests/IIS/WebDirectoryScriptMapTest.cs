@@ -78,5 +78,18 @@ namespace MSBuild.Community.Tasks.Tests.IIS
             Assert.IsTrue(task.Execute(), "Task should have succeeded.");
         }
 
+        [Test]
+        public void AddScriptMap_using_wildcard()
+        {
+            WebDirectoryScriptMap task = new WebDirectoryScriptMap();
+            task.BuildEngine = new MockBuild();
+            task.VirtualDirectoryName = TestWebDirectoryName;
+            task.Extension = "*";
+            task.VerifyFileExists = false;
+            task.MapToAspNet = true;
+            Assert.IsTrue(task.Execute(), "Task should have succeeded.");
+        }
+
+
     }
 }
