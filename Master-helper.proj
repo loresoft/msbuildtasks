@@ -28,6 +28,10 @@
     <DefaultExclude Include="**\www\**" />
     <DefaultExclude Include="**\*.user" />
     <DefaultExclude Include="**\*.suo" />
+    <DefaultExclude Include="**\*.patch" />
+    <DefaultExclude Include="**\*.resharper" />
+    <DefaultExclude Include="**\*.cache" />
+    <DefaultExclude Include="**\_ReSharper*\**" />
     <DefaultExclude Include="**\Documentation\ndoc\**" />
     <DefaultExclude Include="*.zip" />
   </ItemGroup>
@@ -73,12 +77,28 @@
         AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)"
         AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)"
         Condition="$(Revision) != '0' "/>
-
   </Target>
 
   <Target Name="Compile" DependsOnTargets="Version">
     <MSBuild Projects="Source\MSBuild.Community.Tasks.sln"
-				 Properties="Configuration=Release" />
+             Properties="Configuration=Release" />
+  </Target>
+
+  <Target Name="Merge" DependsOnTargets="Compile">
+    <Copy SourceFiles="Build\MSBuild.Community.Tasks.dll"
+          DestinationFiles="Build\MSBuild.Temp.dll" />
+
+    <!-- Merge together library files -->
+    <ILMerge InputAssemblies="Build\MSBuild.Temp.dll;Build\Ionic.Zip.dll"
+             OutputFile="Build\MSBuild.Community.Tasks.dll"
+             KeyFile="Source\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk" />
+
+    <!-- Cleanup unneed files -->
+    <CreateItem Include="Build\*.dll;Build\*.x*l" Exclude="Build\MSBuild.Community.Tasks.*" >
+      <Output TaskParameter="Include" ItemName="PurgeBuildFiles" />
+    </CreateItem>
+
+    <Delete Files="@(PurgeBuildFiles)" />
   </Target>
 
   <ItemGroup>
@@ -108,17 +128,17 @@
 
   </Target>
 
-  <Target Name="Zip" DependsOnTargets="Documentation">
+  <Target Name="Zip" DependsOnTargets="Documentation;Merge">
     <CreateItem Include="**\*.*" Exclude="@(DefaultExclude)" >
       <Output TaskParameter="Include" ItemName="ZipFiles" />
     </CreateItem>
     <Zip Files="@(ZipFiles)"
-			 ZipFileName="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).zip" />
+         ZipFileName="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).zip" />
   </Target>
 
-  <Target Name="Installer" DependsOnTargets="Compile;Documentation">
+  <Target Name="Installer" DependsOnTargets="Compile;Documentation;Merge">
     <MSBuild Projects="Source\MSBuild.Community.Tasks.Setup\MSBuildTasks.wixproj"
-				 Properties="Configuration=Release;Major=$(Major);Minor=$(Minor);Build=$(Build);Revision=$(Revision)" />
+             Properties="Configuration=Release;Major=$(Major);Minor=$(Minor);Build=$(Build);Revision=$(Revision)" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="Zip;Installer">
@@ -133,8 +153,8 @@
           DestinationFiles="www\MSBuild.Community.Tasks.Nightly.msi" />
 
     <FileUpdate Files="www\index.html"
-      Regex="&lt;span id=&quot;version&quot;&gt;(\d+)\.(\d+)\.(\d+)\.(\d+)&lt;/span&gt;"
-      ReplacementText="&lt;span id=&quot;version&quot;&gt;$(Major).$(Minor).$(Build).$(Revision)&lt;/span&gt;"/>
+                Regex="&lt;span id=&quot;version&quot;&gt;(\d+)\.(\d+)\.(\d+)\.(\d+)&lt;/span&gt;"
+                ReplacementText="&lt;span id=&quot;version&quot;&gt;$(Major).$(Minor).$(Build).$(Revision)&lt;/span&gt;"/>
 
     <Time>
       <Output TaskParameter="Month" PropertyName="Month" />
@@ -143,8 +163,8 @@
     </Time>
 
     <FileUpdate Files="www\index.html"
-      Regex="&lt;span id=&quot;date&quot;&gt;(\d+)/(\d+)/(\d+)&lt;/span&gt;"
-      ReplacementText="&lt;span id=&quot;date&quot;&gt;$(Month)/$(Day)/$(Year)&lt;/span&gt;"/>
+                Regex="&lt;span id=&quot;date&quot;&gt;(\d+)/(\d+)/(\d+)&lt;/span&gt;"
+                ReplacementText="&lt;span id=&quot;date&quot;&gt;$(Month)/$(Day)/$(Year)&lt;/span&gt;"/>
 
     <RegistryRead KeyName="HKEY_CURRENT_USER\SOFTWARE\MSBuildTasks" ValueName="CommitUser">
       <Output TaskParameter="Value" PropertyName="CommitUser" />

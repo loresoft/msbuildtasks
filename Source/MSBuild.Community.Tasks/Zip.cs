@@ -1,6 +1,7 @@
-#region Copyright © 2005 Paul Welter. All rights reserved.
+#region Copyright © 2008 MSBuild Community Task Project. All rights reserved.
+
 /*
-Copyright © 2005 Paul Welter. All rights reserved.
+Copyright © 2008 MSBuild Community Task Project. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -25,17 +26,17 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 */
+
 #endregion
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.Build.Utilities;
-using Microsoft.Build.Framework;
 using System.IO;
-using ICSharpCode.SharpZipLib.Checksums;
-using ICSharpCode.SharpZipLib.Zip;
-using System.Globalization;
+using Ionic.Zip;
+using Ionic.Zlib;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
+using MSBuild.Community.Tasks.Properties;
 
 // $Id$
 
@@ -69,85 +70,55 @@ namespace MSBuild.Community.Tasks
     public class Zip : Task
     {
         #region Constructor
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:Zip"/> class.
+        /// Initializes a new instance of the <see cref="Zip"/> class.
         /// </summary>
         public Zip()
         {
-            _zipLevel = 6;
+            ZipLevel = 6;
         }
 
         #endregion Constructor
 
         #region Input Parameters
-        private string _zipFileName;
 
         /// <summary>
         /// Gets or sets the name of the zip file.
         /// </summary>
         /// <value>The name of the zip file.</value>
         [Required]
-        public string ZipFileName
-        {
-            get { return _zipFileName; }
-            set { _zipFileName = value; }
-        }
-
-        private int _zipLevel;
+        public string ZipFileName { get; set; }
 
         /// <summary>
-        /// Gets or sets the zip level.
+        /// Gets or sets the zip level. Default is 6.
         /// </summary>
         /// <value>The zip level.</value>
         /// <remarks>0 - store only to 9 - means best compression</remarks>
-        public int ZipLevel
-        {
-            get { return _zipLevel; }
-            set { _zipLevel = value; }
-        }
-
-        private ITaskItem[] _files;
+        public int ZipLevel { get; set; }
 
         /// <summary>
         /// Gets or sets the files to zip.
         /// </summary>
         /// <value>The files to zip.</value>
         [Required]
-        public ITaskItem[] Files
-        {
-            get { return _files; }
-            set { _files = value; }
-        }
-
-        private bool _flatten;
+        public ITaskItem[] Files { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="T:Zip"/> is flatten.
+        /// Gets or sets a value indicating whether this <see cref="Zip"/> is flatten.
         /// </summary>
         /// <value><c>true</c> if flatten; otherwise, <c>false</c>.</value>
         /// <remarks>
         /// Flattening the zip means that all directories will be removed 
         /// and the files will be place at the root of the zip file
         /// </remarks>
-        public bool Flatten
-        {
-            get { return _flatten; }
-            set { _flatten = value; }
-        }
-
-        private string _comment;
+        public bool Flatten { get; set; }
 
         /// <summary>
         /// Gets or sets the comment.
         /// </summary>
         /// <value>The comment.</value>
-        public string Comment
-        {
-            get { return _comment; }
-            set { _comment = value; }
-        }
-
-        private string _workingDirectory;
+        public string Comment { get; set; }
 
         /// <summary>
         /// Gets or sets the working directory for the zip file.
@@ -157,15 +128,12 @@ namespace MSBuild.Community.Tasks
         /// The working directory is the base of the zip file.  
         /// All files will be made relative from the working directory.
         /// </remarks>
-        public string WorkingDirectory
-        {
-            get { return _workingDirectory; }
-            set { _workingDirectory = value; }
-        }
+        public string WorkingDirectory { get; set; }
 
         #endregion Input Parameters
 
         #region Task Overrides
+
         /// <summary>
         /// When overridden in a derived class, executes the task.
         /// </summary>
@@ -180,114 +148,103 @@ namespace MSBuild.Community.Tasks
         #endregion Task Overrides
 
         #region Private Methods
+
         private bool ZipFiles()
         {
-            Crc32 crc = new Crc32();
-            ZipOutputStream zs = null;
-
             try
             {
-                Log.LogMessage(MSBuild.Community.Tasks.Properties.Resources.ZipCreating, _zipFileName);
+                Log.LogMessage(Resources.ZipCreating, ZipFileName);
 
-                using (zs = new ZipOutputStream(File.Create(_zipFileName)))
+                string directoryName = Path.GetDirectoryName(Path.GetFullPath(ZipFileName));
+                if (!Directory.Exists(directoryName))
+                    Directory.CreateDirectory(directoryName);
+
+                using (var zip = new ZipFile())
                 {
-
                     // make sure level in range
-                    _zipLevel = System.Math.Max(0, _zipLevel);
-                    _zipLevel = System.Math.Min(9, _zipLevel);
+                    ZipLevel = System.Math.Max(0, ZipLevel);
+                    ZipLevel = System.Math.Min(9, ZipLevel);
+                    zip.CompressionLevel = (CompressionLevel) ZipLevel;
 
-                    zs.SetLevel(_zipLevel);
-                    if (!string.IsNullOrEmpty(_comment))
-                        zs.SetComment(_comment);
+                    if (!string.IsNullOrEmpty(Comment))
+                        zip.Comment = Comment;
 
-                    byte[] buffer = new byte[32768];
-                    // add files to zip
-                    foreach (ITaskItem fileItem in _files)
+                    foreach (ITaskItem fileItem in Files)
                     {
                         string name = fileItem.ItemSpec;
-                        FileInfo file = new FileInfo(name);
-                        if (!file.Exists)
+                        string directoryPathInArchive;
+
+                        // clean up name
+                        if (Flatten)
+                            directoryPathInArchive = string.Empty;
+                        else if (!string.IsNullOrEmpty(WorkingDirectory))
+                            directoryPathInArchive = GetPath(name, WorkingDirectory);
+                        else
+                            directoryPathInArchive = fileItem.GetMetadata("RecursiveDir");
+
+                        if (!File.Exists(name))
                         {
                             // maybe a directory
-                            DirectoryInfo directory = new DirectoryInfo(name);
-                            if (directory.Exists)
+                            if (Directory.Exists(name))
                             {
-                                if (!_flatten)
-                                {
-                                    if (!string.IsNullOrEmpty(_workingDirectory)
-                                        && name.StartsWith(_workingDirectory, true, CultureInfo.InvariantCulture))
-                                        name = name.Remove(0, _workingDirectory.Length);
+                                var directoryEntry = zip.AddDirectory(name, directoryPathInArchive);
+                                Log.LogMessage(Resources.ZipAdded, directoryEntry.FileName);
 
-                                    if (!string.IsNullOrEmpty(name))
-                                    {
-                                        name = ZipEntry.CleanName(name);
-                                        ZipEntry directoryEntry = new ZipEntry(name + Path.DirectorySeparatorChar);                                        
-                                        zs.PutNextEntry(directoryEntry);
-                                    }
-
-                                }
-                            }
-                            else
-
-                            {
-                                Log.LogWarning(MSBuild.Community.Tasks.Properties.Resources.FileNotFound, file.FullName);
+                                continue;
                             }
 
+                            Log.LogWarning(Resources.FileNotFound, name);
                             continue;
                         }
 
-                        // clean up name
-                        if (_flatten)
-                            name = file.Name;
-                        else if (!string.IsNullOrEmpty(_workingDirectory)
-                            && name.StartsWith(_workingDirectory, true, CultureInfo.InvariantCulture))
-                            name = name.Remove(0, _workingDirectory.Length);
+                        //remove file name
+                        if (!string.IsNullOrEmpty(directoryPathInArchive))
+                            directoryPathInArchive = Path.GetDirectoryName(directoryPathInArchive);
 
-                        name = ZipEntry.CleanName(name);
+                        var entry = zip.AddFile(name, directoryPathInArchive);
+                        Log.LogMessage(Resources.ZipAdded, entry.FileName);
+                    }
 
-                        ZipEntry entry = new ZipEntry(name);
-                        entry.DateTime = file.LastWriteTime;
-                        entry.Size = file.Length;
-
-                        using (FileStream fs = file.OpenRead())
-                        {
-                            crc.Reset();
-                            long len = fs.Length;
-                            while (len > 0)
-                            {
-                                int readSoFar = fs.Read(buffer, 0, buffer.Length);
-                                crc.Update(buffer, 0, readSoFar);
-                                len -= readSoFar;
-                            }
-                            entry.Crc = crc.Value;
-                            zs.PutNextEntry(entry);
-
-                            len = fs.Length;
-                            fs.Seek(0, SeekOrigin.Begin);
-                            while (len > 0)
-                            {
-                                int readSoFar = fs.Read(buffer, 0, buffer.Length);
-                                zs.Write(buffer, 0, readSoFar);
-                                len -= readSoFar;
-                            }
-                        }
-                        Log.LogMessage(MSBuild.Community.Tasks.Properties.Resources.ZipAdded, name);
-                    } // foreach file
-                    zs.Finish();
+                    zip.Save(ZipFileName);
+                    Log.LogMessage(Resources.ZipSuccessfully, ZipFileName);
                 }
-                Log.LogMessage(MSBuild.Community.Tasks.Properties.Resources.ZipSuccessfully, _zipFileName);
-                return true;
             }
             catch (Exception exc)
             {
                 Log.LogErrorFromException(exc);
                 return false;
             }
-            finally
+
+            return true;
+        }
+
+        private static string GetPath(string originalPath, string rootDirectory)
+        {
+            var relativePath = new List<string>();
+            string[] originalDirectories = originalPath.Split(Path.DirectorySeparatorChar);
+            string[] rootDirectories = rootDirectory.Split(Path.DirectorySeparatorChar);
+
+            int length = System.Math.Min(originalDirectories.Length, rootDirectories.Length);
+
+            int lastCommonRoot = -1;
+
+            // find common root  
+            for (int x = 0; x < length; x++)
             {
-                if (zs != null)
-                    zs.Close();
+                if (!string.Equals(originalDirectories[x], rootDirectories[x],
+                                   StringComparison.OrdinalIgnoreCase))
+                    break;
+
+                lastCommonRoot = x;
             }
+            if (lastCommonRoot == -1)
+                return originalPath;
+
+            // add extra original directories
+            for (int x = lastCommonRoot + 1; x < originalDirectories.Length; x++)
+                relativePath.Add(originalDirectories[x]);
+
+            return string.Join(Path.DirectorySeparatorChar.ToString(), relativePath.ToArray());            
         }
 
         #endregion Private Methods

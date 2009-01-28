@@ -16,7 +16,7 @@
   <Target Name="Nightly" DependsOnTargets="BoostrapCompile;SetCurrentTargetToNightly">
     <CallTarget Targets="ContinueBuild" />
   </Target>
-  
+
   <Target Name="SetCurrentTargetToNightly">
     <CreateProperty Value="Nightly">
       <Output TaskParameter="Value" PropertyName="CurrentTarget"/>
@@ -26,9 +26,19 @@
   <Target Name="Installer" DependsOnTargets="BoostrapCompile;SetCurrentTargetToInstaller">
     <CallTarget Targets="ContinueBuild" />
   </Target>
-  
+
   <Target Name="SetCurrentTargetToInstaller">
     <CreateProperty Value="Installer">
+      <Output TaskParameter="Value" PropertyName="CurrentTarget"/>
+    </CreateProperty>
+  </Target>
+
+  <Target Name="Zip" DependsOnTargets="BoostrapCompile;SetCurrentTargetToZip">
+    <CallTarget Targets="ContinueBuild" />
+  </Target>
+
+  <Target Name="SetCurrentTargetToZip">
+    <CreateProperty Value="Zip">
       <Output TaskParameter="Value" PropertyName="CurrentTarget"/>
     </CreateProperty>
   </Target>
@@ -45,7 +55,6 @@
 
   <Target Name="BoostrapCompile">
     <RemoveDir Directories="Build" />
-    <!--<WriteLinesToFile Lines="//Placeholder" File="$(MSBuildProjectDirectory)\Source\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs" Overwrite="True" />-->
     <MSBuild Projects="Source\MSBuild.Community.Tasks.sln" Properties="Configuration=Release" />
     <CreateItem Include="Build\*">
       <Output TaskParameter="Include" ItemName="BootstrapFiles" />
@@ -54,7 +63,7 @@
   </Target>
 
   <Target Name="ContinueBuild">
-    <MSBuild Projects="Master-helper.proj" Targets="$(CurrentTarget)" 
+    <MSBuild Projects="Master-helper.proj" Targets="$(CurrentTarget)"
              Properties="CalledFromMaster=true;MSBuildCommunityTasksPath=$(MSBuildProjectDirectory)\Bootstrap" />
   </Target>
 </Project>

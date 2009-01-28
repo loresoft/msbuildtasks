@@ -1,6 +1,7 @@
-#region Copyright © 2005 Paul Welter. All rights reserved.
+#region Copyright © 2008 MSBuild Community Task Project. All rights reserved.
+
 /*
-Copyright © 2005 Paul Welter. All rights reserved.
+Copyright © 2008 MSBuild Community Task Project. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -25,16 +26,16 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 */
+
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using System.IO;
-using Microsoft.Build.Utilities;
+using Ionic.Zip;
 using Microsoft.Build.Framework;
-using ICSharpCode.SharpZipLib.Zip;
-using ICSharpCode.SharpZipLib.Core;
+using Microsoft.Build.Utilities;
+using MSBuild.Community.Tasks.Properties;
 
 // $Id$
 
@@ -51,40 +52,46 @@ namespace MSBuild.Community.Tasks
     /// </example>
     public class Unzip : Task
     {
+        private readonly List<ITaskItem> _files = new List<ITaskItem>();
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:Unzip"/> class.
+        /// Initializes a new instance of the <see cref="Unzip"/> class.
         /// </summary>
         public Unzip()
         {
-
+            Overwrite = true;
         }
-
-        private string _zipFileName;
 
         /// <summary>
         /// Gets or sets the name of the zip file.
         /// </summary>
         /// <value>The name of the zip file.</value>
         [Required]
-        public string ZipFileName
-        {
-            get { return _zipFileName; }
-            set { _zipFileName = value; }
-        }
-
-        private string _targetDirectory;
+        public string ZipFileName { get; set; }
 
         /// <summary>
         /// Gets or sets the target directory.
         /// </summary>
         /// <value>The target directory.</value>
         [Required]
-        public string TargetDirectory
-        {
-            get { return _targetDirectory; }
-            set { _targetDirectory = value; }
-        }
+        public string TargetDirectory { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to overwrite any existing files on extraction. Defaults to <c>true</c>.
+        /// </summary>
+        /// <value><c>true</c> to overwrite any existing files on extraction; otherwise, <c>false</c>.</value>
+        [DefaultValue(true)]
+        public bool Overwrite { get; set; }
+
+        /// <summary>
+        /// Gets the files extracted from the zip.
+        /// </summary>
+        /// <value>The files extracted from the zip.</value>
+        [Output]
+        public ITaskItem[] ExtractedFiles
+        {
+            get { return _files.ToArray(); }
+        }
 
         /// <summary>
         /// When overridden in a derived class, executes the task.
@@ -94,42 +101,34 @@ namespace MSBuild.Community.Tasks
         /// </returns>
         public override bool Execute()
         {
-            if (!File.Exists(_zipFileName))
+            if (!File.Exists(ZipFileName))
             {
-                Log.LogError(Properties.Resources.ZipFileNotFound, _zipFileName);
+                Log.LogError(Resources.ZipFileNotFound, ZipFileName);
                 return false;
             }
 
-            if (!Directory.Exists(_targetDirectory))
+            if (!Directory.Exists(TargetDirectory))
+                Directory.CreateDirectory(TargetDirectory);
+
+            Log.LogMessage(Resources.UnzipFileToDirectory, ZipFileName, TargetDirectory);
+
+            using (var zip = new ZipFile(ZipFileName))
             {
-                Directory.CreateDirectory(_targetDirectory);
+                zip.ExtractProgress += OnExtractProgress;
+                zip.ExtractAll(TargetDirectory, Overwrite);
             }
-            
-            FastZipEvents events = new FastZipEvents();
-			events.ProcessDirectory = new ProcessDirectoryHandler(ProcessDirectory);
-			events.ProcessFile = new ProcessFileHandler(ProcessFile);
 
-            FastZip zip = new FastZip(events);
-            zip.CreateEmptyDirectories = false;
-
-            Log.LogMessage(Properties.Resources.UnzipFileToDirectory, _zipFileName, _targetDirectory);
-            zip.ExtractZip(_zipFileName, _targetDirectory, null);
-            Log.LogMessage(Properties.Resources.UnzipSuccessfully, _zipFileName); 
-
+            Log.LogMessage(Resources.UnzipSuccessfully, ZipFileName);
             return true;
         }
 
-        private void ProcessFile(object sender, ScanEventArgs e)
+        private void OnExtractProgress(object sender, ExtractProgressEventArgs e)
         {
-            Log.LogMessage(Properties.Resources.UnzipExtracted, e.Name);            
-        }
+            if (e == null || e.CurrentEntry == null)
+                return;
 
-        private void ProcessDirectory(object sender, DirectoryEventArgs e)
-        {
-            if (!e.HasMatchingFiles)
-            {
-                Log.LogMessage(Properties.Resources.UnzipExtracted, e.Name);
-            }
+            _files.Add(new TaskItem(e.CurrentEntry.LocalFileName));
+            Log.LogMessage(Resources.UnzipExtracted, e.CurrentEntry.FileName);
         }
     }
 }

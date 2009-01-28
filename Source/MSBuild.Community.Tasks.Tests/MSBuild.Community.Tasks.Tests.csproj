@@ -52,9 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs">
-      <Link>AssemblyInfoCommon.cs</Link>
-    </Compile>
     <Compile Include="AspNet\InstallAspNetTest.cs" />
     <Compile Include="AssemblyInfoTest.cs" />
     <Compile Include="AttribTest.cs" />

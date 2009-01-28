@@ -45,7 +45,7 @@ namespace MSBuild.Community.Tasks.Sandcastle
     /// <summary>
     /// The Sandcastle task.
     /// </summary>
-    /// <example>Create the Html Help for MSBuild Community Tassk project.
+    /// <example>Create the Html Help for MSBuild Community Task project.
     /// <code><![CDATA[
     /// <Sandcastle TopicStyle="vs2005"
     ///     WorkingDirectory="$(MSBuildProjectDirectory)\Help"
@@ -175,7 +175,7 @@ namespace MSBuild.Community.Tasks.Sandcastle
             {
                 _topicStyle = value.ToLowerInvariant();
                 if (Array.BinarySearch<string>(topicStyles, _topicStyle) < 0)
-                    throw new ArgumentException("The topic style is not supported. Vaild styles are hana, prototype and vs2005.");
+                    throw new ArgumentException("The topic style is not supported. Valid styles are hana, prototype and vs2005.");
             }
         }
 

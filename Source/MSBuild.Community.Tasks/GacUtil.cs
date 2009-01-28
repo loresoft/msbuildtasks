@@ -52,7 +52,7 @@ namespace MSBuild.Community.Tasks
     }
 
     /// <summary>
-    /// MSBuild task to install and uninstall asseblies into the GAC
+    /// MSBuild task to install and uninstall assemblies into the GAC
     /// </summary>
     /// <example>Install a dll into the GAC.
     /// <code><![CDATA[
@@ -198,7 +198,7 @@ namespace MSBuild.Community.Tasks
         private int _successful = 0;
 
         /// <summary>
-        /// Gets the number of assemlbies successfully installed/uninstalled.
+        /// Gets the number of assemblies successfully installed/uninstalled.
         /// </summary>
         /// <value>The number successful assemblies.</value>
         [Output]
@@ -210,7 +210,7 @@ namespace MSBuild.Community.Tasks
         private int _failed = 0;
 
         /// <summary>
-        /// Gets the number of assemlbies that failed to installed/uninstalled.
+        /// Gets the number of assemblies that failed to installed/uninstalled.
         /// </summary>
         /// <value>The number failed assemblies.</value>
         [Output]
@@ -222,7 +222,7 @@ namespace MSBuild.Community.Tasks
         private int _skipped = 0;
 
         /// <summary>
-        /// Gets the number of assemlbies that were skipped during installed/uninstalled.
+        /// Gets the number of assemblies that were skipped during installed/uninstalled.
         /// </summary>
         /// <value>The number of skipped assemblies.</value>
         [Output]
@@ -233,7 +233,7 @@ namespace MSBuild.Community.Tasks
         #endregion
 
         /// <summary>
-        /// Runs the exectuable file with the specified task parameters.
+        /// Runs the executable file with the specified task parameters.
         /// </summary>
         /// <returns>
         /// true if the task runs successfully; otherwise, false.
