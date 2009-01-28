@@ -180,7 +180,7 @@ namespace MSBuild.Community.Tasks
                         else if (!string.IsNullOrEmpty(WorkingDirectory))
                             directoryPathInArchive = GetPath(name, WorkingDirectory);
                         else
-                            directoryPathInArchive = fileItem.GetMetadata("RecursiveDir");
+                            directoryPathInArchive = null;
 
                         if (!File.Exists(name))
                         {
@@ -198,7 +198,8 @@ namespace MSBuild.Community.Tasks
                         }
 
                         //remove file name
-                        if (!string.IsNullOrEmpty(directoryPathInArchive))
+                        if (!string.IsNullOrEmpty(directoryPathInArchive) 
+                            && Path.GetFileName(directoryPathInArchive) == Path.GetFileName(name))
                             directoryPathInArchive = Path.GetDirectoryName(directoryPathInArchive);
 
                         var entry = zip.AddFile(name, directoryPathInArchive);

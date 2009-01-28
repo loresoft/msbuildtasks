@@ -73,5 +73,29 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.IsTrue(task.Execute(), "Execute Failed");
             Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");
         }
+
+        [Test]
+        public void ZipNoRoot()
+        {
+            var task = new Zip();
+            task.BuildEngine = new MockBuild();
+
+            string testDir = TaskUtility.TestDirectory;
+            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+
+            string workingDir = Path.Combine(prjRootPath, @"Source\MSBuild.Community.Tasks.Tests");
+            string[] files = Directory.GetFiles(workingDir, "*.*", SearchOption.AllDirectories);
+
+            TaskItem[] items = TaskUtility.StringArrayToItemArray(files);
+
+            task.Files = items;
+            task.ZipFileName = Path.Combine(testDir, ZIP_FILE_NAME);
+
+            if (File.Exists(task.ZipFileName))
+                File.Delete(task.ZipFileName);
+
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+            Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");
+        }
     }
 }
