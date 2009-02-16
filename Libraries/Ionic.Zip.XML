@@ -4,10 +4,42 @@
     <name>Ionic.Zip</name>
   </assembly>
   <members>
+    <member name="T:Ionic.Zip.WinZipAesCrypto">
+      <summary> 
+            This is a helper class supporting WinZip AES encryption.  
+            This class is intended for use only by the DotNetZip library.
+            </summary>
+      <remarks>
+            Most uses of the DotNetZip library will not involve direct calls into the
+            WinZipAesCrypto class.  Instead, the WinZipAesCrypto class is instantiated and used by
+            the ZipEntry() class when WinZip AES encryption or decryption on an entry is employed.
+            </remarks>
+    </member>
+    <member name="T:Ionic.Zip.WinZipAesCipherStream">
+      <summary>
+            A stream that encrypts as it writes, or decrypts as it reads.  The Crypto is AES in 
+            CTR (counter) mode, which is 
+            compatible with the AES encryption employed by WinZip 12.0.
+            </summary>
+    </member>
+    <member name="M:Ionic.Zip.WinZipAesCipherStream.#ctor(System.IO.Stream,Ionic.Zip.WinZipAesCrypto,System.Int64,Ionic.Zip.CryptoMode)">
+      <summary>
+            The constructor.
+            </summary>
+      <param name="s">The underlying stream</param>
+      <param name="mode">To either encrypt or decrypt.</param>
+      <param name="cryptoParams">The pre-initialized WinZipAesCrypto object.</param>
+      <param name="length">The maximum number of bytes to read from the stream.</param>
+    </member>
+    <member name="P:Ionic.Zip.WinZipAesCipherStream.FinalAuthentication">
+      <summary>
+            Returns the final HMAC-SHA1-80 
+            </summary>
+    </member>
     <member name="T:Ionic.Zip.CRC32">
       <summary>
             Calculates a 32bit Cyclic Redundancy Checksum (CRC) using the
-            same polynomial used by Zip. This type ie generally not used directly
+            same polynomial used by Zip. This type is used internally by DotNetZip; it is generally not used directly
             by applications wishing to create, read, or manipulate zip archive files.
             </summary>
     </member>
@@ -57,15 +89,18 @@
     </member>
     <member name="T:Ionic.Zip.CrcCalculatorStream">
       <summary>
-             A read-only, forward-only Stream that calculates a CRC, a checksum, on all bytes read, 
+             A Stream that calculates a CRC32 (a checksum) on all bytes read, 
              or on all bytes written.
              </summary>
       <remarks>
+        <para>
              This class can be used to verify the CRC of a ZipEntry when reading from a stream, 
              or to calculate a CRC when writing to a stream.  The stream should be used to either 
              read, or write, but not both.  If you intermix reads and writes, the results are
-             not defined.
-             </remarks>
+             not defined. 
+             </para>
+        <para>This class is intended primarily for use internally by the DotNetZip library.</para>
+      </remarks>
     </member>
     <member name="M:Ionic.Zip.CrcCalculatorStream.#ctor(System.IO.Stream)">
       <summary>
@@ -99,7 +134,7 @@
     </member>
     <member name="M:Ionic.Zip.CrcCalculatorStream.Flush">
       <summary>
-            Not implemented.
+            Flush the stream.
             </summary>
     </member>
     <member name="M:Ionic.Zip.CrcCalculatorStream.Seek(System.Int64,System.IO.SeekOrigin)">
@@ -132,17 +167,17 @@
     </member>
     <member name="P:Ionic.Zip.CrcCalculatorStream.CanRead">
       <summary>
-            Indicates whether the stream supports reading. Always returns true.
+            Indicates whether the stream supports reading. 
             </summary>
     </member>
     <member name="P:Ionic.Zip.CrcCalculatorStream.CanSeek">
       <summary>
-            Indicates whether the stream supports seeking. Always returns false.
+            Indicates whether the stream supports seeking. 
             </summary>
     </member>
     <member name="P:Ionic.Zip.CrcCalculatorStream.CanWrite">
       <summary>
-            Indicates whether the stream supports writing. Always returns true.
+            Indicates whether the stream supports writing. 
             </summary>
     </member>
     <member name="P:Ionic.Zip.CrcCalculatorStream.Length">
@@ -552,14 +587,19 @@
       <param name="mode">To either encrypt or decrypt.</param>
       <param name="cipher">The pre-initialized ZipCrypto object.</param>
     </member>
-    <member name="T:Ionic.Zip.ZipDirEntry">
+    <member name="T:Ionic.Zip.ZipEntry">
       <summary>
             This class models an entry in the directory contained within the zip file.
             The class is generally not used from within application code, though it is
             used by the ZipFile class.
             </summary>
+      <summary>
+            Represents a single entry in a ZipFile. Typically, applications
+            get a ZipEntry by enumerating the entries within a ZipFile,
+            or by adding an entry to a ZipFile.  
+            </summary>
     </member>
-    <member name="M:Ionic.Zip.ZipDirEntry.Read(System.IO.Stream,System.Text.Encoding)">
+    <member name="M:Ionic.Zip.ZipEntry.ReadDirEntry(System.IO.Stream,System.Text.Encoding)">
       <summary>
             Reads one entry from the zip directory structure in the zip file. 
             </summary>
@@ -569,74 +609,12 @@
             </param>
       <returns>the entry read from the archive.</returns>
     </member>
-    <member name="M:Ionic.Zip.ZipDirEntry.IsNotValidSig(System.Int32)">
+    <member name="M:Ionic.Zip.ZipEntry.IsNotValidZipDirEntrySig(System.Int32)">
       <summary>
             Returns true if the passed-in value is a valid signature for a ZipDirEntry. 
             </summary>
       <param name="signature">the candidate 4-byte signature value.</param>
       <returns>true, if the signature is valid according to the PKWare spec.</returns>
-    </member>
-    <member name="P:Ionic.Zip.ZipDirEntry.FileName">
-      <summary>
-            The filename of the file represented by the given entry.
-            </summary>
-    </member>
-    <member name="P:Ionic.Zip.ZipDirEntry.Comment">
-      <summary>
-            Any comment associated to the given entry. Comments are generally optional.
-            </summary>
-    </member>
-    <member name="P:Ionic.Zip.ZipDirEntry.IsDirectory">
-      <summary>
-            True if the referenced entry is a directory.  
-            </summary>
-    </member>
-    <member name="T:Ionic.Zip.EncryptionAlgorithm">
-      <summary>
-            An enum that provides the various encryption algorithms supported by this library.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zip.EncryptionAlgorithm.None">
-      <summary>
-            No encryption at all.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zip.EncryptionAlgorithm.PkzipWeak">
-      <summary>
-            Traditional or Classic pkzip encryption.
-            </summary>
-    </member>
-    <member name="T:Ionic.Zip.EntrySource">
-      <summary>
-            An enum that specifies the source of the ZipEntry. 
-            </summary>
-    </member>
-    <member name="F:Ionic.Zip.EntrySource.None">
-      <summary>
-            Default value.  Invalid on a bonafide ZipEntry.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zip.EntrySource.Filesystem">
-      <summary>
-            Entry was instantiated by Adding an entry from the filesystem.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zip.EntrySource.Zipfile">
-      <summary>
-            Entry was instantiated by reading a zipfile.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zip.EntrySource.Stream">
-      <summary>
-            Entry was instantiated via a stream or string.
-            </summary>
-    </member>
-    <member name="T:Ionic.Zip.ZipEntry">
-      <summary>
-            Represents a single entry in a ZipFile. Typically, applications
-            get a ZipEntry by enumerating the entries within a ZipFile,
-            or by adding an entry to a ZipFile.  
-            </summary>
     </member>
     <member name="M:Ionic.Zip.ZipEntry.Read(Ionic.Zip.ZipFile,System.Boolean)">
       <summary>
@@ -934,6 +912,11 @@
       <param name="password">The password to use for decrypting the entry.</param>
       <returns>The Stream for reading.</returns>
     </member>
+    <member name="P:Ionic.Zip.ZipEntry.AttributesIndicateDirectory">
+      <summary>
+            True if the referenced entry is a directory.  
+            </summary>
+    </member>
     <member name="P:Ionic.Zip.ZipEntry.LastModified">
       <summary>
              The time and date at which the file indicated by the ZipEntry was last modified. 
@@ -1005,15 +988,6 @@
              assumption that may be wrong given the constantly changing DST rules).
              </para>
       </remarks>
-    </member>
-    <member name="P:Ionic.Zip.ZipEntry.TrimVolumeFromFullyQualifiedPaths">
-      <summary>
-            When this is set, this class trims the volume (eg C:\) from any
-            fully-qualified pathname on the ZipEntry, before writing the ZipEntry into
-            the ZipFile. This flag affects only zip creation. By default, this flag is TRUE,
-            which means volume names will not be included in the filenames on entries in
-            the archive.  Your best bet is to just leave this alone.
-            </summary>
     </member>
     <member name="P:Ionic.Zip.ZipEntry.ForceNoCompression">
       <summary>
@@ -1230,21 +1204,33 @@
     </member>
     <member name="P:Ionic.Zip.ZipEntry.Encryption">
       <summary>
-            Set this to specify which encryption algorithm to use for the entry.
-            </summary>
+             Set this to specify which encryption algorithm to use for the entry.
+             </summary>
       <remarks>
-            When setting this property, you must also set a Password on the entry.
-            The set of algoritms is determined by the PKZIP specification from PKWare.
-            The "traditional" encryption used by PKZIP is considered weak.  The Zip specification also
-            supports strong encryption mechanisms including AES of various keysizes and
-            Blowfish, among others.  But, bad news: This library does not implement the full PKZip
-            spec, and strong encryption is one of the things this library does not do.  
-            </remarks>
+        <para>
+             When setting this property, you must also set a Password on the entry.  The set of
+             algorithms supported is determined by the authors of this library.  The PKZIP
+             specification from PKWare defines a set of encryption algorithms, and the data formats
+             for the zip archive that support them. Other vendors of tools and libraries, such as
+             WinZip or Xceed, also specify and support different encryption algorithms and data
+             formats.
+             </para>
+        <para>
+             There is no common, ubiquitous multi-vendor standard for strong encryption. There is
+             broad support for "traditional" Zip encryption, sometimes called Zip 2.0 encryption,
+             as specified by PKWare, but this encryption is considered weak. This library currently
+             supports AES 128 and 256 in addition to the Zip 2.0 "weak" encryption.
+             </para>
+        <para>
+             The WinZip AES encryption algorithms are not supported on the .NET Compact Framework. 
+             </para>
+      </remarks>
     </member>
     <member name="P:Ionic.Zip.ZipEntry.Password">
       <summary>
              Set this to request that the entry be encrypted when writing the zip
-             archive.  
+             archive, ot to specify the password to be used when extracting an 
+             existing archive.
              </summary>
       <remarks>
         <para>
@@ -1375,6 +1361,93 @@
             The text encoding actually used for this ZipEntry.
             </summary>
     </member>
+    <member name="T:Ionic.Zip.EncryptionAlgorithm">
+      <summary>
+            An enum that provides the various encryption algorithms supported by this library.
+            </summary>
+      <remarks>
+        <para>
+            PkzipWeak implies the use of Zip 2.0 encryption, which is known to be weak and subvertible. 
+            </para>
+        <para>
+            A note on interoperability: Values of PkzipWeak and None are specified in the PKWare AppNote.txt document, are 
+            considered to be "standard".  Zip archives produced using these options will be interoperable with many other
+            zip tools and libraries, including Windows Explorer.
+            </para>
+        <para>
+            Values of WinZipAes128 and WinZipAes256 are not part of the Zip specification, but rather imply the use of a 
+            vendor-specific extension from WinZip. If you want to produce interoperable Zip archives, do not use these values. 
+            For example, if you
+            produce a zip archive using WinZipAes256, you will be able to open it in Windows Explorer on Windows XP and Vista, 
+            but you will not be able to extract entries; trying this will lead to an "unspecified error". For this reason, 
+            some people have said that a zip archive that uses WinZip's AES encryption is not actually a zip archive at all.
+            A zip archive produced this way will be readable with the WinZip tool
+            (Version 11 and beyond).
+            </para>
+        <para>
+            There are other third-party tools and libraries, both commercial and otherwise, that support WinZip's 
+            AES encryption. These will be able to read AES-encrypted zip archives produced by DotNetZip, and conversely applications 
+            that use DotNetZip to read zip archives will be able to read AES-encrypted archives produced by those tools
+            or libraries.  Consult the documentation for those other tools and libraries to find out if WinZip's AES 
+            encryption is supported. 
+            </para>
+        <para>
+            In case you care: According to the WinZip specification, the actual key used is derived from the 
+            <see cref="P:Ionic.Zip.ZipEntry.Password" /> via an algorithm that complies with RFC 2898, using an iteration count of 1000.
+            I am no security expert, but I think you should use a long-ish password if you employ 256-bit AES
+            encryption.  Make it 16 characters or more.  
+            </para>
+        <para>
+            The WinZip AES algorithms are not supported with the version of DotNetZip that runs on the .NET Compact Framework. 
+            This is because .NET CF lacks the HMACSHA1 class that is required for producing the archive.
+            </para>
+      </remarks>
+    </member>
+    <member name="F:Ionic.Zip.EncryptionAlgorithm.None">
+      <summary>
+            No encryption at all.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zip.EncryptionAlgorithm.PkzipWeak">
+      <summary>
+            Traditional or Classic pkzip encryption.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zip.EncryptionAlgorithm.WinZipAes128">
+      <summary>
+            WinZip AES encryption (128 key bits).
+            </summary>
+    </member>
+    <member name="F:Ionic.Zip.EncryptionAlgorithm.WinZipAes256">
+      <summary>
+            WinZip AES encryption (256 key bits).
+            </summary>
+    </member>
+    <member name="T:Ionic.Zip.EntrySource">
+      <summary>
+            An enum that specifies the source of the ZipEntry. 
+            </summary>
+    </member>
+    <member name="F:Ionic.Zip.EntrySource.None">
+      <summary>
+            Default value.  Invalid on a bonafide ZipEntry.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zip.EntrySource.Filesystem">
+      <summary>
+            Entry was instantiated by Adding an entry from the filesystem.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zip.EntrySource.Zipfile">
+      <summary>
+            Entry was instantiated by reading a zipfile.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zip.EntrySource.Stream">
+      <summary>
+            Entry was instantiated via a stream or string.
+            </summary>
+    </member>
     <member name="T:Ionic.Zip.ReReadApprovalCallback">
       <summary>
             Delegate for the callback by which the application gives approval for multiple
@@ -1385,11 +1458,17 @@
     <member name="T:Ionic.Zip.WantCompressionCallback">
       <summary>
             Delegate for the callback by which the application tells the libraary whether
-            to use compression on the file or not.  Using this callback, the application can 
+            to use compression on the file or not.  
+            </summary>
+      <remarks>
+        <para>
+            Using this callback, the application can 
             specify that previously-compressed files (.mp3, .png, .docx, etc) should 
             not be compressed, for example, or can turn on or off compression based on any 
             other factor.
-            </summary>
+            </para>
+      </remarks>
+      <seealso cref="P:Ionic.Zip.ZipFile.WantCompression" />
     </member>
     <member name="T:Ionic.Zip.ZipProgressEventType">
       <summary>
@@ -1500,7 +1579,8 @@
     </member>
     <member name="T:Ionic.Zip.ZipProgressEventArgs">
       <summary>
-            Provides information about the progress of a save or extract operation.
+            Provides information about the progress of a save, read, or extract operation. 
+            This is a base class; you will probably use one of the classes derived from this one.
             </summary>
     </member>
     <member name="P:Ionic.Zip.ZipProgressEventArgs.EntriesTotal">
@@ -1526,7 +1606,7 @@
     </member>
     <member name="P:Ionic.Zip.ZipProgressEventArgs.ArchiveName">
       <summary>
-            Returns the archive name.
+            Returns the archive name associated to this event.
             </summary>
     </member>
     <member name="P:Ionic.Zip.ZipProgressEventArgs.BytesTransferred">
@@ -1602,9 +1682,10 @@
       <summary>
             The ZipFile type represents a zip archive file.  This is the main type in the 
             DotNetZip class library.  This class reads and writes zip files, as defined in the format
-            for zip described by PKWare.  The compression for this implementation is based on the
+            for zip described by PKWare.  The compression for this implementation was, at one time, based on the
             System.IO.Compression.DeflateStream base class in the .NET Framework
-            base class library, for v2.0 and later.
+            base class library, available in v2.0 and later of the .NET Framework. As of v1.7 of DotNetZip,
+            the compression is provided by a managed-code version of Zlib, included with DotNetZip. 
             </summary>
     </member>
     <member name="F:Ionic.Zip.ZipFile.DefaultEncoding">
@@ -2140,10 +2221,11 @@
       <remarks>
         <para>
              This method adds a file to a zip archive, or, if the file already exists in the zip archive, 
-             this method Updates the content of that given filename in the zip archive.
+             this method Updates the content of that given filename in the zip archive.  
+             The <c>UpdateFile</c> method might more accurately be called "AddOrUpdateFile".
              </para>
         <para>
-             Upon success, there is no way for the application to learn whether the file was added or updated. 
+             Upon success, there is no way for the application to learn  whether the file was added versus updated. 
              </para>
       </remarks>
       <example>
@@ -2586,6 +2668,12 @@
       <summary>
             Checks the given file to see if it appears to be a valid zip file.
             </summary>
+      <remarks>
+        <para>
+            Calling this method is equivalent to calling 
+            <see cref="M:Ionic.Zip.ZipFile.IsZipFile(System.String)" />.
+            </para>
+      </remarks>
       <param name="fileName">The file to check.</param>
       <returns>true if the file appears to be a zip file.</returns>
     </member>
@@ -2595,14 +2683,15 @@
              </summary>
       <remarks>
         <para>
-             This method opens the specified zip file, reads in the zip archive, then optionally extracts 
+             This method opens the specified zip file, reads in the zip archive, verifying
+             the ZIP metadata as it reads.  Then, if testExtract is true, this method extracts 
              each entry in the archive, dumping all the bits. 
              </para>
         <para>
              If everything succeeds, then the method
              returns true.  If anything fails - for example if an incorrect signature or CRC
-             is found, the the method returns false.  This method also returns false
-             (no exception) for a file that does not exist.  
+             is found, indicating a corrupt file, the the method returns false.  This method also returns false
+             for a file that does not exist. 
              </para>
         <para>
              If <c>testExtract</c> is true, this method reads in the content for each
@@ -3554,54 +3643,93 @@
             </summary>
       <param name="disposeManagedResources">indicates whether the method should dispose streams or not.</param>
     </member>
-    <member name="M:Ionic.Zip.ZipFile.SaveSelfExtractor(System.String,Ionic.Zip.SelfExtractorFlavor)">
+    <member name="M:Ionic.Zip.ZipFile.SaveSelfExtractor(System.String,Ionic.Zip.SelfExtractorFlavor,System.String)">
       <summary>
-            Saves the ZipFile instance to a self-extracting zip archive.
+            Saves the ZipFile instance to a self-extracting zip archive, using the specified 
+            default extract directory. 
             </summary>
       <remarks>
         <para>
-            The generated exe image will execute on any machine that has the .NET Framework 2.0
-            installed on it.
+            This method saves a self extracting archive, 
+            with a specified default extracting location.  Actually, the 
+            default extract directory applies only if the flavor is 
+             <see cref="F:Ionic.Zip.SelfExtractorFlavor.WinFormsApplication" />.  
+            See the documentation for 
+            <see cref="M:Ionic.Zip.ZipFile.SaveSelfExtractor(System.String,Ionic.Zip.SelfExtractorFlavor)" />
+            for more details.  
             </para>
         <para>
-            There are two "flavors" of self-extracting archive.  The <c>WinFormsApplication</c>
-            version will pop up a GUI and allow the user to select a target directory into which
-            to extract. There's also a checkbox allowing the user to specify to overwrite
-            existing files, and another checkbox to allow the user to request that Explorer be
-            opened to see the extracted files after extraction.  The other flavor is
-            <c>ConsoleApplication</c>.  A self-extractor generated with that flavor setting will
-            run from the command line. It accepts command-line options to set the overwrite
-            behavior, and to specify the target extraction directory.
+            The user who runs the SFX will have the opportunity to change the extract
+            directory before extracting. 
+            If at the time of extraction, the specified directory does not exist, 
+            the SFX will create the directory before extracting the files. 
             </para>
+      </remarks>
+      <param name="exeToGenerate">The name of the EXE to generate.</param>
+      <param name="flavor">Indicates whether a Winforms or Console self-extractor is desired.</param>
+      <param name="defaultExtractDirectory">
+            The default extract directory the user will see when running the self-extracting 
+            archive. Passing null (or Nothing in VB) here will cause the Self Extractor to 
+            use the the user's personal directory 
+            (<see cref="F:System.Environment.SpecialFolder.Personal" />) for the default extract 
+            location.
+            </param>
+    </member>
+    <member name="M:Ionic.Zip.ZipFile.SaveSelfExtractor(System.String,Ionic.Zip.SelfExtractorFlavor)">
+      <summary>
+             Saves the ZipFile instance to a self-extracting zip archive.
+             </summary>
+      <remarks>
         <para>
-            There are a few temporary files created during the saving to a self-extracting zip. 
-            These files are normally stored in the directory pointed to by 
-            System.IO.Path.GetTempPath()
-            and they are removed upon successful completion of this method. 
-            </para>
+             The generated exe image will execute on any machine that has the .NET Framework 2.0
+             installed on it.
+             </para>
         <para>
-            NB: This method is not available in the version of DotNetZip
-            build for the .NET Compact Framework.  
-            </para>
+             There are two "flavors" of self-extracting archive.  The <c>WinFormsApplication</c>
+             version will pop up a GUI and allow the user to select a target directory into which
+             to extract. There's also a checkbox allowing the user to specify to overwrite
+             existing files, and another checkbox to allow the user to request that Explorer be
+             opened to see the extracted files after extraction.  The other flavor is
+             <c>ConsoleApplication</c>.  A self-extractor generated with that flavor setting will
+             run from the command line. It accepts command-line options to set the overwrite
+             behavior, and to specify the target extraction directory.
+             </para>
+        <para>
+             There are a few temporary files created during the saving to a self-extracting zip. 
+             These files are created in the directory pointed to by 
+             <see cref="P:Ionic.Zip.ZipFile.TempFileFolder" />, which defaults to  <see cref="M:System.IO.Path.GetTempPath" />.
+             These temporary files are removed upon successful completion of this method. 
+             </para>
+        <para>
+             When a user runs the SFX, the user's personal directory 
+             (<see cref="F:System.Environment.SpecialFolder.Personal" />) 
+             will be used as the default extract location.
+             The user who runs the SFX will have the opportunity to change the extract
+             directory before extracting. 
+             </para>
+        <para>
+             NB: This method is not available in the version of DotNetZip
+             build for the .NET Compact Framework, nor in the "Reduced" DotNEtZip library.  
+             </para>
       </remarks>
       <example>
         <code>
-            string DirectoryPath = "c:\\Documents\\Project7";
-            using (ZipFile zip = new ZipFile())
-            {
-                zip.AddDirectory(DirectoryPath, System.IO.Path.GetFileName(DirectoryPath));
-                zip.Comment = "This will be embedded into a self-extracting console-based exe";
-                zip.SaveSelfExtractor("archive.exe", SelfExtractorFlavor.ConsoleApplication);
-            }
-            </code>
+             string DirectoryPath = "c:\\Documents\\Project7";
+             using (ZipFile zip = new ZipFile())
+             {
+                 zip.AddDirectory(DirectoryPath, System.IO.Path.GetFileName(DirectoryPath));
+                 zip.Comment = "This will be embedded into a self-extracting console-based exe";
+                 zip.SaveSelfExtractor("archive.exe", SelfExtractorFlavor.ConsoleApplication);
+             }
+             </code>
         <code lang="VB">
-            Dim DirectoryPath As String = "c:\Documents\Project7"
-            Using zip As New ZipFile()
-                zip.AddDirectory(DirectoryPath, System.IO.Path.GetFileName(DirectoryPath))
-                zip.Comment = "This will be embedded into a self-extracting console-based exe"
-                zip.SaveSelfExtractor("archive.exe", SelfExtractorFlavor.ConsoleApplication)
-            End Using
-            </code>
+             Dim DirectoryPath As String = "c:\Documents\Project7"
+             Using zip As New ZipFile()
+                 zip.AddDirectory(DirectoryPath, System.IO.Path.GetFileName(DirectoryPath))
+                 zip.Comment = "This will be embedded into a self-extracting console-based exe"
+                 zip.SaveSelfExtractor("archive.exe", SelfExtractorFlavor.ConsoleApplication)
+             End Using
+             </code>
       </example>
       <param name="exeToGenerate">a pathname, possibly fully qualified, to be created. Typically it will end in an .exe extension.</param>
       <param name="flavor">Indicates whether a Winforms or Console self-extractor is desired.</param>
@@ -3661,24 +3789,6 @@
              </para>
       </remarks>
     </member>
-    <member name="P:Ionic.Zip.ZipFile.TrimVolumeFromFullyQualifiedPaths">
-      <summary>
-             When this is set, any volume name (eg C:) is trimmed 
-             from fully-qualified pathnames on any ZipEntry, before writing the 
-             ZipEntry into the ZipFile. 
-             </summary>
-      <remarks>
-        <para>
-             The default value is <c>true</c>. This setting must be true to allow 
-             Windows Explorer to read the zip archives properly. It's also required to be 
-             true if you want to read the generated zip files on any other non-Windows OS. 
-             </para>
-        <para>
-             The property is included for backwards compatibility only.  You'll 
-             almost never need or want to set this to false.
-             </para>
-      </remarks>
-    </member>
     <member name="P:Ionic.Zip.ZipFile.Verbose">
       <summary>
             Indicates whether verbose output is sent to the StatusMessageWriter
@@ -3726,7 +3836,7 @@
             However, because the UTF-8 portion of the PKWare specification is not broadly
             supported by other zip libraries and utilities, such zip files may not
             be readable by your favorite zip tool or archiver. In other words, interoperability
-            will suffer if you set this flag to true. 
+            will decrease if you set this flag to true. 
             </para>
         <para>
             In particular, Zip files created with strict adherence to the PKWare 
@@ -3743,9 +3853,11 @@
             implement the PKWare specification in this regard.
             </para>
         <para>
-            As a result, we have the curious situation that "correct" 
-            behavior by the DotNetZip library during zip creation will result 
-            in zip files that are not able to be read by various other tools.
+            As a result, we have the unfortunate situation that "correct" 
+            behavior by the DotNetZip library with regard to Unicode during zip creation will result 
+            in zip files that are readable by strictly compliant and current tools (for example the most 
+            recent release of the commercial WinZip tool); but these zip files will
+            not  be readable by various other tools or libraries, including Windows Explorer.
             </para>
         <para>
             The DotNetZip library can read and write zip files 
@@ -3790,7 +3902,7 @@
             neither IBM437 nor UTF-8.   Therefore 
             if you set the encoding explicitly when creating a zip archive, you must take care upon 
             reading the zip archive to use the same code page.  If you get it wrong, the behavior is 
-            undefined and may result in incorrect filenames, exceptions, and acne.  
+            undefined and may result in incorrect filenames, exceptions, stomach upset, hair loss, and acne.  
             </para>
       </remarks>
       <seealso cref="P:Ionic.Zip.ZipFile.ProvisionalAlternateEncoding">ProvisionalAlternateEncoding</seealso>
@@ -3871,8 +3983,8 @@
              archivers, set this property to specify the code page to use when encoding the <see cref="P:Ionic.Zip.ZipEntry.FileName" /> and <see cref="P:Ionic.Zip.ZipEntry.Comment" /> for each ZipEntry in the zip file,
              for values that cannot be encoded with the default codepage for zip files, IBM437.
              This is why this property is "provisional".  In all cases, IBM437 is used where
-             possible (where no loss of data would result). It is possible, therefore, to have a given 
-             entry with a Comment encoded in IBM437 and a FileName encoded with the specified codepage. 
+             possible, in other words, where no loss of data would result. It is possible, therefore, to have a given 
+             entry with a Comment encoded in IBM437 and a FileName encoded with the specified "provisional" codepage. 
              </para>
         <para>
              Be aware that a zip file created after you've explicitly set the
@@ -3894,7 +4006,7 @@
              reset ProvisionalAlternateEncoding to IBM437 before calling Save().
              </para>
         <para>
-             When using DotNetZip to read zip archives that have been created by a different
+             When using DotNetZip to read a zip archive that has been created by a different
              tool or library, and the zip archive uses an arbitrary code page, you must
              specify the encoding to use before or when the zipfile is READ.  This means you
              must use a ZipFile.Read() method that allows you to specify a
@@ -3904,7 +4016,7 @@
              </para>
         <para>
              When using an arbitrary, non-UTF8 code page for encoding, there is no standard
-             way for the creator application - whether DotNetZip, WinRar, or something else -
+             way for the creator application - whether DotNetZip, WinZip, WinRar, or something else -
              to specify in the zip file which codepage has been used for the entries. As a result, readers of
              zip files are not able to inspect the zip file and determine the codepage that
              was used for the entries contained within it.  It is left to the application to
@@ -3912,7 +4024,8 @@
              use an incorrect codepage when reading a zipfile, you will get entries with
              filenames that are incorrect, and the incorrect filenames may even contain characters that are not
              legal for use within filenames in Windows. Extracting entries with illegal
-             characters in the filenames will lead to exceptions. Caveat Emptor.
+             characters in the filenames will lead to exceptions. It's too bad, but this is just the
+             way things are with code pages in zip files. Caveat Emptor.
              </para>
       </remarks>
       <seealso cref="F:Ionic.Zip.ZipFile.DefaultEncoding">DefaultEncoding</seealso>
@@ -3958,42 +4071,35 @@
              </summary>
       <remarks>
         <para> 
-             When saving an entry into a zip archive, the DotNetZip first compresses
-             the file, then compares the size of the pre-compressed data with the size of the
-             post-compressed data. For files that are already compressed, like MP3's or JPGs,
-             the deflate algorithm can actually expand the size of the data.  In this case,
-             the DotNetZip library uses the pre-compressed data and simply stores the file
-             data into the archive. 
-             </para>
-        <para>
-             The DotNetZip library does this optimization automatically.  To avoid the
-             unnecessary processing and comparison, the application can explicitly request
-             that Compression not be used, by setting this flag.  The default value is false.
+             When saving an entry into a zip archive, the DotNetZip by default compresses
+             the file. That's what a ZIP archive is all about, isn't it?  
+             For files that are already compressed, like MP3's or JPGs,
+             the deflate algorithm can actually slightly expand the size of the data.  Setting this
+             property to trye allows you to specify that compression should not be used. 
+             The default value is false.
              </para>
         <para>
              Do not construe setting this flag to false as "Force Compression".  Setting it
-             to false merely does NOT force No compression.  Think about it a little bit:
-             There's a difference.  If you want to force the use fo deflate algorithm when
+             to false merely does NOT force No compression.  
+             If you want to force the use of the deflate algorithm when
              storing each entry into the zip archive, define a <see cref="P:Ionic.Zip.ZipFile.WillReadTwiceOnInflation" /> callback, which always returns false, and a 
              <see cref="P:Ionic.Zip.ZipFile.WantCompression" /> callback that always returns true.  This is
-             probably the wrong thing to do, but you could do it.  Forcing the use of the
+             probably the wrong thing to do, but you could do it. Forcing the use of the
              Deflate algorithm when storing an entry does not guarantee that the data size
-             will get smaller. It could increase, as described above.  But if you want to be
-             pig-headed about it, go ahead.
+             will get smaller. It could increase, as described above.  
              </para>
         <para>
              Changes to this flag apply to all entries subsequently added to the archive. 
              The application can also set the <see cref="P:Ionic.Zip.ZipEntry.CompressionMethod" />
              property on each ZipEntry, for more granular control of this capability.
              </para>
-        <para>
-             By the way, there is no way to set compression level in this library.
-             </para>
       </remarks>
       <seealso cref="P:Ionic.Zip.ZipEntry.CompressionMethod" />
+      <seealso cref="P:Ionic.Zip.ZipFile.CompressionLevel" />
+      <seealso cref="P:Ionic.Zip.ZipFile.WantCompression" />
       <example>
              This example shows how to specify that Compression will not be used when adding files 
-             to the zip archive. None of the files added to the archive in this way will use
+             to the zip archive. None of the files added to the archive in this example will use
              compression.
              <code>
              using (ZipFile zip = new ZipFile(ZipFileToCreate))
@@ -4015,36 +4121,58 @@
     <member name="P:Ionic.Zip.ZipFile.TempFileFolder">
       <summary>
              Gets or sets the name for the folder to store the temporary file
-             this library writes when saving the zip archive. 
+             this library writes when saving a zip archive. 
              </summary>
       <remarks>
-             The calling application should have write and delete rights on that folder.  By
-             default, the temp file folder is the directory referred to by the TEMP
-             environment variable.  If that variable is not set, this value defaults to the
-             current working directory.  But for some scenarios, such as ASP.NET
-             applications, the application may wish to explicitly override this,
-             with this public property. This property is used only when calling one of the
+        <para>
+             This library will create a temporary file when saving a Zip archive.
+             By default, the library uses the value of <see cref="M:System.IO.Path.GetTempPath" />
+             as the location in which to store temporary files. For some scenarios, such as ASP.NET
+             applications, the application may wish to explicitly override this default behavior.
+             </para>
+        <para>
+             The temporary file is written when calling one of the
              <c>Save()</c> methods, or the <c>SaveSelfExtractor()</c> method.
-             </remarks>
+             </para>
+        <para>
+             The folder specified must exist; if it does not an exception is thrown.
+             The application should have write and delete permissions on the folder. 
+             The permissions are 
+             never explicitly checked; if the application does not have the appropriate rights, an exception
+             will be thrown at the time <c>Save()</c> is called. 
+             </para>
+        <para>
+             There is no temporary file created when reading a zip archive. 
+             When saving to a Stream, there is no temporary file created.  For example, if the application 
+             is an ASP.NET application and calls <c>Save()</c> specifying the Response.OutStream as the output 
+             stream, there is no temporary file created. 
+             </para>
+      </remarks>
       <exception cref="T:System.IO.FileNotFoundException">
-             Thrown upon setting the property if the directory does not exist. 
+             Thrown when setting the property if the directory does not exist. 
              </exception>
     </member>
     <member name="P:Ionic.Zip.ZipFile.Password">
       <summary>
-             Sets the password to be used for any entry subsequently added 
-             to the ZipFile, using one of the AddFile, AddDirectory, or AddItem methods; 
-             or any entry subsequently extracted from the ZipFile using one of the Extract methods on the ZipFile class.  
+             Sets the password to be used on the ZipFile instance.
              </summary>
       <remarks>
         <para>
-             Though the password is set on the ZipFile object, the password
-             actually does not apply to the archive as a whole.  Instead, it
-             applies to individual entries that are added to the archive, from
-             that point in time onward.  The "directory" of the archive - in other
-             words the list of files - is not encrypted with the password, The
-             list of filenames in the archive is in clear text.  but the contents
-             of the individual files are encrypted.
+             When writing a zip archive, this password is applied to the entries, not
+             to the zip archive itself. It applies to any ZipEntry subsequently added 
+             to the ZipFile, using one of the AddFile, AddDirectory, or AddItem methods. 
+             When reading a zip archive, this property applies to any entry subsequently 
+             extracted from the ZipFile using one of the Extract methods on the ZipFile class.  
+             </para>
+        <para>
+             When writing a zip archive, keep this in mind: though the password is set on the
+             ZipFile object, according to the Zip spec, the "directory" of the archive - in
+             other words the list of entries contained in the archive - is not encrypted with
+             the password, or protected in any way.  IF you set the Password property, the
+             password actually applies to individual entries that are added to the archive,
+             subsequent to the setting of this property.  The list of filenames in the
+             archive that is eventually created will appear in clear text, but the contents
+             of the individual files are encrypted.  This is how Zip encryption works.
              </para>
         <para>
              If you set the password on the zip archive, and then add a set of files to the 
@@ -4054,14 +4182,24 @@
              the first entry is encrypted and the second is not.  Furshtay?
              </para>
         <para>
-             If you read in an existing ZipFile, then set the Password property, then call
-             one of the ZipFile.Extract() overloads, the entry is extracted using the Password that is 
-             specified on the ZipFile instance. If you have not set the Password property, then
-             the password is null, and the entry is extracted with no password.
+             When setting the Password, you may also want to explicitly set the <see cref="P:Ionic.Zip.ZipFile.Encryption" /> property, to specify how to encrypt the entries added to the
+             ZipFile.  If you set the Password to a non-null value and do not set <see cref="P:Ionic.Zip.ZipFile.Encryption" />, then PKZip 2.0 ("Weak") encryption is used.  This
+             encryption is relatively weak but is very interoperable. If you set the password
+             to a null value (<c>Nothing</c> in VB), Encryption is reset to None.
              </para>
         <para>
-             This password is applied to the entries, not
-             to the zip archive itself. 
+             All of the preceding applies to writing zip archives - when you use one of the
+             Save methods.  To use this property when reading or an existing ZipFile -
+             calling Extract methods on the ZipFile or the ZipEntry instances - do the
+             following: set the Password property, then call one of the ZipFile.Extract()
+             overloads. In this case, the entry is extracted using the Password that is
+             specified on the ZipFile instance. If you have not set the Password property,
+             then the password is null, and the entry is extracted with no password.
+             </para>
+        <para>
+             If you set Password on the ZipFile, then Extract() an entry that has not been 
+             encrypted with a password, then the password is not used for that entry, and
+             the ZipEntry is extracted as normal.
              </para>
       </remarks>
       <example>
@@ -4074,7 +4212,7 @@
         <code>
                 try
                 {
-                  using (ZipFile zip = new ZipFile("test3.zip",System.Console.Out))
+                  using (ZipFile zip = new ZipFile())
                   {
                     zip.AddFile("ReadMe.txt");
                     zip.Password= "123456!";
@@ -4082,7 +4220,7 @@
                     zip.Password= "!Secret1";
                     zip.AddFile("2005_Annual_Report.pdf");
             
-                    zip.Save();
+                    zip.Save("EncryptedArchive.zip");
                   }
                 }
                 catch (System.Exception ex1)
@@ -4092,19 +4230,78 @@
              </code>
         <code lang="VB">
               Try 
-                Using zip As New ZipFile("test2.zip", System.Console.Out)
-                  zip.AddFile("c:\datafiles\ReadMe.txt", "")
+                Using zip As New ZipFile()
+                  zip.AddFile("ReadMe.txt")
                   zip.Password = "123456!"
-                  zip.AddFile("c:\photos\personal\7440-N49th.png", "images")
+                  zip.AddFile("7440-N49th.png")
                   zip.Password= "!Secret1";
-                  zip.AddFile("c:\Desktop\2005_Annual_Report.pdf", "files\documents")
-                  zip.Save
+                  zip.AddFile("2005_Annual_Report.pdf")
+                  zip.Save("EncryptedArchive.zip")
                 End Using
               Catch ex1 As System.Exception
                 System.Console.Error.WriteLine("exception: {0}", ex1)
               End Try
              </code>
       </example>
+      <seealso cref="P:Ionic.Zip.ZipFile.Encryption" />
+    </member>
+    <member name="P:Ionic.Zip.ZipFile.Encryption">
+      <summary>
+             The Encryption to use for entries added to the ZipFile.
+             </summary>
+      <remarks>
+        <para>
+             The specified Encryption is applied to the entries subsequently added to the ZipFile instance.  
+             </para>
+        <para>
+             If you set this to something other than EncryptionAlgorithm.None, you will also need to set 
+             the <see cref="P:Ionic.Zip.ZipFile.Password" />.
+             </para>
+        <para>
+             As with other properties (like <see cref="P:Ionic.Zip.ZipFile.Password" /> and <see cref="P:Ionic.Zip.ZipFile.ForceNoCompression" />),
+             setting this property a ZipFile instance will cause that EncryptionAlgorithm to be used on
+             all ZipEntry items that are subsequently added to the ZipFile instance. In other words, if
+             you set this property after you have added items to the ZipFile, but before you have called
+             Save(), those items will not be encrypted or protected with a password in the resulting zip
+             archive. To get a zip archive with encrypted entries, set this property, along with the <see cref="P:Ionic.Zip.ZipFile.Password" />
+             property, before calling <c>AddFile</c>, <c>AddItem</c>, or <c>AddDirectory</c> on the ZipFile instance.
+             </para>
+      </remarks>
+      <example>
+        <code>
+                try
+                {
+                  using (ZipFile zip = new ZipFile())
+                  {
+                    zip.Encryption= EncryptionAlgorithm.WinZipAes256;
+                    zip.Password= "Some.Like.It.Hot.1959!";
+                    zip.AddFile("ReadMe.txt");
+                    zip.AddFile("7440-N49th.png");
+                    zip.AddFile("2005_Annual_Report.pdf");
+                    zip.Save("EncryptedArchive.zip");
+                  }
+                }
+                catch (System.Exception ex1)
+                {
+                  System.Console.Error.WriteLine("exception: {0}", ex1);
+                }
+             </code>
+        <code lang="VB">
+              Try 
+                Using zip As New ZipFile()
+                  zip.Encryption= EncryptionAlgorithm.WinZipAes256
+                  zip.Password= "Some.Like.It.Hot.1959!"
+                  zip.AddFile("ReadMe.txt")
+                  zip.AddFile("7440-N49th.png")
+                  zip.AddFile("2005_Annual_Report.pdf")
+                  zip.Save("EncryptedArchive.zip")
+                End Using
+              Catch ex1 As System.Exception
+                System.Console.Error.WriteLine("exception: {0}", ex1)
+              End Try
+             </code>
+      </example>
+      <seealso cref="P:Ionic.Zip.ZipFile.Password" />
     </member>
     <member name="P:Ionic.Zip.ZipFile.WillReadTwiceOnInflation">
       <summary>
@@ -4143,7 +4340,7 @@
              </para>
         <para>
              As with other properties (like <see cref="P:Ionic.Zip.ZipFile.Password" /> and <see cref="P:Ionic.Zip.ZipFile.ForceNoCompression" />),
-             setting the corresponding delegate on the ZipFile class itself will set it on all ZipEntry
+             setting the corresponding delegate on a ZipFile instance will caused it to be applied to all ZipEntry
              items that are subsequently added to the ZipFile instance. In other words, if you set this
              callback after you have added files to the ZipFile, but before you have called Save(), those
              items will not be governed by the callback when you do call Save(). Your best bet is to 
@@ -4188,56 +4385,71 @@
     <member name="P:Ionic.Zip.ZipFile.WantCompression">
       <summary>
              A callback that allows the application to specify whether compression should
-             be used for a given entry that is about to be added to the zip archive.
+             be used for entries subsequently added to the zip archive.
              </summary>
       <remarks>
         <para>
-             In some cases, applying the Deflate compression algorithm to an entry can
-             result an increase in the size of the data.  This "inflation" can happen with
-             previously compressed files, such as a zip, jpg, png, mp3, and so on.  In a few
-             tests, inflation on zip files can be as large as 60%!  Inflation can also happen
-             with very small files.  
+             In some cases, applying the Deflate compression algorithm to an entry *may*
+             result a slight increase in the size of the data.  This "inflation" can
+             happen with previously compressed files, such as a zip, jpg, png, mp3, and
+             so on; it results from adding DEFLATE framing data around incompressible data.
+             Inflation can also happen with very small files. Applications may wish to
+             avoid the use of compression in these cases. As well, applications may wish
+             to avoid compression to save time.
              </para>
         <para>
-             To handle these cases, the DotNetZip library takes this approach: first it
-             applies a heuristic, to determine whether it should try to compress a file or
-             not.  The library checks the extension of the entry, and if it is one of a
-             known list of uncompressible file types (mp3, zip, docx, and others), the
-             library will not attempt to compress the entry.  The library does not actually
-             check the content of the entry.  If you name a text file "Text.zip", and then
-             attempt to add it to a zip archive, this library will, by default, not attempt
-             to compress the entry.
+             By default, the DotNetZip library takes this approach to decide whether to
+             apply compression: first it applies a heuristic, to determine whether it
+             should try to compress a file or not.  The library checks the extension of
+             the entry, and if it is one of a known list of uncompressible file types
+             (mp3, zip, docx, and others), the library will not attempt to compress the
+             entry.  The library does not actually check the content of the entry.  If
+             you name a text file "Text.mp3", and then attempt to add it to a zip
+             archive, this library will, by default, not attempt to compress the entry,
+             based on the extension of the filename.
              </para>
         <para>
-             For filetypes not covered by that heuristic, the library attempts to compress
-             the entry, and then checks the size of the result.  If applying the Deflate
-             algorithm increases the size of the data, then the library discards the
-             compressed bytes, and stores the uncompressed file data into the zip archive,
-             in compliance with the zip spec.  This is an optimization where smaller size is
-             preferred over longer run times.
+             If this default behavior is not satisfactory, there are two options. First,
+             the application can override it by setting this <see cref="P:Ionic.Zip.ZipFile.WantCompression" /> callback.  This affords maximum control to
+             the application.  With this callback, the application can supply its own
+             logic for determining whether to apply the Deflate algorithm or not.  For
+             example, an application may desire that files over 40mb in size are never
+             compressed, or always compressed.  An application may desire that the first
+             7 entries added to an archive are compressed, and the remaining ones are
+             not.  The WantCompression callback allows the application full control, on
+             an entry-by-entry basis.
              </para>
         <para>
-             Next, the library exposes this <see cref="P:Ionic.Zip.ZipFile.WantCompression" /> callback, to
-             afford maximum control to the application.  With
-             this callback, the application can supply its own logic for determining whether
-             to apply the Deflate algorithm or not.  For example, an application may desire
-             that files over 40mb in size are never compressed, or always compressed.  An
-             application may desire that the first 7 entries added to an archive are
-             compressed, and the remaining ones are not.  The WantCompression callback
-             allows the application full control, on an entry-by-entry basis.
+             The second option for overriding the default logic regarding whether to
+             apply compression is the ForceNoCompression flag.  If this flag is set to
+             true, the compress-and-check-sizes process as decribed above, is not done,
+             nor is the callback invoked.  In other words, if you set ForceNoCompression
+             to true, andalso set the WantCompression callback, only the
+             ForceNoCompression flag is considered.
              </para>
         <para>
-             Finally, the application can specify that compression is not even tried, by setting the
-             ForceNoCompression flag.  In this case, the compress-and-check-sizes process as
-             decribed above, is not done, nor is the callback invoked.
+             This is how the library determines whether compression will be attempted for 
+             an entry.  If it is to be attempted, the library reads the entry, runs it through
+             the deflate algorithm, and then checks the size of the result.  If applying
+             the Deflate algorithm increases the size of the data, then the library
+             discards the compressed bytes, re-reads the raw entry data, and stores the
+             uncompressed file data into the zip archive, in compliance with the zip
+             spec.  This is an optimization where smaller size is preferred over longer
+             run times. The re-reading is gated on the <see cref="P:Ionic.Zip.ZipFile.WillReadTwiceOnInflation" /> callback, if it is set. This callback applies
+             independently of the WantCompression callback.
              </para>
         <para>
-             And, if you have read this far, I would like to point out that a single person 
-             wrote all the code and documentation for this library, and it is about time you
-             donated $5 to the cause.  See http://cheeso.members.winisp.net/DotNetZipDonate.aspx.
+             If by the logic described above, compression is not to be attempted for an entry, 
+             the library reads the entry, and simply stores the entry data uncompressed. 
+             </para>
+        <para>
+             And, if you have read this far, I would like to point out that a single
+             person wrote all the code that does what is described above, and also wrote
+             the description.  Isn't it about time you donated $5 in appreciation?  The
+             money goes to a charity. See
+             http://cheeso.members.winisp.net/DotNetZipDonate.aspx.
              </para>
       </remarks>
-      <seealso cref="T:Ionic.Zip.ReReadApprovalCallback" />
       <seealso cref="P:Ionic.Zip.ZipFile.WillReadTwiceOnInflation" />
     </member>
     <member name="P:Ionic.Zip.ZipFile.LibraryVersion">
@@ -4391,6 +4603,9 @@
       <summary>
             Returns the readonly collection of entries in the Zip archive.
             </summary>
+      <remarks>
+            If there are no entries in the current ZipFile, the value returned is a non-null zero-element collection.
+            </remarks>
     </member>
     <member name="P:Ionic.Zip.ZipFile.Count">
       <summary>
@@ -5019,76 +5234,6 @@
             A self-extracting zip archive that presents a graphical user interface when it is executed.. 
             </summary>
     </member>
-    <member name="T:Ionic.Zlib.ZlibConstants">
-      <summary>
-            A bunch of constants used in the Zlib interface.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_NO_FLUSH">
-      <summary>
-            No flush at all.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_PARTIAL_FLUSH">
-      <summary>
-            A little bit of flush?
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_SYNC_FLUSH">
-      <summary>
-            Sync flush?
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_FULL_FLUSH">
-      <summary>
-            Full flush?
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_FINISH">
-      <summary>
-            Finish?
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.WINDOW_BITS_MAX">
-      <summary>
-            The maximum number of window bits for the Deflate algorithm.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.WINDOW_BITS_DEFAULT">
-      <summary>
-            The default number of window bits for the Deflate algorithm.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_OK">
-      <summary>
-            indicates everything is A-OK
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_STREAM_END">
-      <summary>
-            Indicates that the last operation reached the end of the stream.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_NEED_DICT">
-      <summary>
-            The operation ended in need of a dictionary. 
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_STREAM_ERROR">
-      <summary>
-            There was an error with the stream - not enough data, not open and readable, etc.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_DATA_ERROR">
-      <summary>
-            There was an error with the data - not enough data, bad data, etc.
-            </summary>
-    </member>
-    <member name="F:Ionic.Zlib.ZlibConstants.Z_BUF_ERROR">
-      <summary>
-            There was an error with the working buffer.
-            </summary>
-    </member>
     <member name="T:Ionic.Zlib.CompressionLevel">
       <summary>
             The compression level to be used when using a DeflateStream or ZlibStream with CompressionMode.Compress.
@@ -5277,388 +5422,6 @@
             Applications will almost never need to use this class directly. 
             </remarks>
     </member>
-    <member name="T:Ionic.Zlib.DeflateStream">
-      <summary>
-            A class for compressing and decompressing streams using the Deflate algorithm.
-            </summary>
-      <remarks>
-            Data can be compressed or decompressed, and either of those can be through reading or writing. 
-            For more information, see IETF RFC 1951, "DEFLATE Compressed Data Format Specification version 1.3." 
-            </remarks>
-    </member>
-    <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode)">
-      <summary>
-            Create a DeflateStream using the specified CompressionMode.
-            </summary>
-      <remarks>
-            The DeflateStream will use the default compression level.
-            </remarks>
-      <param name="stream">The stream which will be read or written.</param>
-      <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
-    </member>
-    <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel)">
-      <summary>
-            Create a DeflateStream using the specified CompressionMode and the specified CompressionLevel.
-            </summary>
-      <param name="stream">The stream to be read or written while deflating or inflating.</param>
-      <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
-      <param name="level">A tuning knob to trade speed for effectiveness.</param>
-    </member>
-    <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,System.Boolean)">
-      <summary>
-            Create a DeflateStream using the specified CompressionMode, and explicitly specify whether
-            the stream should be left open after Deflation or Inflation.
-            </summary>
-      <remarks>
-        <para>
-            This constructor allows the application to request that the captive stream remain open after
-            the deflation or inflation occurs.  By default, after Close() is called on the stream, the 
-            captive stream is also closed. In some cases this is not desired, for example if the stream 
-            is a memory stream that will be re-read after compression.  Specify true for the 
-            leaveOpen parameter to leave the stream open. 
-            </para>
-        <para>
-            The DeflateStream will use the default compression level.
-            </para>
-      </remarks>
-      <param name="stream">The stream which will be read or written. This is called the 
-            "captive" stream in other places in this documentation.</param>
-      <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
-      <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
-    </member>
-    <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel,System.Boolean)">
-      <summary>
-            Create a DeflateStream using the specified CompressionMode and the specified CompressionLevel, 
-            and explicitly specify whether
-            the stream should be left open after Deflation or Inflation.
-            </summary>
-      <remarks>
-        <para>
-            This constructor allows the application to request that the captive stream remain open after
-            the deflation or inflation occurs.  By default, after Close() is called on the stream, the 
-            captive stream is also closed. In some cases this is not desired, for example if the stream 
-            is a memory stream that will be re-read after compression.  Specify true for the 
-            leaveOpen parameter to leave the stream open. 
-            </para>
-      </remarks>
-      <param name="stream">The stream which will be read or written.</param>
-      <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
-      <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
-      <param name="level">A tuning knob to trade speed for effectiveness.</param>
-    </member>
-    <member name="M:Ionic.Zlib.DeflateStream.Close">
-      <summary>
-            Close the stream.  
-            </summary>
-      <remarks>
-            This may or may not close the captive stream. 
-            See the ctor's with leaveOpen parameters for more information.
-            </remarks>
-    </member>
-    <member name="M:Ionic.Zlib.DeflateStream.Flush">
-      <summary>
-            Flush the stream.
-            </summary>
-    </member>
-    <member name="M:Ionic.Zlib.DeflateStream.Read(System.Byte[],System.Int32,System.Int32)">
-      <summary>
-            Read data from the stream. 
-            </summary>
-      <remarks>
-        <para>
-            If you wish to use the DeflateStream to compress data while reading, you can create a DeflateStream with 
-            CompressionMode.Compress, providing an uncompressed data stream.  Then call Read() on that DeflateStream, 
-            and the data read will be compressed. 
-            If you wish to use the DeflateStream to decompress data while reading, you can create a DeflateStream with 
-            CompressionMode.Decompress, providing a readable compressed data stream.  Then call Read() on that DeflateStream, 
-            and the data read will be decompressed. 
-            </para>
-        <para>
-            A DeflateStream can be used for Read() or Write(), but not both. 
-            </para>
-      </remarks>
-      <param name="buffer">The buffer into which the read data should be placed.</param>
-      <param name="offset">the offset within that data array to put the first byte read.</param>
-      <param name="count">the number of bytes to read.</param>
-    </member>
-    <member name="M:Ionic.Zlib.DeflateStream.Seek(System.Int64,System.IO.SeekOrigin)">
-      <summary>
-            Calling this method always throws a NotImplementedException.
-            </summary>
-    </member>
-    <member name="M:Ionic.Zlib.DeflateStream.SetLength(System.Int64)">
-      <summary>
-            Calling this method always throws a NotImplementedException.
-            </summary>
-    </member>
-    <member name="M:Ionic.Zlib.DeflateStream.Write(System.Byte[],System.Int32,System.Int32)">
-      <summary>
-            Write data to the stream. 
-            </summary>
-      <remarks>
-        <para>
-            If you wish to use the DeflateStream to compress data while writing, you can create a DeflateStream with 
-            CompressionMode.Compress, and a writable output stream.  Then call Write() on that DeflateStream, 
-            providing uncompressed data as input.  The data sent to the output stream will be the compressed form of the data written.
-            If you wish to use the DeflateStream to decompress data while writing, you can create a DeflateStream with 
-            CompressionMode.Decompress, and a writable output stream.  Then call Write() on that stream, providing previously 
-            compressed data. The data sent to the output stream will be the decompressed form of the data written.   
-            </para>
-        <para>
-            A DeflateStream can be used for Read() or Write(), but not both. 
-            </para>
-      </remarks>
-      <param name="buffer">The buffer holding data to write to the stream.</param>
-      <param name="offset">the offset within that data array to find the first byte to write.</param>
-      <param name="count">the number of bytes to write.</param>
-    </member>
-    <member name="P:Ionic.Zlib.DeflateStream.FlushMode">
-      <summary>
-            This property sets the flush behavior on the stream.  
-            Sorry, though, not sure exactly how to describe all the various settings.
-            </summary>
-    </member>
-    <member name="P:Ionic.Zlib.DeflateStream.BufferSize">
-      <summary>
-            Callers can set the buffer size of the working buffer with this property.  
-            </summary>
-      <remarks>
-            The working buffer is used for all stream operations.
-            The default size is 1024 bytes.  The minimum size is 128 bytes. You may get better 
-            performance with a larger buffer.  Then again, you might not.  I don't know, I haven't tested it.  
-            </remarks>
-    </member>
-    <member name="P:Ionic.Zlib.DeflateStream.TotalIn">
-      <summary> Returns the total number of bytes input so far.</summary>
-    </member>
-    <member name="P:Ionic.Zlib.DeflateStream.TotalOut">
-      <summary> Returns the total number of bytes output so far.</summary>
-    </member>
-    <member name="P:Ionic.Zlib.DeflateStream.CanRead">
-      <summary>
-            Indicates whether the stream can be read.
-            </summary>
-      <remarks>
-            The return value depends on whether the captive stream supports reading.
-            </remarks>
-    </member>
-    <member name="P:Ionic.Zlib.DeflateStream.CanSeek">
-      <summary>
-            Indicates whether the stream supports Seek operations.
-            </summary>
-      <remarks>
-            Always returns false.
-            </remarks>
-    </member>
-    <member name="P:Ionic.Zlib.DeflateStream.CanWrite">
-      <summary>
-            Indicates whether the stream can be written.
-            </summary>
-      <remarks>
-            The return value depends on whether the captive stream supports writing.
-            </remarks>
-    </member>
-    <member name="P:Ionic.Zlib.DeflateStream.Length">
-      <summary>
-            Reading this property always throws a NotImplementedException.
-            </summary>
-    </member>
-    <member name="P:Ionic.Zlib.DeflateStream.Position">
-      <summary>
-            Reading or Writing this property always throws a NotImplementedException.
-            </summary>
-    </member>
-    <member name="T:Ionic.Zlib.ZlibStream">
-      <summary>
-            Represents a Zlib stream for compression or decompression.
-            </summary>
-      <remarks>
-            This is similar to DeflateStream, except that it adds the RFC1950 header bytes to a compressed 
-            stream when compressing, or expects the RFC1950 header bytes when decompressing.
-            </remarks>
-    </member>
-    <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode)">
-      <summary>
-            Create a ZlibStream using the specified CompressionMode.
-            </summary>
-      <remarks>
-            The ZlibStream will use the default compression level.
-            </remarks>
-      <param name="stream">The stream which will be read or written.</param>
-      <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
-    </member>
-    <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel)">
-      <summary>
-            Create a ZlibStream using the specified CompressionMode and the specified CompressionLevel.
-            </summary>
-      <param name="stream">The stream to be read or written while deflating or inflating.</param>
-      <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
-      <param name="level">A tuning knob to trade speed for effectiveness.</param>
-    </member>
-    <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,System.Boolean)">
-      <summary>
-            Create a ZlibStream using the specified CompressionMode, and explicitly specify whether
-            the stream should be left open after Deflation or Inflation.
-            </summary>
-      <remarks>
-        <para>
-            This constructor allows the application to request that the captive stream remain open after
-            the deflation or inflation occurs.  By default, after Close() is called on the stream, the 
-            captive stream is also closed. In some cases this is not desired, for example if the stream 
-            is a memory stream that will be re-read after compression.  Specify true for the 
-            leaveOpen parameter to leave the stream open. 
-            </para>
-        <para>
-            The ZlibStream will use the default compression level.
-            </para>
-      </remarks>
-      <param name="stream">The stream which will be read or written. This is called the 
-            "captive" stream in other places in this documentation.</param>
-      <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
-      <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
-    </member>
-    <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel,System.Boolean)">
-      <summary>
-            Create a ZlibStream using the specified CompressionMode and the specified CompressionLevel, 
-            and explicitly specify whether
-            the stream should be left open after Deflation or Inflation.
-            </summary>
-      <remarks>
-        <para>
-            This constructor allows the application to request that the captive stream remain open after
-            the deflation or inflation occurs.  By default, after Close() is called on the stream, the 
-            captive stream is also closed. In some cases this is not desired, for example if the stream 
-            is a memory stream that will be re-read after compression.  Specify true for the 
-            leaveOpen parameter to leave the stream open. 
-            </para>
-      </remarks>
-      <param name="stream">The stream which will be read or written.</param>
-      <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
-      <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
-      <param name="level">A tuning knob to trade speed for effectiveness.</param>
-    </member>
-    <member name="M:Ionic.Zlib.ZlibStream.Close">
-      <summary>
-            Close the stream.  
-            </summary>
-      <remarks>
-            This may or may not close the captive stream. 
-            See the ctor's with leaveOpen parameters for more information.
-            </remarks>
-    </member>
-    <member name="M:Ionic.Zlib.ZlibStream.Flush">
-      <summary>
-            Flush the stream.
-            </summary>
-    </member>
-    <member name="M:Ionic.Zlib.ZlibStream.Read(System.Byte[],System.Int32,System.Int32)">
-      <summary>
-            Read data from the stream. 
-            </summary>
-      <remarks>
-        <para>
-            If you wish to use the ZlibStream to compress data while reading, you can create a ZlibStream with 
-            CompressionMode.Compress, providing an uncompressed data stream.  Then call Read() on that ZlibStream, 
-            and the data read will be compressed. 
-            If you wish to use the ZlibStream to decompress data while reading, you can create a ZlibStream with 
-            CompressionMode.Decompress, providing a readable compressed data stream.  Then call Read() on that ZlibStream, 
-            and the data read will be decompressed. 
-            </para>
-        <para>
-            A ZlibStream can be used for Read() or Write(), but not both. 
-            </para>
-      </remarks>
-      <param name="buffer">The buffer into which the read data should be placed.</param>
-      <param name="offset">the offset within that data array to put the first byte read.</param>
-      <param name="count">the number of bytes to read.</param>
-    </member>
-    <member name="M:Ionic.Zlib.ZlibStream.Seek(System.Int64,System.IO.SeekOrigin)">
-      <summary>
-            Calling this method always throws a NotImplementedException.
-            </summary>
-    </member>
-    <member name="M:Ionic.Zlib.ZlibStream.SetLength(System.Int64)">
-      <summary>
-            Calling this method always throws a NotImplementedException.
-            </summary>
-    </member>
-    <member name="M:Ionic.Zlib.ZlibStream.Write(System.Byte[],System.Int32,System.Int32)">
-      <summary>
-            Write data to the stream. 
-            </summary>
-      <remarks>
-        <para>
-            If you wish to use the ZlibStream to compress data while writing, you can create a ZlibStream with 
-            CompressionMode.Compress, and a writable output stream.  Then call Write() on that ZlibStream, 
-            providing uncompressed data as input.  The data sent to the output stream will be the compressed form of the data written.
-            If you wish to use the ZlibStream to decompress data while writing, you can create a ZlibStream with 
-            CompressionMode.Decompress, and a writable output stream.  Then call Write() on that stream, providing previously 
-            compressed data. The data sent to the output stream will be the decompressed form of the data written.   
-            </para>
-        <para>
-            A ZlibStream can be used for Read() or Write(), but not both. 
-            </para>
-      </remarks>
-      <param name="buffer">The buffer holding data to write to the stream.</param>
-      <param name="offset">the offset within that data array to find the first byte to write.</param>
-      <param name="count">the number of bytes to write.</param>
-    </member>
-    <member name="P:Ionic.Zlib.ZlibStream.FlushMode">
-      <summary>
-            This property sets the flush behavior on the stream.  
-            Sorry, though, not sure exactly how to describe all the various settings.
-            </summary>
-    </member>
-    <member name="P:Ionic.Zlib.ZlibStream.BufferSize">
-      <summary>
-            Callers can set the buffer size of the working buffer with this property.  
-            </summary>
-      <remarks>
-            The working buffer is used for all stream operations.
-            The default size is 1024 bytes.  The minimum size is 128 bytes. You may get better 
-            performance with a larger buffer.  Then again, you might not.  I don't know, I haven't tested it.  
-            </remarks>
-    </member>
-    <member name="P:Ionic.Zlib.ZlibStream.TotalIn">
-      <summary> Returns the total number of bytes input so far.</summary>
-    </member>
-    <member name="P:Ionic.Zlib.ZlibStream.TotalOut">
-      <summary> Returns the total number of bytes output so far.</summary>
-    </member>
-    <member name="P:Ionic.Zlib.ZlibStream.CanRead">
-      <summary>
-            Indicates whether the stream can be read.
-            </summary>
-      <remarks>
-            The return value depends on whether the captive stream supports reading.
-            </remarks>
-    </member>
-    <member name="P:Ionic.Zlib.ZlibStream.CanSeek">
-      <summary>
-            Indicates whether the stream supports Seek operations.
-            </summary>
-      <remarks>
-            Always returns false.
-            </remarks>
-    </member>
-    <member name="P:Ionic.Zlib.ZlibStream.CanWrite">
-      <summary>
-            Indicates whether the stream can be written.
-            </summary>
-      <remarks>
-            The return value depends on whether the captive stream supports writing.
-            </remarks>
-    </member>
-    <member name="P:Ionic.Zlib.ZlibStream.Length">
-      <summary>
-            Reading this property always throws a NotImplementedException.
-            </summary>
-    </member>
-    <member name="P:Ionic.Zlib.ZlibStream.Position">
-      <summary>
-            Reading or Writing this property always throws a NotImplementedException.
-            </summary>
-    </member>
     <member name="T:Ionic.Zlib.ZlibCodec">
       <summary>
             Encoder and Decoder for ZLIB (IETF RFC1950 and RFC1951).
@@ -5734,7 +5497,9 @@
       <summary>
             Create a ZlibCodec that either compresses or decompresses.
             </summary>
-      <param name="mode">Indicates whether the codec should compress (deflate) or decompress (inflate).</param>
+      <param name="mode">
+            Indicates whether the codec should compress (deflate) or decompress (inflate).
+            </param>
     </member>
     <member name="M:Ionic.Zlib.ZlibCodec.InitializeInflate">
       <summary>
@@ -5935,6 +5700,609 @@
     <member name="P:Ionic.Zlib.ZlibCodec.Adler32">
       <summary>
             The Adler32 checksum on the data transferred through the codec so far. You probably don't need to look at this.
+            </summary>
+    </member>
+    <member name="T:Ionic.Zlib.DeflateStream">
+      <summary>
+            A class for compressing and decompressing streams using the Deflate algorithm.
+            </summary>
+      <remarks>
+        <para>
+            Data can be compressed or decompressed, and either of those can be through reading or writing. 
+            For more information on the Deflate algorithm, see IETF RFC 1951, "DEFLATE Compressed Data 
+            Format Specification version 1.3." 
+            </para>
+        <para>
+            This class is similar to <see cref="T:Ionic.Zlib.ZlibStream" />, except that <c>ZlibStream</c> adds the RFC1950 
+            header bytes to a compressed stream when compressing, or expects the RFC1950 header bytes when 
+            decompressing. The <c>DeflateStream</c> does not.
+            </para>
+      </remarks>
+    </member>
+    <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode)">
+      <summary>
+            Create a DeflateStream using the specified CompressionMode.
+            </summary>
+      <remarks>
+            The DeflateStream will use the default compression level.
+            </remarks>
+      <example>
+            This example shows how to use a DeflateStream to compress data.
+            <code>
+            using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+            {
+                using (var raw = System.IO.File.Create(outputFile))
+                {
+                    using (Stream compressor = new DeflateStream(raw, CompressionMode.Compress))
+                    {
+                        byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                        int n= -1;
+                        while (n != 0)
+                        {
+                            if (n &gt; 0) 
+                                compressor.Write(buffer, 0, n);
+                            n= input.Read(buffer, 0, buffer.Length);
+                        }
+                    }
+                }
+            }
+            </code><code lang="VB">
+            Dim outputFile As String = (fileToCompress &amp; ".compressed")
+            Using input As Stream = File.OpenRead(fileToCompress)
+                Using raw As FileStream = File.Create(outputFile)
+            	Using compressor As Stream = New DeflateStream(raw, CompressionMode.Compress)
+            	    Dim buffer As Byte() = New Byte(4096) {}
+            	    Dim n As Integer = -1
+            	    Do While (n &lt;&gt; 0)
+            		If (n &gt; 0) Then
+            		    compressor.Write(buffer, 0, n)
+            		End If
+            		n = input.Read(buffer, 0, buffer.Length)
+            	    Loop
+            	End Using
+                End Using
+            End Using
+            </code></example>
+      <param name="stream">The stream which will be read or written.</param>
+      <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
+    </member>
+    <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel)">
+      <summary>
+            Create a DeflateStream using the specified CompressionMode and the specified CompressionLevel.
+            </summary>
+      <example>
+            This example shows how to use a DeflateStream to compress data.
+            <code>
+            using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+            {
+                using (var raw = System.IO.File.Create(outputFile))
+                {
+                    using (Stream compressor = new DeflateStream(raw,
+                                                                 CompressionMode.Compress, 
+                                                                 CompressionLevel.BEST_COMPRESSION))
+                    {
+                        byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                        int n= -1;
+                        while (n != 0)
+                        {
+                            if (n &gt; 0) 
+                                compressor.Write(buffer, 0, n);
+                            n= input.Read(buffer, 0, buffer.Length);
+                        }
+                    }
+                }
+            }
+            </code><code lang="VB">
+            Dim outputFile As String = (fileToCompress &amp; ".compressed")
+            Using input As Stream = File.OpenRead(fileToCompress)
+                Using raw As FileStream = File.Create(outputFile)
+            	Using compressor As Stream = New DeflateStream(raw, CompressionMode.Compress, CompressionLevel.BEST_COMPRESSION)
+            	    Dim buffer As Byte() = New Byte(4096) {}
+            	    Dim n As Integer = -1
+            	    Do While (n &lt;&gt; 0)
+            		If (n &gt; 0) Then
+            		    compressor.Write(buffer, 0, n)
+            		End If
+            		n = input.Read(buffer, 0, buffer.Length)
+            	    Loop
+            	End Using
+                End Using
+            End Using
+            </code></example>
+      <param name="stream">The stream to be read or written while deflating or inflating.</param>
+      <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
+      <param name="level">A tuning knob to trade speed for effectiveness.</param>
+    </member>
+    <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,System.Boolean)">
+      <summary>
+            Create a DeflateStream using the specified CompressionMode, and explicitly specify whether
+            the stream should be left open after Deflation or Inflation.
+            </summary>
+      <remarks>
+        <para>
+            This constructor allows the application to request that the captive stream remain open after
+            the deflation or inflation occurs.  By default, after Close() is called on the stream, the 
+            captive stream is also closed. In some cases this is not desired, for example if the stream 
+            is a memory stream that will be re-read after compression.  Specify true for the 
+            leaveOpen parameter to leave the stream open. 
+            </para>
+        <para>
+            The DeflateStream will use the default compression level.
+            </para>
+        <para>
+            See the other overloads of this constructor for example code.
+            </para>
+      </remarks>
+      <param name="stream">The stream which will be read or written. This is called the 
+            "captive" stream in other places in this documentation.</param>
+      <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
+      <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
+    </member>
+    <member name="M:Ionic.Zlib.DeflateStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel,System.Boolean)">
+      <summary>
+            Create a DeflateStream using the specified CompressionMode and the specified CompressionLevel, 
+            and explicitly specify whether
+            the stream should be left open after Deflation or Inflation.
+            </summary>
+      <remarks>
+        <para>
+            This constructor allows the application to request that the captive stream remain open after
+            the deflation or inflation occurs.  By default, after Close() is called on the stream, the 
+            captive stream is also closed. In some cases this is not desired, for example if the stream 
+            is a memory stream that will be re-read after compression.  Specify true for the 
+            leaveOpen parameter to leave the stream open. 
+            </para>
+      </remarks>
+      <example>
+            This example shows how to use a DeflateStream to compress data.
+            <code>
+            using (System.IO.Stream input = System.IO.File.OpenRead(fileToCompress))
+            {
+                using (var raw = System.IO.File.Create(outputFile))
+                {
+                    using (Stream compressor = new DeflateStream(raw, CompressionMode.Compress, true))
+                    {
+                        byte[] buffer = new byte[WORKING_BUFFER_SIZE];
+                        int n= -1;
+                        while (n != 0)
+                        {
+                            if (n &gt; 0) 
+                                compressor.Write(buffer, 0, n);
+                            n= input.Read(buffer, 0, buffer.Length);
+                        }
+                    }
+                }
+            }
+            </code><code lang="VB">
+            Dim outputFile As String = (fileToCompress &amp; ".compressed")
+            Using input As Stream = File.OpenRead(fileToCompress)
+                Using raw As FileStream = File.Create(outputFile)
+            	Using compressor As Stream = New DeflateStream(raw, CompressionMode.Compress, True)
+            	    Dim buffer As Byte() = New Byte(4096) {}
+            	    Dim n As Integer = -1
+            	    Do While (n &lt;&gt; 0)
+            		If (n &gt; 0) Then
+            		    compressor.Write(buffer, 0, n)
+            		End If
+            		n = input.Read(buffer, 0, buffer.Length)
+            	    Loop
+            	End Using
+                End Using
+            End Using
+            </code></example>
+      <param name="stream">The stream which will be read or written.</param>
+      <param name="mode">Indicates whether the DeflateStream will compress or decompress.</param>
+      <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
+      <param name="level">A tuning knob to trade speed for effectiveness.</param>
+    </member>
+    <member name="M:Ionic.Zlib.DeflateStream.Close">
+      <summary>
+            Close the stream.  
+            </summary>
+      <remarks>
+            This may or may not close the captive stream. 
+            See the ctor's with leaveOpen parameters for more information.
+            </remarks>
+    </member>
+    <member name="M:Ionic.Zlib.DeflateStream.Flush">
+      <summary>
+            Flush the stream.
+            </summary>
+    </member>
+    <member name="M:Ionic.Zlib.DeflateStream.Read(System.Byte[],System.Int32,System.Int32)">
+      <summary>
+            Read data from the stream. 
+            </summary>
+      <remarks>
+        <para>
+            If you wish to use the DeflateStream to compress data while reading, you can create a DeflateStream with 
+            CompressionMode.Compress, providing an uncompressed data stream.  Then call Read() on that DeflateStream, 
+            and the data read will be compressed. 
+            If you wish to use the DeflateStream to decompress data while reading, you can create a DeflateStream with 
+            CompressionMode.Decompress, providing a readable compressed data stream.  Then call Read() on that DeflateStream, 
+            and the data read will be decompressed. 
+            </para>
+        <para>
+            A DeflateStream can be used for Read() or Write(), but not both. 
+            </para>
+      </remarks>
+      <param name="buffer">The buffer into which the read data should be placed.</param>
+      <param name="offset">the offset within that data array to put the first byte read.</param>
+      <param name="count">the number of bytes to read.</param>
+      <returns>the number of bytes actually read</returns>
+    </member>
+    <member name="M:Ionic.Zlib.DeflateStream.Seek(System.Int64,System.IO.SeekOrigin)">
+      <summary>
+            Calling this method always throws a <see cref="T:System.NotImplementedException" />.
+            </summary>
+      <param name="offset">this is irrelevant, since it will always throw!</param>
+      <param name="origin">this is irrelevant, since it will always throw!</param>
+      <returns>irrelevant!</returns>
+    </member>
+    <member name="M:Ionic.Zlib.DeflateStream.SetLength(System.Int64)">
+      <summary>
+            Calling this method always throws a NotImplementedException.
+            </summary>
+      <param name="value">this is irrelevant, since it will always throw!</param>
+    </member>
+    <member name="M:Ionic.Zlib.DeflateStream.Write(System.Byte[],System.Int32,System.Int32)">
+      <summary>
+            Write data to the stream. 
+            </summary>
+      <remarks>
+        <para>
+            If you wish to use the DeflateStream to compress data while writing, you can create a DeflateStream with 
+            CompressionMode.Compress, and a writable output stream.  Then call Write() on that DeflateStream, 
+            providing uncompressed data as input.  The data sent to the output stream will be the compressed form of the data written.
+            If you wish to use the DeflateStream to decompress data while writing, you can create a DeflateStream with 
+            CompressionMode.Decompress, and a writable output stream.  Then call Write() on that stream, providing previously 
+            compressed data. The data sent to the output stream will be the decompressed form of the data written.   
+            </para>
+        <para>
+            A DeflateStream can be used for Read() or Write(), but not both. 
+            </para>
+      </remarks>
+      <param name="buffer">The buffer holding data to write to the stream.</param>
+      <param name="offset">the offset within that data array to find the first byte to write.</param>
+      <param name="count">the number of bytes to write.</param>
+    </member>
+    <member name="P:Ionic.Zlib.DeflateStream.FlushMode">
+      <summary>
+            This property sets the flush behavior on the stream.  
+            Sorry, though, not sure exactly how to describe all the various settings.
+            </summary>
+    </member>
+    <member name="P:Ionic.Zlib.DeflateStream.BufferSize">
+      <summary>
+            Callers can set the buffer size of the working buffer with this property.  
+            </summary>
+      <remarks>
+            The working buffer is used for all stream operations.
+            The default size is 1024 bytes.  The minimum size is 128 bytes. You may get better 
+            performance with a larger buffer.  Then again, you might not.  I don't know, I haven't tested it.  
+            </remarks>
+    </member>
+    <member name="P:Ionic.Zlib.DeflateStream.TotalIn">
+      <summary> Returns the total number of bytes input so far.</summary>
+    </member>
+    <member name="P:Ionic.Zlib.DeflateStream.TotalOut">
+      <summary> Returns the total number of bytes output so far.</summary>
+    </member>
+    <member name="P:Ionic.Zlib.DeflateStream.CanRead">
+      <summary>
+            Indicates whether the stream can be read.
+            </summary>
+      <remarks>
+            The return value depends on whether the captive stream supports reading.
+            </remarks>
+    </member>
+    <member name="P:Ionic.Zlib.DeflateStream.CanSeek">
+      <summary>
+            Indicates whether the stream supports Seek operations.
+            </summary>
+      <remarks>
+            Always returns false.
+            </remarks>
+    </member>
+    <member name="P:Ionic.Zlib.DeflateStream.CanWrite">
+      <summary>
+            Indicates whether the stream can be written.
+            </summary>
+      <remarks>
+            The return value depends on whether the captive stream supports writing.
+            </remarks>
+    </member>
+    <member name="P:Ionic.Zlib.DeflateStream.Length">
+      <summary>
+            Reading this property always throws a NotImplementedException.
+            </summary>
+    </member>
+    <member name="P:Ionic.Zlib.DeflateStream.Position">
+      <summary>
+            Reading or Writing this property always throws a NotImplementedException.
+            </summary>
+    </member>
+    <member name="T:Ionic.Zlib.ZlibStream">
+      <summary>
+            Represents a Zlib stream for compression or decompression.
+            </summary>
+      <remarks>
+        <para>
+            Data can be compressed or decompressed, and either of those can be through reading or writing. 
+            For more information on the Deflate algorithm, see IETF RFC 1951, "DEFLATE Compressed Data 
+            Format Specification version 1.3." 
+            </para>
+        <para>
+            This class is similar to <see cref="T:Ionic.Zlib.DeflateStream" />, except that it adds the RFC1950 header 
+            bytes to a compressed stream when compressing, or expects the RFC1950 header bytes when 
+            decompressing.
+            </para>
+      </remarks>
+    </member>
+    <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode)">
+      <summary>
+            Create a ZlibStream using the specified CompressionMode.
+            </summary>
+      <remarks>
+        <para>
+            The ZlibStream will use the default compression level.
+            </para>
+        <para>
+            See the documentation for the <see cref="T:Ionic.Zlib.DeflateStream" /> constructors for example code.
+            </para>
+      </remarks>
+      <param name="stream">The stream which will be read or written.</param>
+      <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
+    </member>
+    <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel)">
+      <summary>
+            Create a ZlibStream using the specified CompressionMode and the specified CompressionLevel.
+            </summary>
+      <remarks>
+            See the documentation for the <see cref="T:Ionic.Zlib.DeflateStream" /> constructors for example code.
+            </remarks>
+      <param name="stream">The stream to be read or written while deflating or inflating.</param>
+      <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
+      <param name="level">A tuning knob to trade speed for effectiveness.</param>
+    </member>
+    <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,System.Boolean)">
+      <summary>
+            Create a ZlibStream using the specified CompressionMode, and explicitly specify whether
+            the stream should be left open after Deflation or Inflation.
+            </summary>
+      <remarks>
+        <para>
+            This constructor allows the application to request that the captive stream remain open after
+            the deflation or inflation occurs.  By default, after Close() is called on the stream, the 
+            captive stream is also closed. In some cases this is not desired, for example if the stream 
+            is a memory stream that will be re-read after compression.  Specify true for the 
+            leaveOpen parameter to leave the stream open. 
+            </para>
+        <para>
+            The ZlibStream will use the default compression level.
+            </para>
+        <para>
+            See the documentation for the <see cref="T:Ionic.Zlib.DeflateStream" /> constructors for example code.
+            </para>
+      </remarks>
+      <param name="stream">The stream which will be read or written. This is called the 
+            "captive" stream in other places in this documentation.</param>
+      <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
+      <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
+    </member>
+    <member name="M:Ionic.Zlib.ZlibStream.#ctor(System.IO.Stream,Ionic.Zlib.CompressionMode,Ionic.Zlib.CompressionLevel,System.Boolean)">
+      <summary>
+            Create a ZlibStream using the specified CompressionMode and the specified CompressionLevel, 
+            and explicitly specify whether
+            the stream should be left open after Deflation or Inflation.
+            </summary>
+      <remarks>
+        <para>
+            This constructor allows the application to request that the captive stream remain open after
+            the deflation or inflation occurs.  By default, after Close() is called on the stream, the 
+            captive stream is also closed. In some cases this is not desired, for example if the stream 
+            is a memory stream that will be re-read after compression.  Specify true for the 
+            leaveOpen parameter to leave the stream open. 
+            </para>
+        <para>
+            See the documentation for the <see cref="T:Ionic.Zlib.DeflateStream" /> constructors for example code.
+            </para>
+      </remarks>
+      <param name="stream">The stream which will be read or written.</param>
+      <param name="mode">Indicates whether the ZlibStream will compress or decompress.</param>
+      <param name="leaveOpen">true if the application would like the stream to remain open after inflation/deflation.</param>
+      <param name="level">A tuning knob to trade speed for effectiveness.</param>
+    </member>
+    <member name="M:Ionic.Zlib.ZlibStream.Close">
+      <summary>
+            Close the stream.  
+            </summary>
+      <remarks>
+            This may or may not close the captive stream. 
+            See the ctor's with leaveOpen parameters for more information.
+            </remarks>
+    </member>
+    <member name="M:Ionic.Zlib.ZlibStream.Flush">
+      <summary>
+            Flush the stream.
+            </summary>
+    </member>
+    <member name="M:Ionic.Zlib.ZlibStream.Read(System.Byte[],System.Int32,System.Int32)">
+      <summary>
+            Read data from the stream. 
+            </summary>
+      <remarks>
+        <para>
+            If you wish to use the ZlibStream to compress data while reading, you can create a ZlibStream with 
+            CompressionMode.Compress, providing an uncompressed data stream.  Then call Read() on that ZlibStream, 
+            and the data read will be compressed. 
+            If you wish to use the ZlibStream to decompress data while reading, you can create a ZlibStream with 
+            CompressionMode.Decompress, providing a readable compressed data stream.  Then call Read() on that ZlibStream, 
+            and the data read will be decompressed. 
+            </para>
+        <para>
+            A ZlibStream can be used for Read() or Write(), but not both. 
+            </para>
+      </remarks>
+      <param name="buffer">The buffer into which the read data should be placed.</param>
+      <param name="offset">the offset within that data array to put the first byte read.</param>
+      <param name="count">the number of bytes to read.</param>
+    </member>
+    <member name="M:Ionic.Zlib.ZlibStream.Seek(System.Int64,System.IO.SeekOrigin)">
+      <summary>
+            Calling this method always throws a NotImplementedException.
+            </summary>
+    </member>
+    <member name="M:Ionic.Zlib.ZlibStream.SetLength(System.Int64)">
+      <summary>
+            Calling this method always throws a NotImplementedException.
+            </summary>
+    </member>
+    <member name="M:Ionic.Zlib.ZlibStream.Write(System.Byte[],System.Int32,System.Int32)">
+      <summary>
+            Write data to the stream. 
+            </summary>
+      <remarks>
+        <para>
+            If you wish to use the ZlibStream to compress data while writing, you can create a ZlibStream with 
+            CompressionMode.Compress, and a writable output stream.  Then call Write() on that ZlibStream, 
+            providing uncompressed data as input.  The data sent to the output stream will be the compressed form of the data written.
+            If you wish to use the ZlibStream to decompress data while writing, you can create a ZlibStream with 
+            CompressionMode.Decompress, and a writable output stream.  Then call Write() on that stream, providing previously 
+            compressed data. The data sent to the output stream will be the decompressed form of the data written.   
+            </para>
+        <para>
+            A ZlibStream can be used for Read() or Write(), but not both. 
+            </para>
+      </remarks>
+      <param name="buffer">The buffer holding data to write to the stream.</param>
+      <param name="offset">the offset within that data array to find the first byte to write.</param>
+      <param name="count">the number of bytes to write.</param>
+    </member>
+    <member name="P:Ionic.Zlib.ZlibStream.FlushMode">
+      <summary>
+            This property sets the flush behavior on the stream.  
+            Sorry, though, not sure exactly how to describe all the various settings.
+            </summary>
+    </member>
+    <member name="P:Ionic.Zlib.ZlibStream.BufferSize">
+      <summary>
+            Callers can set the buffer size of the working buffer with this property.  
+            </summary>
+      <remarks>
+            The working buffer is used for all stream operations.
+            The default size is 1024 bytes.  The minimum size is 128 bytes. You may get better 
+            performance with a larger buffer.  Then again, you might not.  I don't know, I haven't tested it.  
+            </remarks>
+    </member>
+    <member name="P:Ionic.Zlib.ZlibStream.TotalIn">
+      <summary> Returns the total number of bytes input so far.</summary>
+    </member>
+    <member name="P:Ionic.Zlib.ZlibStream.TotalOut">
+      <summary> Returns the total number of bytes output so far.</summary>
+    </member>
+    <member name="P:Ionic.Zlib.ZlibStream.CanRead">
+      <summary>
+            Indicates whether the stream can be read.
+            </summary>
+      <remarks>
+            The return value depends on whether the captive stream supports reading.
+            </remarks>
+    </member>
+    <member name="P:Ionic.Zlib.ZlibStream.CanSeek">
+      <summary>
+            Indicates whether the stream supports Seek operations.
+            </summary>
+      <remarks>
+            Always returns false.
+            </remarks>
+    </member>
+    <member name="P:Ionic.Zlib.ZlibStream.CanWrite">
+      <summary>
+            Indicates whether the stream can be written.
+            </summary>
+      <remarks>
+            The return value depends on whether the captive stream supports writing.
+            </remarks>
+    </member>
+    <member name="P:Ionic.Zlib.ZlibStream.Length">
+      <summary>
+            Reading this property always throws a NotImplementedException.
+            </summary>
+    </member>
+    <member name="P:Ionic.Zlib.ZlibStream.Position">
+      <summary>
+            Reading or Writing this property always throws a NotImplementedException.
+            </summary>
+    </member>
+    <member name="T:Ionic.Zlib.ZlibConstants">
+      <summary>
+            A bunch of constants used in the Zlib interface.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_NO_FLUSH">
+      <summary>
+            No flush at all.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_PARTIAL_FLUSH">
+      <summary>
+            A little bit of flush?
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_SYNC_FLUSH">
+      <summary>
+            Sync flush?
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_FULL_FLUSH">
+      <summary>
+            Full flush?
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_FINISH">
+      <summary>
+            Finish?
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.WINDOW_BITS_MAX">
+      <summary>
+            The maximum number of window bits for the Deflate algorithm.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.WINDOW_BITS_DEFAULT">
+      <summary>
+            The default number of window bits for the Deflate algorithm.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_OK">
+      <summary>
+            indicates everything is A-OK
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_STREAM_END">
+      <summary>
+            Indicates that the last operation reached the end of the stream.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_NEED_DICT">
+      <summary>
+            The operation ended in need of a dictionary. 
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_STREAM_ERROR">
+      <summary>
+            There was an error with the stream - not enough data, not open and readable, etc.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_DATA_ERROR">
+      <summary>
+            There was an error with the data - not enough data, bad data, etc.
+            </summary>
+    </member>
+    <member name="F:Ionic.Zlib.ZlibConstants.Z_BUF_ERROR">
+      <summary>
+            There was an error with the working buffer.
             </summary>
     </member>
   </members>
