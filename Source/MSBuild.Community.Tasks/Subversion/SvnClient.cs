@@ -28,6 +28,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -51,13 +52,12 @@ namespace MSBuild.Community.Tasks.Subversion
         private const string _switchValueFormat = " --{0} {1}";
 
         private static readonly Regex _revisionParse = new Regex(@"\b(?<Rev>\d+)", RegexOptions.Compiled);
-        private static readonly Regex _cleanPath = new Regex(@"[\\/:*?""<>|\a\b\t\n\v\f\r]", RegexOptions.Compiled);
 
         /// <summary>
         /// Contains output of SVN command-line client.
         /// </summary>
         protected StringBuilder _outputBuffer = new StringBuilder();
-       
+
 
         #endregion Fields
 
@@ -311,7 +311,7 @@ namespace MSBuild.Community.Tasks.Subversion
 
             if (!string.IsNullOrEmpty(_messageFile) && File.Exists(_messageFile))
                 builder.AppendFormat(_switchStringFormat, "file", _messageFile);
-            
+
             if (!string.IsNullOrEmpty(_message))
                 builder.AppendFormat(_switchStringFormat, "message", _message);
 
@@ -416,21 +416,18 @@ namespace MSBuild.Community.Tasks.Subversion
             if (key != null)
             {
                 string possiblePath = key.GetValue(null) as string;
-                if (File.Exists(possiblePath))
-                {
+                if (SafeFileExists(possiblePath))
                     toolPath = Path.GetDirectoryName(possiblePath);
-                }
             }
             // 2) search the path
             if (toolPath == null)
             {
                 string pathEnvironmentVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
-                string[] paths = pathEnvironmentVariable.Split(Path.PathSeparator);
+                string[] paths = pathEnvironmentVariable.Split(new[] { Path.PathSeparator }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string path in paths)
                 {
-                    string p = _cleanPath.Replace(path, string.Empty);
-                    string fullPathToClient = Path.Combine(p, toolName);
-                    if (File.Exists(fullPathToClient))
+                    string fullPathToClient = Path.Combine(path, toolName);
+                    if (SafeFileExists(fullPathToClient))
                     {
                         toolPath = path;
                         break;
@@ -446,10 +443,10 @@ namespace MSBuild.Community.Tasks.Subversion
                                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"VisualSVN\bin")
                                           };
 
-            foreach (string path in commonSVNLocations) 
+            foreach (string path in commonSVNLocations)
             {
-                string fullPathToClient = Path.Combine(path, toolName);                
-                if (File.Exists(fullPathToClient))
+                string fullPathToClient = Path.Combine(path, toolName);
+                if (SafeFileExists(fullPathToClient))
                 {
                     toolPath = path;
                     break;
@@ -462,6 +459,14 @@ namespace MSBuild.Community.Tasks.Subversion
             }
 
             return toolPath;
+        }
+
+        private static bool SafeFileExists(string file)
+        {
+            try { return File.Exists(file); }
+            catch { } // eat exception
+
+            return false;
         }
 
         /// <summary>
