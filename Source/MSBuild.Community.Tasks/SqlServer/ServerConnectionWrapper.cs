@@ -1,13 +1,19 @@
 // $Id$
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Reflection;
 
 namespace MSBuild.Community.Tasks.SqlServer
 {
 	internal class ServerConnectionWrapper
 	{
-		public static string AssemblyName = "Microsoft.SqlServer.ConnectionInfo, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL";
+		public static string[] AssemblyNames = new[]
+			{
+				"Microsoft.SqlServer.ConnectionInfo, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91",
+				"Microsoft.SqlServer.ConnectionInfo, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
+			};
 		private static volatile Assembly _assembly;
 		private static object _lock = new object();
 		private Type _type;
@@ -26,19 +32,32 @@ namespace MSBuild.Community.Tasks.SqlServer
 		
 		private static void LoadAssembly()
 		{
+			List<string> errors = new List<string>();
 			if (_assembly == null)
 			{
 				lock(_lock)
 				{
 					if (_assembly == null)
 					{
-						_assembly = Assembly.Load(AssemblyName);
+						foreach (string assemblyName in AssemblyNames)
+						{
+							try
+							{
+								_assembly = Assembly.Load(assemblyName);
+								break;
+							}
+							catch (FileNotFoundException ex)
+							{
+								errors.Add(String.Format("Could not load assembly {0} : {1}", assemblyName, ex.Message));	
+							}
+						}
+						
 					}
 				}
 			}
 			if (_assembly == null)
 			{
-				throw new ArgumentNullException("Could not load assembly {0}", AssemblyName);
+				throw new ArgumentNullException(String.Join("\n", errors.ToArray()));
 			}
 		}
 		
@@ -125,13 +144,9 @@ namespace MSBuild.Community.Tasks.SqlServer
 			Exception inner = e.InnerException;
 			if (inner != null)
 			{
-				throw (Exception)CreateInstance(e.InnerException.GetType(),
-					e.InnerException.Message, e.InnerException);
+				throw inner;
 			}
-			else
-			{
-				throw (Exception)CreateInstance(e.GetType(), e.Message, e);
-			}
+			throw (Exception)CreateInstance(e.GetType(), e.Message, e);
 		}
 	}
 }

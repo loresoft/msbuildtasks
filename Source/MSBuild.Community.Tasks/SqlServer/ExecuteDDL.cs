@@ -140,29 +140,19 @@ namespace MSBuild.Community.Tasks.SqlServer
 				}
 				catch (Exception ex)
 				{
-					if (ex.GetType().ToString().Contains("Microsoft.SqlServer.Management.Common"))
+					Log.LogError("Unexpected {2} error executing SQL command: {0}\n{1}", sql, ex.Message, ex.GetType());
+					Exception inner = ex.InnerException;
+					while (inner != null)
 					{
-						Log.LogError(ex.Message);
-						Exception inner = ex.InnerException;
-						while (inner != null)
+						Log.LogError("Error {0}", inner.Message);
+						if (inner is SqlException)
 						{
-							if (inner is SqlException)
+							foreach (SqlError error in ((SqlException)inner).Errors)
 							{
-								foreach (SqlError error in ((SqlException)inner).Errors)
-								{
-									Log.LogError("{1}: Error # {0} on Line {2}: {3}", error.Number, error.Server, error.LineNumber, error.Message);
-								}
+								Log.LogError("{1}: Error # {0} on Line {2}: {3}", error.Number, error.Server, error.LineNumber, error.Message);
 							}
-							else
-							{
-								Log.LogError("Error {0}", inner.Message);
-							}
-							inner = inner.InnerException;
 						}
-					}
-					else
-					{
-						Log.LogError("Unexpected {2} error executing SQL command: {0}\n{1}", sql, ex.Message, ex.GetType());
+						inner = inner.InnerException;
 					}
 				}
 				_results.Add(sqlResult);

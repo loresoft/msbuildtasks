@@ -75,5 +75,20 @@ namespace MSBuild.Community.Tasks.Tests.SqlServer
 			Assert.IsTrue(_ddl.Execute(), "ExecuteDDL Create database failed.");
 			Assert.IsTrue(File.Exists(_dbFilename));
 		}
+
+		[Test]
+		public void ExecuteDDLSyntaxError()
+		{
+			TaskItem sqlFile = WriteSqlFile("SELECT * from sys.tabless;");
+			_ddl.Files = new ITaskItem[] { sqlFile };
+			try
+			{
+				Assert.IsFalse(_ddl.Execute());
+			}
+			catch(Exception ex)
+			{
+				StringAssert.StartsWith("error executing SQL command:", ex.Message);
+			}
+		}
 	}
 }
