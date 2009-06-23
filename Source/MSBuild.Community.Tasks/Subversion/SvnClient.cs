@@ -440,7 +440,8 @@ namespace MSBuild.Community.Tasks.Subversion
                                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Subversion\bin"),
                                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion Server"),
                                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion"),
-                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"VisualSVN\bin")
+                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"VisualSVN\bin"),
+                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"SlikSvn\bin")
                                           };
 
             foreach (string path in commonSVNLocations)

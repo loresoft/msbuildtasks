@@ -139,6 +139,9 @@
   <Target Name="Installer" DependsOnTargets="Compile;Documentation;Merge">
     <MSBuild Projects="Source\MSBuild.Community.Tasks.Setup\MSBuildTasks.wixproj"
              Properties="Configuration=Release;Major=$(Major);Minor=$(Minor);Build=$(Build);Revision=$(Revision)" />
+
+    <Copy SourceFiles="Source\MSBuild.Community.Tasks.Setup\bin\Release\MSBuild.Community.Tasks.msi"
+          DestinationFiles="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).msi" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="Zip;Installer">
