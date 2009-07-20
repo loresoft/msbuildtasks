@@ -51,7 +51,7 @@ namespace MSBuild.Community.Tasks.Subversion
         private const string _switchStringFormat = " --{0} \"{1}\"";
         private const string _switchValueFormat = " --{0} {1}";
 
-        private static readonly Regex _revisionParse = new Regex(@"\b(?<Rev>\d+)", RegexOptions.Compiled);
+        private static readonly Regex _revisionParse = new Regex(@"(?<=[rR]ev(ision)?\s+)\d+", RegexOptions.Compiled);
 
         /// <summary>
         /// Contains output of SVN command-line client.
@@ -384,8 +384,7 @@ namespace MSBuild.Community.Tasks.Subversion
             Match revMatch = _revisionParse.Match(singleLine);
             if (revMatch.Success)
             {
-                string tempRev = revMatch.Groups["Rev"].Value;
-                int.TryParse(tempRev, out _revision);
+                int.TryParse(revMatch.Value, out _revision);
             }
         }
 
@@ -440,10 +439,11 @@ namespace MSBuild.Community.Tasks.Subversion
                                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Subversion\bin"),
                                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion Server"),
                                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion"),
+                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion Client"),
                                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"VisualSVN\bin"),
+                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"VisualSVN Server\bin"),
                                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"SlikSvn\bin")
                                           };
-
             foreach (string path in commonSVNLocations)
             {
                 string fullPathToClient = Path.Combine(path, toolName);
