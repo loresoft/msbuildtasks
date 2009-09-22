@@ -57,7 +57,8 @@ namespace MSBuild.Community.Tasks.Subversion
         public SvnCopy()
         {
             Command = "copy";
-            CommandSwitches = SvnSwitches.NonInteractive | SvnSwitches.NoAuthCache;
+            base.NonInteractive = true;
+            base.NoAuthCache = true;
         }
 
         private string sourcePath;

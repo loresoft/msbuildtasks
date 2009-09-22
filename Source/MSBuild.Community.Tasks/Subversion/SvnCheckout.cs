@@ -58,7 +58,8 @@ namespace MSBuild.Community.Tasks.Subversion
         public SvnCheckout()
         {
             base.Command = "checkout";
-            base.CommandSwitches = SvnSwitches.NonInteractive | SvnSwitches.NoAuthCache;
+            base.NonInteractive = true;
+            base.NoAuthCache = true;
         }
 
         /// <summary>

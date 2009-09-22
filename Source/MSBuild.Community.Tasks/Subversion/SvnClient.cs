@@ -60,19 +60,7 @@ namespace MSBuild.Community.Tasks.Subversion
 
 
         #endregion Fields
-
-        #region Enums
-        [Flags]
-        internal enum SvnSwitches
-        {
-            None = 0,
-            NonInteractive = 0x01,
-            NoAuthCache = 0x02,
-            Xml = 0x04
-        }
-
-        #endregion Enums
-
+        
         #region Input Parameters
         private string _command;
 
@@ -211,11 +199,54 @@ namespace MSBuild.Community.Tasks.Subversion
             set { _targets = value; }
         }
 
+        private bool _nonInteractive = true;
+        /// <summary>
+        /// Gets or sets a value indicating the command is non interactive].
+        /// </summary>
+        /// <value><c>true</c> if non interactive; otherwise, <c>false</c>.</value>
+        public bool NonInteractive
+        {
+            get { return _nonInteractive; }
+            set { _nonInteractive = value; }
+        }
+
+        private bool _noAuthCache = true;
+        /// <summary>
+        /// Gets or sets a value indicating no auth cache.
+        /// </summary>
+        /// <value><c>true</c> if no auth cache; otherwise, <c>false</c>.</value>
+        public bool NoAuthCache
+        {
+            get { return _noAuthCache; }
+            set { _noAuthCache = value; }
+        }
+
+        private bool _trustServerCert;
+        /// <summary>
+        /// Gets or sets a value indicating whether to trust the server cert.
+        /// </summary>
+        /// <value><c>true</c> to trust the server cert; otherwise, <c>false</c>.</value>
+        public bool TrustServerCert
+        {
+            get { return _trustServerCert; }
+            set { _trustServerCert = value; }
+        }
+
+        private bool _xml;
+        /// <summary>
+        /// Gets or sets a value indicating the output is XML.
+        /// </summary>
+        /// <value><c>true</c> to output in XML; otherwise, <c>false</c>.</value>
+        public bool Xml
+        {
+            get { return _xml; }
+            set { _xml = value; }
+        }
+
         #endregion Input Parameters
 
         #region Output Parameters
         private int _revision = -1;
-        private string _output;
 
         /// <summary>
         /// Gets or sets the revision.
@@ -234,31 +265,10 @@ namespace MSBuild.Community.Tasks.Subversion
         [Output]
         public string Output
         {
-            get
-            {
-                if (_output == null)
-                    _output = _outputBuffer.ToString();
-
-                return _output;
-            }
+            get { return _outputBuffer.ToString(); }
         }
 
         #endregion Output Parameters
-
-        #region Internal Properties
-        private SvnSwitches _commandSwitches = SvnSwitches.None;
-
-        /// <summary>
-        /// Gets or sets the command switchs.
-        /// </summary>
-        /// <value>The command switchs.</value>
-        internal SvnSwitches CommandSwitches
-        {
-            get { return _commandSwitches; }
-            set { _commandSwitches = value; }
-        }
-
-        #endregion Internal Properties
 
         #region Protected Methods
         /// <summary>
@@ -292,8 +302,6 @@ namespace MSBuild.Community.Tasks.Subversion
             return builder.ToString();
         }
 
-
-
         /// <summary>
         /// Generates the SVN arguments.
         /// </summary>
@@ -324,19 +332,17 @@ namespace MSBuild.Community.Tasks.Subversion
             if (!string.IsNullOrEmpty(_arguments))
                 builder.AppendFormat(" {0}", _arguments);
 
-            if ((CommandSwitches & SvnSwitches.Xml) == SvnSwitches.Xml)
-            {
+            if (_xml)
                 builder.AppendFormat(_switchBooleanFormat, "xml");
-            }
 
-            if ((CommandSwitches & SvnSwitches.NonInteractive) == SvnSwitches.NonInteractive)
-            {
+            if (_nonInteractive)
                 builder.AppendFormat(_switchBooleanFormat, "non-interactive");
-            }
-            if ((CommandSwitches & SvnSwitches.NoAuthCache) == SvnSwitches.NoAuthCache)
-            {
+
+            if (_noAuthCache)
                 builder.AppendFormat(_switchBooleanFormat, "no-auth-cache");
-            }
+
+            if (_trustServerCert)
+                builder.AppendFormat(_switchBooleanFormat, "trust-server-cert");
 
             return builder.ToString();
         }
@@ -344,6 +350,13 @@ namespace MSBuild.Community.Tasks.Subversion
         #endregion Protected Methods
 
         #region Task Overrides
+        public override bool Execute()
+        {
+            _outputBuffer.Length = 0; // clear buffer
+
+            return base.Execute();
+        }
+
         /// <summary>
         /// Returns a string value containing the command line arguments to pass directly to the executable file.
         /// </summary>
@@ -378,8 +391,11 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <param name="messageImportance">The message importance.</param>
         protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
         {
-            base.LogEventsFromTextOutput(singleLine, messageImportance);
-            _outputBuffer.Append(singleLine);
+            // dont log xml messages
+            if (!Xml)
+                base.LogEventsFromTextOutput(singleLine, messageImportance);
+
+            _outputBuffer.AppendLine(singleLine);
 
             Match revMatch = _revisionParse.Match(singleLine);
             if (revMatch.Success)
@@ -496,10 +512,7 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <returns>The name of the executable file to run.</returns>
         protected override string ToolName
         {
-            get
-            {
-                return "svn.exe";
-            }
+            get { return "svn.exe"; }
         }
 
         #endregion Task Overrides

@@ -46,7 +46,8 @@ namespace MSBuild.Community.Tasks.Subversion
         public SvnCommit()
         {
             base.Command = "commit";
-            base.CommandSwitches = SvnSwitches.NonInteractive | SvnSwitches.NoAuthCache;
+            base.NonInteractive = true;
+            base.NoAuthCache = true;
         }
 
         /// <summary>
