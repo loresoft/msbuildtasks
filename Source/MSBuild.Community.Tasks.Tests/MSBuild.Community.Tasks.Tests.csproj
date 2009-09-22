@@ -10,7 +10,7 @@
     <RootNamespace>MSBuild.Community.Tasks.Tests</RootNamespace>
     <AssemblyName>MSBuild.Community.Tasks.Tests</AssemblyName>
     <WarningLevel>4</WarningLevel>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -91,6 +91,8 @@
     <Compile Include="ServiceControllerTest.cs" />
     <Compile Include="Solution\GetSolutionProjectsTest.cs" />
     <Compile Include="Sound\SoundTest.cs" />
+    <Compile Include="SourceServer\SrcToolTest.cs" />
+    <Compile Include="SourceServer\SvnSourceIndexTest.cs" />
     <Compile Include="SqlServer\ExecuteDDLTest.cs" />
     <Compile Include="SqlServer\SqlPubWizTest.cs" />
     <Compile Include="Subversion\SvnCopyTest.cs" />

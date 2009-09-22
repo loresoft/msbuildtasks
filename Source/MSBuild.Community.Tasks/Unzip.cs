@@ -127,7 +127,7 @@ namespace MSBuild.Community.Tasks
             if (e == null || e.CurrentEntry == null)
                 return;
 
-            _files.Add(new TaskItem(e.CurrentEntry.LocalFileName));
+            _files.Add(new TaskItem(e.CurrentEntry.FileName));
             Log.LogMessage(Resources.UnzipExtracted, e.CurrentEntry.FileName);
         }
     }

@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild Scripts", "MSBuild 
 		Script.proj = Script.proj
 		Services.proj = Services.proj
 		Sleep.proj = Sleep.proj
+		SourceServer.proj = SourceServer.proj
 		Subversion.proj = Subversion.proj
 		Task.proj = Task.proj
 		Vss.proj = Vss.proj

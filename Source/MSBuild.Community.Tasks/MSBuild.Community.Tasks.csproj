@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MSBuild.Community.Tasks</RootNamespace>
     <AssemblyName>MSBuild.Community.Tasks</AssemblyName>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>MSBuild.Community.Tasks.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -41,9 +41,9 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip, Version=1.7.1.17, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+    <Reference Include="Ionic.Zip.Reduced, Version=1.8.4.23, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\Ionic.Zip.dll</HintPath>
+      <HintPath>..\..\Libraries\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
@@ -148,8 +148,16 @@
     <Compile Include="Oracle\TnsParser.cs" />
     <Compile Include="RoboCopy.cs" />
     <Compile Include="Sound\Sound.cs" />
+    <Compile Include="SourceServer\FileBase.cs" />
+    <Compile Include="SourceServer\PdbStr.cs" />
+    <Compile Include="SourceServer\SourceFile.cs" />
+    <Compile Include="SourceServer\SourceIndexBase.cs" />
+    <Compile Include="SourceServer\SrcTool.cs" />
+    <Compile Include="SourceServer\SvnSourceIndex.cs" />
+    <Compile Include="SourceServer\SymbolFile.cs" />
     <Compile Include="SqlServer\SqlPubWiz.cs" />
     <Compile Include="Subversion\SvnCopy.cs" />
+    <Compile Include="Subversion\Info.cs" />
     <Compile Include="SymbolServer\SymStore.cs" />
     <Compile Include="Tfs\IServer.cs" />
     <Compile Include="Tfs\Proxies\Changeset.cs" />
