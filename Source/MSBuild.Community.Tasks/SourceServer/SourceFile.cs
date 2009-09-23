@@ -33,7 +33,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 
-// $Id $
+// $Id$
 
 namespace MSBuild.Community.Tasks.SourceServer
 {

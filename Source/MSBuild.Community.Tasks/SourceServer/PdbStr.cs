@@ -34,7 +34,7 @@ using System.Text;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-// $Id $
+// $Id$
 
 namespace MSBuild.Community.Tasks.SourceServer
 {

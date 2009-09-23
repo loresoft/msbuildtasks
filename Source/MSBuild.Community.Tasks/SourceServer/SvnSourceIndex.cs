@@ -38,7 +38,7 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using MSBuild.Community.Tasks.Subversion;
 
-// $Id $
+// $Id$
 
 namespace MSBuild.Community.Tasks.SourceServer
 {

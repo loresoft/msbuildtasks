@@ -32,7 +32,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Xml.Serialization;
 
-// $Id $
+// $Id$
 
 namespace MSBuild.Community.Tasks.Subversion
 {
