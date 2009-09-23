@@ -25,7 +25,7 @@ namespace MSBuild.Community.Tasks.Tests.SourceServer
         }
 
         [Test]
-        public void Example()
+        public void IndexSource()
         {
             var task = new SvnSourceIndex();
             task.BuildEngine = new MockBuild();

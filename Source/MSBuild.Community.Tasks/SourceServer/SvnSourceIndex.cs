@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.Build.Framework;
@@ -53,8 +54,7 @@ namespace MSBuild.Community.Tasks.SourceServer
         /// </summary>
         public SvnSourceIndex()
         {
-            SourceTargetFormat = "%targ%\\%fnbksl%(%var3%)\\%var4%\\%fnfile%(%var1%)";
-            SourceCommandFormat = "svn.exe export %var2%%var3%@%var4% %srcsrvtrg% --non-interactive --trust-server-cert --quiet %svnauth%";
+            SourceCommandFormat = "svn.exe export %var2%%var3%@%var4% %srcsrvtrg% --non-interactive --trust-server-cert --quiet";
         }
 
         /// <summary>
@@ -66,45 +66,17 @@ namespace MSBuild.Community.Tasks.SourceServer
         /// </returns>
         protected override bool AddSourceProperties(SymbolFile symbolFile)
         {
-            // get all the svn info in one call
-            SvnClient client = new SvnClient();
-            CopyBuildEngine(client);
+            IList<SourceFile> sourceFiles = symbolFile.SourceFiles;
 
-            List<ITaskItem> items = new List<ITaskItem>();
-            foreach (var sourceFile in symbolFile.SourceFiles)
-                items.Add(new TaskItem(sourceFile.File.FullName));
-
-            client.Command = "info";
-            client.Xml = true;
-            client.Targets = items.ToArray();
-
-            if (!client.Execute())
-            {
-                Failed++;
-                Log.LogError("Error getting source information from subversion.");
+            string output;
+            if (!GetSourceInfomation(sourceFiles, out output)) 
                 return false;
-            }
 
-            Info info = null;
-
-            // reuse for multiple calls. no need to make static, lifetime of msbuild.exe is short.
-            if (_infoSerializer == null)
-                _infoSerializer = new XmlSerializer(typeof(Info));
-
-            using (var sr = new StringReader(client.Output))
-            using (var reader = XmlReader.Create(sr))
-            {
-                info = _infoSerializer.Deserialize(reader) as Info;
-            }
-
-            if (info == null)
-            {
-                Failed++;
-                Log.LogError("Error parsing svn info xml information.");
+            Info info;
+            if (!ConvertOutput(output, out info)) 
                 return false;
-            }
 
-            foreach (var sourceFile in symbolFile.SourceFiles)
+            foreach (var sourceFile in sourceFiles)
             {
                 if (!info.Entries.Contains(sourceFile.File.FullName))
                 {
@@ -113,39 +85,114 @@ namespace MSBuild.Community.Tasks.SourceServer
                 }
 
                 var entry = info.Entries[sourceFile.File.FullName];
-
-                sourceFile.Properties["Revision"] = entry.Revision;
-
-                string baseUri = entry.Repository.Root;
-                if (!baseUri.EndsWith("/"))
-                    baseUri += "/";
-
-                sourceFile.Properties["Root"] = baseUri;
-                sourceFile.Properties["Url"] = entry.Url;
-
-                Uri root = new Uri(baseUri);
-                Uri fullPath = new Uri(entry.Url);
-                Uri itemPath = root.MakeRelativeUri(fullPath);
-
-                sourceFile.Properties["ItemPath"] = itemPath.ToString();
-
-                sourceFile.Properties["CommitRevision"] = entry.Commit.Revision;
-                sourceFile.Properties["CommitAuthor"] = entry.Commit.Author;
-
-                if (entry.Commit.DateSpecified)
-                    sourceFile.Properties["CommitDate"] = entry.Commit.Date;
-
-                sourceFile.Properties["Kind"] = entry.Kind;
-
-                if (!string.Equals(entry.WorkingCopy.Schedule, "normal", StringComparison.OrdinalIgnoreCase))
-                    Log.LogWarning("Source file '{0}' has pending changes. Index may point to incorrect revision.", sourceFile.File.FullName);                
-                else if (entry.Revision == 0)
-                    Log.LogWarning("Source file '{0}' has a revision of zero.", sourceFile.File.FullName);
-                
-                sourceFile.IsResolved = true;
+                AddProperties(sourceFile, entry);
             }
 
             return true;
+        }
+
+        private bool ConvertOutput(string output, out Info info)
+        {
+            info = null;
+            if (string.IsNullOrEmpty(output))
+            {
+                Failed++;
+                Log.LogError("Error parsing svn info xml information, output is null.");
+                return false;
+            }
+
+            // reuse for multiple calls. no need to make static, lifetime of msbuild.exe is short.
+            if (_infoSerializer == null)
+                _infoSerializer = new XmlSerializer(typeof(Info));
+
+            using (var sr = new StringReader(output))
+            using (var reader = XmlReader.Create(sr))
+            {
+                info = _infoSerializer.Deserialize(reader) as Info;
+            }
+
+            if (info == null)
+            {
+                Failed++;
+                Log.LogError("Error parsing svn info xml information, info object is null.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool GetSourceInfomation(IList<SourceFile> sourceFiles, out string output)
+        {
+            bool result = false;
+            output = string.Empty;
+
+            // get all the svn info in one call
+            SvnClient client = new SvnClient();
+            CopyBuildEngine(client);
+
+            // using target file to prevent hitting max command line lenght
+            string targetFile = Path.GetTempFileName();
+
+            try
+            {
+                // dumping source file list to target file
+                using (var sw = File.CreateText(targetFile))
+                    foreach (var sourceFile in sourceFiles)
+                        sw.WriteLine(sourceFile);
+
+                client.Command = "info";
+                client.TargetFile = targetFile;
+                client.Xml = true;
+
+                result = client.Execute();
+            }
+            finally
+            {
+                File.Delete(targetFile);
+            }
+
+            if (!result)
+            {
+                Failed++;
+                Log.LogError("Error getting source information from subversion.");
+                return false;
+            }
+
+            output = client.Output;
+            return true;
+        }
+
+        private void AddProperties(SourceFile sourceFile, Entry entry)
+        {
+            sourceFile.Properties["Revision"] = entry.Revision;
+
+            string baseUri = entry.Repository.Root;
+            if (!baseUri.EndsWith("/"))
+                baseUri += "/";
+
+            sourceFile.Properties["Root"] = baseUri;
+            sourceFile.Properties["Url"] = entry.Url;
+
+            Uri root = new Uri(baseUri);
+            Uri fullPath = new Uri(entry.Url);
+            Uri itemPath = root.MakeRelativeUri(fullPath);
+
+            sourceFile.Properties["ItemPath"] = itemPath.ToString();
+
+            sourceFile.Properties["CommitRevision"] = entry.Commit.Revision;
+            sourceFile.Properties["CommitAuthor"] = entry.Commit.Author;
+
+            if (entry.Commit.DateSpecified)
+                sourceFile.Properties["CommitDate"] = entry.Commit.Date;
+
+            sourceFile.Properties["Kind"] = entry.Kind;
+
+            if (!string.Equals(entry.WorkingCopy.Schedule, "normal", StringComparison.OrdinalIgnoreCase))
+                Log.LogWarning("Source file '{0}' has pending changes. Index may point to incorrect revision.", sourceFile.File.FullName);
+            else if (entry.Revision == 0)
+                Log.LogWarning("Source file '{0}' has a revision of zero.", sourceFile.File.FullName);
+
+            sourceFile.IsResolved = true;
         }
 
         /// <summary>
@@ -167,8 +214,22 @@ namespace MSBuild.Community.Tasks.SourceServer
                 writer.WriteLine("DATETIME={0}", DateTime.UtcNow.ToString("u"));
                 writer.WriteLine("SRCSRV: variables ------------------------------------------");
 
-                writer.WriteLine("SRCSRVTRG={0}", SourceTargetFormat);
-                writer.WriteLine("SRCSRVCMD={0}", SourceCommandFormat);
+                // clean name
+                string name = string.IsNullOrEmpty(SourceServerName) ? "Name" : SourceServerName.Trim();
+                name = Regex.Replace(name, "\\W", "");
+
+                string target = string.IsNullOrEmpty(SourceTargetFormat)
+                    ? string.Format("%targ%\\{0}\\%fnbksl%(%var3%)\\%var4%\\%fnfile%(%var1%)", name)
+                    : SourceTargetFormat;
+
+                name = name.ToUpperInvariant();
+
+                writer.WriteLine("SVN_{0}_AUTH=", name);
+                writer.WriteLine("SVN_{0}_TRG={1}", name, target);
+                writer.WriteLine("SVN_{0}_CMD={1} %SVN_{0}_AUTH%", name, SourceCommandFormat);
+
+                writer.WriteLine("SRCSRVTRG=%SVN_{0}_TRG%", name);
+                writer.WriteLine("SRCSRVCMD=%SVN_{0}_CMD%", name);
 
                 writer.WriteLine("SRCSRV: source files ---------------------------------------");
 

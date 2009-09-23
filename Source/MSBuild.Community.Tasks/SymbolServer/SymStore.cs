@@ -83,7 +83,7 @@ namespace MSBuild.Community.Tasks.SymbolServer
         /// <value>The command.</value>
         /// <enum cref="MSBuild.Community.Tasks.SymbolServer.SymStoreCommands"/>
         public string Command { get; set; }
-        
+
         /// <summary>
         /// Gets or sets a value indicating SymStore will append new indexing information to an existing index file.
         /// </summary>
@@ -259,7 +259,23 @@ namespace MSBuild.Community.Tasks.SymbolServer
         /// </returns>
         protected override string GenerateFullPathToTool()
         {
-            return string.IsNullOrEmpty(ToolPath) ? ToolName : Path.Combine(ToolPath, ToolName);
+            if (!string.IsNullOrEmpty(ToolPath))
+                return Path.Combine(ToolPath, ToolName);
+
+            string pf = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            if (pf.EndsWith("(x86)"))
+            {
+                string pf64 = pf.Substring(0, pf.Length - 5).Trim();
+                string path64 = Path.Combine(pf64, "Debugging Tools for Windows (x64)");
+                if (Directory.Exists(path64))
+                    return Path.Combine(path64, ToolName);
+            }
+
+            string path = Path.Combine(pf, "Debugging Tools for Windows (x86)");
+            if (Directory.Exists(path))
+                return Path.Combine(path, ToolName);
+
+            return ToolName;
         }
 
         /// <summary>
@@ -290,10 +306,7 @@ namespace MSBuild.Community.Tasks.SymbolServer
         /// <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
         protected override MessageImportance StandardOutputLoggingImportance
         {
-            get
-            {
-                return MessageImportance.Normal;
-            }
+            get { return MessageImportance.Normal; }
         }
 
 

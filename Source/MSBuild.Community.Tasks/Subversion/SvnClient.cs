@@ -60,7 +60,7 @@ namespace MSBuild.Community.Tasks.Subversion
 
 
         #endregion Fields
-        
+
         #region Input Parameters
         private string _command;
 
@@ -187,6 +187,22 @@ namespace MSBuild.Community.Tasks.Subversion
             set { _localPath = value; }
         }
 
+        private string _targetFile;
+
+        /// <summary>
+        /// Gets or sets the target file.
+        /// </summary>
+        /// <value>The target file.</value>
+        /// <remarks>
+        /// Tells Subversion to get the list of files that you wish to operate on from
+        /// the filename that you provide instead of listing all the files on the command line.
+        ///  </remarks>
+        public string TargetFile
+        {
+            get { return _targetFile; }
+            set { _targetFile = value; }
+        }
+
         private ITaskItem[] _targets;
 
         /// <summary>
@@ -298,6 +314,9 @@ namespace MSBuild.Community.Tasks.Subversion
                     builder.AppendFormat(" \"{0}\"", fileTarget.ItemSpec);
                 }
             }
+
+            if (!string.IsNullOrEmpty(_targetFile))
+                builder.AppendFormat(_switchStringFormat, "targets", _targetFile);
 
             return builder.ToString();
         }

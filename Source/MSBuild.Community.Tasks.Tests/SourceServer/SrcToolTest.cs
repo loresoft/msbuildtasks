@@ -33,7 +33,7 @@ namespace MSBuild.Community.Tasks.Tests.SourceServer
 
             task.SourceOnly = true;
             task.PdbFile = pdfFile;
-            task.ToolPath = @"C:\Program Files\Debugging Tools for Windows (x64)\srcsrv";
+            //task.ToolPath = @"C:\Program Files\Debugging Tools for Windows (x64)\srcsrv";
 
             var result = task.Execute();
 

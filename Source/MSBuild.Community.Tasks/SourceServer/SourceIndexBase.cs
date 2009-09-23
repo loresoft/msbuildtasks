@@ -53,6 +53,7 @@ namespace MSBuild.Community.Tasks.SourceServer
         /// Gets or sets the symbol files to have to source index added.
         /// </summary>
         /// <value>The symbol files.</value>
+        [Required]
         public ITaskItem[] SymbolFiles { get; set; }
 
         /// <summary>
@@ -60,6 +61,13 @@ namespace MSBuild.Community.Tasks.SourceServer
         /// </summary>
         /// <value>The source server SDK path.</value>
         public string SourceServerSdkPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the source server.
+        /// </summary>
+        /// <value>The name of the source server.</value>
+        [Required]
+        public string SourceServerName { get; set; }
 
         /// <summary>
         /// Gets or sets the source command format. The SRCSRVCMD environment variable.

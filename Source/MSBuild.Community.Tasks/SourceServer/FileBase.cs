@@ -33,22 +33,55 @@ using System.IO;
 
 namespace MSBuild.Community.Tasks.SourceServer
 {
+    /// <summary>
+    /// A base class that has a file.
+    /// </summary>
     public class FileBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileBase"/> class.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
         public FileBase(string fileName)
             : this(new FileInfo(fileName))
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileBase"/> class.
+        /// </summary>
+        /// <param name="fileInfo">The file info.</param>
         public FileBase(FileInfo fileInfo)
         {
             File = fileInfo;
         }
 
+        /// <summary>
+        /// Gets or sets the file.
+        /// </summary>
+        /// <value>The file.</value>
         public FileInfo File { get; private set; }
 
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return File.ToString();
         }
+
+        #region implicit operators
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="FileBase"/> to <see cref="System.String"/>.
+        /// </summary>
+        /// <param name="file">The output file.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator string(FileBase file)
+        {
+            return file.File.FullName;
+        }
+        #endregion
     }
 }

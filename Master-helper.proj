@@ -66,17 +66,17 @@
     </Time>
 
     <AssemblyInfo CodeLanguage="CS"
-				OutputFile="Source\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs"
-				GenerateClass="true"
-        AssemblyCompany="http://msbuildtasks.tigris.org/"
-				AssemblyProduct="MSBuild.Community.Tasks"
-				AssemblyCopyright="Copyright © $(Year) MSBuild Community Tasks Project"
-				ComVisible="false"
-				CLSCompliant="false"
-				AssemblyVersion="$(Major).$(BindMinor).$(BindBuild).$(BindRevision)"
-        AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)"
-        AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)"
-        Condition="$(Revision) != '0' "/>
+                  OutputFile="Source\MSBuild.Community.Tasks\Properties\AssemblyInfoCommon.cs"
+                  GenerateClass="true"
+                  AssemblyCompany="http://msbuildtasks.tigris.org/"
+                  AssemblyProduct="MSBuild.Community.Tasks"
+                  AssemblyCopyright="Copyright © $(Year) MSBuild Community Tasks Project"
+                  ComVisible="false"
+                  CLSCompliant="false"
+                  AssemblyVersion="$(Major).$(BindMinor).$(BindBuild).$(BindRevision)"
+                  AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)"
+                  AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)"
+                  Condition="$(Revision) != '0' "/>
   </Target>
 
   <Target Name="Compile" DependsOnTargets="Version">
@@ -84,12 +84,21 @@
              Properties="Configuration=Release" />
   </Target>
 
+  <Target Name="SourceIndex" DependsOnTargets="Compile">
+    <CreateItem Include="Build\*.pdb">
+      <Output TaskParameter="Include" ItemName="SymbolFiles" />
+    </CreateItem>
+
+    <SvnSourceIndex SourceServerName="Tigris" SymbolFiles="@(SymbolFiles)"
+                    SourceServerSdkPath="C:\Program Files\Debugging Tools for Windows (x64)\srcsrv"  />
+  </Target>
+  
   <Target Name="Merge" DependsOnTargets="Compile">
     <Copy SourceFiles="Build\MSBuild.Community.Tasks.dll"
           DestinationFiles="Build\MSBuild.Temp.dll" />
 
     <!-- Merge together library files -->
-    <ILMerge InputAssemblies="Build\MSBuild.Temp.dll;Build\Ionic.Zip.dll"
+    <ILMerge InputAssemblies="Build\MSBuild.Temp.dll;Build\Ionic.Zip.Reduced.dll"
              OutputFile="Build\MSBuild.Community.Tasks.dll"
              KeyFile="Source\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk" />
 
@@ -107,8 +116,10 @@
 
   <Target Name="Documentation" DependsOnTargets="Compile">
     <TaskSchema Assemblies="Build\MSBuild.Community.Tasks.dll"
-        OutputPath="Build" CreateTaskList="false" IgnoreMsBuildSchema="true"
-        Includes="Microsoft.Build.Commontypes.xsd"/>
+                OutputPath="Build" 
+                CreateTaskList="false" 
+                IgnoreMsBuildSchema="true"
+                Includes="Microsoft.Build.Commontypes.xsd"/>
 
     <Sandcastle Clean="true" TopicStyle="vs2005"
                 NoWarnMessages="true" NoInfoMessages="true"
@@ -144,7 +155,7 @@
           DestinationFiles="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).msi" />
   </Target>
 
-  <Target Name="Build" DependsOnTargets="Zip;Installer">
+  <Target Name="Build" DependsOnTargets="SourceIndex;Zip;Installer">
     <Message Text="Build Complete"/>
   </Target>
 

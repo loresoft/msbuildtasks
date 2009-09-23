@@ -41,6 +41,7 @@ namespace MSBuild.Community.Tasks.Subversion
     [XmlRoot("info", Namespace = "", IsNullable = false)]
     public class Info
     {
+        /// <remarks/>
         public Info()
         {
             Entries = new EntryCollection();
@@ -97,6 +98,11 @@ namespace MSBuild.Community.Tasks.Subversion
     /// <remarks/>
     public class EntryCollection : KeyedCollection<string, Entry>
     {
+        /// <remarks/>
+        public EntryCollection()
+            : base(StringComparer.OrdinalIgnoreCase)
+        { }
+
         /// <remarks/>
         protected override string GetKeyForItem(Entry item)
         {

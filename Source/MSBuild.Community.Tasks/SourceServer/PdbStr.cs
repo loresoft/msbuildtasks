@@ -117,10 +117,23 @@ namespace MSBuild.Community.Tasks.SourceServer
         /// </returns>
         protected override string GenerateFullPathToTool()
         {
-            if (string.IsNullOrEmpty(ToolPath))
-                return ToolName;
+            if (!string.IsNullOrEmpty(ToolPath))
+                return Path.Combine(ToolPath, ToolName);
 
-            return Path.Combine(ToolPath, ToolName);
+            string pf = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            if (pf.EndsWith("(x86)"))
+            {
+                string pf64 = pf.Substring(0, pf.Length - 5).Trim();
+                string path64 = Path.Combine(pf64, "Debugging Tools for Windows (x64)\\srcsrv");
+                if (Directory.Exists(path64))
+                    return Path.Combine(path64, ToolName);
+            }
+
+            string path = Path.Combine(pf, "Debugging Tools for Windows (x86)\\srcsrv");
+            if (Directory.Exists(path))
+                return Path.Combine(path, ToolName);
+
+            return ToolName;
         }
 
         /// <summary>
