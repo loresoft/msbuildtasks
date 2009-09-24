@@ -89,8 +89,7 @@
       <Output TaskParameter="Include" ItemName="SymbolFiles" />
     </CreateItem>
 
-    <SvnSourceIndex SourceServerName="Tigris" SymbolFiles="@(SymbolFiles)"
-                    SourceServerSdkPath="C:\Program Files\Debugging Tools for Windows (x64)\srcsrv"  />
+    <SvnSourceIndex SourceServerName="Tigris" SymbolFiles="@(SymbolFiles)" />
   </Target>
   
   <Target Name="Merge" DependsOnTargets="Compile">
