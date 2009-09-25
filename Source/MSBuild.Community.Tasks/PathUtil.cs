@@ -5,8 +5,19 @@ using System.Text;
 
 namespace MSBuild.Community.Tasks
 {
-    internal class PathUtil
+    internal static class PathUtil
     {
+        private static readonly char[] _invalidPathChars;
+        private static readonly char[] _invalidFileChars;
+
+        static PathUtil()
+        {
+            _invalidPathChars = Path.GetInvalidPathChars();
+            Array.Sort(_invalidPathChars);
+            _invalidFileChars = Path.GetInvalidFileNameChars();
+            Array.Sort(_invalidFileChars);
+        }
+
         /// <summary>  
         /// Creates a relative path from one file  
         /// or folder to another.  
@@ -82,5 +93,19 @@ namespace MSBuild.Community.Tasks
             return newPath;
         }
 
+        public static bool IsPathValid(string path)
+        {
+            for (int i = 0; i < path.Length; i++)
+                if (Array.BinarySearch(_invalidPathChars, 0, _invalidPathChars.Length, path[i]) >= 0)
+                    return false;
+
+            string fileName = Path.GetFileName(path);
+            for (int i = 0; i < fileName.Length; i++)
+                if (Array.BinarySearch(_invalidFileChars, 0, _invalidFileChars.Length, fileName[i]) >= 0)
+                    return false;
+
+
+            return true;
+        }
     }
 }

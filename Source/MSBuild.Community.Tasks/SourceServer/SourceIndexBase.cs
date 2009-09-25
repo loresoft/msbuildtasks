@@ -88,7 +88,7 @@ namespace MSBuild.Community.Tasks.SourceServer
         /// Describes how to build the target path for the extracted file. 
         /// See srcsrv.doc for full documentation on SRCSRVTRG.
         /// </remarks>
-        public string SourceTargetFormat { get; set; } 
+        public string SourceTargetFormat { get; set; }
         #endregion
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace MSBuild.Community.Tasks.SourceServer
         protected bool IndexSymbolFile(ITaskItem item)
         {
             bool result = false;
-            
+
             // step 1: check if source already indexed
             // step 2: get source file list from pdb
             SymbolFile symbolFile = CreateSymbolFile(item);
@@ -154,7 +154,7 @@ namespace MSBuild.Community.Tasks.SourceServer
                     Log.LogMessage("  '{0}' source indexed successfully.", symbolFile.File.Name);
                     Successful++;
                 }
-            
+
                 return result;
             }
             finally
@@ -171,7 +171,7 @@ namespace MSBuild.Community.Tasks.SourceServer
         protected virtual SymbolFile CreateSymbolFile(ITaskItem item)
         {
             SymbolFile symbolFile = new SymbolFile(item.ItemSpec);
-            
+
             var srcTool = new SrcTool();
             CopyBuildEngine(srcTool);
 
@@ -200,7 +200,18 @@ namespace MSBuild.Community.Tasks.SourceServer
                 return null;
             }
 
-            symbolFile.AddSourceFiles(srcTool.SourceFiles);
+            foreach (string file in srcTool.SourceFiles)
+            {
+                // check that we didn't get garbage back from SrcTool.  
+                if (!PathUtil.IsPathValid(file))
+                {
+                    Log.LogMessage(MessageImportance.Low, "  Invalid path for source file '{0}'.", file);
+                    continue;
+                }
+
+                SourceFile sourceFile = new SourceFile(file);
+                symbolFile.SourceFiles.Add(sourceFile);
+            }
 
             return symbolFile;
         }
