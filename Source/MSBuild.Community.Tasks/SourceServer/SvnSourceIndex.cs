@@ -69,11 +69,11 @@ namespace MSBuild.Community.Tasks.SourceServer
             IList<SourceFile> sourceFiles = symbolFile.SourceFiles;
 
             string output;
-            if (!GetSourceInfomation(sourceFiles, out output)) 
+            if (!GetSourceInfomation(sourceFiles, out output))
                 return false;
 
             Info info;
-            if (!ConvertOutput(output, out info)) 
+            if (!ConvertOutput(output, out info))
                 return false;
 
             foreach (var sourceFile in sourceFiles)
@@ -105,10 +105,19 @@ namespace MSBuild.Community.Tasks.SourceServer
             if (_infoSerializer == null)
                 _infoSerializer = new XmlSerializer(typeof(Info));
 
-            using (var sr = new StringReader(output))
-            using (var reader = XmlReader.Create(sr))
+            try
             {
-                info = _infoSerializer.Deserialize(reader) as Info;
+                using (var sr = new StringReader(output))
+                using (var reader = XmlReader.Create(sr))
+                {
+                    info = _infoSerializer.Deserialize(reader) as Info;
+                }
+            }
+            catch (Exception ex)
+            {
+                Failed++;
+                Log.LogErrorFromException(ex);
+                return false;
             }
 
             if (info == null)
@@ -123,7 +132,6 @@ namespace MSBuild.Community.Tasks.SourceServer
 
         private bool GetSourceInfomation(IList<SourceFile> sourceFiles, out string output)
         {
-            bool result = false;
             output = string.Empty;
 
             // get all the svn info in one call
@@ -138,27 +146,22 @@ namespace MSBuild.Community.Tasks.SourceServer
                 // dumping source file list to target file
                 using (var sw = File.CreateText(targetFile))
                     foreach (var sourceFile in sourceFiles)
-                        sw.WriteLine(sourceFile);
+                        // can only get info on files that exists
+                        if (File.Exists(sourceFile)) 
+                            sw.WriteLine(sourceFile);
 
                 client.Command = "info";
                 client.TargetFile = targetFile;
                 client.Xml = true;
 
-                result = client.Execute();
+                client.Execute();
             }
             finally
             {
                 File.Delete(targetFile);
             }
 
-            if (!result)
-            {
-                Failed++;
-                Log.LogError("Error getting source information from subversion.");
-                return false;
-            }
-
-            output = client.Output;
+            output = client.StandardOutput;
             return true;
         }
 

@@ -54,8 +54,13 @@
   </Target>
 
   <Target Name="BoostrapCompile">
-    <RemoveDir Directories="Build" />
+    <CreateItem Include="Build\*">
+      <Output TaskParameter="Include" ItemName="RemoveFiles" />
+    </CreateItem>
+    <Delete Files="@(RemoveFiles)" />
+    
     <MSBuild Projects="Source\MSBuild.Community.Tasks.sln" Properties="Configuration=Release" />
+    
     <CreateItem Include="Build\*">
       <Output TaskParameter="Include" ItemName="BootstrapFiles" />
     </CreateItem>

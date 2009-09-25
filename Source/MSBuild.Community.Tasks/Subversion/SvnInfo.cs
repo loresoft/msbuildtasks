@@ -154,7 +154,7 @@ namespace MSBuild.Community.Tasks.Subversion
 
         private void Parse()
         {            
-            using (var sr = new StringReader(_outputBuffer.ToString()))
+            using (var sr = new StringReader(StandardOutput))
             using (var reader = XmlReader.Create(sr))
             {
                 // since no names are dulicated we can read as flat xml file

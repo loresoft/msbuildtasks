@@ -53,11 +53,8 @@ namespace MSBuild.Community.Tasks.Subversion
 
         private static readonly Regex _revisionParse = new Regex(@"(?<=[rR]ev(ision)?\s+)\d+", RegexOptions.Compiled);
 
-        /// <summary>
-        /// Contains output of SVN command-line client.
-        /// </summary>
-        protected StringBuilder _outputBuffer = new StringBuilder();
-
+        private StringBuilder _outputBuffer = new StringBuilder();
+        private StringBuilder _errorBuffer = new StringBuilder();
 
         #endregion Fields
 
@@ -279,9 +276,18 @@ namespace MSBuild.Community.Tasks.Subversion
         /// Gets the output of SVN command-line client.
         /// </summary>
         [Output]
-        public string Output
+        public string StandardOutput
         {
             get { return _outputBuffer.ToString(); }
+        }
+
+        /// <summary>
+        /// Gets the error output of SVN command-line client.
+        /// </summary>
+        [Output]
+        public string StandardError
+        {
+            get { return _errorBuffer.ToString(); }
         }
 
         #endregion Output Parameters
@@ -372,6 +378,7 @@ namespace MSBuild.Community.Tasks.Subversion
         public override bool Execute()
         {
             _outputBuffer.Length = 0; // clear buffer
+            _errorBuffer.Length = 0;
 
             return base.Execute();
         }
@@ -410,17 +417,25 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <param name="messageImportance">The message importance.</param>
         protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
         {
+            bool isError = messageImportance == StandardErrorLoggingImportance;
+            
             // dont log xml messages
-            if (!Xml)
+            if (!Xml || isError)
                 base.LogEventsFromTextOutput(singleLine, messageImportance);
 
+            // keep error output and standard output seperated. 
+            // only way to tell is the message importance.
+            if (isError)
+            {
+                _errorBuffer.AppendLine(singleLine);
+                return; // no need to continue if error
+            }
+            
             _outputBuffer.AppendLine(singleLine);
 
             Match revMatch = _revisionParse.Match(singleLine);
             if (revMatch.Success)
-            {
                 int.TryParse(revMatch.Value, out _revision);
-            }
         }
 
         /// <summary>
