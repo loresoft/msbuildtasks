@@ -1,40 +1,44 @@
+//-----------------------------------------------------------------------
+// <copyright file="ILMergeTest.cs" company="MSBuild Community Tasks Project">
+//     Copyright © 2006 Ignaz Kohlbecker
+// </copyright>
+//-----------------------------------------------------------------------
 // $Id$
-// Copyright © 2006 Ignaz Kohlbecker
-
-using System;
-using System.Collections;
-using System.IO;
-using System.Reflection;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
-using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
 {
-    /// <summary>
-    /// NUnit tests for the MSBuild <see cref="Microsoft.Build.Framework.Task"/> 
-    /// <see cref="ILMerge"/>.
-    /// </summary>
-    [TestFixture]
-    public class ILMergeTest
+	using System;
+	using System.IO;
+	using System.Reflection;
+	using global::NUnit.Framework;
+	using Microsoft.Build.Framework;
+	using Microsoft.Build.Utilities;
+
+	/// <summary>
+	/// NUnit tests for the MSBuild <see cref="Microsoft.Build.Framework.Task"/> 
+	/// <see cref="ILMerge"/>.
+	/// </summary>
+	[TestFixture]
+	public class ILMergeTest
 	{
 		#region Constants
 
-		public const int PUBLIC_A_COUNT = 2;
-		public const int INTERNAL_A_COUNT = 1;
-		public const int PUBLIC_B_COUNT = 3;
-		public const int INTERNAL_B_COUNT = 1;
+		public const int PublicACount = 2;
+		public const int InternalACount = 1;
+		public const int PublicBCount = 3;
+		public const int InternalBCount = 1;
 
-		public const int PUBLIC_COUNT = PUBLIC_A_COUNT + PUBLIC_B_COUNT;
-		public const int INTERNAL_COUNT = INTERNAL_A_COUNT + INTERNAL_B_COUNT;
-		public const int TYPE_COUNT = PUBLIC_COUNT + INTERNAL_COUNT;
+		public const int PublicCount = PublicACount + PublicBCount;
+		public const int InternalCount = InternalACount + InternalBCount;
+		public const int TypeCount = PublicCount + InternalCount;
 
-		public const string VERSION_A = @"1.2.3.4";
+		public const string VersionA = @"1.2.3.4";
 
 		#endregion Constants
 
 		#region Fields
-		private bool ilMergeAvailable;
+
+		private bool isILMergeAvailable;
 		private string assemblyA;
 		private string assemblyB;
 		private ITaskItem[] inputAssemblies;
@@ -45,152 +49,191 @@ namespace MSBuild.Community.Tasks.Tests
 		#endregion Fields
 
 		#region TestFixtureSetUp
+
+		/// <summary>
+		/// Initializes the test fixture.
+		/// </summary>
 		[TestFixtureSetUp]
 		public void FixtureInit()
 		{
-			ilMergeAvailable = File.Exists(
-				Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+			this.isILMergeAvailable = File.Exists(Path.Combine(
+				Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
 				@"Microsoft\ILMerge\ILMerge.exe"));
 
 			MockBuild buildEngine = new MockBuild();
 
-			testDirectory = TaskUtility.makeTestDirectory(buildEngine);
+			this.testDirectory = TaskUtility.makeTestDirectory(buildEngine);
 
 			ILMerge task = new ILMerge();
 			task.BuildEngine = buildEngine;
 
 			if (TaskUtility.CalledInBuildDirectory)
 			{
-				assemblyA = Path.Combine(testDirectory, @"A.dll");
-				assemblyB = Path.Combine(testDirectory, @"B.dll");
-				excludeFile = Path.Combine(testDirectory, @"ExcludeTypes.txt");
-				keyFile = Path.Combine(testDirectory, @"keypair.snk");
+				this.assemblyA = Path.Combine(this.testDirectory, @"A.dll");
+				this.assemblyB = Path.Combine(this.testDirectory, @"B.dll");
+				this.excludeFile = Path.Combine(this.testDirectory, @"ExcludeTypes.txt");
+				this.keyFile = Path.Combine(this.testDirectory, @"keypair.snk");
 			}
 			else
 			{
 				string config = TaskUtility.BuildConfiguration;
 				string assDir = Path.GetFullPath(TaskUtility.AssemblyDirectory);
-				assemblyA = Path.GetFullPath(Path.Combine(assDir, @"..\..\ILMerge\A\bin\" + config + @"\A.dll"));
-				assemblyB = Path.GetFullPath(Path.Combine(assDir, @"..\..\ILMerge\B\bin\" + config + @"\B.dll"));
-				excludeFile = Path.Combine(assDir, @"ILMerge\ExcludeTypes.txt");
-				keyFile = Path.Combine(assDir, @"ILMerge\keypair.snk");
+				this.assemblyA = Path.GetFullPath(Path.Combine(assDir, @"..\..\ILMerge\A\bin\" + config + @"\A.dll"));
+				this.assemblyB = Path.GetFullPath(Path.Combine(assDir, @"..\..\ILMerge\B\bin\" + config + @"\B.dll"));
+				this.excludeFile = Path.Combine(assDir, @"ILMerge\ExcludeTypes.txt");
+				this.keyFile = Path.Combine(assDir, @"ILMerge\keypair.snk");
 			}
 
-			inputAssemblies = TaskUtility.StringArrayToItemArray(assemblyA, assemblyB);
+			this.inputAssemblies = TaskUtility.StringArrayToItemArray(this.assemblyA, this.assemblyB);
 		}
 
 		#endregion TestFixtureSetUp
 
 		#region Test cases
 
+		/// <summary>
+		/// ILMerge with duplicate type collision.
+		/// </summary>
 		[Test(Description = "ILMerge with duplicate type collision")]
 		public void DuplicateTypeCollision()
 		{
-			if (!ilMergeAvailable) Assert.Ignore(@"ILMerge.exe not available");
+			if (!this.isILMergeAvailable)
+			{
+				Assert.Ignore(@"ILMerge.exe not available");
+			}
 
 			ILMerge task = new ILMerge();
 			task.BuildEngine = new MockBuild();
 
-			task.InputAssemblies = inputAssemblies;
-			task.OutputFile = new TaskItem(Path.Combine(testDirectory, @"merged.dll"));
+			task.InputAssemblies = this.inputAssemblies;
+			task.OutputFile = new TaskItem(Path.Combine(this.testDirectory, @"merged.dll"));
 
 			Assert.IsFalse(task.Execute(), @"Task succeeded dispite of duplicate type names");
-
 		}
 
+		/// <summary>
+		/// Allow duplicate type.
+		/// </summary>
 		[Test(Description = "Allow duplicate type")]
 		public void DuplicateTypeAllowed()
 		{
-			if (!ilMergeAvailable) Assert.Ignore(@"ILMerge.exe not available");
+			if (!this.isILMergeAvailable)
+			{
+				Assert.Ignore(@"ILMerge.exe not available");
+			}
 
 			ILMerge task = new ILMerge();
 			task.BuildEngine = new MockBuild();
 
-			task.InputAssemblies = inputAssemblies;
-			task.OutputFile = new TaskItem(Path.Combine(testDirectory, @"merged1.dll"));
+			task.InputAssemblies = this.inputAssemblies;
+			task.OutputFile = new TaskItem(Path.Combine(this.testDirectory, @"merged1.dll"));
 			task.AllowDuplicateTypes = TaskUtility.StringArrayToItemArray(@"ClassAB");
 			task.XmlDocumentation = true;
 
 			Assert.IsTrue(task.Execute(), @"Task failed");
-			AssertResults(task, PUBLIC_COUNT, VERSION_A);
+			this.AssertResults(task, PublicCount, VersionA);
 		}
 
+		/// <summary>
+		/// Internalize all but primary assembly types.
+		/// </summary>
 		[Test(Description = "Internalize all but primary assembly types")]
 		public void PrimaryTypesOnly()
 		{
-			if (!ilMergeAvailable) Assert.Ignore(@"ILMerge.exe not available");
+			if (!this.isILMergeAvailable)
+			{
+				Assert.Ignore(@"ILMerge.exe not available");
+			}
 
 			ILMerge task = new ILMerge();
 			task.BuildEngine = new MockBuild();
 
-			task.InputAssemblies = inputAssemblies;
-			task.OutputFile = new TaskItem(Path.Combine(testDirectory, @"merged2.dll"));
+			task.InputAssemblies = this.inputAssemblies;
+			task.OutputFile = new TaskItem(Path.Combine(this.testDirectory, @"merged2.dll"));
 			task.AllowDuplicateTypes = TaskUtility.StringArrayToItemArray(@"ClassAB");
 			task.DebugInfo = false;
 			task.XmlDocumentation = false;
 			task.ExcludeFile = new TaskItem();
 
 			Assert.IsTrue(task.Execute(), @"Task failed");
-			AssertResults(task, PUBLIC_A_COUNT, VERSION_A);
+			this.AssertResults(task, PublicACount, VersionA);
 		}
 
+		/// <summary>
+		/// Internalize with exclusions.
+		/// </summary>
 		[Test(Description = "Internalize with exclusions")]
 		public void PrimaryTypesAndExclusions()
 		{
-			if (!ilMergeAvailable) Assert.Ignore(@"ILMerge.exe not available");
+			if (!this.isILMergeAvailable)
+			{
+				Assert.Ignore(@"ILMerge.exe not available");
+			}
 
 			ILMerge task = new ILMerge();
 			task.BuildEngine = new MockBuild();
 
-			task.InputAssemblies = inputAssemblies;
-			task.OutputFile = new TaskItem(Path.Combine(testDirectory, @"merged3.dll"));
+			task.InputAssemblies = this.inputAssemblies;
+			task.OutputFile = new TaskItem(Path.Combine(this.testDirectory, @"merged3.dll"));
 			task.AllowDuplicateTypes = TaskUtility.StringArrayToItemArray(@"ClassAB");
 			task.DebugInfo = false;
 			task.XmlDocumentation = false;
-			task.ExcludeFile = new TaskItem(excludeFile);
+			task.ExcludeFile = new TaskItem(this.excludeFile);
 
 			Assert.IsTrue(task.Execute(), @"Task failed");
-			AssertResults(task, PUBLIC_A_COUNT + 1, VERSION_A);
+			this.AssertResults(task, PublicACount + 1, VersionA);
 		}
 
+		/// <summary>
+		/// Signed merged assembly.
+		/// </summary>
 		[Test(Description = "Signed merged assembly")]
 		public void SignedMergedAssembly()
 		{
-			if (!ilMergeAvailable) Assert.Ignore(@"ILMerge.exe not available");
+			if (!this.isILMergeAvailable)
+			{
+				Assert.Ignore(@"ILMerge.exe not available");
+			}
 
 			ILMerge task = new ILMerge();
 			task.BuildEngine = new MockBuild();
 
-			task.InputAssemblies = inputAssemblies;
-			task.OutputFile = new TaskItem(Path.Combine(testDirectory, @"merged4.dll"));
+			task.InputAssemblies = this.inputAssemblies;
+			task.OutputFile = new TaskItem(Path.Combine(this.testDirectory, @"merged4.dll"));
 			task.AllowDuplicateTypes = TaskUtility.StringArrayToItemArray(@"ClassAB");
 			task.DebugInfo = false;
 			task.XmlDocumentation = false;
-			task.KeyFile = new TaskItem(keyFile);
+			task.KeyFile = new TaskItem(this.keyFile);
 
 			Assert.IsTrue(task.Execute(), @"Task failed");
-			AssertResults(task, PUBLIC_COUNT, VERSION_A);
+			this.AssertResults(task, PublicCount, VersionA);
 		}
 
+		/// <summary>
+		/// Explicitely versioned merged assembly.
+		/// </summary>
 		[Test(Description = "Explicitely versioned merged assembly")]
 		public void VersionedMergedAssembly()
 		{
-			if (!ilMergeAvailable) Assert.Ignore(@"ILMerge.exe not available");
+			if (!this.isILMergeAvailable)
+			{
+				Assert.Ignore(@"ILMerge.exe not available");
+			}
 
 			ILMerge task = new ILMerge();
 			task.BuildEngine = new MockBuild();
 
-			task.InputAssemblies = inputAssemblies;
-			task.OutputFile = new TaskItem(Path.Combine(testDirectory, @"merged5.dll"));
+			task.InputAssemblies = this.inputAssemblies;
+			task.OutputFile = new TaskItem(Path.Combine(this.testDirectory, @"merged5.dll"));
 			task.AllowDuplicateTypes = TaskUtility.StringArrayToItemArray(@"ClassAB");
 			task.DebugInfo = false;
 			task.XmlDocumentation = false;
-			task.KeyFile = new TaskItem(keyFile);
+			task.KeyFile = new TaskItem(this.keyFile);
 			string version = @"5.6.7.8";
 			task.Version = version;
 
 			Assert.IsTrue(task.Execute(), @"Task failed");
-			AssertResults(task, PUBLIC_COUNT, version);
+			this.AssertResults(task, PublicCount, version);
 		}
 
 		#endregion Test cases
@@ -202,7 +245,7 @@ namespace MSBuild.Community.Tasks.Tests
 			MessageImportance imp = MessageImportance.Low;
 
 			Assert.IsTrue(File.Exists(task.OutputFile.ItemSpec), @"No merged assembly");
-			string pdbFile = Path.ChangeExtension(task.OutputFile.ItemSpec, "pdb"); 
+			string pdbFile = Path.ChangeExtension(task.OutputFile.ItemSpec, "pdb");
 			Assert.AreEqual(task.DebugInfo, File.Exists(pdbFile), @"No debug file");
 			string xmlFile = Path.ChangeExtension(task.OutputFile.ItemSpec, @"xml");
 			Assert.AreEqual(task.XmlDocumentation, File.Exists(xmlFile), @"No xml documentation file");
@@ -216,6 +259,7 @@ namespace MSBuild.Community.Tasks.Tests
 				task.Log.LogMessage(imp, "Type: {0}", type.Name);
 				task.Log.LogMessage(imp, " Attributes: {0}", type.Attributes.ToString());
 			}
+
 			Assert.AreEqual(publicTypeCount, types.Length, @"Wrong number of public types");
 
 			AssemblyName assName = new AssemblyName(merge.FullName);
@@ -231,7 +275,6 @@ namespace MSBuild.Community.Tasks.Tests
 			{
 				Assert.AreNotEqual(0, publicKeyToken, @"Merged assembly expected to be signed");
 			}
-
 		}
 
 		#endregion Private Methods

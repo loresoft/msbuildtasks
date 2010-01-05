@@ -1,18 +1,21 @@
+//-----------------------------------------------------------------------
+// <copyright file="Sound.cs" company="MSBuild Community Tasks Project">
+//     Copyright © 2008 Ignaz Kohlbecker
+// </copyright>
+//-----------------------------------------------------------------------
 // $Id$
-// Copyright © 2008 Ignaz Kohlbecker
-
-using System;
-using System.IO;
-using System.Media;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
 
 namespace MSBuild.Community.Tasks
 {
+	using System;
+	using System.IO;
+	using System.Media;
+	using Microsoft.Build.Utilities;
+
 	/// <summary>
 	/// A task to play a sound from a .wav file path or URL.
 	/// </summary>
-	/// <include file='AdditionalDocumentation.xml' path='docs/task[@name="Sound"]/*'/>
+	/// <include file='..\AdditionalDocumentation.xml' path='docs/task[@name="Sound"]/*'/>
 	public class Sound : Task
 	{
 		#region Fields
@@ -29,8 +32,15 @@ namespace MSBuild.Community.Tasks
 		/// </summary>
 		public string SoundLocation
 		{
-			get { return this.soundPlayer.SoundLocation; }
-			set { this.soundPlayer.SoundLocation = value; }
+			get
+			{
+				return this.soundPlayer.SoundLocation;
+			}
+
+			set
+			{
+				this.soundPlayer.SoundLocation = value;
+			}
 		}
 
 		/// <summary>
@@ -43,7 +53,10 @@ namespace MSBuild.Community.Tasks
 		/// </example>
 		public string SystemSoundFile
 		{
-			set { this.soundPlayer.SoundLocation = Path.Combine(Environment.SystemDirectory, value); }
+			set
+			{
+				this.soundPlayer.SoundLocation = Path.Combine(Environment.SystemDirectory, value);
+			}
 		}
 
 		/// <summary>
@@ -69,8 +82,15 @@ namespace MSBuild.Community.Tasks
 		/// </remarks>
 		public int LoadTimeout
 		{
-			get { return this.soundPlayer.LoadTimeout; }
-			set { this.soundPlayer.LoadTimeout = value; }
+			get
+			{
+				return this.soundPlayer.LoadTimeout;
+			}
+
+			set
+			{
+				this.soundPlayer.LoadTimeout = value;
+			}
 		}
 
 		/// <summary>
@@ -82,8 +102,15 @@ namespace MSBuild.Community.Tasks
 		/// </value>
 		public bool Synchron
 		{
-			get { return this.sync; }
-			set { this.sync = value; }
+			get
+			{
+				return this.sync;
+			}
+
+			set
+			{
+				this.sync = value;
+			}
 		}
 
 		#endregion Input Parameters
@@ -103,7 +130,7 @@ namespace MSBuild.Community.Tasks
 			bool result = false;
 			try
 			{
-				if (Synchron)
+				if (this.Synchron)
 				{
 					this.soundPlayer.PlaySync();
 				}
@@ -114,14 +141,19 @@ namespace MSBuild.Community.Tasks
 
 				result = true;
 			}
-			catch (TimeoutException) { }
-			catch (FileNotFoundException) { }
-			catch (InvalidOperationException) { }
+			catch (TimeoutException)
+			{
+			}
+			catch (FileNotFoundException)
+			{
+			}
+			catch (InvalidOperationException)
+			{
+			}
 
 			return result;
 		}
 
 		#endregion Task overrides
-
 	}
 }

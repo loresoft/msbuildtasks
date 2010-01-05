@@ -1,12 +1,14 @@
+//-----------------------------------------------------------------------
+// <copyright file="BeepTest.cs" company="MSBuild Community Tasks Project">
+//     Copyright © 2008 Ignaz Kohlbecker
+// </copyright>
+//-----------------------------------------------------------------------
 // $Id$
-// Copyright © 2008 Ignaz Kohlbecker
-
-using System;
-using Microsoft.Build.Utilities;
-using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests
 {
+	using global::NUnit.Framework;
+
 	/// <summary>
 	/// NUnit tests for the MSBuild <see cref="Microsoft.Build.Framework.Task"/> 
 	/// <see cref="Beep"/>.
@@ -14,6 +16,9 @@ namespace MSBuild.Community.Tasks.Tests
 	[TestFixture]
 	public class BeepTest
 	{
+		/// <summary>
+		/// Tests the default beeps.
+		/// </summary>
 		[Test(Description = "Execute the Beep task with default values")]
 		public void BeepDefault()
 		{
@@ -25,9 +30,11 @@ namespace MSBuild.Community.Tasks.Tests
 			Assert.AreEqual(200, task.Duration, @"Wrong default duration");
 
 			Assert.IsTrue(task.Execute(), @"Beep task failed");
-
 		}
 
+		/// <summary>
+		/// Tests a custom beep.
+		/// </summary>
 		[Test(Description = "Execute the Beep task with custom values")]
 		public void BeepCustom()
 		{
@@ -37,9 +44,11 @@ namespace MSBuild.Community.Tasks.Tests
 			task.Duration = 400;
 
 			Assert.IsTrue(task.Execute(), @"Beep task failed");
-
 		}
 
+		/// <summary>
+		/// Tests a beep with a bad frequency.
+		/// </summary>
 		[Test(Description = "Execute the Beep task with frequency out of range")]
 		public void BeepBadFrequency()
 		{
@@ -48,9 +57,11 @@ namespace MSBuild.Community.Tasks.Tests
 			task.Frequency = 0;
 
 			Assert.IsTrue(task.Execute(), @"Beep task failed");
-
 		}
 
+		/// <summary>
+		/// Tests a beep with a bad duration value.
+		/// </summary>
 		[Test(Description = "Execute the Beep task with duration out of range")]
 		public void BeepBadDuration()
 		{
@@ -59,8 +70,6 @@ namespace MSBuild.Community.Tasks.Tests
 			task.Duration = 0;
 
 			Assert.IsTrue(task.Execute(), @"Beep task failed");
-
 		}
-
 	}
 }

@@ -1,17 +1,20 @@
+//-----------------------------------------------------------------------
+// <copyright file="Beep.cs" company="MSBuild Community Tasks Project">
+//     Copyright © 2008 Ignaz Kohlbecker
+// </copyright>
+//-----------------------------------------------------------------------
 // $Id$
-// Copyright © 2008 Ignaz Kohlbecker
-
-using System;
-using System.Security;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
 
 namespace MSBuild.Community.Tasks
 {
+	using System;
+	using System.Security;
+	using Microsoft.Build.Utilities;
+
 	/// <summary>
 	/// A task to play the sound of a beep through the console speaker.
 	/// </summary>
-	/// <include file='AdditionalDocumentation.xml' path='docs/task[@name="Beep"]/*'/>
+	/// <include file='..\AdditionalDocumentation.xml' path='docs/task[@name="Beep"]/*'/>
 	public class Beep : Task
 	{
 		#region Fields
@@ -59,15 +62,18 @@ namespace MSBuild.Community.Tasks
 		{
 			try
 			{
-				Console.Beep(Frequency, Duration);
+				Console.Beep(this.Frequency, this.Duration);
 			}
-			catch (ArgumentOutOfRangeException) { }
-			catch (HostProtectionException) { }
+			catch (ArgumentOutOfRangeException)
+			{
+			}
+			catch (HostProtectionException)
+			{
+			}
 
 			return true;
 		}
 
 		#endregion Task overrides
-
 	}
 }

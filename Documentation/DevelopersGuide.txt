@@ -11,7 +11,7 @@ Build Environment Prerequisites
 - MSBuild; typically already installed as part of .NET2.0,
   for example in C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe
 
-- NUnit 2.4.X (http://www.nunit.org/);
+- NUnit 2.5.3 (http://www.nunit.org/);
   necessary to run the tests
 
 - Microsoft Visual SourceSafe(R) 2005;
@@ -46,7 +46,7 @@ Before writing your own task
     with your tigris user/password
     to a local working copy <msbuildtasks> of your choice.
 
-2.  Check that you can build the project on the command line:
+2.  Verify that you can build the project on the command line:
 	** Important ** You must run the build from the command line before attempting to
 	open the Visual Studio solution file, in order to create some required files.
 
@@ -65,7 +65,7 @@ Before writing your own task
       /p:devel=true is necessary when you want to work with 
       the assemblies of your own build, for example because
       you did not run the installer of MSBuildCommunityTasks yet.
-      /p:nunitpath must point to the bin folder of your local installation of NUnit 2.4.x
+      /p:nunitpath must point to the bin folder of your local installation of NUnit 2.5.3
 
     - Open <msbuildtasks>\Debug\test\TestReport.html
       and check the test results.
@@ -74,7 +74,7 @@ Before writing your own task
       such as FTP server or Email server is missing
       on your machine.
 
-3.  Check that you can build the project in VS2005:
+3.  Verify that you can build the project in VS2005:
 
     - Open <msbuildtasks>\Source\MSBuild.Community.Tasks.sln.
 
@@ -82,14 +82,14 @@ Before writing your own task
 
     - Open the properties of MSBuild.Community.Tasks.Tests;
       in Debug/Start Action, set the external program to NUnit,
-      e.g. "C:\Program Files\NUnit 2.4.6\bin\nunit.exe";
+      e.g. "C:\Program Files\NUnit 2.5.3\bin\net-2.0\nunit.exe";
       in Debug/Start Options, set command line arguments to
       "MSBuild.Community.Tasks.Tests.dll".
 
     - If you work with another version of NUnit,
-      it may be necessary to the NUnit library
+      it may be necessary to copy the NUnit library
       from your NUnit's installation folder to
-      <msbuildtasks>\Libaries\NUnit\<version>\nunit.framework.dll
+      <msbuildtasks>\Libaries\nunit.framework.dll
       and to re-import it to the test project.
 
     - Run the project in debugging mode (F5);
@@ -107,8 +107,8 @@ Writing your own task
     always add a folder, even if you want to add just one file.
 
 2.  Add third party libraries that you are allowed to redistribute to
-    <msbuildtasks>\Libraries\<ThirdParyTool>\<ReleaseNumber>\
-    (e.g. <msbuildtasks>\Libraries\NUnit\2.4.6\nunit.framework.dll).
+    <msbuildtasks>\Libraries\
+    (e.g. <msbuildtasks>\Libraries\nunit.framework.dll).
    
 3.  For third party libraries that you are not allowed to redistribute,
     add an entry in the prerequisits section of this document

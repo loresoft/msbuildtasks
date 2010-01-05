@@ -1,7 +1,9 @@
+//-----------------------------------------------------------------------
+// <copyright file="ClassB3.cs" company="MSBuild Community Tasks Project">
+//     Copyright © 2006 Ignaz Kohlbecker
+// </copyright>
+//-----------------------------------------------------------------------
 // $Id$
-// Copyright © 2006 Ignaz Kohlbecker
-
-using System;
 
 namespace MSBuild.Community.Tasks.Tests.ILMerging
 {

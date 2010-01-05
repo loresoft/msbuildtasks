@@ -494,7 +494,7 @@ Ex:
       </p>
       <p>
         Parameter <see cref="RootAttributes"/> defaults to
-        one attribute with a name specified by <see cref="CREATED_ATTRIBUTE"/>,
+        one attribute with a name specified by <see cref="CreatedAttributeName"/>,
         and a local time stamp as value.
         To suppress the default value, an empty parameter
         <code>RootAttributes=""</code>
