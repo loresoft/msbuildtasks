@@ -29,6 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
@@ -89,6 +90,7 @@ namespace MSBuild.Community.Tasks
             {
                 con = new SqlConnection(ConnectionString);
                 cmd = new SqlCommand(Command, con);
+                cmd.CommandTimeout = CommandTimeout;
                 con.Open();
 
                 switch (SelectMode)
@@ -146,6 +148,7 @@ namespace MSBuild.Community.Tasks
         private string _mode;
         private int _result;
         private string _output;
+        private int _commandTimeout;
         #endregion
 
         /// <summary>
@@ -166,6 +169,17 @@ namespace MSBuild.Community.Tasks
         {
             get { return _cmd; }
             set { _cmd = value; }
+        }
+
+        /// <summary>
+        /// Command Timeout
+        /// </summary>
+        /// <remarks>Defaults to 30 seconds. Set to 0 for an infinite timeout period.</remarks>
+        [DefaultValue(30)]
+        public int CommandTimeout
+        {
+            get { return _commandTimeout; }
+            set { _commandTimeout = value; }
         }
 
         /// <summary>
