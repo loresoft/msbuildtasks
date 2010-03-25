@@ -1,4 +1,4 @@
-#region Copyright © 2008 MSBuild Community Task Project. All rights reserved.
+#region Copyright © 2010 MSBuild Community Task Project. All rights reserved.
 
 /*
 Copyright © 2008 MSBuild Community Task Project. All rights reserved.
@@ -130,6 +130,12 @@ namespace MSBuild.Community.Tasks
         /// </remarks>
         public string WorkingDirectory { get; set; }
 
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        /// <value>The password.</value>
+        public string Password { get; set; }
+
         #endregion Input Parameters
 
         #region Task Overrides
@@ -161,10 +167,16 @@ namespace MSBuild.Community.Tasks
 
                 using (var zip = new ZipFile())
                 {
+                    zip.ProvisionalAlternateEncoding = System.Text.Encoding.Unicode;
+                    zip.UseUnicodeAsNecessary = true;
+
                     // make sure level in range
                     ZipLevel = System.Math.Max(0, ZipLevel);
                     ZipLevel = System.Math.Min(9, ZipLevel);
-                    zip.CompressionLevel = (CompressionLevel) ZipLevel;
+                    zip.CompressionLevel = (CompressionLevel)ZipLevel;
+
+                    if (!string.IsNullOrEmpty(Password))
+                        zip.Password = Password;
 
                     if (!string.IsNullOrEmpty(Comment))
                         zip.Comment = Comment;
@@ -198,7 +210,7 @@ namespace MSBuild.Community.Tasks
                         }
 
                         //remove file name
-                        if (!string.IsNullOrEmpty(directoryPathInArchive) 
+                        if (!string.IsNullOrEmpty(directoryPathInArchive)
                             && Path.GetFileName(directoryPathInArchive) == Path.GetFileName(name))
                             directoryPathInArchive = Path.GetDirectoryName(directoryPathInArchive);
 
@@ -245,7 +257,7 @@ namespace MSBuild.Community.Tasks
             for (int x = lastCommonRoot + 1; x < originalDirectories.Length; x++)
                 relativePath.Add(originalDirectories[x]);
 
-            return string.Join(Path.DirectorySeparatorChar.ToString(), relativePath.ToArray());            
+            return string.Join(Path.DirectorySeparatorChar.ToString(), relativePath.ToArray());
         }
 
         #endregion Private Methods

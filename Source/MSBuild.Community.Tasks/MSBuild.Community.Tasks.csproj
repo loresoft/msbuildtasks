@@ -158,6 +158,7 @@
     <Compile Include="SqlServer\SqlPubWiz.cs" />
     <Compile Include="Subversion\SvnCopy.cs" />
     <Compile Include="Subversion\Info.cs" />
+    <Compile Include="Subversion\SvnStatus.cs" />
     <Compile Include="SymbolServer\SymStore.cs" />
     <Compile Include="Tfs\IServer.cs" />
     <Compile Include="Tfs\Proxies\Changeset.cs" />

@@ -46,6 +46,18 @@
     <Message Text="Revision: $(Revision)" />
   </Target>
 
+  <Target Name="Status">
+
+    <WriteLinesToFile File="%(CommitFiles.FullPath)" Lines="This is another test append." />
+
+    <SvnStatus LocalPath="$(TestWorkingFolder)">
+      <Output ItemName="Entries" TaskParameter="Entries" />
+    </SvnStatus>
+
+    <Message Text="Modified files: @(Entries)" />
+    <Message Text="Files: %(Entries.Props) %(Entries.Item) %(Modified.Filename)" />
+  </Target>
+  
   <Target Name="Update" DependsOnTargets="Checkout">
     <Delete Files="$(TestWorkingFolder)\SvnClientTest.cs" />
     <SvnUpdate LocalPath="$(TestWorkingFolder)" Force="true">
@@ -131,6 +143,7 @@
     <CallTarget Targets="Version" />
     <CallTarget Targets="Export" />
     <CallTarget Targets="Checkout" />
+    <CallTarget Targets="Status" />
     <CallTarget Targets="Copy" />
     <CallTarget Targets="Revert" />
     <CallTarget Targets="Update" />

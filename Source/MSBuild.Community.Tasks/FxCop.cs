@@ -68,6 +68,17 @@ namespace MSBuild.Community.Tasks
     public class FxCop : ToolTask
     {
         #region Properties
+
+        private bool _searchGac = false;
+        /// <summary>
+        /// Tells FxCop to search the GAC for assembly references. This parameter was added in FxCop 1.35
+        /// </summary>
+        public bool SearchGac
+        { 
+            get { return _searchGac; } 
+            set { _searchGac = value; } 
+        }
+
         private bool _applyOutXsl;
 
         /// <summary>
@@ -364,6 +375,11 @@ namespace MSBuild.Community.Tasks
         {
             GenerateFullPathToTool();
             StringBuilder _programArguments = new StringBuilder();
+
+            if (SearchGac)
+            {
+                _programArguments.Append("/gac ");
+            }
 
             if (ApplyOutXsl)
             {

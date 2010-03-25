@@ -164,6 +164,25 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.That(content.Contains("assembly: InternalsVisibleTo(\"UnitTests\")"));
         }
 
+        [Test(Description = "Creates an assembly info which has AllowPartiallyTrustedCallers attribute")]
+        public void IncludeAllowPartiallyTrustedCallers()
+        {
+            string outputFile = Path.Combine(testDirectory, "AllowPartiallyTrustedCallers.cs");
+            AssemblyInfo task = CreateCSAssemblyInfo(outputFile);
+            task.AllowPartiallyTrustedCallers = true;
+
+            Assert.IsTrue(task.Execute(), "Execute failed");
+            Assert.IsTrue(File.Exists(outputFile));
+
+            string content;
+            using (StreamReader stream = File.OpenText(outputFile))
+            {
+                content = stream.ReadToEnd();
+            }
+            Assert.IsNotNull(content);
+            Assert.That(content.Contains("assembly: AllowPartiallyTrustedCallers"));
+        }
+
         private AssemblyInfo CreateCSAssemblyInfo(string outputFile)
         {
             AssemblyInfo task = new AssemblyInfo();

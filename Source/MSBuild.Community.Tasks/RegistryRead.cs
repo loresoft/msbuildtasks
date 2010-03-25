@@ -126,16 +126,17 @@ namespace MSBuild.Community.Tasks
         /// </returns>
         public override bool Execute()
         {
+            Log.LogMessage(Properties.Resources.RegistryRead);
             string defaultValueForCall = _defaultValue ?? String.Empty;
             object key = Registry.GetValue(_keyName, _valueName, defaultValueForCall);
             if (key == null)
             {
                 _value = _defaultValue;
-                return !String.IsNullOrEmpty(_defaultValue);
+                Log.LogWarning("Failed to read registry key '{0}'.", _keyName);
+                return true;
             }
             _value = key.ToString() ?? string.Empty;
 
-            Log.LogMessage(Properties.Resources.RegistryRead);
             Log.LogMessage(MessageImportance.Low, "[{0}]", _keyName);
             if(string.IsNullOrEmpty(_valueName))
                 Log.LogMessage(MessageImportance.Low, "@=\"{0}\"", _value);

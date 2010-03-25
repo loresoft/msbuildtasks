@@ -131,6 +131,7 @@ namespace MSBuild.Community.Tasks
         private const string SkipVerificationName = "SkipVerification";
         private const string UnmanagedCodeName = "UnmanagedCode";
         private const string InternalsVisibleToName = "InternalsVisibleTo";
+        private const string AllowPartiallyTrustedCallersName = "AllowPartiallyTrustedCallers";
 
         #endregion Constants
 
@@ -178,6 +179,9 @@ namespace MSBuild.Community.Tasks
                                                                            AssemblyKeyFileName,
                                                                            InternalsVisibleToName
                                                                        };
+        private static readonly string[] markerAttributes = {
+                                                                  AllowPartiallyTrustedCallersName 
+                                                            };
         #endregion
 
         #region Fields
@@ -432,6 +436,15 @@ namespace MSBuild.Community.Tasks
             set { _attributes[InternalsVisibleToName] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets whether to allow strong-named assemblies to be called by partially trusted code.
+        /// </summary>
+        public bool AllowPartiallyTrustedCallers
+        {
+            get { return ReadBooleanAttribute(AllowPartiallyTrustedCallersName); }
+            set { _attributes[AllowPartiallyTrustedCallersName] = value.ToString(); }
+        }
+        
         #endregion Input Parameters
 
         #region Input/Output Parameters
@@ -514,6 +527,11 @@ namespace MSBuild.Community.Tasks
                 {
                     // Add the security permission request attribute for the given action
                     AddSecurityPermissionAssemblyAttribute(codeCompileUnit, name, value);
+                }
+                else if (Array.Exists(markerAttributes, name.Equals))
+                {
+                    // Add the security permission request attribute for the given action
+                    AddMarkerAssemblyAttribute(codeCompileUnit, name, value);
                 }
                 else
                 {
@@ -629,6 +647,13 @@ namespace MSBuild.Community.Tasks
             codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
         }
 
+        private static void AddMarkerAttributeToCodeDom(CodeCompileUnit codeCompileUnit, string name)
+        {
+            var codeAttributeDeclaration = new CodeAttributeDeclaration(name);
+            // add assembly-level argument to code compile unit
+            codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
+        }
+        
         private static void AddBooleanAssemblyAttribute(CodeCompileUnit codeCompileUnit, String name, String value)
         {
             bool typedValue;
@@ -668,6 +693,21 @@ namespace MSBuild.Community.Tasks
             codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
         }
 
+        private static void AddMarkerAssemblyAttribute(CodeCompileUnit codeCompileUnit, String name, String value)
+        {
+            bool typedValue;
+
+            if (!bool.TryParse(value, out typedValue))
+            {
+                throw new InvalidOperationException("Boolean attribute " + name + "is not boolean: " +
+                                                    value);
+            }
+            if (typedValue)
+            {
+                AddMarkerAttributeToCodeDom(codeCompileUnit, name);
+            }
+        }
+        
         private void AddAssemblyLanguageCodeAttribute(CodeCompileUnit codeCompileUnit)
         {
             var codeAttributeDeclaration = new CodeAttributeDeclaration("NeutralResourcesLanguage");

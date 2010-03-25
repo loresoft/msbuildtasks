@@ -97,6 +97,7 @@
     <Compile Include="SqlServer\SqlPubWizTest.cs" />
     <Compile Include="Subversion\SvnCopyTest.cs" />
     <Compile Include="Subversion\SvnInfoTest.cs" />
+    <Compile Include="Subversion\SvnStatusTest.cs" />
     <Compile Include="SymbolServer\SymStoreTest.cs" />
     <Compile Include="TemplateFile\TemplateFileTest.cs" />
     <Compile Include="Time\TimeTest.cs" />

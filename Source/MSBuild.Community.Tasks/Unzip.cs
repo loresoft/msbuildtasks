@@ -112,10 +112,14 @@ namespace MSBuild.Community.Tasks
 
             Log.LogMessage(Resources.UnzipFileToDirectory, ZipFileName, TargetDirectory);
 
+            ExtractExistingFileAction acting = Overwrite 
+                ? ExtractExistingFileAction.OverwriteSilently 
+                : ExtractExistingFileAction.DoNotOverwrite;
+
             using (var zip = new ZipFile(ZipFileName))
             {
                 zip.ExtractProgress += OnExtractProgress;
-                zip.ExtractAll(TargetDirectory, Overwrite);
+                zip.ExtractAll(TargetDirectory, acting);
             }
 
             Log.LogMessage(Resources.UnzipSuccessfully, ZipFileName);

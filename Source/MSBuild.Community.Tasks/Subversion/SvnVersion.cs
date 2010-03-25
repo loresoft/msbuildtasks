@@ -258,6 +258,10 @@ namespace MSBuild.Community.Tasks.Subversion
 				int revision;
 				if (int.TryParse(rm.Value, out revision))
 				{
+					if (_lowRevision == -1)
+					{
+					  _lowRevision = revision;
+					}
 					_lowRevision = System.Math.Min(revision, _lowRevision);
 					_highRevision = System.Math.Max(revision, _highRevision);
 				}
