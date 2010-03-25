@@ -24,8 +24,26 @@ namespace MSBuild.Community.Tasks.Tfs
         {
             if (clientLocation == null)
             {
-                clientAssembly = Assembly.Load("Microsoft.TeamFoundation.Client, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-                versionControlClientAssembly = Assembly.Load("Microsoft.TeamFoundation.VersionControl.Client, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+                try
+                {
+                    clientAssembly =
+                        Assembly.Load(
+                            "Microsoft.TeamFoundation.Client, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+                    versionControlClientAssembly =
+                        Assembly.Load(
+                            "Microsoft.TeamFoundation.VersionControl.Client, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+                }
+                catch {}
+
+                if (clientAssembly == null)
+                {
+                    clientAssembly =
+                        Assembly.Load(
+                            "Microsoft.TeamFoundation.Client, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+                    versionControlClientAssembly =
+                        Assembly.Load(
+                            "Microsoft.TeamFoundation.VersionControl.Client, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+                }
             }
             else
             {
