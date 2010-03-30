@@ -136,6 +136,15 @@ namespace MSBuild.Community.Tasks
         /// <value>The password.</value>
         public string Password { get; set; }
 
+        /// <summary>
+        /// Gets or sets the encryption algorithm.
+        /// </summary>
+        /// <value>The encryption algorithm.</value>
+        /// <remarks>
+        /// Possible values are None, PkzipWeak, WinZipAes128 and WinZipAes256
+        /// </remarks>
+        public string Encryption { get; set; }
+
         #endregion Input Parameters
 
         #region Task Overrides
@@ -177,6 +186,15 @@ namespace MSBuild.Community.Tasks
 
                     if (!string.IsNullOrEmpty(Password))
                         zip.Password = Password;
+
+                    if (string.Equals(Encryption, "PkzipWeak", StringComparison.OrdinalIgnoreCase))
+                        zip.Encryption = EncryptionAlgorithm.PkzipWeak;
+                    else if (string.Equals(Encryption, "WinZipAes128", StringComparison.OrdinalIgnoreCase))
+                        zip.Encryption = EncryptionAlgorithm.WinZipAes128;
+                    else if (string.Equals(Encryption, "WinZipAes256", StringComparison.OrdinalIgnoreCase))
+                        zip.Encryption = EncryptionAlgorithm.WinZipAes256;
+                    else
+                        zip.Encryption = EncryptionAlgorithm.None;
 
                     if (!string.IsNullOrEmpty(Comment))
                         zip.Comment = Comment;
