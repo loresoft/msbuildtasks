@@ -154,6 +154,16 @@ namespace MSBuild.Community.Tasks
             set { _importFiles = value; }
         }
 
+        private string _customDictionary;
+
+        /// <summary>
+        /// Specifies the custom dictionary.
+        /// </summary>
+        public string CustomDictionary {
+            get { return _customDictionary; }
+            set { _customDictionary = value; }
+        }
+
         private ITaskItem[] _ruleLibraries;
 
         /// <summary>
@@ -396,6 +406,10 @@ namespace MSBuild.Community.Tasks
                 _programArguments.AppendFormat("/cXsl:\"{0}\" ", ConsoleXslFileName);
             }
 
+            if (!string.IsNullOrEmpty(CustomDictionary)) {
+                _programArguments.AppendFormat("/dic:\"{0}\" ", CustomDictionary);
+            }
+
             if (DependencyDirectories != null)
             {
                 foreach (ITaskItem item in DependencyDirectories)
@@ -506,11 +520,12 @@ namespace MSBuild.Community.Tasks
                 return false;
             }
 
-            // If no project file is specified both target assemblies and a ruleset must be specified
-            if (string.IsNullOrEmpty(ProjectFile) && (RuleLibraries == null || RuleLibraries.Length < 1))
-            {
-                return false;
-            }
+            // Commented out since it prohibits some legal input configurations with FxCop 1.36.
+            //// If no project file is specified both target assemblies and a ruleset must be specified
+            //if (string.IsNullOrEmpty(ProjectFile) && (RuleLibraries == null || RuleLibraries.Length < 1))
+            //{
+            //    return false;
+            //}
             return base.ValidateParameters();
         }
 

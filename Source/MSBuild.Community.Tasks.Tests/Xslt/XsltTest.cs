@@ -66,12 +66,14 @@ namespace MSBuild.Community.Tasks.Tests
 			}
 
 			task.Inputs = TaskUtility.StringArrayToItemArray(Path.Combine(testDir, @"XsltTestInput.xml"));
+			task.Inputs[0].SetMetadata(@"configuration", "test");
 			task.Xsl = new TaskItem(Path.Combine(assemblyDir, @"NUnitReport.xsl"));
 			task.Xsl.SetMetadata(@"project", "XsltTest");
+
+			task.RootTag = "mergedroot";
 			task.Output = Path.Combine(testDir, @"XsltTestOutput.html");
 
 			Assert.IsNotNull(task.Inputs, @"No inputs");
-			Assert.IsNull(task.RootTag, @"Wrong default root tag");
 			Assert.IsNull(task.RootAttributes, @"Wrong default root attributes");
 			Assert.IsNotNull(task.Xsl, @"No xsl");
 			Assert.IsNotNull(task.Output, @"No output");
@@ -79,6 +81,11 @@ namespace MSBuild.Community.Tasks.Tests
 			// executing with one input files
 			Assert.IsTrue(task.Execute(), @"Task with one input files failed");
 			Assert.IsTrue(File.Exists(task.Output), @"Missing output file");
+
+			string taskOutput = File.ReadAllText(task.Output);
+			Assert.IsTrue(taskOutput.Contains(
+				@"<h1>Project ""XsltTest"" - Configuration ""test"" - NUnit Test Report</h1>"),
+				@"Input or Xsl metadata not correctly added.");
 		}
 	}
 }

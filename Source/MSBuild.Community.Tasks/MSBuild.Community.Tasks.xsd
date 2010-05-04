@@ -267,6 +267,11 @@
             be applied to the analysis output before it is displayed in the console.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="CustomDictionary" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Specifies the custom dictionary.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="DependencyDirectories" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Specifies additional directories to search for assembly dependencies. 
@@ -3529,7 +3534,12 @@
         <xs:extension base="msb:TaskType">
           <xs:attribute name="Inputs" type="msb:non_empty_string" use="required">
             <xs:annotation>
-              <xs:documentation>Gets or sets the xml input files.</xs:documentation>
+              <xs:documentation>Gets or sets the xml input files.
+            If only one input file is passed, its metadata is passed as stylesheet parameters,
+            where the parameter name is defined by the metadata name prepended by "item_".
+            Additionally, metadata not already defined with the Xsl parameter is passed
+            like the metadata of the Xsl task parameter.
+              </xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Output" type="msb:non_empty_string" use="required">
@@ -3555,7 +3565,8 @@
           <xs:attribute name="Xsl" type="msb:non_empty_string" use="required">
             <xs:annotation>
               <xs:documentation>Gets or sets the path of the
-            xsl transformation file to apply.</xs:documentation>
+            xsl transformation file to apply.
+            Metadata is passed as stylesheet parameters.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>

@@ -412,13 +412,13 @@
     <value>XmlUpdate Wrote: "{0}".</value>
   </data>
   <data name="XsltAddingParameter" xml:space="preserve">
-    <value>Adding Parameter \"{0}\": \"{1}\".</value>
+    <value>Adding Parameter "{0}": "{1}".</value>
   </data>
   <data name="XsltAddingRootAttribute" xml:space="preserve">
-    <value>Adding root attribute {0}=\"{1}\".</value>
+    <value>Adding root attribute {0}="{1}".</value>
   </data>
   <data name="XsltCreatingRootTag" xml:space="preserve">
-    <value>Creating root tag \"{0}\".</value>
+    <value>Creating root tag "{0}".</value>
   </data>
   <data name="XsltNoInputFiles" xml:space="preserve">
     <value>No input files.</value>

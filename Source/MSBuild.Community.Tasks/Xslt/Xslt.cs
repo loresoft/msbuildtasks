@@ -13,6 +13,7 @@ namespace MSBuild.Community.Tasks
 	using System.Xml.Xsl;
 	using Microsoft.Build.Framework;
 	using Microsoft.Build.Utilities;
+	using MSBuild.Community.Tasks.Properties;
 
 	/// <summary>
 	/// A task to merge and transform a set of xml files.
@@ -29,6 +30,12 @@ namespace MSBuild.Community.Tasks
 		/// and the attribute will contain a local time stamp.
 		/// </summary>
 		public const string CreatedAttributeName = @"created";
+
+		/// <summary>
+		/// The prefix of XSLT parameters created from single XML input metadata.
+		/// <para>The value is <c>"input_"</c>.</para>
+		/// </summary>
+		public const string InputMetadataArgumentPrefix = @"input_";
 
 		#endregion Constants
 
@@ -150,7 +157,7 @@ namespace MSBuild.Community.Tasks
 			#region Sanity checks
 			if ((this.Inputs == null) || (this.Inputs.Length == 0))
 			{
-				Log.LogError(Properties.Resources.XsltNoInputFiles);
+				Log.LogError(Resources.XsltNoInputFiles);
 				return false;
 			}
 			#endregion Sanity checks
@@ -163,7 +170,7 @@ namespace MSBuild.Community.Tasks
 			{
 				if ((this.inputs.Length == 1) && string.IsNullOrEmpty(this.rootTag))
 				{
-					Log.LogMessage(MessageImportance.Normal, Properties.Resources.XsltNoRootTag);
+					Log.LogMessage(MessageImportance.Low, Resources.XsltNoRootTag);
 					doc.Load(this.inputs[0].ItemSpec);
 				}
 				else
@@ -212,18 +219,25 @@ namespace MSBuild.Community.Tasks
 			#region Parameters from Metadata
 
 			XsltArgumentList argumentList = new XsltArgumentList();
+
+			// add metadata from xsl
 			foreach (string metadataName in this.xsl.MetadataNames)
 			{
-				string metatdataValue = this.xsl.GetMetadata(metadataName);
-				argumentList.AddParam(metadataName, string.Empty, metatdataValue);
-
-				Log.LogMessage(
-					MessageImportance.Low,
-					Properties.Resources.XsltAddingParameter,
-					metadataName,
-					metatdataValue);
+				AddParameter(metadataName, this.xsl.GetMetadata(metadataName), argumentList);
 			}
 
+			// add metadata from single xml
+			if (this.inputs.Length == 1)
+			{
+				ITaskItem input = this.inputs[0];
+				foreach (string metadataName in input.MetadataNames)
+				{
+					// add two times by design, but note that the first parameter might be ignored.
+					AddParameter(metadataName, input.GetMetadata(metadataName), argumentList);
+					AddParameter(InputMetadataArgumentPrefix + metadataName, input.GetMetadata(metadataName),
+						argumentList);
+				}
+			}
 			#endregion Parameters from Metadata
 
 			try
@@ -273,7 +287,7 @@ namespace MSBuild.Community.Tasks
 		private void CreateRootNode(XmlDocument doc)
 		{
 			// create the root element
-			Log.LogMessage(MessageImportance.Normal, Properties.Resources.XsltCreatingRootTag, this.rootTag);
+			Log.LogMessage(MessageImportance.Normal, Resources.XsltCreatingRootTag, this.rootTag);
 			XmlElement rootElement = doc.CreateElement(this.rootTag);
 
 			if (this.rootAttributes == null)
@@ -282,7 +296,7 @@ namespace MSBuild.Community.Tasks
 				string timestamp = DateTime.Now.ToString();
 				Log.LogMessage(
 					MessageImportance.Normal,
-					Properties.Resources.XsltAddingRootAttribute,
+					Resources.XsltAddingRootAttribute,
 					CreatedAttributeName,
 					timestamp);
 				rootElement.SetAttribute(CreatedAttributeName, timestamp);
@@ -295,7 +309,7 @@ namespace MSBuild.Community.Tasks
 
 					Log.LogMessage(
 						MessageImportance.Normal,
-						Properties.Resources.XsltAddingRootAttribute,
+						Resources.XsltAddingRootAttribute,
 						keyValuePair[0],
 						keyValuePair[1]);
 
@@ -305,6 +319,35 @@ namespace MSBuild.Community.Tasks
 
 			// insert the root element to the document
 			doc.AppendChild(rootElement);
+		}
+
+		/// <summary>
+		/// Adds a new xsl parameter with to the specified argument list.
+		/// </summary>
+		/// <param name="name">The name of the parameter.</param>
+		/// <param name="value">The value of the parameter.</param>
+		/// <param name="parameters">The parameter list.</param>
+		/// <returns>Whether the parameter was added.</returns>
+		/// <remarks>Does not add the parameter
+		/// when a parameter with the same name is already part of the <paramref name="parameters"/>.</remarks>
+		private bool AddParameter(string name, string value, XsltArgumentList parameters)
+		{
+			bool result;
+
+			if (parameters.GetParam(name, string.Empty) == null)
+			{
+				parameters.AddParam(name, string.Empty, value);
+
+				Log.LogMessage(MessageImportance.Low, Resources.XsltAddingParameter, name, value);
+
+				result = true;
+			}
+			else
+			{
+				// don't add the parameter when already provided by other xml metadata
+				result = false;
+			}
+			return result;
 		}
 
 		#endregion Private Methods

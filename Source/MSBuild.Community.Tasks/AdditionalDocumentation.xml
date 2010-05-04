@@ -512,6 +512,13 @@ Ex:
         as parameters.
       </p>
       <p>
+        If only one input file is given with <see cref="ITaskItem"/> <see cref="Inputs"/>,
+        metadata will also be handed to the xsl transformation.
+        However, the <see cref="Xsl"/> metadata is preferred in case of equal names.
+        To overcome this limitation, for each input item metadatum, an additional parameter
+        prefixed with <see cref="InputMetadataArgumentPrefix"/> is created.
+      </p>
+      <p>
         The output is written to the file
         specified by parameter <see cref="Output"/>.
       </p>
