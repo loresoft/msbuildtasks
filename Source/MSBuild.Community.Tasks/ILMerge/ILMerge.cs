@@ -251,6 +251,12 @@ namespace MSBuild.Community.Tasks
         public bool PublicKeyTokens { get; set; }
 
         /// <summary>
+        /// Gets or sets the directories to be used to search for input assemblies.
+        /// </summary>
+        /// <value>The search directories.</value>
+        public ITaskItem[] SearchDirectories { get; set; }
+
+        /// <summary>
         /// Gets or sets the .NET framework version for the target assembly.
         /// </summary>
         /// <remarks>
@@ -339,68 +345,87 @@ namespace MSBuild.Community.Tasks
         {
             var builder = new CommandLineBuilder();
 
-            if (AllowDuplicateTypes != null)
-                foreach (ITaskItem allowDuplicateType in AllowDuplicateTypes)
-                    builder.AppendSwitch(@"/allowDup:" + allowDuplicateType.ItemSpec);
+
+            builder.AppendSwitchIfNotNull("/allowDup:", AllowDuplicateTypes, " /allowDup:");
 
             if (AllowZeroPeKind)
-                builder.AppendSwitch(@"/zeroPeKind");
+                builder.AppendSwitch("/zeroPeKind");
 
-            if (AttributeFile != null)
-                builder.AppendSwitch(@"/attr:" + AttributeFile.ItemSpec);
+            builder.AppendSwitchIfNotNull("/attr:", AttributeFile);
 
             if (Closed)
-                builder.AppendSwitch(@"/closed");
+                builder.AppendSwitch("/closed");
 
             if (CopyAttributes)
-                builder.AppendSwitch(@"/copyattrs");
+                builder.AppendSwitch("/copyattrs");
 
             if (!DebugInfo)
-                builder.AppendSwitch(@"/ndebug");
+                builder.AppendSwitch("/ndebug");
 
             if (DelaySign)
-                builder.AppendSwitch(@"/delaysign");
+                builder.AppendSwitch("/delaysign");
 
             if (ExcludeFile != null)
-                builder.AppendSwitch(@"/internalize" + ((ExcludeFile.ItemSpec.Length == 0)
-                                                            ? string.Empty
-                                                            : @":" + ExcludeFile.ItemSpec));
+                if (ExcludeFile.ItemSpec.Length == 0)
+                    builder.AppendSwitch("/internalize");
+                else
+                    builder.AppendSwitchIfNotNull("/internalize:", ExcludeFile);
             else if (Internalize)
-                builder.AppendSwitch(@"/internalize");
+                builder.AppendSwitch("/internalize");
 
-            if (KeyFile != null)
-                builder.AppendSwitch(@"/keyfile:" + KeyFile.ItemSpec);
+            builder.AppendSwitchIfNotNull("/keyfile:", KeyFile);
 
             if (LogFile != null)
-                builder.AppendSwitch(@"/log" + ((LogFile.ItemSpec.Length == 0)
-                                                    ? string.Empty
-                                                    : @":" + LogFile.ItemSpec));
+                if (LogFile.ItemSpec.Length == 0)
+                    builder.AppendSwitchIfNotNull("/log:", LogFile);
+                else
+                    builder.AppendSwitch("/log");
 
-            if (OutputFile != null)
-                builder.AppendSwitch(@"/out:" + OutputFile.ItemSpec);
+            builder.AppendSwitchIfNotNull("/out:", OutputFile);
 
             if (PublicKeyTokens)
-                builder.AppendSwitch(@"/publickeytokens");
+                builder.AppendSwitch("/publickeytokens");
 
             if (TargetPlatformVersion != null)
-                builder.AppendSwitch(@"/targetplatform:"
-                                     + TargetPlatformVersion
-                                     + ((TargetPlatformDirectory == null)
-                                            ? string.Empty
-                                            : @"," + TargetPlatformDirectory.ItemSpec));
+                if (TargetPlatformDirectory == null)
+                    builder.AppendSwitch("/targetplatform:" + TargetPlatformVersion);
+                else
+                    builder.AppendSwitchIfNotNull("/targetplatform:" + TargetPlatformVersion + ",", TargetPlatformDirectory);                                    
 
-            if (TargetKind != null)
-                builder.AppendSwitch(@"/target:" + TargetKind);
+            builder.AppendSwitchIfNotNull("/target:", TargetKind);
 
-            if (Version != null)
-                builder.AppendSwitch(@"/ver:" + Version);
+            builder.AppendSwitchIfNotNull("/ver:", Version);
 
             if (XmlDocumentation)
-                builder.AppendSwitch(@"/xmldocs");
+                builder.AppendSwitch("/xmldocs");
 
-            builder.AppendFileNamesIfNotNull(InputAssemblies, @" ");
+            builder.AppendSwitchIfNotNull("/lib:", SearchDirectories, " /lib:");
+
+            builder.AppendFileNamesIfNotNull(InputAssemblies, " ");
 
             return builder.ToString();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
+        /// </summary>
+        /// <value></value>
+        /// <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
+        protected override MessageImportance StandardOutputLoggingImportance
+        {
+            get { return MessageImportance.Normal; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"/> with which to log errors.
+        /// </summary>
+        /// <value></value>
+        /// <returns>
+        /// The <see cref="T:Microsoft.Build.Framework.MessageImportance"/> with which to log errors.
+        /// </returns>
+        protected override MessageImportance StandardErrorLoggingImportance
+        {
+            get { return MessageImportance.High; }
         }
     }
 }
