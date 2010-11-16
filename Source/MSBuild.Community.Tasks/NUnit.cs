@@ -227,6 +227,17 @@ namespace MSBuild.Community.Tasks
             set { _force32Bit = value; }
         }
 
+        private string _framework;
+
+        /// <summary>
+        /// Determines the framework to run aganist.
+        /// </summary>
+        public string Framework
+        {
+          get { return _framework; }
+          set { _framework = value; }
+        }
+
         #endregion
 
         #region Task Overrides
@@ -263,6 +274,8 @@ namespace MSBuild.Community.Tasks
             builder.AppendSwitchIfNotNull("/xml=", _outputXmlFile);
 
             builder.AppendSwitchIfNotNull("/err=", _errorOutputFile);
+
+            builder.AppendSwitchIfNotNull("/framework=",_framework);
 
             return builder.ToString();
         }
