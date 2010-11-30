@@ -187,10 +187,7 @@ namespace MSBuild.Community.Tasks
         #region Fields
         private readonly Dictionary<string, string> _attributes;
         private readonly string[] _imports;
-        private bool _generateClass;
-        private string _languageCode;
         private string _outputFile;
-        private string _codeLanguage;
 
         #endregion Fields
 
@@ -214,11 +211,7 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         /// <value>The code language.</value>
         [Required]
-        public string CodeLanguage
-        {
-            get { return _codeLanguage; }
-            set { _codeLanguage = value; }
-        }
+        public string CodeLanguage { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [COMVisible].
@@ -408,21 +401,19 @@ namespace MSBuild.Community.Tasks
         /// <summary>
         /// Gets or sets a value indicating whether to generate the ThisAssmebly class.
         /// </summary>
-        public bool GenerateClass
-        {
-            get { return _generateClass; }
-            set { _generateClass = value; }
-        }
+        public bool GenerateClass { get; set; }
 
         /// <summary>
         /// Gets or sets the neutral language which is used as a fallback language configuration 
         /// if the locale on the computer isn't supported. Example is setting this to "en-US".
         /// </summary>
-        public string NeutralResourcesLanguage
-        {
-            get { return _languageCode; }
-            set { _languageCode = value; }
-        }
+        public string NeutralResourcesLanguage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ultimate resource fallback location.
+        /// </summary>
+        /// <value>The ultimate resource fallback location.</value>
+        public string UltimateResourceFallbackLocation { get; set; }
 
         /// <summary>
         /// Makes it possible to make certain assemblies able to use constructs marked as internal.
@@ -495,12 +486,12 @@ namespace MSBuild.Community.Tasks
         #region Private Methods
         private void GenerateFile(TextWriter writer)
         {
-            _codeLanguage = (_codeLanguage ?? String.Empty).ToLower();
+            CodeLanguage = (CodeLanguage ?? String.Empty).ToLower();
 
             // Get the chosen provider and rename the output file's extension
-            CodeDomProvider provider = GetProviderAndSetExtension(_codeLanguage, ref _outputFile);
+            CodeDomProvider provider = GetProviderAndSetExtension(CodeLanguage, ref _outputFile);
 
-            SetDefaultsForLanguage(_codeLanguage);
+            SetDefaultsForLanguage(CodeLanguage);
 
             CodeCompileUnit codeCompileUnit = new CodeCompileUnit();
             CodeNamespace codeNamespace = new CodeNamespace();
@@ -541,14 +532,14 @@ namespace MSBuild.Community.Tasks
             }
 
             // Add an assembly language code attribute to determine the neutral culture
-            if (_languageCode != null)
+            if (NeutralResourcesLanguage != null)
             {
                 AddAssemblyLanguageCodeAttribute(codeCompileUnit);
             }
 
             // Generate an internally accessible class which has the version information 
             // available as properties
-            if (_generateClass)
+            if (GenerateClass)
             {
                 GenerateThisAssemblyClass(codeNamespace);
             }
@@ -564,7 +555,7 @@ namespace MSBuild.Community.Tasks
             if (!_codeLangMapping.TryGetValue(codeLanguage, out codeLang))
             {
                 throw new NotSupportedException("The specified code language is not supported: '" +
-                                                _codeLanguage +
+                                                CodeLanguage +
                                                 "'");
             }
 
@@ -713,10 +704,13 @@ namespace MSBuild.Community.Tasks
             var codeAttributeDeclaration = new CodeAttributeDeclaration("NeutralResourcesLanguage");
             codeAttributeDeclaration.Arguments.Add(
                 new CodeAttributeArgument(
-                    new CodePrimitiveExpression(_languageCode)));
-            codeAttributeDeclaration.Arguments.Add(
-                new CodeAttributeArgument(
-                    new CodeTypeReferenceExpression("System.Resources.UltimateResourceFallbackLocation.Satellite")));
+                    new CodePrimitiveExpression(NeutralResourcesLanguage)));
+            
+            if (! string.IsNullOrEmpty(UltimateResourceFallbackLocation))
+                codeAttributeDeclaration.Arguments.Add(
+                    new CodeAttributeArgument(
+                        new CodeTypeReferenceExpression(UltimateResourceFallbackLocation)));
+
             codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
         }
 

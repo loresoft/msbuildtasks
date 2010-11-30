@@ -153,7 +153,9 @@
     <None Include="ILMerge\ILMergeTest.proj" />
     <None Include="Install\InstallTest.proj" />
     <None Include="JavaScript\JavaScriptTest.proj" />
-    <None Include="Regex\RegexTest.proj" />
+    <None Include="Regex\RegexTest.proj">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Solution\GetSolutionProjectsTest.proj" />
     <None Include="SqlServer\createDb.sql.template" />
     <None Include="SqlServer\dropDb.sql" />
