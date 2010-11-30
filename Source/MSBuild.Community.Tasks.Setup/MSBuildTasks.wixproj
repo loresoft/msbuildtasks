@@ -1,18 +1,20 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProductVersion>3.0</ProductVersion>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.5</ProductVersion>
     <ProjectGuid>{6e293db7-b1e3-4cea-ab94-79a979f91af5}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>MSBuild.Community.Tasks</OutputName>
     <OutputType>Package</OutputType>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
-    <WixToolPath>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.5\Wix2010.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.5\Wix2010.targets</WixTargetsPath>
     <Name>MSBuildTasks</Name>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <IntermediateOutputPath>obj\Debug\</IntermediateOutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
     <AllowIdenticalRows>False</AllowIdenticalRows>
     <CabinetCachePath>
@@ -53,9 +55,9 @@
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>False</Pedantic>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\Release</OutputPath>
-    <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <Cultures>en-US</Cultures>
     <DefineConstants>Debug</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
@@ -77,17 +79,21 @@
     <Content Include="Variables.wxi" />
   </ItemGroup>
   <ItemGroup>
-    <WixExtension Include="WixNetFxExtension">
-      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixNetFxExtension.dll</HintPath>
-    </WixExtension>
-    <WixExtension Include="WixUIExtension">
-      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixUIExtension.dll</HintPath>
-    </WixExtension>
     <WixExtension Include="WixUtilExtension">
-      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixUtilExtension.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Windows Installer XML v3.5\bin\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
     </WixExtension>
     <WixExtension Include="WixVSExtension">
-      <HintPath>C:\Program Files\Windows Installer XML v3\bin\WixVSExtension.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Windows Installer XML v3.5\bin\WixVSExtension.dll</HintPath>
+      <Name>WixVSExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>C:\Program Files (x86)\Windows Installer XML v3.5\bin\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>C:\Program Files (x86)\Windows Installer XML v3.5\bin\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
     </WixExtension>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />

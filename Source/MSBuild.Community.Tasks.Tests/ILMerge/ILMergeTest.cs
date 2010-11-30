@@ -127,7 +127,7 @@ namespace MSBuild.Community.Tasks.Tests
 
 			task.InputAssemblies = this.inputAssemblies;
 			task.OutputFile = new TaskItem(Path.Combine(this.testDirectory, @"merged1.dll"));
-			task.AllowDuplicateTypes = TaskUtility.StringArrayToItemArray(@"ClassAB");
+			task.AllowDuplicateTypes = TaskUtility.StringArrayToItemArray(@"ClassAB", "ClassBA");
 			task.XmlDocumentation = true;
 
 			Assert.IsTrue(task.Execute(), @"Task failed");

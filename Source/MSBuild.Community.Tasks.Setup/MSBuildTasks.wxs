@@ -52,7 +52,7 @@
 
     <Property Id="VS2005_SCHEMAS_MSBUILD_DIR">
       <RegistrySearch Id="VS2005SearchForCommonPath" Type="raw" Root="HKLM"
-                Key="SOFTWARE\Microsoft\VisualStudio\8.0\Setup\VS" Name="ProductDir" >
+                      Key="SOFTWARE\Microsoft\VisualStudio\8.0\Setup\VS" Name="ProductDir" >
         <DirectorySearch Id="VS2005SearchForXmlPath" Path="Xml" Depth="1">
           <DirectorySearch Id="VS2005SearchForXmlSchemasPath" Path="Schemas" Depth="1">
             <DirectorySearch Id="VS2005SearchForXmlSchemasLangPath" Path="1033" Depth="1">
@@ -65,7 +65,7 @@
 
     <Property Id="VS2005_MSBUILD_SCHEMA">
       <RegistrySearch Id="VS2005SearchForCommonPath2" Type="raw" Root="HKLM"
-          Key="SOFTWARE\Microsoft\VisualStudio\8.0\Setup\VS" Name="ProductDir" >
+                      Key="SOFTWARE\Microsoft\VisualStudio\8.0\Setup\VS" Name="ProductDir" >
         <DirectorySearch Id="VS2005SearchForXmlPath2" Path="Xml" Depth="1">
           <DirectorySearch Id="VS2005SearchForXmlSchemasPath2" Path="Schemas" Depth="1">
             <DirectorySearch Id="VS2005SearchForXmlSchemasLangPath2" Path="1033" Depth="1">
@@ -78,7 +78,7 @@
 
     <Property Id="VS2008_SCHEMAS_MSBUILD_DIR">
       <RegistrySearch Id="VS2008SearchForCommonPath" Type="raw" Root="HKLM"
-                Key="SOFTWARE\Microsoft\VisualStudio\9.0\Setup\VS" Name="ProductDir" >
+                      Key="SOFTWARE\Microsoft\VisualStudio\9.0\Setup\VS" Name="ProductDir" >
         <DirectorySearch Id="VS2008SearchForXmlPath" Path="Xml" Depth="1">
           <DirectorySearch Id="VS2008SearchForXmlSchemasPath" Path="Schemas" Depth="1">
             <DirectorySearch Id="VS2008SearchForXmlSchemasLangPath" Path="1033" Depth="1">
@@ -91,7 +91,7 @@
 
     <Property Id="VS2008_MSBUILD_SCHEMA">
       <RegistrySearch Id="VS2008SearchForCommonPath2" Type="raw" Root="HKLM"
-          Key="SOFTWARE\Microsoft\VisualStudio\9.0\Setup\VS" Name="ProductDir" >
+                      Key="SOFTWARE\Microsoft\VisualStudio\9.0\Setup\VS" Name="ProductDir" >
         <DirectorySearch Id="VS2008SearchForXmlPath2" Path="Xml" Depth="1">
           <DirectorySearch Id="VS2008SearchForXmlSchemasPath2" Path="Schemas" Depth="1">
             <DirectorySearch Id="VS2008SearchForXmlSchemasLangPath2" Path="1033" Depth="1">
@@ -102,8 +102,35 @@
       </RegistrySearch>
     </Property>
 
+    <Property Id="VS2010_SCHEMAS_MSBUILD_DIR">
+      <RegistrySearch Id="VS2010SearchForCommonPath" Root="HKLM" 
+                      Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="10.0" Type="raw">
+        <DirectorySearch Id="VS2010SearchForXmlPath" Path="Xml" Depth="1">
+          <DirectorySearch Id="VS2010SearchForXmlSchemasPath" Path="Schemas" Depth="1">
+            <DirectorySearch Id="VS2010SearchForXmlSchemasLangPath" Path="1033" Depth="1">
+              <DirectorySearch Id="VS2010SearchForXmlSchemasMSBuildPath" Path="MSBuild" Depth="1" />
+            </DirectorySearch>
+          </DirectorySearch>
+        </DirectorySearch>
+      </RegistrySearch>
+    </Property>
+
+    <Property Id="VS2010_MSBUILD_SCHEMA">
+      <RegistrySearch Id="VS2010SearchForCommonPath2" Root="HKLM" 
+                      Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="10.0" Type="raw">
+        <DirectorySearch Id="VS2010SearchForXmlPath2" Path="Xml" Depth="1">
+          <DirectorySearch Id="VS2010SearchForXmlSchemasPath2" Path="Schemas" Depth="1">
+            <DirectorySearch Id="VS2010SearchForXmlSchemasLangPath2" Path="1033" Depth="1">
+              <FileSearch Id ="VS2010SearchForMSBuildSchema" Name="Microsoft.Build.xsd"/>
+            </DirectorySearch>
+          </DirectorySearch>
+        </DirectorySearch>
+      </RegistrySearch>
+    </Property>
+
     <PropertyRef Id="VS2005DEVENV" />
     <PropertyRef Id="VS90DEVENV" />
+    <PropertyRef Id="VS2010DEVENV" />
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
@@ -120,12 +147,15 @@
         <File Id="MSBuild.Community.Tasks.xml" Name="MSBuild.Community.Tasks.xml" />
         <File Id="MSBuild.Community.Tasks.Targets" Name="MSBuild.Community.Tasks.Targets" />
       </Component>
+      
       <Component Id="MSBuildTasksSchema" Guid="F22319C9-7937-47bb-968B-CA3939299FE1">
         <File Id="MSBuild.Community.Tasks.xsd" Name="MSBuild.Community.Tasks.xsd" KeyPath="yes" />
       </Component>
+      
       <Component Id="MSBuildTasksHelp" Guid="00951D3A-C401-499c-BB5B-7636AC12364D">
         <File Id="MSBuild.Community.Tasks.chm" Name="MSBuild.Community.Tasks.chm" />
       </Component>
+      
       <Component Id="MSBuildTasksVS2005" Guid="15EE7B53-F94D-4c33-839F-02521C896A72">
         <RegistryKey Root="HKLM" Key="Software\Microsoft\VisualStudio\8.0\MSBuild\SafeImports">
           <RegistryValue Name="MSBuildCommunityTasks" Value="[INSTALLDIR]MSBuild.Community.Tasks.Targets" Type="string" KeyPath="yes" />
@@ -160,6 +190,7 @@
                         Sequence="1">
         </util:XmlConfig>
       </Component>
+      
       <Component Id="MSBuildTasksVS2008" Guid="9FA7CCB2-1E57-4588-B4F0-7FFF7163FFE3">
         <RegistryKey Root="HKLM" Key="Software\Microsoft\VisualStudio\9.0\MSBuild\SafeImports">
           <RegistryValue Name="MSBuildCommunityTasks" Value="[INSTALLDIR]MSBuild.Community.Tasks.Targets" Type="string" KeyPath="yes" />
@@ -186,6 +217,40 @@
         </util:XmlConfig>
         <util:XmlConfig Id="MSBuildTasksSchemaRemoveVS2008"
                         File="[VS2008_MSBUILD_SCHEMA]"
+                        Action="delete"
+                        On="uninstall"
+                        ElementPath="//xs:schema/xs:include"
+                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        Sequence="1">
+        </util:XmlConfig>
+      </Component>
+
+      <Component Id="MSBuildTasksVS2010" Guid="DCACCCD1-83B0-4EA6-AB0F-392F19F0098D">
+        <RegistryKey Root="HKLM" Key="Software\Microsoft\VisualStudio\10.0\MSBuild\SafeImports">
+          <RegistryValue Name="MSBuildCommunityTasks" Value="[INSTALLDIR]MSBuild.Community.Tasks.Targets" Type="string" KeyPath="yes" />
+        </RegistryKey>
+        <CopyFile Id="CopySchema2010"
+                  DestinationProperty="VS2010_SCHEMAS_MSBUILD_DIR"
+                  FileId="MSBuild.Community.Tasks.xsd" />
+        <util:XmlConfig Id="MSBuildTasksSchemaIncludeVS2010"
+                        File="[VS2010_MSBUILD_SCHEMA]"
+                        Action="create"
+                        On="install"
+                        ElementPath="//xs:schema"
+                        Name="xs:include"
+                        Node="element"
+                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        Sequence="1">
+        </util:XmlConfig>
+        <util:XmlConfig Id="MSBuildTasksSchemaLocationVS2010"
+                        File="[VS2010_MSBUILD_SCHEMA]"
+                        ElementPath="MSBuildTasksSchemaIncludeVS2010"
+                        Name="schemaLocation"
+                        Value="MSBuild\MSBuild.Community.Tasks.xsd"
+                        Sequence="2">
+        </util:XmlConfig>
+        <util:XmlConfig Id="MSBuildTasksSchemaRemoveVS2010"
+                        File="[VS2010_MSBUILD_SCHEMA]"
                         Action="delete"
                         On="uninstall"
                         ElementPath="//xs:schema/xs:include"
@@ -240,6 +305,17 @@
         <Condition Level="1">VS90DEVENV</Condition>
         <ComponentRef Id="MSBuildTasksVS2008" />
       </Feature>
+
+      <Feature Id="MSBuildTasksVS2010Feature"
+         Title="Visual Studio 2010 Integration"
+         Description="Integrate MSBuild Community Tasks with Visual Studio 2010."
+         AllowAdvertise="no"
+         Display="expand"
+         Level="0">
+        <Condition Level="1">VS2010DEVENV</Condition>
+        <ComponentRef Id="MSBuildTasksVS2010" />
+      </Feature>
+
     </Feature>
 
     <!-- Install Sequences -->

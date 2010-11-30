@@ -33,6 +33,7 @@ using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text.RegularExpressions;
+using System.Xml;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
@@ -52,7 +53,7 @@ namespace MSBuild.Community.Tasks
         public RegexCompiler()
         {
             AssemblyVersion = "1.0.0.0";
-            IsPublic = true;            
+            IsPublic = true;
         }
 
         #region Properties
@@ -128,9 +129,12 @@ namespace MSBuild.Community.Tasks
         /// Gets or sets the regular expressions.
         /// </summary>
         /// <value>The regular expressions.</value>
-        [Required]
         public ITaskItem[] RegularExpressions { get; set; }
-
+        /// <summary>
+        /// Gets or sets the file defining the regular expressions.
+        /// </summary>
+        /// <value>The regular expressions file.</value>
+        public ITaskItem RegularExpressionsFile { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether the default value is public for regular expression instances.
         /// </summary>
@@ -162,7 +166,11 @@ namespace MSBuild.Community.Tasks
             {
                 Validate();
 
-                RegexCompilationInfo[] infoArray = GetRegexCompilation();
+                var regexCompilations = new List<RegexCompilationInfo>();
+                regexCompilations.AddRange(GetRegexCompilation());
+                regexCompilations.AddRange(GetRegexCompilationFile());
+
+                RegexCompilationInfo[] infoArray = regexCompilations.ToArray();
                 AssemblyName name = GetAssemblyName();
                 CustomAttributeBuilder[] attributes = GetAttributes();
 
@@ -227,13 +235,13 @@ namespace MSBuild.Community.Tasks
             name.Name = Path.GetFileNameWithoutExtension(AssemblyName);
             name.Version = version;
 
-            if (!string.IsNullOrEmpty(AssemblyKeyFile) && File.Exists(AssemblyKeyFile))
+            if (string.IsNullOrEmpty(AssemblyKeyFile) || !File.Exists(AssemblyKeyFile)) 
+                return name;
+
+            using (var fs = File.OpenRead(AssemblyKeyFile))
             {
-                using (var fs = File.OpenRead(AssemblyKeyFile))
-                {
-                    var keyPair = new StrongNameKeyPair(fs);
-                    name.KeyPair = keyPair;
-                }
+                var keyPair = new StrongNameKeyPair(fs);
+                name.KeyPair = keyPair;
             }
 
             return name;
@@ -265,11 +273,14 @@ namespace MSBuild.Community.Tasks
             return attributes.ToArray();
         }
 
-        private RegexCompilationInfo[] GetRegexCompilation()
+        private List<RegexCompilationInfo> GetRegexCompilation()
         {
             RegexOptions defaultRegexOptions = GetRegexOptions(Options);
 
             var regexList = new List<RegexCompilationInfo>();
+            if (RegularExpressions == null)
+                return regexList;
+
             foreach (ITaskItem expression in RegularExpressions)
             {
                 string name = expression.ItemSpec;
@@ -288,7 +299,9 @@ namespace MSBuild.Community.Tasks
                 if (string.IsNullOrEmpty(nspace))
                     nspace = Path.GetFileNameWithoutExtension(AssemblyName);
 
-                RegexOptions regexOptions = string.IsNullOrEmpty(options) ? defaultRegexOptions : GetRegexOptions(options);
+                RegexOptions regexOptions = string.IsNullOrEmpty(options)
+                                                ? defaultRegexOptions
+                                                : GetRegexOptions(options);
 
                 bool isPublic;
 
@@ -299,7 +312,94 @@ namespace MSBuild.Community.Tasks
                 regexList.Add(info);
             }
 
-            return regexList.ToArray();
+            return regexList;
+        }
+
+        private List<RegexCompilationInfo> GetRegexCompilationFile()
+        {
+            RegexOptions defaultRegexOptions = GetRegexOptions(Options);
+            string defaultNamespace = Namespace;
+            if (string.IsNullOrEmpty(defaultNamespace))
+                defaultNamespace = Path.GetFileNameWithoutExtension(AssemblyName);
+
+            var regexList = new List<RegexCompilationInfo>();
+            if (RegularExpressionsFile == null)
+                return null;
+
+            if (!File.Exists(RegularExpressionsFile.ItemSpec))
+            {
+                Log.LogWarning("The expressions file '{0}' does not exists.", RegularExpressionsFile.ItemSpec);
+                return null;
+            }
+            Log.LogMessage(MessageImportance.Low,  "Loading expressions file '{0}'.", RegularExpressionsFile.ItemSpec);
+
+            using (FileStream fs = File.OpenRead(RegularExpressionsFile.ItemSpec))
+            using (XmlReader reader = XmlReader.Create(fs))
+            {
+                RegexCompilationInfo current = null;
+
+                while (reader.Read())
+                {
+                    if ((reader.NodeType != XmlNodeType.Element))
+                        continue;
+
+                    switch (reader.Name)
+                    {
+                        case "Regex":
+                            string name = reader.GetAttribute("Name");
+                            current = new RegexCompilationInfo("", defaultRegexOptions, name, defaultNamespace, IsPublic);
+                            regexList.Add(current);
+                            break;
+                        case "Pattern":
+                            if (current == null)
+                                break;
+
+                            string pattern = reader.ReadElementContentAsString();
+                            if (string.IsNullOrEmpty(pattern))
+                                throw new InvalidOperationException(string.Format(
+                                    "The regular expression '{0}' is missing the Pattern metadata.", current.Name));
+
+                            current.Pattern = pattern;
+
+                            break;
+                        case "Namespace":
+                            if (current == null)
+                                break;
+
+                            string nspace = reader.ReadElementContentAsString();
+                            if (string.IsNullOrEmpty(nspace))
+                                break;
+
+                            current.Namespace = nspace;
+                            break;
+                        case "Options":
+                            if (current == null)
+                                break;
+
+                            string options = reader.ReadElementContentAsString();
+                            if (string.IsNullOrEmpty(options))
+                                break;
+
+                            RegexOptions regexOptions = GetRegexOptions(options);
+                            current.Options = regexOptions;
+
+                            break;
+                        case "IsPublic":
+                            if (current == null)
+                                break;
+
+                            bool isPublic;
+                            string pub = reader.ReadElementContentAsString();
+                            if (!bool.TryParse(pub, out isPublic))
+                                break;
+
+                            current.IsPublic = isPublic;
+                            break;
+                    } // switch
+                } // whild read
+            } // using
+
+            return regexList;
         }
 
         private RegexOptions GetRegexOptions(string options)

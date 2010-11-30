@@ -304,6 +304,20 @@
 			AssemblyCopyright="Copyright (c) MSBuildTasks 2008"
 			AssemblyVersion="1.0.0.0"
 			AssemblyFileVersion="1.0.0.0" />
+
+    <RegexCompiler
+      OutputDirectory="Test"
+      RegularExpressionsFile="RegularExpressions.xml"
+      Namespace="MSBuild.RegularExpressions"
+      AssemblyName="MSBuild.Community.RegularExpressions.dll"
+      AssemblyTitle="MSBuild.Community.RegularExpressions"
+      AssemblyDescription="MSBuild Community Tasks Regular Expressions"
+      AssemblyCompany="Company Name, LLC"
+      AssemblyProduct="MSBuildTasks"
+      AssemblyCopyright="Copyright (c) MSBuildTasks 2008"
+      AssemblyVersion="1.0.0.0"
+      AssemblyFileVersion="1.0.0.0" />
+
   </Target>
 
   <Target Name="DeleteTree">

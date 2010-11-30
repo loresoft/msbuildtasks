@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RegularExpressions>
+  <Regex Name="TextRegex">
+    <Pattern>\G[^&lt;]+</Pattern>
+    <Options>RegexOptions.Singleline | RegexOptions.Multiline</Options>
+  </Regex>
+  <Regex Name="CommentRegex">
+    <Pattern>\G&lt;%--(([^-]*)-)*?-%&gt;</Pattern>
+    <Options>RegexOptions.Singleline | RegexOptions.Multiline</Options>
+  </Regex>
+  <Regex Name="CodeRegex">
+    <Pattern>\G&lt;%(?![@%])(?&lt;code&gt;.*?)%&gt;</Pattern>
+    <Options>RegexOptions.Singleline | RegexOptions.Multiline</Options>
+    <Namespace>MSBuild.Community.RegularExpressions</Namespace>
+  </Regex>
+</RegularExpressions>
