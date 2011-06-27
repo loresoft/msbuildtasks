@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>MSBuildTasks</id>
+    <version>1.3.0</version>
+    <authors>Paul Welter</authors>
+    <description>The MSBuild Community Tasks project is a collection of open source tasks for MSBuild.</description>
+    <language>en-US</language>
+    <projectUrl>http://msbuildtasks.tigris.org/</projectUrl>
+    <licenseUrl>http://opensource.org/licenses/bsd-license.php</licenseUrl>
+    <tags>MSBuild</tags>
+  </metadata>
+  <files>
+    <file src="MSBuild.Community.Tasks.dll" target="lib" />
+    <file src="MSBuild.Community.Tasks.xml" target="lib" />
+    <file src="MSBuild.Community.Tasks.Targets" target="lib" />
+    <file src="MSBuild.Community.Tasks.chm" target="content" />
+  </files>
+</package>

@@ -118,6 +118,7 @@
     <Compile Include="InnoSetup.cs" />
     <Compile Include="Merge.cs" />
     <Compile Include="Net\HttpRequest.cs" />
+    <Compile Include="NuGet.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Regex\RegexCompiler.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Tfs\Proxies\Workstation.cs" />
     <Compile Include="Tfs\TeamFoundationServer.cs" />
     <Compile Include="Tfs\TeamFoundationServerException.cs" />
+    <Compile Include="Tfs\TfsClient.cs" />
     <Compile Include="Tfs\TfsVersion.cs" />
     <Compile Include="Services\Win32Registry.cs" />
     <Compile Include="User\User.cs" />
