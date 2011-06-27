@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
@@ -41,8 +42,14 @@ namespace MSBuild.Community.Tasks.Tfs
         public string WorkspaceOwner { get; set; }
         public string ShelveSetName { get; set; }
         public string ShelveSetOwner { get; set; }
+
         
+        [Output]
+        public string Changeset { get; set; }
+        [Output]
+        public string ServerPath { get; set; }
         
+
         private string FindToolPath(string toolName)
         {
             return string.Empty;
@@ -175,6 +182,31 @@ namespace MSBuild.Community.Tasks.Tfs
             GenerateArguments(commandLine);
 
             return commandLine.ToString();
+        }
+      
+        protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
+        {
+          bool isError = messageImportance == StandardErrorLoggingImportance;
+
+          if (isError)
+            base.LogEventsFromTextOutput(singleLine, messageImportance);
+
+          Match m = Regex.Match(singleLine, @"(?<Name>[\w ]+)\s*\:(?<Value>[^\r\n]+)");
+          if (!m.Success)
+            return;
+
+          string name = m.Groups["Name"].Value.Trim();
+          string value = m.Groups["Value"].Value.Trim();
+
+          switch (name)
+          {
+            case "Changeset":
+              Changeset = value;
+              break;
+            case "Server path":
+              ServerPath = value;
+              break;
+          }
         }
 
         /// <summary>
