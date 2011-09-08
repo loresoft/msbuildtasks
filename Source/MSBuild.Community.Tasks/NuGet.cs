@@ -9,12 +9,21 @@ using Microsoft.Build.Utilities;
 
 namespace MSBuild.Community.Tasks
 {
+    public enum NuGetCommands
+    {
+        
+
+    }
+
     /// <summary>
     /// Creates a NuGet package based on the specified manifest (Nuspec) file.
     /// Can set the version number in the manifest prior to building the package.
     /// </summary>
     public class NuGet : ToolTask
     {
+        [Required]        
+        public string Command { get; set; }
+        
         /// <summary>
         /// The location of the manifest (Nuspec) file to create a package.
         /// </summary>
@@ -29,6 +38,15 @@ namespace MSBuild.Community.Tasks
         public string OutputDirectory { get; set; }
 
         /// <summary>
+        /// Sets the version of the package in the manifest (Nuspec) file.
+        /// The version must specify at least two places "X.X".
+        /// </summary>
+        /// <value>The version to set in the manifest.</value>
+        public string Version { get; set; }
+
+        public bool ExcludeVersion { get; set; }
+
+        /// <summary>
         /// The Base Path of the files defined in the nuspec file.
         /// </summary>
         /// <value>The base path.</value>
@@ -40,13 +58,8 @@ namespace MSBuild.Community.Tasks
         /// <value><c>true</c> if verbose; otherwise, <c>false</c>.</value>
         public bool Verbose { get; set; }
 
-        /// <summary>
-        /// Sets the version of the package in the manifest (Nuspec) file.
-        /// The version must specify at least two places "X.X".
-        /// </summary>
-        /// <value>The version to set in the manifest.</value>
-        public string Version { get; set; }
 
+        
         /// <summary>
         /// Gets or sets the working directory.
         /// </summary>
