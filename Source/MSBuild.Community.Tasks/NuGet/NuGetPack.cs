@@ -77,9 +77,9 @@ namespace MSBuild.Community.Tasks.NuGet
             var builder = new CommandLineBuilder();
             builder.AppendSwitch("pack");
             builder.AppendFileNameIfNotNull(File);
-            builder.AppendSwitchIfNotNull("-OutputDirectory", OutputDirectory);
-            builder.AppendSwitchIfNotNull("-BasePath", BasePath);
-            builder.AppendSwitchIfNotNull("-Version", Version);
+            builder.AppendSwitchIfNotNull("-OutputDirectory ", OutputDirectory);
+            builder.AppendSwitchIfNotNull("-BasePath ", BasePath);
+            builder.AppendSwitchIfNotNull("-Version ", Version);
             if (Verbose)
                 builder.AppendSwitch("-Verbose");
 

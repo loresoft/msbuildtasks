@@ -75,7 +75,7 @@ namespace MSBuild.Community.Tasks.NuGet
             builder.AppendSwitch("push");
             builder.AppendFileNameIfNotNull(File);
             builder.AppendFileNameIfNotNull(APIKey);
-            builder.AppendSwitchIfNotNull("-Source", Source);
+            builder.AppendSwitchIfNotNull("-Source ", Source);
             if (CreateOnly)
                 builder.AppendSwitch("-CreateOnly");
 
