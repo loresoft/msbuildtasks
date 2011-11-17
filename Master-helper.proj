@@ -174,7 +174,7 @@
                Version="$(Major).$(Minor).$(Build).$(Revision)" />
 
     <NuGetPush ToolPath="Libraries" 
-               File="MSBuildTasks.symbols.$(Major).$(Minor).$(Build).$(Revision).nupkg" 
+               File="MSBuildTasks.$(Major).$(Minor).$(Build).$(Revision).symbols.nupkg" 
                APIKey="$(NuGetAPIKey)" />
   </Target>
 
