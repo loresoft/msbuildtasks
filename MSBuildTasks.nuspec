@@ -11,9 +11,9 @@
     <tags>MSBuild</tags>
   </metadata>
   <files>
-    <file src="Build\MSBuild.Community.Tasks.dll" target="lib" />
-    <file src="Build\MSBuild.Community.Tasks.xml" target="lib" />
-    <file src="Build\MSBuild.Community.Tasks.Targets" target="lib" />
+    <file src="Build\MSBuild.Community.Tasks.dll" target="lib\net20\MSBuild.Community.Tasks.dll" />
+    <file src="Build\MSBuild.Community.Tasks.xml" target="lib\net20\MSBuild.Community.Tasks.xml" />
+    <file src="Build\MSBuild.Community.Tasks.Targets" target="lib\net20\MSBuild.Community.Tasks.Targets" />
     <file src="Build\MSBuild.Community.Tasks.chm" target="content" />
   </files>
 </package>
