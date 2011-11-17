@@ -156,21 +156,23 @@
   </Target>
 
   <Target Name="NuGet" DependsOnTargets="Compile;Documentation;Merge">
-    <NuGetPack ToolPath="Libraries" 
-               File="MSBuildTasks.nuspec" 
-               Version="$(Major).$(Minor).$(Build).$(Revision)" />
-    <NuGetPack ToolPath="Libraries" 
-               File="MSBuildTasks.symbols.nuspec" 
-               Version="$(Major).$(Minor).$(Build).$(Revision)" />
-
     <RegistryRead KeyName="HKEY_CURRENT_USER\SOFTWARE\MSBuildTasks" ValueName="NuGetAPIKey">
       <Output TaskParameter="Value" PropertyName="NuGetAPIKey" />
     </RegistryRead>
 
-
-    <NuGetPush ToolPath="Libraries" 
-               File="MSBuildTasks.$(Major).$(Minor).$(Build).$(Revision).nupkg" 
+    <NuGetPack ToolPath="Libraries" 
+               File="MSBuildTasks.nuspec" 
+               Version="$(Major).$(Minor).$(Build).$(Revision)" />
+    <NuGetPush ToolPath="Libraries"
+               File="MSBuildTasks.$(Major).$(Minor).$(Build).$(Revision).nupkg"
                APIKey="$(NuGetAPIKey)" />
+
+    
+    <NuGetPack ToolPath="Libraries" 
+               File="MSBuildTasks.symbols.nuspec" 
+               Symbols="true"
+               Version="$(Major).$(Minor).$(Build).$(Revision)" />
+
     <NuGetPush ToolPath="Libraries" 
                File="MSBuildTasks.symbols.$(Major).$(Minor).$(Build).$(Revision).nupkg" 
                APIKey="$(NuGetAPIKey)" />

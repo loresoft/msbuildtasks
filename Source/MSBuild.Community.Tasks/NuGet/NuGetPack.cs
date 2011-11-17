@@ -67,6 +67,15 @@ namespace MSBuild.Community.Tasks.NuGet
         public bool Verbose { get; set; }
 
         /// <summary>
+        /// Determines if a package containing sources and symbols should be created. When specified with a nuspec, 
+        /// creates a regular NuGet package file and the corresponding symbols package.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if symbols; otherwise, <c>false</c>.
+        /// </value>
+        public bool Symbols { get; set; }
+
+        /// <summary>
         /// Returns a string value containing the command line arguments to pass directly to the executable file.
         /// </summary>
         /// <returns>
@@ -82,6 +91,8 @@ namespace MSBuild.Community.Tasks.NuGet
             builder.AppendSwitchIfNotNull("-Version ", Version);
             if (Verbose)
                 builder.AppendSwitch("-Verbose");
+            if (Symbols)
+                builder.AppendSwitch("-Symbols");
 
             return builder.ToString();
         }
