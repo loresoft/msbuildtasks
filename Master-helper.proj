@@ -91,7 +91,7 @@
 
     <SvnSourceIndex SourceServerName="Tigris" SymbolFiles="@(SymbolFiles)" />
   </Target>
-  
+
   <Target Name="Merge" DependsOnTargets="Compile">
     <Copy SourceFiles="Build\MSBuild.Community.Tasks.dll"
           DestinationFiles="Build\MSBuild.Temp.dll" />
@@ -116,8 +116,8 @@
 
   <Target Name="Documentation" DependsOnTargets="Compile">
     <TaskSchema Assemblies="Build\MSBuild.Community.Tasks.dll"
-                OutputPath="Build" 
-                CreateTaskList="false" 
+                OutputPath="Build"
+                CreateTaskList="false"
                 IgnoreMsBuildSchema="true"
                 Includes="Microsoft.Build.Commontypes.xsd"/>
 
@@ -153,6 +153,27 @@
 
     <Copy SourceFiles="Source\MSBuild.Community.Tasks.Setup\bin\Release\MSBuild.Community.Tasks.msi"
           DestinationFiles="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).msi" />
+  </Target>
+
+  <Target Name="NuGet" DependsOnTargets="Compile;Documentation;Merge">
+    <NuGetPack ToolPath="Libraries" 
+               File="MSBuildTasks.nuspec" 
+               Version="$(Major).$(Minor).$(Build).$(Revision)" />
+    <NuGetPack ToolPath="Libraries" 
+               File="MSBuildTasks.symbols.nuspec" 
+               Version="$(Major).$(Minor).$(Build).$(Revision)" />
+
+    <RegistryRead KeyName="HKEY_CURRENT_USER\SOFTWARE\MSBuildTasks" ValueName="NuGetAPIKey">
+      <Output TaskParameter="Value" PropertyName="NuGetAPIKey" />
+    </RegistryRead>
+
+
+    <NuGetPush ToolPath="Libraries" 
+               File="MSBuildTasks.$(Major).$(Minor).$(Build).$(Revision).nupkg" 
+               APIKey="$(NuGetAPIKey)" />
+    <NuGetPush ToolPath="Libraries" 
+               File="MSBuildTasks.symbols.$(Major).$(Minor).$(Build).$(Revision).nupkg" 
+               APIKey="$(NuGetAPIKey)" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="SourceIndex;Zip;Installer">

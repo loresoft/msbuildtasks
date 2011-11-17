@@ -118,7 +118,9 @@
     <Compile Include="InnoSetup.cs" />
     <Compile Include="Merge.cs" />
     <Compile Include="Net\HttpRequest.cs" />
-    <Compile Include="NuGet.cs" />
+    <Compile Include="NuGet\NuGetBase.cs" />
+    <Compile Include="NuGet\NuGetPack.cs" />
+    <Compile Include="NuGet\NuGetPush.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Regex\RegexCompiler.cs" />

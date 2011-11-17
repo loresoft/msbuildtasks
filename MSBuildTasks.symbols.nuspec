@@ -12,8 +12,8 @@
   </metadata>
   <files>
     <file src="Build\MSBuild.Community.Tasks.dll" target="lib" />
+    <file src="Build\MSBuild.Community.Tasks.pdb" target="lib" />
     <file src="Build\MSBuild.Community.Tasks.xml" target="lib" />
-    <file src="Build\MSBuild.Community.Tasks.Targets" target="lib" />
-    <file src="Build\MSBuild.Community.Tasks.chm" target="content" />
+    <file src="Source\MSBuild.Community.Tasks\**\*.cs" target="src" />
   </files>
 </package>
