@@ -176,7 +176,7 @@
                APIKey="$(NuGetAPIKey)" />
   </Target>
 
-  <Target Name="Build" DependsOnTargets="SourceIndex;Zip;Installer">
+  <Target Name="Build" DependsOnTargets="SourceIndex;Zip;Installer;NuGet">
     <Message Text="Build Complete"/>
   </Target>
 
