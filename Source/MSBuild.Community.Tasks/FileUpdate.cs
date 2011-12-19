@@ -27,6 +27,16 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #endregion
 
+#region 2011-12-19: Default Encoding by Manuel Sprock (Phoenix Contact)
+/* 
+Support for default encoding (utf-8-without-bom) added. 
+There is no WebName for utf-8-without-bom. It's the default 
+encoding when not specifying an encoding and using the overload
+File.WriteAllText(fileName, buffer) 
+Cf. http://msdn.microsoft.com/en-us/library/ms143375.aspx
+*/
+#endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -146,16 +156,31 @@ namespace MSBuild.Community.Tasks
             set { _replacementText = value; }
         }
 
+        /// Maintain the behaviour of the original implementation for compatibility
+        /// (i.e. initialize _useDefaultEncoding with false) and use utf-8-without-bom,  
+        /// which is Microsoft's default encoding, only when Encoding property is set 
+        /// to "utf-8-without-bom". 
+        private bool _useDefaultEncoding; 
+
         private Encoding _encoding = System.Text.Encoding.UTF8;
         /// <summary>
         /// The character encoding used to read and write the file.
         /// </summary>
         /// <remarks>Any value returned by <see cref="System.Text.Encoding.WebName"/> is valid input.
-        /// <para>The default is <c>utf-8</c></para></remarks>
+        /// <para>The default is <c>utf-8</c></para>
+        /// <para>Additionally, <c>utf-8-without-bom</c>can be used.</para></remarks>
         public string Encoding
         {
-            get { return _encoding.WebName; }
-            set { _encoding = System.Text.Encoding.GetEncoding(value); }
+            get 
+            {
+                if (_useDefaultEncoding) return "utf-8-without-bom"; 
+                else return _encoding.WebName; 
+            }
+            set
+            {
+                if (value.ToLower().CompareTo("utf-8-without-bom") == 0) _useDefaultEncoding = true; 
+                else _encoding = System.Text.Encoding.GetEncoding(value);
+            }
         }
 
         //--added for testing
@@ -202,20 +227,24 @@ namespace MSBuild.Community.Tasks
 
             try
             {
-				foreach (ITaskItem item in _files)
-				{
-					string fileName = item.ItemSpec;
-					Log.LogMessage("Updating File \"{0}\".", fileName);
-					string buffer = File.ReadAllText(fileName, _encoding);
-                    
+                foreach (ITaskItem item in _files)
+                {
+                    string fileName = item.ItemSpec;
+                    Log.LogMessage("Updating File \"{0}\".", fileName);
+
+                    string buffer = "";
+                    if (_useDefaultEncoding) buffer = File.ReadAllText(fileName);
+                    else buffer = File.ReadAllText(fileName, _encoding);
+
                     if (_warnOnNoUpdate == true)
                         if (replaceRegex.IsMatch(buffer) != true)
                             Log.LogWarning(String.Format("No updates were performed on file : {0}.", fileName));
 
-					buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);
-					File.WriteAllText(fileName, buffer, _encoding);
+                    buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);
 
-				}
+                    if (_useDefaultEncoding) File.WriteAllText(fileName, buffer);
+                    else File.WriteAllText(fileName, buffer, _encoding);
+                }
             }
             catch (Exception ex)
             {
