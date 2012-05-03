@@ -6,6 +6,8 @@ The MSBuild Community Tasks Project is an open source project for MSBuild tasks.
 
 Please join the MSBuild Community Tasks Project and help contribute in building the tasks. 
 
+##Current Community Tasks
+
 <table border="0" cellpadding="3" cellspacing="0" width="90%" id="tasksTable">
     <tr>
         <th align="left" width="190">
