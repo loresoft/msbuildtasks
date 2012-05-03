@@ -1,0 +1,12 @@
+[Bb]in
+[Oo]bj
+*.suo
+*.user
+*.[Cc]ache
+*[Rr]esharper*
+Bootstrap
+[Bb]uild
+Temp
+*.zip
+TestResults
+Test
