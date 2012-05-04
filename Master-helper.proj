@@ -20,11 +20,13 @@
 
   <ItemGroup>
     <DefaultExclude Include="**\.git\**" />
+    <DefaultExclude Include="**\.git*" />
     <DefaultExclude Include="**\bin\**" />
     <DefaultExclude Include="**\Bootstrap\**" />
     <DefaultExclude Include="**\obj\**" />
     <DefaultExclude Include="**\Release\**" />
     <DefaultExclude Include="**\Debug\**" />
+    <DefaultExclude Include="**\packages\**" />
     <DefaultExclude Include="**\Test\**" />
     <DefaultExclude Include="**\TestResults\**" />
     <DefaultExclude Include="**\doc\**" />
@@ -34,6 +36,7 @@
     <DefaultExclude Include="**\*.resharper" />
     <DefaultExclude Include="**\*.cache" />
     <DefaultExclude Include="**\_ReSharper*\**" />
+    <DefaultExclude Include="*.teamcity*" />
     <DefaultExclude Include="*.zip" />
   </ItemGroup>
 
