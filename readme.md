@@ -20,6 +20,9 @@ https://nuget.org/packages/MSBuildTasks
 
 Please join the MSBuild Community Tasks Project and help contribute in building the tasks. 
 
+Google Group for MSBuild Community Tasks
+https://groups.google.com/d/forum/msbuildtasks
+
 ##Current Community Tasks
 
 <table border="0" cellpadding="3" cellspacing="0" width="90%" id="tasksTable">
