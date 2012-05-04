@@ -1,4 +1,4 @@
-// $Id$
+
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Build.Utilities;

@@ -8,7 +8,7 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using System.IO;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Schema
 {

@@ -30,7 +30,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Runtime.InteropServices;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Fusion
 {

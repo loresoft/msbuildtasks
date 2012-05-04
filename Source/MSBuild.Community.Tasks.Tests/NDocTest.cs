@@ -1,4 +1,4 @@
-// $Id$
+
 
 using System;
 using System.IO;
@@ -16,7 +16,7 @@ namespace MSBuild.Community.Tasks.Tests
         [Test(Description="Generate NDoc project")]
         public void NDocExecute()
         {
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
             string workingDir = Path.Combine(prjRootPath, @"Documentation");
 
             NDoc task = new NDoc();

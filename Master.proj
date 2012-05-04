@@ -4,9 +4,7 @@
   <Target Name="Build" DependsOnTargets="BoostrapCompile;SetCurrentTargetToBuild" >
     <CallTarget Targets="ContinueBuild" />
   </Target>
-  <!-- Working around CreateProperty/CallTarget bug
-        http://www.sedodream.com/PermaLink,guid,dd6cb1db-c0e4-47f7-ad84-6e59ff6b03d0.aspx
-  -->
+
   <Target Name="SetCurrentTargetToBuild">
     <CreateProperty Value="Build">
       <Output TaskParameter="Value" PropertyName="CurrentTarget"/>

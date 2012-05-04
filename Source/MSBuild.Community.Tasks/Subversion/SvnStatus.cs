@@ -35,7 +35,7 @@ using System.Xml;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Subversion
 {
@@ -55,6 +55,12 @@ namespace MSBuild.Community.Tasks.Subversion
             base.Xml = true;
         }
 
+        /// <summary>
+        /// Runs the exectuable file with the specified task parameters.
+        /// </summary>
+        /// <returns>
+        /// true if the task runs successfully; otherwise, false.
+        /// </returns>
         public override bool Execute()
         {
             bool result = base.Execute();
@@ -124,6 +130,9 @@ namespace MSBuild.Community.Tasks.Subversion
             }
         }
 
+        /// <summary>
+        /// Gets or sets the entries.
+        /// </summary>
         [Output]
         public ITaskItem[] Entries
         {

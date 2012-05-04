@@ -18,6 +18,8 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,18 +47,13 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip.Reduced, Version=1.8.4.23, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\Ionic.Zip.Reduced.dll</HintPath>
+    <Reference Include="Ionic.Zip.Reduced, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.Reduced.1.9.1.8\lib\net20\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks" />
     <Reference Include="Microsoft.Build.Utilities" />
-    <Reference Include="Microsoft.VisualStudio.SourceSafe.Interop, Version=5.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\Microsoft.VisualStudio.SourceSafe.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
@@ -65,6 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AspNet\InstallAspNet.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attrib.cs" />
@@ -113,6 +113,8 @@
     </Compile>
     <Compile Include="Fusion\InstallReference.cs" />
     <Compile Include="Fusion\NativeMethods.cs" />
+    <Compile Include="Git\GitClient.cs" />
+    <Compile Include="Git\GitVersion.cs" />
     <Compile Include="HtmlHelp\ChmCompiler.cs" />
     <Compile Include="HtmlHelp\HxCompiler.cs" />
     <Compile Include="InnoSetup.cs" />
@@ -122,7 +124,6 @@
     <Compile Include="NuGet\NuGetPack.cs" />
     <Compile Include="NuGet\NuGetPush.cs" />
     <Compile Include="PathUtil.cs" />
-    <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Regex\RegexCompiler.cs" />
     <Compile Include="Sandcastle\BuildAssembler.cs">
       <SubType>Code</SubType>
@@ -201,7 +202,6 @@
     <Compile Include="FxCop.cs" />
     <Compile Include="IIS\WebBase.cs" />
     <Compile Include="ServiceController.cs" />
-    <Compile Include="SourceSafe\VssClean.cs" />
     <Compile Include="FtpUpload\FtpRequestCreator.cs" />
     <Compile Include="IIS\AppPoolCreate.cs" />
     <Compile Include="IIS\WebDirectoryCreate.cs" />
@@ -227,16 +227,6 @@
     <Compile Include="RegistryWrite.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="Sleep.cs" />
-    <Compile Include="SourceSafe\VssBase.cs" />
-    <Compile Include="SourceSafe\VssCheckin.cs" />
-    <Compile Include="SourceSafe\VssCheckout.cs" />
-    <Compile Include="SourceSafe\VssAdd.cs" />
-    <Compile Include="SourceSafe\VssDiff.cs" />
-    <Compile Include="SourceSafe\VssGet.cs" />
-    <Compile Include="SourceSafe\VssHistory.cs" />
-    <Compile Include="SourceSafe\VssLabel.cs" />
-    <Compile Include="SourceSafe\VssRecursiveBase.cs" />
-    <Compile Include="SourceSafe\VssUndoCheckout.cs" />
     <Compile Include="SqlExecute.cs" />
     <Compile Include="Subversion\SvnCheckout.cs" />
     <Compile Include="Subversion\SvnCommit.cs" />
@@ -264,6 +254,7 @@
     <Content Include="NUnitReport.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -273,9 +264,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="GitHub\" />
     <Folder Include="Vault\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

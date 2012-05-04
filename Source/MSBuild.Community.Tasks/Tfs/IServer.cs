@@ -1,4 +1,4 @@
-﻿// $Id$
+﻿
 using System;
 namespace MSBuild.Community.Tasks.Tfs
 {

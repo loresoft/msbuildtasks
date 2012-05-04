@@ -38,7 +38,7 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using MSBuild.Community.Tasks.Properties;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks
 {
@@ -176,8 +176,8 @@ namespace MSBuild.Community.Tasks
 
                 using (var zip = new ZipFile())
                 {
-                    zip.ProvisionalAlternateEncoding = System.Text.Encoding.Unicode;
-                    zip.UseUnicodeAsNecessary = true;
+                    zip.AlternateEncoding = System.Text.Encoding.Unicode;
+                    zip.AlternateEncodingUsage = ZipOption.AsNecessary;
 
                     // make sure level in range
                     ZipLevel = System.Math.Max(0, ZipLevel);

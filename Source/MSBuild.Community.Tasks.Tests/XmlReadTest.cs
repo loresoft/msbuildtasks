@@ -1,4 +1,4 @@
-// $Id$
+
 
 using System;
 using System.IO;
@@ -18,7 +18,7 @@ namespace MSBuild.Community.Tasks.Tests
         {
             XmlRead task = new XmlRead();
             task.BuildEngine = new MockBuild();
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
             task.XmlFileName = Path.Combine(prjRootPath, @"Source\Subversion.proj");
             task.XPath = "string(/n:Project/n:PropertyGroup/n:MSBuildCommunityTasksPath/text())";
             task.Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
@@ -34,7 +34,7 @@ namespace MSBuild.Community.Tasks.Tests
         {
             XmlRead task = new XmlRead();
             task.BuildEngine = new MockBuild();
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
             task.XmlFileName = Path.Combine(prjRootPath, @"Source\Subversion.proj");
             task.XPath = "count(/n:Project/n:PropertyGroup/*)";
             task.Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
@@ -48,7 +48,7 @@ namespace MSBuild.Community.Tasks.Tests
         {
             XmlRead task = new XmlRead();
             task.BuildEngine = new MockBuild();
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
             task.XmlFileName = Path.Combine(prjRootPath, @"Source\Subversion.proj");
             task.XPath = "10 < 10";
             task.Namespace = "http://schemas.microsoft.com/developer/msbuild/2003";

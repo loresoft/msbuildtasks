@@ -1,4 +1,4 @@
-// $Id$
+
 
 using System.IO;
 using Microsoft.Build.Utilities;
@@ -22,7 +22,7 @@ namespace MSBuild.Community.Tasks.Tests
             task.BuildEngine = new MockBuild();
 
             string testDir = TaskUtility.TestDirectory;
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
 
             string workingDir = Path.Combine(prjRootPath, @"Source\MSBuild.Community.Tasks.Tests");
             string[] files = Directory.GetFiles(workingDir, "*.*", SearchOption.TopDirectoryOnly);
@@ -47,7 +47,7 @@ namespace MSBuild.Community.Tasks.Tests
             task.BuildEngine = new MockBuild();
 
             string testDir = TaskUtility.TestDirectory;
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
 
             string workingDir = Path.Combine(prjRootPath, @"Source\MSBuild.Community.Tasks.Tests");
             string[] files = Directory.GetFiles(workingDir, "*.*", SearchOption.TopDirectoryOnly);
@@ -81,7 +81,7 @@ namespace MSBuild.Community.Tasks.Tests
             task.BuildEngine = new MockBuild();
 
             string testDir = TaskUtility.TestDirectory;
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
 
             string workingDir = Path.Combine(prjRootPath, @"Source\MSBuild.Community.Tasks.Tests");
             string[] files = Directory.GetFiles(workingDir, "*.*", SearchOption.AllDirectories);

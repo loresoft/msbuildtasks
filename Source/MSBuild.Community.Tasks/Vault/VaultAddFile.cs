@@ -1,4 +1,4 @@
-// $Id$
+
 // Copyright © 2006 Douglas Rohm
 
 using System;

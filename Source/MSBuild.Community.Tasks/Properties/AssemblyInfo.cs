@@ -1,4 +1,4 @@
-// $Id$
+
 // Copyright © 2006 Paul Welter
 
 using System.Reflection;
@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("MSBuild.Community.Tasks")]
 [assembly: AssemblyDescription("MSBuild community tasks library")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCulture("")]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM

@@ -11,7 +11,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.XPath;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Schema
 {

@@ -45,7 +45,7 @@ using System.IO;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks
 {
@@ -206,24 +206,24 @@ namespace MSBuild.Community.Tasks
         /// </returns>
         public override bool Execute()
         {
-			RegexOptions options = RegexOptions.None;
-			if (_ignoreCase)
-			{
-				options |= RegexOptions.IgnoreCase;
-			}
-			if (_multiline)
-			{
-				options |= RegexOptions.Multiline;
-			}
-			if (_singleline)
-			{
-				options |= RegexOptions.Singleline;
-			}
-			if (_replacementCount == 0)
-			{
-				_replacementCount = -1;
-			}
-			Regex replaceRegex = new Regex(_regex, options);
+            RegexOptions options = RegexOptions.None;
+            if (_ignoreCase)
+            {
+                options |= RegexOptions.IgnoreCase;
+            }
+            if (_multiline)
+            {
+                options |= RegexOptions.Multiline;
+            }
+            if (_singleline)
+            {
+                options |= RegexOptions.Singleline;
+            }
+            if (_replacementCount == 0)
+            {
+                _replacementCount = -1;
+            }
+            Regex replaceRegex = new Regex(_regex, options);
 
             try
             {

@@ -3,7 +3,7 @@
 //     Copyright © 2006 Ignaz Kohlbecker
 // </copyright>
 //-----------------------------------------------------------------------
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Tests
 {

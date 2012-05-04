@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using NUnit.Framework;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Tests
 {

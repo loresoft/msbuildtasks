@@ -30,7 +30,7 @@
 //
 #endregion
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.JavaScript
 {

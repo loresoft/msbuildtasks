@@ -36,7 +36,7 @@ using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 using Microsoft.Win32;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Subversion
 {
@@ -375,6 +375,12 @@ namespace MSBuild.Community.Tasks.Subversion
         #endregion Protected Methods
 
         #region Task Overrides
+        /// <summary>
+        /// Runs the exectuable file with the specified task parameters.
+        /// </summary>
+        /// <returns>
+        /// true if the task runs successfully; otherwise, false.
+        /// </returns>
         public override bool Execute()
         {
             _outputBuffer.Length = 0; // clear buffer

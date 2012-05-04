@@ -37,7 +37,7 @@ using Microsoft.Build.Framework;
 using MSBuild.Community.Tasks.Properties;
 using System.Text.RegularExpressions;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.JavaScript
 {

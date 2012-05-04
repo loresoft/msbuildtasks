@@ -35,48 +35,171 @@ using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Tfs
 {
+    /// <summary>
+    /// A task for Team Foundation Server version control.
+    /// </summary>
     public class TfsClient : ToolTask
     {
 
+        /// <summary>
+        /// Gets or sets the Team Foundation Server command.
+        /// </summary>
         public string Command { get; set; }
 
+        /// <summary>
+        /// Gets or sets the files.
+        /// </summary>
         public ITaskItem[] Files { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is recursive.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if recursive; otherwise, <c>false</c>.
+        /// </value>
         public bool Recursive { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is all.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if all; otherwise, <c>false</c>.
+        /// </value>
         public bool All { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is overwrite.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if overwrite; otherwise, <c>false</c>.
+        /// </value>
         public bool Overwrite { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is override.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if override; otherwise, <c>false</c>.
+        /// </value>
         public bool Override { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is force.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if force; otherwise, <c>false</c>.
+        /// </value>
         public bool Force { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is preview.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if preview; otherwise, <c>false</c>.
+        /// </value>
         public bool Preview { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is remap.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if remap; otherwise, <c>false</c>.
+        /// </value>
         public bool Remap { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is silent.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if silent; otherwise, <c>false</c>.
+        /// </value>
         public bool Silent { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is saved.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if saved; otherwise, <c>false</c>.
+        /// </value>
         public bool Saved { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is validate.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if validate; otherwise, <c>false</c>.
+        /// </value>
         public bool Validate { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is bypass.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if bypass; otherwise, <c>false</c>.
+        /// </value>
         public bool Bypass { get; set; }
 
+        /// <summary>
+        /// Gets or sets the comment.
+        /// </summary>
         public string Comment { get; set; }
+        /// <summary>
+        /// Gets or sets the version.
+        /// </summary>
         public string Version { get; set; }
+        /// <summary>
+        /// Gets or sets the lock.
+        /// </summary>
         public string Lock { get; set; }
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
         public string Type { get; set; }
+        /// <summary>
+        /// Gets or sets the author.
+        /// </summary>
         public string Author { get; set; }
+        /// <summary>
+        /// Gets or sets the notes.
+        /// </summary>
         public string Notes { get; set; }
+        /// <summary>
+        /// Gets or sets the format.
+        /// </summary>
         public string Format { get; set; }
+        /// <summary>
+        /// Gets or sets the collection.
+        /// </summary>
         public string Collection { get; set; }
 
+        /// <summary>
+        /// Gets or sets the name of the user.
+        /// </summary>
         public string UserName { get; set; }
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
         public string Password { get; set; }
+        /// <summary>
+        /// Gets or sets the name of the workspace.
+        /// </summary>
         public string WorkspaceName { get; set; }
+        /// <summary>
+        /// Gets or sets the workspace owner.
+        /// </summary>
         public string WorkspaceOwner { get; set; }
+        /// <summary>
+        /// Gets or sets the name of the shelve set.
+        /// </summary>
         public string ShelveSetName { get; set; }
+        /// <summary>
+        /// Gets or sets the shelve set owner.
+        /// </summary>
         public string ShelveSetOwner { get; set; }
 
-        
+
+        /// <summary>
+        /// Gets or sets the changeset.
+        /// </summary>
         [Output]
         public string Changeset { get; set; }
+        /// <summary>
+        /// Gets or sets the server path.
+        /// </summary>
         [Output]
         public string ServerPath { get; set; }
         
@@ -86,12 +209,20 @@ namespace MSBuild.Community.Tasks.Tfs
             return string.Empty;
         }
 
+        /// <summary>
+        /// Generates the command.
+        /// </summary>
+        /// <param name="builder">The <see cref="CommandLineBuilder"/>.</param>
         protected virtual void GenerateCommand(CommandLineBuilder builder)
         {
             builder.AppendSwitch(Command);
             builder.AppendFileNamesIfNotNull(Files, " ");
         }
 
+        /// <summary>
+        /// Generates the arguments.
+        /// </summary>
+        /// <param name="builder">The <see cref="CommandLineBuilder"/>.</param>
         protected virtual void GenerateArguments(CommandLineBuilder builder)
         {
             builder.AppendSwitch("/noprompt");
@@ -214,7 +345,12 @@ namespace MSBuild.Community.Tasks.Tfs
 
             return commandLine.ToString();
         }
-      
+
+        /// <summary>
+        /// Parses a single line of text to identify any errors or warnings in canonical format.
+        /// </summary>
+        /// <param name="singleLine">A single line of text for the method to parse.</param>
+        /// <param name="messageImportance">A value of <see cref="T:Microsoft.Build.Framework.MessageImportance"/> that indicates the importance level with which to log the message.</param>
         protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
         {
           bool isError = messageImportance == StandardErrorLoggingImportance;

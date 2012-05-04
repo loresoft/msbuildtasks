@@ -263,11 +263,11 @@ Ex:
         <code>
           <![CDATA[<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<appSettings>
-		<add key="ItemsPerPage" value="10" />
-		<add key="EnableCaching" value="true" />
-		<add key="DefaultServer" value="TIGRIS" />
-	</appSettings>
+  <appSettings>
+    <add key="ItemsPerPage" value="10" />
+    <add key="EnableCaching" value="true" />
+    <add key="DefaultServer" value="TIGRIS" />
+  </appSettings>
     <system.web>
         <compilation defaultLanguage="c#" debug="true" />
         <customErrors mode="Off" />
@@ -421,7 +421,7 @@ Ex:
 
 <XmlQuery Lines="@(FileContents)"
     XPath = "/configuration/system.web/compilation/@defaultLanguage">
-	<Output TaskParameter="Values" PropertyName="CompilationLanguage" />
+  <Output TaskParameter="Values" PropertyName="CompilationLanguage" />
 </XmlQuery>
 
 <Message Text="The default language is $(CompilationLanguage)." />
@@ -434,7 +434,7 @@ Ex:
         <![CDATA[
 <XmlQuery XmlFileName="$(MSBuildProjectDirectory)\web.config"
     XPath = "/configuration/system.web/compilation">
-	<Output TaskParameter="Values" ItemName="CompilationElement" />
+  <Output TaskParameter="Values" ItemName="CompilationElement" />
 </XmlQuery>
 
 <Message Text="The default language is: $(CompilationElement.defaultLanguage)." />
@@ -452,7 +452,7 @@ Ex:
 
 <XmlQuery Lines="@(FileContents)"
     XPath = "/configuration/singleValue/LastName">
-	<Output TaskParameter="Values" PropertyName="LastNameElement" />
+  <Output TaskParameter="Values" PropertyName="LastNameElement" />
 </XmlQuery>
 
 <Message Text="The last name is %(LastNameElement._value)" />
@@ -468,7 +468,7 @@ Ex:
         <![CDATA[
 <XmlMassUpdate ContentFile="web.config"
   SubstitutionsRoot="/configuration/substitutions"
- 	NamespaceDefinitions = "soap=http://www.w3.org/2001/12/soap-envelope;x=http://www.w3.org/1999/XSL/Transform">
+  NamespaceDefinitions = "soap=http://www.w3.org/2001/12/soap-envelope;x=http://www.w3.org/1999/XSL/Transform">
 />]]>
       </code>
     </example>

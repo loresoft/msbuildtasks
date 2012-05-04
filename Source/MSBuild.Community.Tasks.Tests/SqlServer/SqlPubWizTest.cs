@@ -5,7 +5,7 @@ using NUnit.Framework;
 using MSBuild.Community.Tasks.SqlServer;
 using Microsoft.Build.Utilities;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Tests.SqlServer
 {

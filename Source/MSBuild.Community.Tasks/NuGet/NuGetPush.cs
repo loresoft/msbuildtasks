@@ -30,7 +30,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.NuGet
 {

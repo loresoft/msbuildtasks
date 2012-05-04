@@ -35,7 +35,7 @@ using Microsoft.Build.Framework;
 using System.ServiceProcess;
 using Service = System.ServiceProcess.ServiceController;
 
-// $Id$
+
 
 
 namespace MSBuild.Community.Tasks

@@ -36,7 +36,7 @@ using System.IO;
 using System.Collections;
 using MSBuild.Community.Tasks.Properties;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks
 {

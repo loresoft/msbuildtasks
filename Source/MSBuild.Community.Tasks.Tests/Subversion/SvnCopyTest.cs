@@ -1,4 +1,4 @@
-// $Id$
+
 
 using MSBuild.Community.Tasks.Subversion;
 using NUnit.Framework;

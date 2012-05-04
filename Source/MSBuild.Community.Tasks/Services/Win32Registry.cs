@@ -1,4 +1,4 @@
-// $Id$
+
 using System;
 using Microsoft.Win32;
 

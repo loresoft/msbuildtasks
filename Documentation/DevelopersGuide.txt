@@ -47,8 +47,8 @@ Before writing your own task
     to a local working copy <msbuildtasks> of your choice.
 
 2.  Verify that you can build the project on the command line:
-	** Important ** You must run the build from the command line before attempting to
-	open the Visual Studio solution file, in order to create some required files.
+    ** Important ** You must run the build from the command line before attempting to
+    open the Visual Studio solution file, in order to create some required files.
 
     - Add the directory of MSBuild.exe to your PATH environment variable, e.g.
       C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727.
@@ -116,20 +116,20 @@ Writing your own task
 
 4.  Implement your task
 
-	- Insert the character sequence '$', 'Id', '$'
-	  (not concatenated here to avoid expansion by svn in this text itself)
-	  somewhere in the fileheader comment.
+    - Insert the character sequence '$', 'Id', '$'
+      (not concatenated here to avoid expansion by svn in this text itself)
+      somewhere in the fileheader comment.
 
-	- When adding source files to the repository, set the metadata "svn:keywords" to "Id".
-	  
-	  From the command line: svn ps svn:keywords "Id" myNewTask.cs
-	  
-	  With TortoiseSVN: Right-click the myNewTask.cs in Explorer, choose Properties, change
-	  to Subversion tab, choose svn-keywords from dropdown in Properties section, 
-	  enter "Id" in the text box, and press the Set button.
+    - When adding source files to the repository, set the metadata "svn:keywords" to "Id".
+      
+      From the command line: svn ps svn:keywords "Id" myNewTask.cs
+      
+      With TortoiseSVN: Right-click the myNewTask.cs in Explorer, choose Properties, change
+      to Subversion tab, choose svn-keywords from dropdown in Properties section, 
+      enter "Id" in the text box, and press the Set button.
 
-	- Avoid Console.WriteLine, use Log.LogMessage instead.
-	
+    - Avoid Console.WriteLine, use Log.LogMessage instead.
+    
     - For log messages in your task,
       use resource strings instead of hard coded strings,
       e.g. "Log.LogError(Properties.Resources.XsltNoInputFiles);".

@@ -1,4 +1,4 @@
-// $Id$
+
 using System;
 using NUnit.Framework;
 using MSBuild.Community.Tasks.Xml;
@@ -133,7 +133,7 @@ namespace MSBuild.Community.Tasks.Tests.Xml
             task = new XmlQuery();
             task.BuildEngine = new MockBuild();
 
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
             task.XmlFileName = System.IO.Path.Combine(prjRootPath, @"Source\Subversion.proj");
             task.XPath = "count(/n:Project/n:PropertyGroup/*)";
             task.NamespaceDefinitions = new ITaskItem[] { 
@@ -149,7 +149,7 @@ namespace MSBuild.Community.Tasks.Tests.Xml
         public void SpecifyBothLinesAndXmlFileName_ReturnFalse()
         {
             setupTask(testXml);
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
             task.XmlFileName = System.IO.Path.Combine(prjRootPath, @"Source\Subversion.proj");
             task.XPath = "count(/configuration/appSettings/*)";
             Assert.IsFalse(task.Execute(), "Should have failed to execute.");

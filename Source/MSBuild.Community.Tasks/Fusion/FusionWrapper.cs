@@ -33,7 +33,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Fusion
 {

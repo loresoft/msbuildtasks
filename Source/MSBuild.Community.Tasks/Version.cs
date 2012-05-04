@@ -34,7 +34,7 @@ using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 using System.IO;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks
 {

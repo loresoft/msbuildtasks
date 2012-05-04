@@ -29,7 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Subversion
 {

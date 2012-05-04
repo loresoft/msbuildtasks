@@ -33,7 +33,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Build.Utilities;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.NuGet
 {

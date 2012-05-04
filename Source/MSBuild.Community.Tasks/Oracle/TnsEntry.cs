@@ -1,4 +1,4 @@
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Oracle
 {

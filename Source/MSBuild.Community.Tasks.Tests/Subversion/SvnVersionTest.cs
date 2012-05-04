@@ -1,4 +1,4 @@
-// $Id$
+
 
 using System.IO;
 using MSBuild.Community.Tasks.Subversion;
@@ -18,7 +18,7 @@ namespace MSBuild.Community.Tasks.Tests.Subversion
             SvnVersion task = new SvnVersion();
             task.BuildEngine = new MockBuild();
 
-            string prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
             task.LocalPath = Path.Combine(prjRootPath, @"Source");
 
             Assert.IsTrue(task.Execute(), "Execute Failed");

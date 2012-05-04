@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("A")]
 [assembly: AssemblyDescription("Test assembly for the ILMerge task")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("http://msbuildtasks.tigris.org/")]
+[assembly: AssemblyCompany("https://github.com/loresoft/msbuildtasks/")]
 [assembly: AssemblyProduct("MSBuild.Community.Tasks")]
 [assembly: AssemblyCopyright("Copyright © Ignaz Kohlbecker 2006")]
 [assembly: AssemblyTrademark("")]

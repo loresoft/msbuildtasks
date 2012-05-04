@@ -49,7 +49,7 @@
 
   <?define PackageDescription = "MSBuild Community Tasks is an open source project for MSBuild tasks." ?>
   <?define PackageComments = "MSBuild Community Tasks $(var.VersionNumberUserVisible)$(var.SpaceParenDebug)" ?>
-  <?define PackageUrl = "http://msbuildtasks.tigris.org/"?>  
+  <?define PackageUrl = "https://github.com/loresoft/msbuildtasks/"?>  
   <?define PackageManufacturer = "MSBuild Community Tasks" ?>
 
   <!-- GUIDs -->

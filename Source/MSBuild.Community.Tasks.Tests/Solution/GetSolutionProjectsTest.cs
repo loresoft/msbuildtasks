@@ -57,7 +57,7 @@ namespace MSBuild.Community.Tasks.Tests
         {
             GetSolutionProjects task = new GetSolutionProjects();
             task.BuildEngine = new MockBuild();
-            task.Solution = Path.Combine(TaskUtility.getProjectRootDirectory(true), @"Source\MSBuild.Community.Tasks.Tests\Solution\TestSolution.sln");
+            task.Solution = Path.Combine(TaskUtility.GetProjectRootDirectory(true), @"Source\MSBuild.Community.Tasks.Tests\Solution\TestSolution.sln");
 
             Assert.IsTrue(task.Execute());
 
@@ -99,7 +99,7 @@ namespace MSBuild.Community.Tasks.Tests
         {
             GetSolutionProjects task = new GetSolutionProjects();
             task.BuildEngine = new MockBuild();
-            string msbuildProjectDirectory = TaskUtility.getProjectRootDirectory(true);
+            string msbuildProjectDirectory = TaskUtility.GetProjectRootDirectory(true);
             string solutionDirectory = Path.Combine(msbuildProjectDirectory, @"Source\MSBuild.Community.Tasks.Tests\Solution");
             task.Solution = Path.Combine(solutionDirectory, @"TestSolution.sln");
             Assert.IsTrue(task.Execute());
@@ -120,7 +120,7 @@ namespace MSBuild.Community.Tasks.Tests
             // http://msdn2.microsoft.com/en-us/library/ms164313.aspx
             GetSolutionProjects task = new GetSolutionProjects();
             task.BuildEngine = new MockBuild();
-            task.Solution = Path.Combine(TaskUtility.getProjectRootDirectory(true), @"Source\MSBuild.Community.Tasks.Tests\Solution\TestSolution.sln");
+            task.Solution = Path.Combine(TaskUtility.GetProjectRootDirectory(true), @"Source\MSBuild.Community.Tasks.Tests\Solution\TestSolution.sln");
             Assert.IsTrue(task.Execute());
 
             Assert.AreEqual("TestProject1", task.Output[0].GetMetadata("Filename"));

@@ -131,6 +131,9 @@
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.NuGet.NuGetPack" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.NuGet.NuGetPush" />
 
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Git.GitClient" />
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Git.GitVersion" />
+
   <ItemGroup>
     <FxCopRuleAssemblies Include="UsageRules.dll"/>
     <FxCopRuleAssemblies Include="SecurityRules.dll"/>

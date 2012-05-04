@@ -31,7 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Math
 {

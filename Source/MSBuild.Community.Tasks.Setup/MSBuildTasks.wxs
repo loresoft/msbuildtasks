@@ -152,10 +152,6 @@
         <File Id="MSBuild.Community.Tasks.xsd" Name="MSBuild.Community.Tasks.xsd" KeyPath="yes" />
       </Component>
       
-      <Component Id="MSBuildTasksHelp" Guid="00951D3A-C401-499c-BB5B-7636AC12364D">
-        <File Id="MSBuild.Community.Tasks.chm" Name="MSBuild.Community.Tasks.chm" />
-      </Component>
-      
       <Component Id="MSBuildTasksVS2005" Guid="15EE7B53-F94D-4c33-839F-02521C896A72">
         <RegistryKey Root="HKLM" Key="Software\Microsoft\VisualStudio\8.0\MSBuild\SafeImports">
           <RegistryValue Name="MSBuildCommunityTasks" Value="[INSTALLDIR]MSBuild.Community.Tasks.Targets" Type="string" KeyPath="yes" />
@@ -276,15 +272,6 @@
       <ComponentRef Id="MSBuildTasksFiles" />
       <ComponentRef Id="MSBuildTasksSchema" />
       <ComponentRef Id="MSBuild.Community.Tasks.dll.gac" />
-
-      <Feature Id="MSBuildTasksHelpFeature"
-               Title="Tasks Help File"
-               Description="Install the help file for the Community Tasks."
-               AllowAdvertise="no"
-               Display="expand"
-               Level="1">
-        <ComponentRef Id="MSBuildTasksHelp" />
-      </Feature>
 
       <Feature Id="MSBuildTasksVS2005Feature"
                Title="Visual Studio 2005 Integration"

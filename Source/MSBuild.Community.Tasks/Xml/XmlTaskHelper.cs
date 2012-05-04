@@ -1,4 +1,4 @@
-// $Id$
+
 using Microsoft.Build.Framework;
 using System.Xml;
 using System;

@@ -36,7 +36,7 @@ using Microsoft.Build.Framework;
 using System.Reflection;
 using MSBuild.Community.Tasks.Fusion;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks
 {

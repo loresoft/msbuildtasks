@@ -36,7 +36,7 @@ using Microsoft.Build.Framework;
 using System.Data.SqlClient;
 using System.IO;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks
 {

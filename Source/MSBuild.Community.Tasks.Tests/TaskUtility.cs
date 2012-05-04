@@ -1,4 +1,4 @@
-// $Id$
+
 
 using System;
 using System.IO;
@@ -133,7 +133,7 @@ namespace MSBuild.Community.Tasks.Tests
         /// in case the project root directory cannot be found.</param>
         /// <returns>Return the project root directory or <c>null</c>
         /// if it cannot be determined.</returns>
-        public static string getProjectRootDirectory(bool assertIgnoreOnFailure)
+        public static string GetProjectRootDirectory(bool assertIgnoreOnFailure)
         {
             string testDir = TaskUtility.TestDirectory;
             string searchPath = (TaskUtility.CalledInBuildDirectory) ? @"build\" : @"source\";

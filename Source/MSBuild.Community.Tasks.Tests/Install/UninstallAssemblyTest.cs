@@ -1,4 +1,4 @@
-// $Id$
+
 
 using System;
 using MSBuild.Community.Tasks.Install;

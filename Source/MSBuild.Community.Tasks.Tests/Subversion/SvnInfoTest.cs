@@ -21,7 +21,7 @@ namespace MSBuild.Community.Tasks.Tests.Subversion
         public void TestInfoReturnValues()
         {
             SvnInfo info = new SvnInfo();
-            info.LocalPath = Path.Combine(TaskUtility.getProjectRootDirectory(true), "Source");
+            info.LocalPath = Path.Combine(TaskUtility.GetProjectRootDirectory(true), "Source");
             info.BuildEngine = new MockBuild();
             Assert.IsTrue(info.Execute());
 
@@ -39,7 +39,7 @@ namespace MSBuild.Community.Tasks.Tests.Subversion
         public void TestInfoCommand()
         {
             SvnInfo info = new SvnInfo();
-            string localPath = Path.Combine(TaskUtility.getProjectRootDirectory(true), "Source");
+            string localPath = Path.Combine(TaskUtility.GetProjectRootDirectory(true), "Source");
             info.LocalPath = localPath;
 
             string expectedCommand = String.Format("info \"{0}\" --xml --non-interactive --no-auth-cache", localPath);

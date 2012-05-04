@@ -1,4 +1,4 @@
-// $Id$
+
 
 using System;
 using Microsoft.Win32;
@@ -159,7 +159,7 @@ namespace MSBuild.Community.Tasks.Tests.Oracle
             {
                 SetupResult.For(fileSystem.ReadTextFromFile(specifiedFile)).Return(SAMPLE_FILE);
                 fileSystem.WriteTextToFile(specifiedFile, SAMPLE_FILE);
-				LastCall.Constraints(Rhino.Mocks.Constraints.Is.Equal(specifiedFile), Rhino.Mocks.Constraints.Is.Anything());
+                LastCall.Constraints(Rhino.Mocks.Constraints.Is.Equal(specifiedFile), Rhino.Mocks.Constraints.Is.Anything());
             }
 
             Assert.IsTrue(task.Execute());

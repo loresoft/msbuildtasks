@@ -3,7 +3,7 @@
 //     Copyright © 2006 Ignaz Kohlbecker
 // </copyright>
 //-----------------------------------------------------------------------
-// $Id$
+
 using System;
 using System.IO;
 using Microsoft.Build.Framework;

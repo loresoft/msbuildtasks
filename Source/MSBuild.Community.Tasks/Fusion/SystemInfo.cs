@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Fusion
 {

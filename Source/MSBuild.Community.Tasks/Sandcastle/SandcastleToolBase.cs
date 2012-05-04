@@ -36,7 +36,7 @@ using Microsoft.Build.Utilities;
 using Microsoft.Win32;
 using System.Collections.Specialized;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Sandcastle
 {

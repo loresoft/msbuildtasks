@@ -3,7 +3,7 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using NUnit.Framework;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Tests
 {

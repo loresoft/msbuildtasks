@@ -1,4 +1,4 @@
-// $Id$
+
 
 using System;
 using System.IO;
@@ -18,7 +18,7 @@ namespace MSBuild.Community.Tasks.Tests
 
         public XmlUpdateTest()
         {
-            prjRootPath = TaskUtility.getProjectRootDirectory(true);
+            prjRootPath = TaskUtility.GetProjectRootDirectory(true);
             testFile = Path.Combine(prjRootPath, @"Source\Test\Subversion.proj");
         }
 

@@ -38,7 +38,7 @@ using System.Xml;
 using System.Reflection;
 using MSBuild.Community.Tasks.HtmlHelp;
 
-// $Id$
+
 
 namespace MSBuild.Community.Tasks.Sandcastle
 {

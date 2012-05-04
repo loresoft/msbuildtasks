@@ -5,8 +5,12 @@
 *.[Cc]ache
 *[Rr]esharper*
 Bootstrap
+packages
 [Bb]uild
 Temp
-*.zip
 TestResults
 Test
+*.zip
+*.nupkg
+*.msi
+*.chm
