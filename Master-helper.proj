@@ -50,8 +50,7 @@
   </Target>
 
   <Target Name="Version" DependsOnTargets="Initialize">
-    <GitVersion LocalPath="$(MSBuildProjectDirectory)" 
-                ToolPath="$(ProgramFiles)\Git\bin">
+    <GitVersion LocalPath="$(MSBuildProjectDirectory)">
       <Output TaskParameter="CommitHash" PropertyName="CommitHash" />
     </GitVersion>
 
