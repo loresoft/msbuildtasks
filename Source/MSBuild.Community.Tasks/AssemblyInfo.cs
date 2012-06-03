@@ -155,12 +155,35 @@ namespace MSBuild.Community.Tasks
             _codeLangMapping["c++"] = CPP;
             _codeLangMapping["c++/cli"] = CPP;
             _codeLangMapping["c plus plus"] = CPP;
+
+            _attributeNamespaces[CLSCompliantName] = "System";
+            _attributeNamespaces[ComVisibleName] = "System.Runtime.InteropServices";
+            _attributeNamespaces[GuidName] = "System.Runtime.InteropServices";
+            _attributeNamespaces[AssemblyTitleName] = "System.Reflection";
+            _attributeNamespaces[AssemblyDescriptionName] = "System.Reflection";
+            _attributeNamespaces[AssemblyConfigurationName] = "System.Reflection";
+            _attributeNamespaces[AssemblyCompanyName] = "System.Reflection";
+            _attributeNamespaces[AssemblyProductName] = "System.Reflection";
+            _attributeNamespaces[AssemblyCopyrightName] = "System.Reflection";
+            _attributeNamespaces[AssemblyTrademarkName] = "System.Reflection";
+            _attributeNamespaces[AssemblyCultureName] = "System.Reflection";
+            _attributeNamespaces[AssemblyVersionName] = "System.Reflection";
+            _attributeNamespaces[AssemblyFileVersionName] = "System.Reflection";
+            _attributeNamespaces[AssemblyInformationalVersionName] = "System.Reflection";
+            _attributeNamespaces[AssemblyKeyFileName] = "System.Reflection";
+            _attributeNamespaces[AssemblyKeyNameName] = "System.Reflection";
+            _attributeNamespaces[AssemblyDelaySignName] = "System.Reflection";
+            _attributeNamespaces[InternalsVisibleToName] = "System.Runtime.CompilerServices";
+            _attributeNamespaces[AllowPartiallyTrustedCallersName] = "System.Security";
         }
         #endregion
 
         #region Type Fields
 
         private readonly static Dictionary<string, string> _codeLangMapping
+            = new Dictionary<string, string>();
+
+        private readonly static Dictionary<string, string> _attributeNamespaces
             = new Dictionary<string, string>();
 
         private static readonly string[] booleanAttributes = { 
@@ -186,7 +209,6 @@ namespace MSBuild.Community.Tasks
 
         #region Fields
         private readonly Dictionary<string, string> _attributes;
-        private readonly string[] _imports;
         private string _outputFile;
 
         #endregion Fields
@@ -198,7 +220,6 @@ namespace MSBuild.Community.Tasks
         public AssemblyInfo()
         {
             _attributes = new Dictionary<string, string>();
-            _imports = new string[] { "System", "System.Reflection", "System.Resources", "System.Runtime.CompilerServices", "System.Runtime.InteropServices" };
             _outputFile = DEFAULT_OUTPUT_FILE;
         }
 
@@ -495,12 +516,6 @@ namespace MSBuild.Community.Tasks
 
             CodeCompileUnit codeCompileUnit = new CodeCompileUnit();
             CodeNamespace codeNamespace = new CodeNamespace();
-
-            foreach (string import in _imports)
-            {
-                codeNamespace.Imports.Add(new CodeNamespaceImport(import));
-            }
-
             codeCompileUnit.Namespaces.Add(codeNamespace);
 
             // Add each configured attribute
@@ -632,7 +647,7 @@ namespace MSBuild.Community.Tasks
         private static void AddAttributeToCodeDom(CodeCompileUnit codeCompileUnit, string name, object value)
         {
             var valueExpression = new CodePrimitiveExpression(value);
-            var codeAttributeDeclaration = new CodeAttributeDeclaration(name);
+            var codeAttributeDeclaration = new CodeAttributeDeclaration(_attributeNamespaces[name] + "." + name);
             codeAttributeDeclaration.Arguments.Add(new CodeAttributeArgument(valueExpression));
             // add assembly-level argument to code compile unit
             codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
@@ -640,7 +655,7 @@ namespace MSBuild.Community.Tasks
 
         private static void AddMarkerAttributeToCodeDom(CodeCompileUnit codeCompileUnit, string name)
         {
-            var codeAttributeDeclaration = new CodeAttributeDeclaration(name);
+            var codeAttributeDeclaration = new CodeAttributeDeclaration(_attributeNamespaces[name] + "." + name);
             // add assembly-level argument to code compile unit
             codeCompileUnit.AssemblyCustomAttributes.Add(codeAttributeDeclaration);
         }
@@ -661,7 +676,7 @@ namespace MSBuild.Community.Tasks
         private static void AddSecurityPermissionAssemblyAttribute(CodeCompileUnit codeCompileUnit, String name, String value)
         {
 
-            var codeAttributeDeclaration = new CodeAttributeDeclaration("SecurityPermissionAttribute");
+            var codeAttributeDeclaration = new CodeAttributeDeclaration("System.Security.Permissions.SecurityPermissionAttribute");
 
             var requestMinimum = new CodeAttributeArgument(
                 new CodeFieldReferenceExpression(
@@ -701,7 +716,7 @@ namespace MSBuild.Community.Tasks
         
         private void AddAssemblyLanguageCodeAttribute(CodeCompileUnit codeCompileUnit)
         {
-            var codeAttributeDeclaration = new CodeAttributeDeclaration("NeutralResourcesLanguage");
+            var codeAttributeDeclaration = new CodeAttributeDeclaration("System.Resources.NeutralResourcesLanguage");
             codeAttributeDeclaration.Arguments.Add(
                 new CodeAttributeArgument(
                     new CodePrimitiveExpression(NeutralResourcesLanguage)));
