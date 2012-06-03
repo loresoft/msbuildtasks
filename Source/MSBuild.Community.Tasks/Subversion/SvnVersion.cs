@@ -203,7 +203,7 @@ namespace MSBuild.Community.Tasks.Subversion
 		/// <returns>The name of the executable file to run.</returns>
 		protected override string ToolName
 		{
-			get { return "svnversion.exe"; }
+            get { return ToolPathUtil.MakeToolName("svnversion"); }
 		}
 
 		/// <summary>
