@@ -38,8 +38,6 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using MSBuild.Community.Tasks.Properties;
 
-
-
 namespace MSBuild.Community.Tasks
 {
     /// <summary>

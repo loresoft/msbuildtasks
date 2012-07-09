@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("https://github.com/loresoft/msbuildtasks/")]
 [assembly: AssemblyProduct("MSBuild.Community.Tasks")]
 [assembly: AssemblyCopyright("Copyright © 2012 MSBuild Community Tasks Project")]
-[assembly: AssemblyConfiguration("Commit b40e37a")]
+[assembly: AssemblyConfiguration("Commit 8663c5c")]
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(false)]
 [assembly: AssemblyVersion("1.4.0.0")]
@@ -34,7 +34,7 @@ internal sealed partial class ThisAssembly {
     
     internal const string AssemblyCopyright = "Copyright © 2012 MSBuild Community Tasks Project";
     
-    internal const string AssemblyConfiguration = "Commit b40e37a";
+    internal const string AssemblyConfiguration = "Commit 8663c5c";
     
     internal const string AssemblyVersion = "1.4.0.0";
     

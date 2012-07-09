@@ -12,47 +12,47 @@
     <MakeDir Directories="$(MSBuildProjectDirectory)\Test" />
 
     <AssemblyInfo CodeLanguage="CS"
-			OutputFile="$(MSBuildProjectDirectory)\Test\VersionInfo.cs"
-			AssemblyVersion="1.0.0.0"
-			AssemblyFileVersion="1.0.0.0" />
+            OutputFile="$(MSBuildProjectDirectory)\Test\VersionInfo.cs"
+            AssemblyVersion="1.0.0.0"
+            AssemblyFileVersion="1.0.0.0" />
 
     <AssemblyInfo CodeLanguage="VB"
-			OutputFile="$(MSBuildProjectDirectory)\Test\VersionInfo.vb"
-			AssemblyVersion="1.0.0.0"
-			AssemblyFileVersion="1.0.0.0"/>
+            OutputFile="$(MSBuildProjectDirectory)\Test\VersionInfo.vb"
+            AssemblyVersion="1.0.0.0"
+            AssemblyFileVersion="1.0.0.0"/>
 
     <AssemblyInfo CodeLanguage="CS"
-			OutputFile="$(MSBuildProjectDirectory)\Test\GlobalInfo2.cs"
-			GenerateClass="true"
-      AssemblyTitle="AssemblyInfoTask"
-			AssemblyDescription="AssemblyInfo Description"
-			AssemblyConfiguration=""
-			AssemblyCompany="Company Name, LLC"
-			AssemblyProduct="AssemblyInfoTask"
-			AssemblyCopyright="Copyright (c) Company Name, LLC 2005"
-			AssemblyTrademark=""
-			ComVisible="false"
-			CLSCompliant="true"
-			Guid="d038566a-1937-478a-b5c5-b79c4afb253d"
-			AssemblyVersion="1.0.0.0"
-			AssemblyFileVersion="1.0.0.0"
-      NeutralResourcesLanguage="en-US"/>
+            OutputFile="$(MSBuildProjectDirectory)\Test\GlobalInfo2.cs"
+            GenerateClass="true"
+            AssemblyTitle="AssemblyInfoTask"
+            AssemblyDescription="AssemblyInfo Description"
+            AssemblyConfiguration=""
+            AssemblyCompany="Company Name, LLC"
+            AssemblyProduct="AssemblyInfoTask"
+            AssemblyCopyright="Copyright (c) Company Name, LLC 2005"
+            AssemblyTrademark=""
+            ComVisible="false"
+            CLSCompliant="true"
+            Guid="d038566a-1937-478a-b5c5-b79c4afb253d"
+            AssemblyVersion="1.0.0.0"
+            AssemblyFileVersion="1.0.0.0"
+            NeutralResourcesLanguage="en-US"/>
     
     <AssemblyInfo CodeLanguage="CS"
-			OutputFile="$(MSBuildProjectDirectory)\Test\GlobalInfo3.cs"
-			GenerateClass="true"
+            OutputFile="$(MSBuildProjectDirectory)\Test\GlobalInfo3.cs"
+            GenerateClass="true"
       AssemblyTitle="AssemblyInfoTask"
-			AssemblyDescription="AssemblyInfo Description"
-			AssemblyConfiguration=""
-			AssemblyCompany="Company Name, LLC"
-			AssemblyProduct="AssemblyInfoTask"
-			AssemblyCopyright="Copyright (c) Company Name, LLC 2005"
-			AssemblyTrademark=""
-			ComVisible="false"
-			CLSCompliant="true"
-			Guid="d038566a-1937-478a-b5c5-b79c4afb253d"
-			AssemblyVersion="1.0.0.0"
-			AssemblyFileVersion="1.0.0.0"
+            AssemblyDescription="AssemblyInfo Description"
+            AssemblyConfiguration=""
+            AssemblyCompany="Company Name, LLC"
+            AssemblyProduct="AssemblyInfoTask"
+            AssemblyCopyright="Copyright (c) Company Name, LLC 2005"
+            AssemblyTrademark=""
+            ComVisible="false"
+            CLSCompliant="true"
+            Guid="d038566a-1937-478a-b5c5-b79c4afb253d"
+            AssemblyVersion="1.0.0.0"
+            AssemblyFileVersion="1.0.0.0"
       NeutralResourcesLanguage="en-US"
       UltimateResourceFallbackLocation="System.Resources.UltimateResourceFallbackLocation.MainAssembly" />
 
@@ -60,10 +60,10 @@
 
   <Target Name="Mail">
     <Mail SmtpServer="localhost"
-			To="user@email.com"
-			From="from@email.com"
-			Subject="Test Mail Task"
-			Body="This is a test of the mail task." />
+            To="user@email.com"
+            From="from@email.com"
+            Subject="Test Mail Task"
+            Body="This is a test of the mail task." />
   </Target>
 
   <ItemGroup>
@@ -89,13 +89,13 @@
     <MakeDir Directories="Test" />
 
     <Zip Files="@(ZipFiles)"
-			ZipFileName="Test\MSBuild.Community.Tasks.zip" />
+            ZipFileName="Test\MSBuild.Community.Tasks.zip" />
 
   </Target>
 
   <Target Name="Unzip" DependsOnTargets="Zip">
     <Unzip ZipFileName="Test\MSBuild.Community.Tasks.zip"
-			TargetDirectory="Test\Backup"/>
+            TargetDirectory="Test\Backup"/>
   </Target>
 
   <Target Name="Math">
@@ -140,34 +140,34 @@
 
   <Target Name="NDoc">
     <NDoc Documenter="MSDN"
-			ProjectFilePath="MSBuild.Community.Tasks.ndoc"
-			WorkingDirectory="..\Documentation"/>
+            ProjectFilePath="MSBuild.Community.Tasks.ndoc"
+            WorkingDirectory="..\Documentation"/>
 
     <Copy SourceFiles="..\Documentation\doc\MSBuild.Community.Tasks.chm"
-			DestinationFiles="..\Documentation\MSBuild.Community.Tasks.chm" />
+            DestinationFiles="..\Documentation\MSBuild.Community.Tasks.chm" />
 
     <RemoveDir Directories="...\Documentation\doc" />
   </Target>
 
   <Target Name="Registry">
     <RegistryRead
-			KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework"
-			ValueName="InstallRoot">
+            KeyName="HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework"
+            ValueName="InstallRoot">
       <Output TaskParameter="Value" PropertyName="InstallRoot" />
     </RegistryRead>
     <Message Text="InstallRoot: $(InstallRoot)"/>
 
     <RegistryWrite
-			KeyName="HKEY_CURRENT_USER\SOFTWARE\MSBuildTasks"
-			ValueName="RegistryWrite"
-			Value="Test Write" />
+            KeyName="HKEY_CURRENT_USER\SOFTWARE\MSBuildTasks"
+            ValueName="RegistryWrite"
+            Value="Test Write" />
 
   </Target>
 
   <Target Name="FTP" DependsOnTargets="Zip">
     <FtpUpload
-			LocalFile="Test\MSBuild.Community.Tasks.zip"
-			RemoteUri="ftp://localhost/MSBuild.Community.Tasks.zip" />
+            LocalFile="Test\MSBuild.Community.Tasks.zip"
+            RemoteUri="ftp://localhost/MSBuild.Community.Tasks.zip" />
 
   </Target>
 
@@ -176,9 +176,9 @@
     <Copy SourceFiles="Subversion.proj" DestinationFolder="Test\Subversion.proj" />
 
     <XmlRead Prefix="n"
-			Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
-			XPath="/n:Project/n:Target/@Name"
-			XmlFileName="Test\Subversion.proj">
+            Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
+            XPath="/n:Project/n:Target/@Name"
+            XmlFileName="Test\Subversion.proj">
       <Output TaskParameter="Value" PropertyName="BuildTargets" />
     </XmlRead>
     <Message Text="Build Targets: $(BuildTargets)"/>
@@ -186,10 +186,10 @@
 
 
     <XmlUpdate Prefix="n"
-			Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
-			XPath="/n:Project/n:PropertyGroup/n:TestUpdate"
-			XmlFileName="Test\Subversion.proj"
-			Value="Test from $(MSBuildProjectFile)"/>
+            Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
+            XPath="/n:Project/n:PropertyGroup/n:TestUpdate"
+            XmlFileName="Test\Subversion.proj"
+            Value="Test from $(MSBuildProjectFile)"/>
 
   </Target>
 
@@ -202,8 +202,8 @@
 
   <Target Name="FileUpdate" DependsOnTargets="Version">
     <FileUpdate Files="Test\version.txt"
-			Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
-			ReplacementText="$1.$2.$3.123" />
+            Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
+            ReplacementText="$1.$2.$3.123" />
   </Target>
 
   <Target Name="Service">
@@ -219,7 +219,7 @@
   <Target Name="WebDownload">
     <MakeDir Directories="Test" />
     <WebDownload FileUri="http://www.microsoft.com/default.aspx"
-			FileName="Test\microsoft.html" />
+            FileName="Test\microsoft.html" />
   </Target>
 
   <Target Name="TaskSchema">
@@ -316,13 +316,13 @@
       RegularExpressions="@(RegexPatterns)"
       Namespace="MSBuild.RegularExpressions"
       AssemblyName="MSBuild.Community.RegularExpressions.dll"
-			AssemblyTitle="MSBuild.Community.RegularExpressions"
-			AssemblyDescription="MSBuild Community Tasks Regular Expressions"
-			AssemblyCompany="Company Name, LLC"
-			AssemblyProduct="MSBuildTasks"
-			AssemblyCopyright="Copyright (c) MSBuildTasks 2008"
-			AssemblyVersion="1.0.0.0"
-			AssemblyFileVersion="1.0.0.0" />
+            AssemblyTitle="MSBuild.Community.RegularExpressions"
+            AssemblyDescription="MSBuild Community Tasks Regular Expressions"
+            AssemblyCompany="Company Name, LLC"
+            AssemblyProduct="MSBuildTasks"
+            AssemblyCopyright="Copyright (c) MSBuildTasks 2008"
+            AssemblyVersion="1.0.0.0"
+            AssemblyFileVersion="1.0.0.0" />
 
     <RegexCompiler
       OutputDirectory="Test"
