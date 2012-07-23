@@ -315,7 +315,7 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         protected override string ToolName
         {
-            get { return @"ILMerge.exe"; }
+            get { return ToolPathUtil.MakeToolName("ILMerge"); }
         }
 
         /// <summary>
@@ -328,9 +328,11 @@ namespace MSBuild.Community.Tasks
         /// <returns>Returns [ProgramFiles]\Microsoft\ILMerge.exe.</returns>
         protected override string GenerateFullPathToTool()
         {
-            return Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                @"Microsoft\ILMerge\" + ToolName);
+            string toolPath =
+                ToolPathUtil.FindInProgramFiles(ToolName, @"Microsoft\ILMerge") ??
+                ToolPathUtil.FindInPath(ToolName);
+
+            return Path.Combine(toolPath, ToolName);
         }
 
         /// <summary>

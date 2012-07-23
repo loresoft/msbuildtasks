@@ -465,50 +465,17 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <returns></returns>
         public static string FindToolPath(string toolName)
         {
-            string toolPath = null;
-            // 1) check registry
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\" + toolName, false);
-            if (key != null)
-            {
-                string possiblePath = key.GetValue(null) as string;
-                if (SafeFileExists(possiblePath))
-                    toolPath = Path.GetDirectoryName(possiblePath);
-            }
-            // 2) search the path
-            if (toolPath == null)
-            {
-                string pathEnvironmentVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
-                string[] paths = pathEnvironmentVariable.Split(new[] { Path.PathSeparator }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (string path in paths)
-                {
-                    string fullPathToClient = Path.Combine(path, toolName);
-                    if (SafeFileExists(fullPathToClient))
-                    {
-                        toolPath = path;
-                        break;
-                    }
-                }
-            }
-
-            // try some typical locations
-            string[] commonSVNLocations = {
-                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Subversion\bin"),
-                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion Server"),
-                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion"),
-                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"CollabNet Subversion Client"),
-                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"VisualSVN\bin"),
-                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"VisualSVN Server\bin"),
-                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"SlikSvn\bin")
-                                          };
-            foreach (string path in commonSVNLocations)
-            {
-                string fullPathToClient = Path.Combine(path, toolName);
-                if (SafeFileExists(fullPathToClient))
-                {
-                    toolPath = path;
-                    break;
-                }
-            }
+            string toolPath =
+                ToolPathUtil.FindInRegistry(toolName) ??
+                ToolPathUtil.FindInPath(toolName) ??
+                ToolPathUtil.FindInProgramFiles(toolName,
+                    @"Subversion\bin",
+                    @"CollabNet Subversion Server",
+                    @"CollabNet Subversion",
+                    @"CollabNet Subversion Client",
+                    @"VisualSVN\bin",
+                    @"VisualSVN Server\bin",
+                    @"SlikSvn\bin");
 
             if (toolPath == null)
             {
@@ -516,14 +483,6 @@ namespace MSBuild.Community.Tasks.Subversion
             }
 
             return toolPath;
-        }
-
-        private static bool SafeFileExists(string file)
-        {
-            try { return File.Exists(file); }
-            catch { } // eat exception
-
-            return false;
         }
 
         /// <summary>
@@ -552,7 +511,7 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <returns>The name of the executable file to run.</returns>
         protected override string ToolName
         {
-            get { return "svn.exe"; }
+            get { return ToolPathUtil.MakeToolName("svn"); }
         }
 
         #endregion Task Overrides

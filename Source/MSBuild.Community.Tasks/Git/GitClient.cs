@@ -42,6 +42,13 @@ namespace MSBuild.Community.Tasks.Git
     /// </summary>
     public class GitClient : ToolTask
     {
+        private string _initialToolPath;
+
+        public GitClient()
+        {
+            _initialToolPath = ToolPath;
+        }
+
         /// <summary>
         /// Gets or sets the command to run.
         /// </summary>
@@ -60,7 +67,17 @@ namespace MSBuild.Community.Tasks.Git
         
         private string FindToolPath(string toolName)
         {
-            return string.Empty;
+            string toolPath =
+                ToolPathUtil.FindInRegistry(toolName) ??
+                ToolPathUtil.FindInPath(toolName) ??
+                ToolPathUtil.FindInProgramFiles(toolName, @"Git\bin");
+
+            if (toolPath == null)
+            {
+                throw new Exception("Could not find git.exe.  Looked in PATH locations and various common folders inside Program Files.");
+            }
+
+            return toolPath;
         }
 
         /// <summary>
@@ -104,7 +121,7 @@ namespace MSBuild.Community.Tasks.Git
         /// </returns>
         protected override string GenerateFullPathToTool()
         {
-            if (string.IsNullOrEmpty(ToolPath))
+            if (string.IsNullOrEmpty(ToolPath) || ToolPath == _initialToolPath && !ToolPathUtil.SafeFileExists(ToolPath, ToolName))
                 ToolPath = FindToolPath(ToolName);
 
             return Path.Combine(ToolPath, ToolName);
@@ -137,7 +154,7 @@ namespace MSBuild.Community.Tasks.Git
         /// </returns>
         protected override string ToolName
         {
-            get { return "git.exe"; }
+            get { return ToolPathUtil.MakeToolName("git"); }
         }
         
         /// <summary>
