@@ -12,6 +12,7 @@
   </metadata>
   <files>
     <file src="Build\MSBuild.Community.Tasks.dll" target="tools\MSBuild.Community.Tasks.dll" />
+    <file src="Build\MSBuild.Community.Tasks.xml" target="tools\MSBuild.Community.Tasks.xml" />
     <file src="Build\MSBuild.Community.Tasks.Targets" target="tools\MSBuild.Community.Tasks.Targets" />
     <file src="readme.md" target="content\MSBuild.Community.Tasks.ReadMe.md" />
     <file src="Tools\Install.ps1" target="tools\Install.ps1" />
