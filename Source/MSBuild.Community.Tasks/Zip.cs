@@ -75,6 +75,7 @@ namespace MSBuild.Community.Tasks
         public Zip()
         {
             ZipLevel = 6;
+            ParallelCompression = true;
         }
 
         #endregion Constructor
@@ -143,6 +144,15 @@ namespace MSBuild.Community.Tasks
         /// </remarks>
         public string Encryption { get; set; }
 
+        /// <summary>
+        /// Gets or sets whether parallel compression is used
+        /// </summary>
+        /// <value>Whether or not the files will be compressed in parallel.</value>
+        /// <remarks>
+        /// This is true by default
+        /// </remarks>
+        public bool ParallelCompression { get; set; }
+
         #endregion Input Parameters
 
         #region Task Overrides
@@ -174,6 +184,11 @@ namespace MSBuild.Community.Tasks
 
                 using (var zip = new ZipFile())
                 {
+                    if (!ParallelCompression)
+                    {
+                        zip.ParallelDeflateThreshold = -1;
+                    }
+
                     zip.AlternateEncoding = System.Text.Encoding.Unicode;
                     zip.AlternateEncodingUsage = ZipOption.AsNecessary;
 
