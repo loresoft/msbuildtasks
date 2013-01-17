@@ -32,6 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using Ionic.Zip;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -131,8 +132,10 @@ namespace MSBuild.Community.Tasks
             if (e == null || e.CurrentEntry == null)
                 return;
 
-            _files.Add(new TaskItem(e.CurrentEntry.FileName));
-            Log.LogMessage(Resources.UnzipExtracted, e.CurrentEntry.FileName);
+            if (_files.All(f => f.ItemSpec != e.CurrentEntry.FileName)) {
+                _files.Add(new TaskItem(e.CurrentEntry.FileName));
+                Log.LogMessage(Resources.UnzipExtracted, e.CurrentEntry.FileName);
+            }
         }
     }
 }
