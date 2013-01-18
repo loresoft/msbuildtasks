@@ -1,12 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E57396C8-69C1-45A3-B30A-3EFD0AE03EF6}"
 	ProjectSection(SolutionItems) = preProject
 		..\Documentation\DevelopersGuide.txt = ..\Documentation\DevelopersGuide.txt
-		..\Master-helper.proj = ..\Master-helper.proj
-		..\Master.proj = ..\Master.proj
-		..\MSBuildTasks.nuspec = ..\MSBuildTasks.nuspec
 		Settings.SourceAnalysis = Settings.SourceAnalysis
 		..\Documentation\TaskList.xslt = ..\Documentation\TaskList.xslt
 	EndProjectSection
@@ -42,8 +39,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "B", "MSBuild.Community.Task
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E49E905A-72B3-474A-BF88-006E986F8CB8}"
 	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{8840F549-AFDF-420C-99D0-FCEC0D9DDEF2}"
+	ProjectSection(SolutionItems) = preProject
+		..\Tools\Build.proj = ..\Tools\Build.proj
+		..\Tools\Install.Project.ps1 = ..\Tools\Install.Project.ps1
+		..\Tools\Install.Solution.ps1 = ..\Tools\Install.Solution.ps1
+		..\Master-helper.proj = ..\Master-helper.proj
+		..\Master.proj = ..\Master.proj
+		..\Tools\MSBuild.psm1 = ..\Tools\MSBuild.psm1
+		..\MSBuildTasks.nuspec = ..\MSBuildTasks.nuspec
+		..\MSBuildTasks.Project.nuspec = ..\MSBuildTasks.Project.nuspec
+		..\Tools\Uninstall.Project.ps1 = ..\Tools\Uninstall.Project.ps1
 	EndProjectSection
 EndProject
 Global

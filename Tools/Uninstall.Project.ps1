@@ -20,7 +20,7 @@ function Uninstall-Targets ( $project )
 
 function Remove-MSBuildTasks($project) {
     $solutionDir = Get-SolutionDir
-    $tasksToolsPath = (Join-Path $solutionDir "Build")
+    $tasksToolsPath = (Join-Path $solutionDir ".build")
 
     if(!(Test-Path $tasksToolsPath)) {
         return
@@ -29,7 +29,7 @@ function Remove-MSBuildTasks($project) {
     Write-Host "Removing MSBuild Community Tasks files from $tasksToolsPath"
     Remove-Item "$tasksToolsPath\MSBuild.Community.Tasks.*" | Out-Null
 
-    return '$(SolutionDir)\Build'
+    return $tasksToolsPath
 }
 
 function Main 
