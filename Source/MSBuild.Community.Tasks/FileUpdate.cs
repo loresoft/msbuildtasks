@@ -144,6 +144,18 @@ namespace MSBuild.Community.Tasks
             set { _replacementCount = value; }
         }
 
+        private bool _replacementTextEmpty;
+
+        /// <summary>
+        /// Gets or sets if replacement text is empty.
+        /// </summary>
+        /// <value><c>true</c> if [ignore case]; otherwise, <c>false</c>.</value>
+        public bool ReplacementTextEmpty
+        {
+            get { return _replacementTextEmpty; }
+            set { _replacementTextEmpty = value; }
+        }
+
         private string _replacementText;
 
         /// <summary>
@@ -222,6 +234,10 @@ namespace MSBuild.Community.Tasks
             if (_replacementCount == 0)
             {
                 _replacementCount = -1;
+            }
+            if (_replacementTextEmpty)
+            {
+                _replacementText = String.Empty;
             }
             Regex replaceRegex = new Regex(_regex, options);
 
