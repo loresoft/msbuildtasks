@@ -489,14 +489,32 @@ namespace MSBuild.Community.Tasks
                 return false;
             }
 
+            string tempFile = _outputFile + ".tmp";
             Encoding utf8WithSignature = new UTF8Encoding(true);
 
-            using (StreamWriter writer = new StreamWriter(_outputFile, false, utf8WithSignature))
+            try
             {
-                GenerateFile(writer);
-                writer.Flush();
-                writer.Close();
-                Log.LogMessage("Created AssemblyInfo file \"{0}\".", _outputFile);
+                using (StreamWriter writer = new StreamWriter(tempFile, false, utf8WithSignature))
+                {
+                    GenerateFile(writer);
+                    writer.Flush();
+                    writer.Close();
+                }
+
+                if (CompareFiles(tempFile, _outputFile))
+                {
+                    Log.LogMessage("AssemblyInfo file unchanged \"{0}\".", _outputFile);
+                }
+                else
+                {
+                    File.Delete(_outputFile);
+                    File.Move(tempFile, _outputFile);
+                    Log.LogMessage("Created AssemblyInfo file \"{0}\".", _outputFile);
+                }
+            }
+            finally
+            {
+                File.Delete(tempFile);
             }
 
             return true;
@@ -788,6 +806,33 @@ namespace MSBuild.Community.Tasks
                 return false;
 
             return result;
+        }
+
+        private bool CompareFiles(string srcName, string destName)
+        {
+            if (!File.Exists(destName))
+            {
+                return false;
+            }
+
+            using (var src = new FileStream(srcName, FileMode.Open))
+            using (var dest = new FileStream(destName, FileMode.Open))
+            {
+                if (src.Length != dest.Length)
+                {
+                    return false;
+                }
+
+                while (src.Position < src.Length)
+                {
+                    if (src.ReadByte() != dest.ReadByte())
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
         }
 
         #endregion Private Methods
