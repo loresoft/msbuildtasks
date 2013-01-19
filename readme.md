@@ -4,8 +4,8 @@ The MSBuild Community Tasks Project is an open source project for MSBuild tasks.
 
 ##Download
 
-The latest nightly build of can be downloaded from the Downloads tab.
-https://github.com/loresoft/msbuildtasks/downloads
+The latest nightly build of can be downloaded from the following location.
+http://code.google.com/p/msbuildtasks/downloads/list
 
 The MSBuild Community Tasks  library is also available on nuget.org via package name `MSBuildTasks`.
 
