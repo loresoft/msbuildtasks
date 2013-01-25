@@ -85,6 +85,13 @@ namespace MSBuild.Community.Tasks
         public bool Overwrite { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to output less information. Defaults to <c>false</c>.
+        /// </summary>
+        /// <value><c>false</c> to output a message for every file extracted; otherwise, <c>true</c>.</value>
+        [DefaultValue(false)]
+        public bool Quiet { get; set; }
+
+        /// <summary>
         /// Gets the files extracted from the zip.
         /// </summary>
         /// <value>The files extracted from the zip.</value>
@@ -134,7 +141,9 @@ namespace MSBuild.Community.Tasks
 
             if (_files.All(f => f.ItemSpec != e.CurrentEntry.FileName)) {
                 _files.Add(new TaskItem(e.CurrentEntry.FileName));
-                Log.LogMessage(Resources.UnzipExtracted, e.CurrentEntry.FileName);
+                if (!Quiet) {
+                    Log.LogMessage(Resources.UnzipExtracted, e.CurrentEntry.FileName);
+                }
             }
         }
     }
