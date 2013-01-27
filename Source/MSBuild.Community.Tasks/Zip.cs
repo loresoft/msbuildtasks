@@ -31,6 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using Ionic.Zip;
 using Ionic.Zlib;
@@ -153,6 +154,13 @@ namespace MSBuild.Community.Tasks
         /// </remarks>
         public bool ParallelCompression { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to output less information. Defaults to <c>false</c>.
+        /// </summary>
+        /// <value><c>false</c> to output a message for every file added to a zip; otherwise, <c>true</c>.</value>
+        [DefaultValue(false)]
+        public bool Quiet { get; set; }
+
         #endregion Input Parameters
 
         #region Task Overrides
@@ -231,7 +239,8 @@ namespace MSBuild.Community.Tasks
                             if (Directory.Exists(name))
                             {
                                 var directoryEntry = zip.AddDirectory(name, directoryPathInArchive);
-                                Log.LogMessage(Resources.ZipAdded, directoryEntry.FileName);
+                                if (!Quiet)
+                                    Log.LogMessage(Resources.ZipAdded, directoryEntry.FileName);
 
                                 continue;
                             }
@@ -246,7 +255,8 @@ namespace MSBuild.Community.Tasks
                             directoryPathInArchive = Path.GetDirectoryName(directoryPathInArchive);
 
                         var entry = zip.AddFile(name, directoryPathInArchive);
-                        Log.LogMessage(Resources.ZipAdded, entry.FileName);
+                        if (!Quiet)
+                            Log.LogMessage(Resources.ZipAdded, entry.FileName);
                     }
 
                     zip.Save(ZipFileName);
