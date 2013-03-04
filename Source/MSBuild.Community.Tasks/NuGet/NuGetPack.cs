@@ -64,7 +64,16 @@ namespace MSBuild.Community.Tasks.NuGet
         /// Shows verbose output for package building.
         /// </summary>
         /// <value><c>true</c> if verbose; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// Depricated in NuGet 2.0.  Use <see cref="Verbosity"/> instead.
+        /// </remarks>
         public bool Verbose { get; set; }
+
+        /// <summary>
+        /// Display this amount of details in the output.
+        /// </summary>
+        /// <value><c>normal</c>; <c>quiet</c>; ; <c>detailed</c></value>
+        public string Verbosity { get; set; }
 
         /// <summary>
         /// Determines if a package containing sources and symbols should be created. When specified with a nuspec, 
@@ -89,8 +98,12 @@ namespace MSBuild.Community.Tasks.NuGet
             builder.AppendSwitchIfNotNull("-OutputDirectory ", OutputDirectory);
             builder.AppendSwitchIfNotNull("-BasePath ", BasePath);
             builder.AppendSwitchIfNotNull("-Version ", Version);
-            if (Verbose)
-                builder.AppendSwitch("-Verbose");
+            builder.AppendSwitchIfNotNull("-Verbosity ", Verbosity);
+            
+            // backward compatible with old Verbose property
+            if (Verbosity == null && Verbose)
+                builder.AppendSwitch("-Verbosity detailed");
+
             if (Symbols)
                 builder.AppendSwitch("-Symbols");
 
