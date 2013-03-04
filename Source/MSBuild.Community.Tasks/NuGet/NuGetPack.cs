@@ -85,6 +85,11 @@ namespace MSBuild.Community.Tasks.NuGet
         public bool Symbols { get; set; }
 
         /// <summary>
+        /// Provides the ability to specify a semicolon ";" delimited list of properties when creating a package.
+        /// </summary>
+        public string Properties { get; set; }
+
+        /// <summary>
         /// Returns a string value containing the command line arguments to pass directly to the executable file.
         /// </summary>
         /// <returns>
@@ -106,6 +111,7 @@ namespace MSBuild.Community.Tasks.NuGet
 
             if (Symbols)
                 builder.AppendSwitch("-Symbols");
+            builder.AppendSwitchIfNotNull("-Properties ", Properties);
 
             return builder.ToString();
         }
