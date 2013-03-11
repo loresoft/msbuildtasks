@@ -56,6 +56,9 @@ namespace MSBuild.Community.Tasks.Subversion
         private StringBuilder _outputBuffer = new StringBuilder();
         private StringBuilder _errorBuffer = new StringBuilder();
 
+        private static readonly string _sanitizedPasswordArgument = string.Format(_switchValueFormat, "password", "***");
+        private string _passwordArgument;
+
         #endregion Fields
 
         #region Input Parameters
@@ -105,6 +108,18 @@ namespace MSBuild.Community.Tasks.Subversion
         {
             get { return _password; }
             set { _password = value; }
+        }
+
+        private bool _sanitizePassword;
+
+        /// <summary>
+        /// Allows to sanitize password string from svn command log output.
+        /// </summary>
+        /// <value>The sanitize.</value>
+        public bool SanitizePassword 
+        {
+            get { return _sanitizePassword; }
+            set { _sanitizePassword = value; }
         }
 
         private bool _verbose;
@@ -491,6 +506,13 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
         protected override void LogToolCommand(string message)
         {
+            if (SanitizePassword && !string.IsNullOrEmpty(message)) {
+                if (_passwordArgument == null) {
+                    _passwordArgument = string.Format(_switchValueFormat, "password", _password);
+                }
+
+                message = message.Replace(_passwordArgument, _sanitizedPasswordArgument);
+            }
             Log.LogCommandLine(MessageImportance.Low, message);
         }
 
