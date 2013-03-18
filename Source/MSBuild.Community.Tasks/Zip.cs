@@ -238,10 +238,7 @@ namespace MSBuild.Community.Tasks
                             if (Directory.Exists(name))
                             {
                                 var directoryEntry = zip.AddDirectory(name, directoryPathInArchive);
-                                if (!MinimalLogging)
-                                {
-                                    Log.LogMessage(Resources.ZipAdded, directoryEntry.FileName);
-                                }
+                                LogMessageIfNotMinimalLogging(Resources.ZipAdded, directoryEntry.FileName);
 
                                 continue;
                             }
@@ -257,10 +254,7 @@ namespace MSBuild.Community.Tasks
 
                         var entry = zip.AddFile(name, directoryPathInArchive);
 
-                        if (!MinimalLogging)
-                        {
-                            Log.LogMessage(Resources.ZipAdded, entry.FileName);
-                        }
+                        LogMessageIfNotMinimalLogging(Resources.ZipAdded, entry.FileName);
                     }
 
                     zip.Save(ZipFileName);
@@ -303,6 +297,14 @@ namespace MSBuild.Community.Tasks
                 relativePath.Add(originalDirectories[x]);
 
             return string.Join(Path.DirectorySeparatorChar.ToString(), relativePath.ToArray());
+        }
+
+        private void LogMessageIfNotMinimalLogging(string message, params object[] messageArguments)
+        {
+            if (!MinimalLogging)
+            {
+                Log.LogMessage(message, messageArguments);
+            }
         }
 
         #endregion Private Methods
