@@ -76,6 +76,7 @@ namespace MSBuild.Community.Tasks
         {
             ZipLevel = 6;
             ParallelCompression = true;
+            MinimalLogging = false;
         }
 
         #endregion Constructor
@@ -152,6 +153,12 @@ namespace MSBuild.Community.Tasks
         /// This is true by default
         /// </remarks>
         public bool ParallelCompression { get; set; }
+
+        /// <summary>
+        /// 'Add' statement won't be logged with MinimalLogging enabled.
+        /// The default value for MinimalLogging is false.
+        /// </summary>
+        public bool MinimalLogging { get; set; }
 
         #endregion Input Parameters
 
@@ -231,7 +238,7 @@ namespace MSBuild.Community.Tasks
                             if (Directory.Exists(name))
                             {
                                 var directoryEntry = zip.AddDirectory(name, directoryPathInArchive);
-                                Log.LogMessage(Resources.ZipAdded, directoryEntry.FileName);
+                                LogMessageIfNotMinimalLogging(Resources.ZipAdded, directoryEntry.FileName);
 
                                 continue;
                             }
@@ -246,7 +253,8 @@ namespace MSBuild.Community.Tasks
                             directoryPathInArchive = Path.GetDirectoryName(directoryPathInArchive);
 
                         var entry = zip.AddFile(name, directoryPathInArchive);
-                        Log.LogMessage(Resources.ZipAdded, entry.FileName);
+
+                        LogMessageIfNotMinimalLogging(Resources.ZipAdded, entry.FileName);
                     }
 
                     zip.Save(ZipFileName);
@@ -289,6 +297,14 @@ namespace MSBuild.Community.Tasks
                 relativePath.Add(originalDirectories[x]);
 
             return string.Join(Path.DirectorySeparatorChar.ToString(), relativePath.ToArray());
+        }
+
+        private void LogMessageIfNotMinimalLogging(string message, params object[] messageArguments)
+        {
+            if (!MinimalLogging)
+            {
+                Log.LogMessage(message, messageArguments);
+            }
         }
 
         #endregion Private Methods
