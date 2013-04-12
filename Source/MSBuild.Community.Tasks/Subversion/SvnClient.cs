@@ -505,6 +505,16 @@ namespace MSBuild.Community.Tasks.Subversion
         }
 
         /// <summary>
+        /// Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
+        /// </summary>
+        /// <value></value>
+        /// <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
+        protected override MessageImportance StandardErrorLoggingImportance
+        {
+            get { return MessageImportance.High; }
+        }
+
+        /// <summary>
         /// Gets the name of the executable file to run.
         /// </summary>
         /// <value></value>
