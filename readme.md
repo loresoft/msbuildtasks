@@ -747,9 +747,19 @@ https://groups.google.com/d/forum/msbuildtasks
     
 ##Getting Started
 
-In order to use the tasks in this project, you need to import the MSBuild.Community.Tasks.Targets files. If you installed the project with the msi installer, you can use the following.
+In order to use the tasks in this project, you need to import the MSBuild.Community.Tasks.Targets files. 
+
+If you installed the project with the msi installer, you can use the following.
 
     <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+
+Alternatively if you want to get started with the nuget packages please add the following.
+  
+    <PropertyGroup>
+        <MSBuildCommunityTasksPath>$(SolutionDir)\.build</MSBuildCommunityTasksPath>
+    </PropertyGroup>  
+ 
+    <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
 
 ## License
 
