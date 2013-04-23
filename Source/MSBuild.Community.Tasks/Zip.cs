@@ -98,6 +98,18 @@ namespace MSBuild.Community.Tasks
         public int ZipLevel { get; set; }
 
         /// <summary>
+        /// Gets or sets whether to use ZIP64 extensions.
+        /// </summary>
+        /// <value><c>true</c> to use ZIP64 extensions when necessary; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// When ZIP64 is specified, then ZIP64 extension is used when necessary.
+        /// For example, when a single entry exceeds 0xFFFFFFFF in size, or when the archive 
+        /// as a whole exceeds 0xFFFFFFFF in size, or when there are more than 65535 entries 
+        /// in an archive.
+        /// </remarks>
+        public bool Zip64 { get; set; }
+
+        /// <summary>
         /// Gets or sets the files to zip.
         /// </summary>
         /// <value>The files to zip.</value>
@@ -203,6 +215,8 @@ namespace MSBuild.Community.Tasks
                     ZipLevel = System.Math.Max(0, ZipLevel);
                     ZipLevel = System.Math.Min(9, ZipLevel);
                     zip.CompressionLevel = (CompressionLevel)ZipLevel;
+
+                    zip.UseZip64WhenSaving = Zip64 ? Zip64Option.AsNecessary: Zip64Option.Never;
 
                     if (!string.IsNullOrEmpty(Password))
                         zip.Password = Password;
