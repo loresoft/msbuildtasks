@@ -289,11 +289,11 @@ namespace MSBuild.Community.Tasks.SourceSafe
             {
                 // VSS returns the versions in descending order, meaning the
                 // most recent versions appear first.
-                if (ToLabel == null || version.Action.StartsWith(string.Format("Labeled '{0}'", ToLabel)))
+                if (ToLabel == null || version.Action.StartsWith(string.Format("Labeled '{0}'", ToLabel), StringComparison.InvariantCultureIgnoreCase))
                 {
                     startLogging = true;
                 }
-                if (FromLabel != null && version.Action.StartsWith(string.Format("Labeled '{0}'", FromLabel)))
+                if (FromLabel != null && version.Action.StartsWith(string.Format("Labeled '{0}'", FromLabel), StringComparison.InvariantCultureIgnoreCase))
                 {
                     stopLogging = true;
                 }
