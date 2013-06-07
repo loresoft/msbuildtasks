@@ -134,6 +134,7 @@
 
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Git.GitClient" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Git.GitVersion" />
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Git.GitBranch" />
 
   <ItemGroup>
     <FxCopRuleAssemblies Include="UsageRules.dll"/>
