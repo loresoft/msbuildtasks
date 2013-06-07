@@ -114,12 +114,12 @@ namespace MSBuild.Community.Tasks
 
         private void SetDefaults()
         {
-            if (string.IsNullOrWhiteSpace(ResourceType))
+            if (string.IsNullOrEmpty(ResourceType))
             {
                 ResourceType = "RC_DATA";
             }
 
-            if (string.IsNullOrWhiteSpace(ResourceName))
+            if (string.IsNullOrEmpty(ResourceName))
             {
                 FileInfo fi = new FileInfo(ResourcePath);
                 ResourceName = fi.Name;
