@@ -65,6 +65,17 @@ namespace MSBuild.Community.Tasks
     ///         ZipFileName="D:\svn\repo.zip" />
     /// </Target>
     /// ]]></code>
+    /// Create a zip file using a root directory.
+    /// <code><![CDATA[
+    /// <ItemGroup>
+    ///     <RepoFiles Include="D:\svn\repo\**\*.*" />
+    /// </ItemGroup>
+    /// <Target Name="Zip">
+    ///     <Zip Files="@(RepoFiles)" 
+    ///         RootDirectory="Repo" 
+    ///         ZipFileName="D:\svn\repo.zip" />
+    /// </Target>
+    /// ]]></code>
     /// </example>
     public class Zip : Task
     {
@@ -125,10 +136,18 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         /// <value>The working directory.</value>
         /// <remarks>
-        /// The working directory is the base of the zip file.  
         /// All files will be made relative from the working directory.
         /// </remarks>
         public string WorkingDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the root directory for the archive.
+        /// </summary>
+        /// <value>The root directory.</value>
+        /// <remarks>
+        /// The root directory is the base of the archive.  
+        /// </remarks>
+        public string RootDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the password.
@@ -249,7 +268,7 @@ namespace MSBuild.Community.Tasks
                             // maybe a directory
                             if (Directory.Exists(name))
                             {
-                                var directoryEntry = zip.AddDirectory(name, directoryPathInArchive);
+                                var directoryEntry = zip.AddDirectory(name, GetArchivePath(RootDirectory, directoryPathInArchive));
                                 if (!Quiet)
                                     Log.LogMessage(Resources.ZipAdded, directoryEntry.FileName);
 
@@ -265,7 +284,7 @@ namespace MSBuild.Community.Tasks
                             && Path.GetFileName(directoryPathInArchive) == Path.GetFileName(name))
                             directoryPathInArchive = Path.GetDirectoryName(directoryPathInArchive);
 
-                        var entry = zip.AddFile(name, directoryPathInArchive);
+                        var entry = zip.AddFile(name, GetArchivePath(RootDirectory, directoryPathInArchive));
                         if (!Quiet)
                             Log.LogMessage(Resources.ZipAdded, entry.FileName);
                     }
@@ -281,6 +300,15 @@ namespace MSBuild.Community.Tasks
             }
 
             return true;
+        }
+
+        private static string GetArchivePath(string rootDirectory, string directoryPathInArchive)
+        {
+            return String.IsNullOrEmpty(rootDirectory)
+                ? directoryPathInArchive
+                : String.IsNullOrEmpty(directoryPathInArchive)
+                    ? rootDirectory
+                    : Path.Combine(rootDirectory, directoryPathInArchive);
         }
 
         private static string GetPath(string originalPath, string rootDirectory)
