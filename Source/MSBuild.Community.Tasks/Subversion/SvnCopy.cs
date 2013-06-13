@@ -99,7 +99,7 @@ namespace MSBuild.Community.Tasks.Subversion
         /// <returns></returns>
         protected override string GenerateSvnCommand()
         {
-            return String.Format("{0} {1} \"{2}\" \"{3}\"", base.GenerateSvnCommand(), BuildTree ? "--parents" : "", sourcePath, destinationPath);
+            return String.Format("{0} \"{2}\" \"{3}\"{1}", base.GenerateSvnCommand(), BuildTree ? " --parents" : "", sourcePath, destinationPath);
         }
 
         /// <summary>
