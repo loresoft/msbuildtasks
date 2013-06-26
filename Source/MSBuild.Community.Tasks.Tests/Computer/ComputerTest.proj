@@ -17,11 +17,12 @@
     <Computer>
       <Output TaskParameter="Name" PropertyName="BuildMachineName" />
       <Output TaskParameter="IPAddress" PropertyName="BuildMachineIPAddress" />
+      <Output TaskParameter="IPAddressV4" PropertyName="BuildMachineIPAddressV4" />
       <Output TaskParameter="OSPlatform" PropertyName="BuildMachineOSPlatform" />
       <Output TaskParameter="OSVersion" PropertyName="BuildMachineOSVersion" />
     </Computer>    
 
-    <Message Text="Build computer: $(BuildMachineName) ($(BuildMachineIPAddress))" />
+    <Message Text="Build computer: $(BuildMachineName) ($(BuildMachineIPAddress), $(BuildMachineIPAddressV4))" />
     <Message Text="                $(BuildMachineOSPlatform) $(BuildMachineOSVersion)" />
   </Target>
 
