@@ -44,6 +44,9 @@ namespace MSBuild.Community.Tasks.Git
     {
         private string _initialToolPath;
 
+        /// <summary>
+        /// Default constructor. Creates a new GitClient task.
+        /// </summary>
         public GitClient()
         {
             _initialToolPath = ToolPath;
