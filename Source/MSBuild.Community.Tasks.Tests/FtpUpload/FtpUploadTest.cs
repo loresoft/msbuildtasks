@@ -39,8 +39,8 @@ namespace MSBuild.Community.Tasks.Tests
 
 			// record expected operations
 			var mockery = new MockRepository();
-			var ftpService = mockery.CreateMock<IFtpWebRequest>();
-			var ftpCreator = mockery.CreateMock<IFtpWebRequestCreator>();
+			var ftpService = mockery.StrictMock<IFtpWebRequest>();
+			var ftpCreator = mockery.StrictMock<IFtpWebRequestCreator>();
 
 			FtpUpload task = new FtpUpload(ftpCreator);
 
@@ -82,8 +82,8 @@ namespace MSBuild.Community.Tasks.Tests
 
 			// record expected operations
 			var mockery = new MockRepository();
-			var ftpService = mockery.CreateMock<IFtpWebRequest>();
-			var ftpCreator = mockery.CreateMock<IFtpWebRequestCreator>();
+			var ftpService = mockery.StrictMock<IFtpWebRequest>();
+			var ftpCreator = mockery.StrictMock<IFtpWebRequestCreator>();
 
 			FtpUpload task = new FtpUpload(ftpCreator);
 
