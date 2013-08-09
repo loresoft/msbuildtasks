@@ -20,5 +20,18 @@ namespace MSBuild.Community.Tasks.Tests.Subversion
             string actualCommand = TaskUtility.GetToolTaskCommand(task);
             Assert.AreEqual(expectedCommand, actualCommand);
         }
+
+        [Test]
+        public void SvnCopyBuildTreeExecute()
+        {
+            SvnCopy task = new SvnCopy();
+            task.Message = "Tagging";
+            task.SourcePath = "file:///d:/svn/trunk/path";
+            task.DestinationPath = "file:///d:/svn/tags/release/path";
+            task.BuildTree = true;
+            string expectedCommand = "copy \"file:///d:/svn/trunk/path\" \"file:///d:/svn/tags/release/path\" --parents --message \"Tagging\" --non-interactive --no-auth-cache";
+            string actualCommand = TaskUtility.GetToolTaskCommand(task);
+            Assert.AreEqual(expectedCommand, actualCommand);
+        }
     }
 }
