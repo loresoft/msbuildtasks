@@ -47,6 +47,16 @@ namespace MSBuild.Community.Tasks.Net
         public bool FailOnNon2xxResponse { get; set; }
 
         /// <summary>
+        /// Optional. The username to use with basic authentication.
+        /// </summary>
+        public string Username{ get; set; }
+
+        /// <summary>
+        /// Optional. The password to use with basic authentication.
+        /// </summary>
+        public string Password{ get; set; }
+
+        /// <summary>
         /// Optional; the name of the file to write the response to.
         /// </summary>
         public string WriteResponseTo { get; set; }
@@ -89,6 +99,11 @@ namespace MSBuild.Community.Tasks.Net
                 Log.LogError("Url \"{0}\" did not create an HttpRequest.", Url);
                 return false;
             }
+
+	    if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+	    {
+		request.Credentials = new NetworkCredential(Username, Password);
+	    }
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
