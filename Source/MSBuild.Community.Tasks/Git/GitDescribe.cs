@@ -70,13 +70,16 @@ namespace MSBuild.Community.Tasks.Git
         public string Tag { get; set; }
 
 
+        bool softErrorMode = false;
+
+
         /// <summary>
         /// Make sure we specify abbrev=40 to get full CommitHash
         /// </summary>
         /// <param name="builder"></param>
         protected override void GenerateArguments(CommandLineBuilder builder)
         {
-            builder.AppendSwitch("--abbrev=40");
+            builder.AppendSwitch("--long --abbrev=40");
             base.GenerateArguments(builder);
         }
 
@@ -94,15 +97,18 @@ namespace MSBuild.Community.Tasks.Git
             else
             {
                 var line = singleLine.Trim();
-                var hashPosition = singleLine.Length - 40;
+                var hashPosition = singleLine.Length - 40 - 1;
 
                 // TODO: get rid of these "soft" errors once unit tests are in place
                 try
                 {
                     CommitHash = line.Substring(hashPosition);
                 }
-                catch (Exception)
+                catch
                 {
+                    if (!softErrorMode)
+                        throw;
+
                     CommitCount = -1;
                     Tag = "Failure Parsing Git Describe: " + line;
                     return;
@@ -136,6 +142,9 @@ namespace MSBuild.Community.Tasks.Git
                     }
                     catch (Exception)
                     {
+                        if (!softErrorMode)
+                            throw;
+
                         Tag = "Failure Parsing Git Describe: commitCount = '" + commitCount + "' / line = " + line;
                         CommitCount = -1;
                     }
