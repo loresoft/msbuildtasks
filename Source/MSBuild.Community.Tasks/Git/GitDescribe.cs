@@ -69,8 +69,13 @@ namespace MSBuild.Community.Tasks.Git
         [Output]
         public string Tag { get; set; }
 
+        /// <summary>
+        /// Not active yet
+        /// </summary>
+        [Output]
+        public string ErrorMessage { get; set; }
 
-        bool softErrorMode = false;
+        public bool SoftErrorMode { get; set; }
 
 
         /// <summary>
@@ -106,7 +111,7 @@ namespace MSBuild.Community.Tasks.Git
                 }
                 catch
                 {
-                    if (!softErrorMode)
+                    if (!SoftErrorMode)
                         throw;
 
                     CommitCount = -1;
@@ -140,9 +145,9 @@ namespace MSBuild.Community.Tasks.Git
                     {
                         CommitCount = int.Parse(commitCount);
                     }
-                    catch (Exception)
+                    catch 
                     {
-                        if (!softErrorMode)
+                        if (!SoftErrorMode)
                             throw;
 
                         Tag = "Failure Parsing Git Describe: commitCount = '" + commitCount + "' / line = " + line;
