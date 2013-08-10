@@ -6,22 +6,41 @@ using System.Runtime.InteropServices;
 
 namespace MSBuild.Community.Tasks
 {
+    /// <summary>
+    /// A task for embedded native resource.
+    /// </summary>
     public class EmbedNativeResource : Task
     {
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the target assembly path.
+        /// </summary>
         [Required]
         public string TargetAssemblyPath { get; set; }
 
+        /// <summary>
+        /// Gets or sets the resource path.
+        /// </summary>
         [Required]
         public string ResourcePath { get; set; }
 
+        /// <summary>
+        /// Gets or sets the resource name.
+        /// </summary>
         public string ResourceName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the resource type.
+        /// </summary>
         public string ResourceType { get; set; }
 
         #endregion
 
+        /// <summary>
+        /// Executes the task.
+        /// </summary>
+        /// <returns>Success or failure of the task.</returns>
         public override bool Execute()
         {
             try
