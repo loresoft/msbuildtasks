@@ -70,6 +70,7 @@
     <Compile Include="Fusion\FusionWrapperTest.cs" />
     <Compile Include="FxCopTest.cs" />
     <Compile Include="GacUtilTest.cs" />
+    <Compile Include="Git\GitDescribeTest.cs" />
     <Compile Include="Git\GitBranchTest.cs" />
     <Compile Include="Git\GitVersionTest.cs" />
     <Compile Include="IIS\WebDirectoryScriptMapTest.cs" />
