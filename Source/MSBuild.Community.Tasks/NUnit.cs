@@ -250,32 +250,35 @@ namespace MSBuild.Community.Tasks
         protected override string GenerateCommandLineCommands()
         {
             CommandLineBuilder builder = new CommandLineBuilder();
-            builder.AppendSwitch("/nologo");
+
+            char c = Environment.OSVersion.Platform == PlatformID.Unix ? '-' : '/';
+
+            builder.AppendSwitch(c+"nologo");
             if (DisableShadowCopy)
             {
-                builder.AppendSwitch("/noshadow");
+                builder.AppendSwitch(c+"noshadow");
             }
             if (_testInNewThread.HasValue && !_testInNewThread.Value)
             {
-                builder.AppendSwitch("/nothread");
+                builder.AppendSwitch(c+"nothread");
             }
             builder.AppendFileNamesIfNotNull(_assemblies, " ");
 
-            builder.AppendSwitchIfNotNull("/config=", _projectConfiguration);
+            builder.AppendSwitchIfNotNull(c+"config=", _projectConfiguration);
 
-            builder.AppendSwitchIfNotNull("/fixture=", _fixture);
+            builder.AppendSwitchIfNotNull(c+"fixture=", _fixture);
 
-            builder.AppendSwitchIfNotNull("/include=", _includeCategory);
+            builder.AppendSwitchIfNotNull(c+"include=", _includeCategory);
 
-            builder.AppendSwitchIfNotNull("/exclude=", _excludeCategory);
+            builder.AppendSwitchIfNotNull(c+"exclude=", _excludeCategory);
 
-            builder.AppendSwitchIfNotNull("/transform=", _xsltTransformFile);
+            builder.AppendSwitchIfNotNull(c+"transform=", _xsltTransformFile);
 
-            builder.AppendSwitchIfNotNull("/xml=", _outputXmlFile);
+            builder.AppendSwitchIfNotNull(c+"xml=", _outputXmlFile);
 
-            builder.AppendSwitchIfNotNull("/err=", _errorOutputFile);
+            builder.AppendSwitchIfNotNull(c+"err=", _errorOutputFile);
 
-            builder.AppendSwitchIfNotNull("/framework=",_framework);
+            builder.AppendSwitchIfNotNull(c+"framework=",_framework);
 
             return builder.ToString();
         }
@@ -336,10 +339,8 @@ namespace MSBuild.Community.Tasks
         {
             get
             {
-                if (_force32Bit)
-                    return @"nunit-console-x86.exe";
-                else
-                    return @"nunit-console.exe";
+                string toolName = @"nunit-console" + (_force32Bit ? "-x86" : "");
+                return ToolPathUtil.MakeToolName(toolName);
             }
         }
 
