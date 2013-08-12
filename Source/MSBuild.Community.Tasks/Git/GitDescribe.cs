@@ -1,6 +1,6 @@
-﻿#region Copyright © 2012 Paul Welter. All rights reserved.
+﻿#region Copyright © 2013 Malachi Burke. All rights reserved.
 /*
-Copyright © 2012 Paul Welter. All rights reserved.
+Copyright © 2013 Malachi Burke. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -27,6 +27,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #endregion
 
+
+
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,7 +39,7 @@ using Microsoft.Build.Utilities;
 namespace MSBuild.Community.Tasks.Git
 {
     /// <summary>
-    /// A task for git to get the current commit hash.
+    /// A task for git to get the most current tag, commit count since tag, and commit hash.
     /// </summary>
     public class GitDescribe : GitClient
     {
@@ -61,11 +64,8 @@ namespace MSBuild.Community.Tasks.Git
         public string CommitHash { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating what the last tagname for this branch is
+        /// Gets the last tagname for this branch
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if short; otherwise, <c>false</c>.
-        /// </value>
         [Output]
         public string Tag { get; set; }
 
@@ -75,6 +75,9 @@ namespace MSBuild.Community.Tasks.Git
         [Output]
         public string ErrorMessage { get; set; }
 
+        /// <summary>
+        /// When true, any processing errors will push error status out into <see cref="Tag"/>
+        /// </summary>
         public bool SoftErrorMode { get; set; }
 
 
@@ -102,17 +105,18 @@ namespace MSBuild.Community.Tasks.Git
             else
             {
                 var line = singleLine.Trim();
+                // hashPosition includes the git-describe 'g' delimiter
                 var hashPosition = singleLine.Length - 40 - 1;
 
                 // TODO: get rid of these "soft" errors once unit tests are in place
                 try
                 {
-                    CommitHash = line.Substring(hashPosition);
+                    // We do +1 to skip the git-describe 'g' delimiter
+                    CommitHash = line.Substring(hashPosition + 1);
                 }
                 catch
                 {
-                    if (!SoftErrorMode)
-                        throw;
+                    if (!SoftErrorMode) throw;
 
                     CommitCount = -1;
                     Tag = "Failure Parsing Git Describe: " + line;
@@ -134,8 +138,11 @@ namespace MSBuild.Community.Tasks.Git
                 // sanity check, just incase parsing goes badly wrong (maybe git will change.. ?)
                 if (i == 0)
                 {
-                    CommitCount = -1;
                     Tag = "Failure Parsing Git Describe: " + line;
+
+                    if (!SoftErrorMode) throw new FormatException(Tag);
+
+                    CommitCount = -1;
                     return;
                 }
                 else
@@ -144,11 +151,11 @@ namespace MSBuild.Community.Tasks.Git
                     try
                     {
                         CommitCount = int.Parse(commitCount);
+                        Tag = line.Substring(0, i);
                     }
                     catch 
                     {
-                        if (!SoftErrorMode)
-                            throw;
+                        if (!SoftErrorMode) throw;
 
                         Tag = "Failure Parsing Git Describe: commitCount = '" + commitCount + "' / line = " + line;
                         CommitCount = -1;
