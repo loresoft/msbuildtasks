@@ -396,7 +396,7 @@ namespace MSBuild.Community.Tasks.Xml
                 {
                     throw new MultipleRootNodesException();
                 }
-                targetNode = destinationParentNode.AppendChild(mergedDocument.CreateNode(XmlNodeType.Element, nodeToModify.Name, String.Empty));
+                targetNode = destinationParentNode.AppendChild(mergedDocument.CreateNode(XmlNodeType.Element, nodeToModify.Name, nodeToModify.NamespaceURI));
                 Log.LogMessage(MessageImportance.Low, "Created node '{0}'", getFullPathOfNode(targetNode));
                 if (keyAttribute != null)
                 {
@@ -417,15 +417,18 @@ namespace MSBuild.Community.Tasks.Xml
 
         private XmlNode locateTargetNode(XmlNode parentNode, XmlNode nodeToFind, XmlAttribute keyAttribute)
         {
+            var prefix = namespaceManager.LookupPrefix(nodeToFind.NamespaceURI);
+            var qname = String.IsNullOrEmpty(prefix) ? nodeToFind.LocalName : prefix + ":" + nodeToFind.LocalName;
+
             string xpath;
             if (keyAttribute == null)
             {
-                xpath = nodeToFind.Name;
+                xpath = qname;
             }
             else
             {
-                Log.LogMessage(MessageImportance.Low, "Using keyed attribute '{0}={1}' to locate node '{2}'", keyAttribute.LocalName, keyAttribute.Value, getFullPathOfNode(parentNode) + "/" + nodeToFind.LocalName);
-                xpath = String.Format("{0}[@{1}='{2}']", nodeToFind.LocalName, keyAttribute.LocalName, keyAttribute.Value);
+                Log.LogMessage(MessageImportance.Low, "Using keyed attribute '{0}={1}' to locate node '{2}'", keyAttribute.LocalName, keyAttribute.Value, getFullPathOfNode(parentNode) + "/" + qname);
+                xpath = String.Format("{0}[@{1}='{2}']", qname, keyAttribute.LocalName, keyAttribute.Value);
             }
             XmlNode foundNode = parentNode.SelectSingleNode(xpath, namespaceManager);
             return foundNode;
