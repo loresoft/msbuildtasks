@@ -238,6 +238,17 @@ namespace MSBuild.Community.Tasks
           set { _framework = value; }
         }
 
+        private bool _showLabels;
+
+        /// <summary>
+        /// Whether or not to show test labels in output
+        /// </summary>
+        public bool ShowLabels
+        {
+            get { return _showLabels; }
+            set { _showLabels = value; }
+        }
+
         #endregion
 
         #region Task Overrides
@@ -258,6 +269,10 @@ namespace MSBuild.Community.Tasks
             if (_testInNewThread.HasValue && !_testInNewThread.Value)
             {
                 builder.AppendSwitch("/nothread");
+            }
+            if (_showLabels)
+            {
+                builder.AppendSwitch("/labels");
             }
             builder.AppendFileNamesIfNotNull(_assemblies, " ");
 
