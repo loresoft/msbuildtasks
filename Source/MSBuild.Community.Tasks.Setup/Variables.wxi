@@ -55,4 +55,7 @@
   <!-- GUIDs -->
   <?define UpgradeGuid = "CA7189D4-2038-4F21-BA2C-F604AD1F965D" ?>
 
+  <!-- XML -->
+  <?define VerifyPath = "//xs:schema/xs:include[\[]@schemaLocation='MSBuild\\MSBuild.Community.Tasks.xsd'[\]]" ?>
+
 </Include>
