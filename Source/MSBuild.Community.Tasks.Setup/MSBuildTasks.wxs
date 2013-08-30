@@ -103,7 +103,7 @@
     </Property>
 
     <Property Id="VS2010_SCHEMAS_MSBUILD_DIR">
-      <RegistrySearch Id="VS2010SearchForCommonPath" Root="HKLM" 
+      <RegistrySearch Id="VS2010SearchForCommonPath" Root="HKLM"
                       Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="10.0" Type="raw">
         <DirectorySearch Id="VS2010SearchForXmlPath" Path="Xml" Depth="1">
           <DirectorySearch Id="VS2010SearchForXmlSchemasPath" Path="Schemas" Depth="1">
@@ -116,7 +116,7 @@
     </Property>
 
     <Property Id="VS2010_MSBUILD_SCHEMA">
-      <RegistrySearch Id="VS2010SearchForCommonPath2" Root="HKLM" 
+      <RegistrySearch Id="VS2010SearchForCommonPath2" Root="HKLM"
                       Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="10.0" Type="raw">
         <DirectorySearch Id="VS2010SearchForXmlPath2" Path="Xml" Depth="1">
           <DirectorySearch Id="VS2010SearchForXmlSchemasPath2" Path="Schemas" Depth="1">
@@ -174,11 +174,11 @@
         <File Id="MSBuild.Community.Tasks.xml" Name="MSBuild.Community.Tasks.xml" />
         <File Id="MSBuild.Community.Tasks.Targets" Name="MSBuild.Community.Tasks.Targets" />
       </Component>
-      
+
       <Component Id="MSBuildTasksSchema" Guid="F22319C9-7937-47bb-968B-CA3939299FE1">
         <File Id="MSBuild.Community.Tasks.xsd" Name="MSBuild.Community.Tasks.xsd" KeyPath="yes" />
       </Component>
-      
+
       <Component Id="MSBuildTasksVS2005" Guid="15EE7B53-F94D-4c33-839F-02521C896A72">
         <RegistryKey Root="HKLM" Key="Software\Microsoft\VisualStudio\8.0\MSBuild\SafeImports">
           <RegistryValue Name="MSBuildCommunityTasks" Value="[MSBuildTasksDir]MSBuild.Community.Tasks.Targets" Type="string" KeyPath="yes" />
@@ -213,7 +213,7 @@
                         Sequence="1">
         </util:XmlConfig>
       </Component>
-      
+
       <Component Id="MSBuildTasksVS2008" Guid="9FA7CCB2-1E57-4588-B4F0-7FFF7163FFE3">
         <RegistryKey Root="HKLM" Key="Software\Microsoft\VisualStudio\9.0\MSBuild\SafeImports">
           <RegistryValue Name="MSBuildCommunityTasks" Value="[MSBuildTasksDir]MSBuild.Community.Tasks.Targets" Type="string" KeyPath="yes" />
@@ -228,22 +228,21 @@
                         ElementPath="//xs:schema"
                         Name="xs:include"
                         Node="element"
-                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        VerifyPath="$(var.VerifyPath)"
                         Sequence="1">
-        </util:XmlConfig>
-        <util:XmlConfig Id="MSBuildTasksSchemaLocationVS2008"
-                        File="[VS2008_MSBUILD_SCHEMA]"
-                        ElementPath="MSBuildTasksSchemaIncludeVS2008"
-                        Name="schemaLocation"
-                        Value="MSBuild\MSBuild.Community.Tasks.xsd"
-                        Sequence="2">
+          <util:XmlConfig Id="MSBuildTasksSchemaLocationVS2008"
+                          File="[VS2008_MSBUILD_SCHEMA]"
+                          ElementId="MSBuildTasksSchemaIncludeVS2008"
+                          Name="schemaLocation"
+                          Value="MSBuild\MSBuild.Community.Tasks.xsd" />
         </util:XmlConfig>
         <util:XmlConfig Id="MSBuildTasksSchemaRemoveVS2008"
                         File="[VS2008_MSBUILD_SCHEMA]"
                         Action="delete"
                         On="uninstall"
-                        ElementPath="//xs:schema/xs:include"
-                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        ElementPath="//xs:schema"
+                        Node="element"
+                        VerifyPath="$(var.VerifyPath)"
                         Sequence="1">
         </util:XmlConfig>
       </Component>
@@ -262,22 +261,21 @@
                         ElementPath="//xs:schema"
                         Name="xs:include"
                         Node="element"
-                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        VerifyPath="$(var.VerifyPath)"
                         Sequence="1">
-        </util:XmlConfig>
-        <util:XmlConfig Id="MSBuildTasksSchemaLocationVS2010"
-                        File="[VS2010_MSBUILD_SCHEMA]"
-                        ElementPath="MSBuildTasksSchemaIncludeVS2010"
-                        Name="schemaLocation"
-                        Value="MSBuild\MSBuild.Community.Tasks.xsd"
-                        Sequence="2">
+          <util:XmlConfig Id="MSBuildTasksSchemaLocationVS2010"
+                          File="[VS2010_MSBUILD_SCHEMA]"
+                          ElementId="MSBuildTasksSchemaIncludeVS2010"
+                          Name="schemaLocation"
+                          Value="MSBuild\MSBuild.Community.Tasks.xsd" />
         </util:XmlConfig>
         <util:XmlConfig Id="MSBuildTasksSchemaRemoveVS2010"
                         File="[VS2010_MSBUILD_SCHEMA]"
                         Action="delete"
                         On="uninstall"
-                        ElementPath="//xs:schema/xs:include"
-                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        ElementPath="//xs:schema"
+                        Node="element"
+                        VerifyPath="$(var.VerifyPath)"
                         Sequence="1">
         </util:XmlConfig>
       </Component>
@@ -296,22 +294,21 @@
                         ElementPath="//xs:schema"
                         Name="xs:include"
                         Node="element"
-                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        VerifyPath="$(var.VerifyPath)"
                         Sequence="1">
-        </util:XmlConfig>
-        <util:XmlConfig Id="MSBuildTasksSchemaLocationVS2012"
-                        File="[VS2012_MSBUILD_SCHEMA]"
-                        ElementPath="MSBuildTasksSchemaIncludeVS2012"
-                        Name="schemaLocation"
-                        Value="MSBuild\MSBuild.Community.Tasks.xsd"
-                        Sequence="2">
+          <util:XmlConfig Id="MSBuildTasksSchemaLocationVS2012"
+                          File="[VS2012_MSBUILD_SCHEMA]"
+                          ElementId="MSBuildTasksSchemaIncludeVS2012"
+                          Name="schemaLocation"
+                          Value="MSBuild\MSBuild.Community.Tasks.xsd" />
         </util:XmlConfig>
         <util:XmlConfig Id="MSBuildTasksSchemaRemoveVS2012"
                         File="[VS2012_MSBUILD_SCHEMA]"
                         Action="delete"
                         On="uninstall"
-                        ElementPath="//xs:schema/xs:include"
-                        VerifyPath="//xs:schema/xs:include[\[]@schemaLocation='MSBuild\MSBuild.Community.Tasks.xsd'[\]]"
+                        ElementPath="//xs:schema"
+                        Node="element"
+                        VerifyPath="$(var.VerifyPath)"
                         Sequence="1">
         </util:XmlConfig>
       </Component>
