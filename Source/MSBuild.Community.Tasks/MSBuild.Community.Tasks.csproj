@@ -215,7 +215,7 @@
     <Compile Include="Math\MathBase.cs" />
     <Compile Include="Math\Multiple.cs" />
     <Compile Include="Math\Subtract.cs" />
-    <Compile Include="Move.cs" />
+    <Compile Include="MV.cs" />
     <Compile Include="NDoc.cs" />
     <Compile Include="NUnit.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
