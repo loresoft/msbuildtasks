@@ -53,7 +53,7 @@
   <?define PackageManufacturer = "MSBuild Community Tasks" ?>
 
   <!-- GUIDs -->
-  <?define UpgradeGuid = "CA7189D4-2038-4F21-BA2C-F604AD1F965D" ?>
+  <?define UpgradeGuid = "F289AA13-BBAF-4EA2-97C8-BAEC7E5B743E" ?>
 
   <!-- XML -->
   <?define VerifyPath = "//xs:schema/xs:include[\[]@schemaLocation='MSBuild\\MSBuild.Community.Tasks.xsd'[\]]" ?>
