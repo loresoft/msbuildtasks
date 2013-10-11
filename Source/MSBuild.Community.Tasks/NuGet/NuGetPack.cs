@@ -29,6 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
+using System.Text.RegularExpressions;
 
 
 
@@ -39,6 +40,11 @@ namespace MSBuild.Community.Tasks.NuGet
     /// </summary>
     public class NuGetPack : NuGetBase
     {
+        /// <summary>
+        /// The Regex used to get the full path to the NuGet Package created by the NuGetPack Task
+        /// </summary>
+        private static readonly Regex _outputFilePathParse = new Regex(@"Successfully created package '(?<filename>.*)'.", RegexOptions.Compiled);
+
         /// <summary>
         /// The location of the nuspec or project file to create a package.
         /// </summary>
@@ -90,6 +96,12 @@ namespace MSBuild.Community.Tasks.NuGet
         public string Properties { get; set; }
 
         /// <summary>
+        /// The full file path of the NuGet package created by the NuGetPack task
+        /// </summary>
+        [Output]
+        public string OutputFilePath { get; set; }
+
+        /// <summary>
         /// Returns a string value containing the command line arguments to pass directly to the executable file.
         /// </summary>
         /// <returns>
@@ -114,6 +126,29 @@ namespace MSBuild.Community.Tasks.NuGet
             builder.AppendSwitchIfNotNull("-Properties ", Properties);
 
             return builder.ToString();
+        }
+
+        /// <summary>
+        /// Logs the events from text output.
+        /// </summary>
+        /// <param name="singleLine">The single line.</param>
+        /// <param name="messageImportance">The message importance.</param>
+        protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
+        {
+            bool isError = messageImportance == StandardErrorLoggingImportance;
+
+            if (isError)
+            {
+                base.LogEventsFromTextOutput(singleLine, messageImportance);
+                return;
+            }
+
+            Match outputFilePathMatch = _outputFilePathParse.Match(singleLine);
+
+            if (!outputFilePathMatch.Success)
+                return;
+
+            OutputFilePath = outputFilePathMatch.Groups["filename"].Value;
         }
     }
 }

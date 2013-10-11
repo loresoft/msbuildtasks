@@ -31,6 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using Ionic.Zip;
 using Ionic.Zlib;
@@ -76,7 +77,6 @@ namespace MSBuild.Community.Tasks
         {
             ZipLevel = 6;
             ParallelCompression = true;
-            MinimalLogging = false;
         }
 
         #endregion Constructor
@@ -170,7 +170,19 @@ namespace MSBuild.Community.Tasks
         /// 'Add' statement won't be logged with MinimalLogging enabled.
         /// The default value for MinimalLogging is false.
         /// </summary>
-        public bool MinimalLogging { get; set; }
+        [Obsolete("Obsolete, Use Quiet instead.")]
+        public bool MinimalLogging
+        {
+            get { return Quiet; }
+            set { Quiet = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to output less information. Defaults to <c>false</c>.
+        /// </summary>
+        /// <value><c>false</c> to output a message for every file added to a zip; otherwise, <c>true</c>.</value>
+        [DefaultValue(false)]
+        public bool Quiet { get; set; }
 
         #endregion Input Parameters
 
@@ -252,7 +264,8 @@ namespace MSBuild.Community.Tasks
                             if (Directory.Exists(name))
                             {
                                 var directoryEntry = zip.AddDirectory(name, directoryPathInArchive);
-                                LogMessageIfNotMinimalLogging(Resources.ZipAdded, directoryEntry.FileName);
+                                if (!Quiet)
+                                    Log.LogMessage(Resources.ZipAdded, directoryEntry.FileName);
 
                                 continue;
                             }
@@ -267,8 +280,8 @@ namespace MSBuild.Community.Tasks
                             directoryPathInArchive = Path.GetDirectoryName(directoryPathInArchive);
 
                         var entry = zip.AddFile(name, directoryPathInArchive);
-
-                        LogMessageIfNotMinimalLogging(Resources.ZipAdded, entry.FileName);
+                        if (!Quiet)
+                            Log.LogMessage(Resources.ZipAdded, entry.FileName);
                     }
 
                     zip.Save(ZipFileName);
@@ -311,14 +324,6 @@ namespace MSBuild.Community.Tasks
                 relativePath.Add(originalDirectories[x]);
 
             return string.Join(Path.DirectorySeparatorChar.ToString(), relativePath.ToArray());
-        }
-
-        private void LogMessageIfNotMinimalLogging(string message, params object[] messageArguments)
-        {
-            if (!MinimalLogging)
-            {
-                Log.LogMessage(message, messageArguments);
-            }
         }
 
         #endregion Private Methods
