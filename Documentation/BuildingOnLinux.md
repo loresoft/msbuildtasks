@@ -1,6 +1,10 @@
 % Building MSBuildTasks on Linux
 
-# Overview #
+> *Note:* The easiest way to build and install MSBuildTasks is with [NuGet](http://www.nuget.org/).
+> However, if you don't want to spend time getting NuGet working on your system, MSBuildTasks
+> can be built without NuGet, using these instructions.
+
+## Overview ##
 
 MSBuildTasks depends on two other projects:
 
@@ -13,21 +17,17 @@ ILMerge doesn't run on Linux, but [ILRepack][3] can be used as a drop-in replace
 [2]: http://research.microsoft.com/en-us/people/mbarnett/ilmerge.aspx
 [3]: http://github.com/gluck/il-repack
 
-# Procedure #
+## Procedure ##
 
 Make a directory to hold downloaded files:
 
 	mkdir nuget
 	cd nuget
 
-Fetch the [NuGet][4] package files:
+Fetch the NuGet package files:
 
 	wget -O dotnetzip.reduced.nupkg http://packages.nuget.org/api/v1/package/DotNetZip.Reduced
 	wget -O ilrepack.nupkg http://packages.nuget.org/api/v1/package/ILRepack
-
-(Unfortunately, NuGet doesn't run on Linux.)
-
-[4]: http://www.nuget.org/
 
 Extract the needed binaries:
 
@@ -53,7 +53,7 @@ Run the build:
 
 	xbuild Master.proj
 
-# Other platforms #
+## Other platforms ##
 
 This procedure will probably work on other Unix-based systems (BSD, OS X)
 but hasn't been tested on them.
