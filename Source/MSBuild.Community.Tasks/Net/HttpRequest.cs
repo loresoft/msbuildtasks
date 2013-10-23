@@ -62,6 +62,11 @@ namespace MSBuild.Community.Tasks.Net
         public string Password{ get; set; }
 
         /// <summary>
+        /// Optional; the name of the file to reqd the request from.
+        /// </summary>
+        public string ReadRequestFrom { get; set; }
+
+        /// <summary>
         /// Optional; the name of the file to write the response to.
         /// </summary>
         public string WriteResponseTo { get; set; }
@@ -81,6 +86,15 @@ namespace MSBuild.Community.Tasks.Net
             get
             {
                 return !string.IsNullOrEmpty(EnsureResponseContains);
+            }
+        }
+
+
+        private bool ReadRequestFromFile
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(ReadRequestFrom);
             }
         }
 
@@ -114,6 +128,23 @@ namespace MSBuild.Community.Tasks.Net
 	    {
 		request.Credentials = new NetworkCredential(Username, Password);
 	    }
+	
+	    if (ReadRequestFromFile) {
+		request.SendChunked = true;
+		using (FileStream source = File.Open(ReadRequestFrom, FileMode.Open))
+		{
+			using (Stream requestStream = request.GetRequestStream())
+			{
+				byte[] buffer = new byte[16 * 1024];
+				int bytesRead;
+				while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
+				{
+					requestStream.Write(buffer, 0, bytesRead);
+				}
+			}
+		}
+	    }
+
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
