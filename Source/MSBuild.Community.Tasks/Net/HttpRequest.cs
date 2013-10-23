@@ -47,6 +47,11 @@ namespace MSBuild.Community.Tasks.Net
         public bool FailOnNon2xxResponse { get; set; }
 
         /// <summary>
+        /// Optional, default is GET. The HTTP method to use for the request.
+        /// </summary>
+        public string Method{ get; set; }
+
+        /// <summary>
         /// Optional. The username to use with basic authentication.
         /// </summary>
         public string Username{ get; set; }
@@ -99,6 +104,11 @@ namespace MSBuild.Community.Tasks.Net
                 Log.LogError("Url \"{0}\" did not create an HttpRequest.", Url);
                 return false;
             }
+
+	    if (!string.IsNullOrEmpty(Method))
+	    {
+ 		request.Method = Method;
+	    }
 
 	    if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
 	    {
