@@ -4,7 +4,7 @@ using Microsoft.Build.Utilities;
 namespace MSBuild.Community.Tasks.Git
 {
     /// <summary>
-    /// A task for git to get the current commit hash.
+    /// A task for git to retrieve the number of commits on a revision.
     /// </summary>
     public class GitCommits : GitClient
     {
@@ -18,15 +18,15 @@ namespace MSBuild.Community.Tasks.Git
         }
 
         /// <summary>
-        /// Gets or sets the revision to get the version from. Default is HEAD.
+        /// Gets or sets the revision to get the total number of commits from. Default is HEAD.
         /// </summary>
         public string Revision { get; set; }
 
         /// <summary>
-        /// Gets or sets the commits.
+        /// Gets or sets the commitscount.
         /// </summary>
         [Output]
-        public string Commits { get; set; }
+        public string CommitsCount { get; set; }
 
         /// <summary>
         /// Generates the arguments.
@@ -53,7 +53,7 @@ namespace MSBuild.Community.Tasks.Git
             if (isError)
                 base.LogEventsFromTextOutput(singleLine, messageImportance);
             else
-                Commits = singleLine.Trim();
+                CommitsCount = singleLine.Trim();
         }
     }
 }

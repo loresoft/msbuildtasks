@@ -10,7 +10,7 @@ namespace MSBuild.Community.Tasks.Tests.Git
         [Test]
         public void Execute()
         {
-            GitCommits task = new GitCommits();
+            var task = new GitCommits();
             task.BuildEngine = new MockBuild();
             task.ToolPath = @"C:\Program Files (x86)\Git\bin";
 
@@ -19,11 +19,11 @@ namespace MSBuild.Community.Tasks.Tests.Git
 
             bool result = task.Execute();
             int commits;
-            int.TryParse(task.Commits, out commits);
+            int.TryParse(task.CommitsCount, out commits);
 
             Assert.IsTrue(result, "Execute Failed");
 
-            Assert.IsFalse(commits == 0, "No commits");
+            Assert.IsFalse(commits == 0, "Invalid CommitsCount");
         }
     }
 }
