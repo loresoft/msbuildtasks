@@ -71,6 +71,7 @@
     <Compile Include="FxCopTest.cs" />
     <Compile Include="GacUtilTest.cs" />
     <Compile Include="Git\GitBranchTest.cs" />
+    <Compile Include="Git\GitCommitsTest.cs" />
     <Compile Include="Git\GitVersionTest.cs" />
     <Compile Include="IIS\WebDirectoryScriptMapTest.cs" />
     <Compile Include="IIS\WebDirectorySettingTest.cs" />
