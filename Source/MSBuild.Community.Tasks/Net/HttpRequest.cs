@@ -47,6 +47,26 @@ namespace MSBuild.Community.Tasks.Net
         public bool FailOnNon2xxResponse { get; set; }
 
         /// <summary>
+        /// Optional, default is GET. The HTTP method to use for the request.
+        /// </summary>
+        public string Method{ get; set; }
+
+        /// <summary>
+        /// Optional. The username to use with basic authentication.
+        /// </summary>
+        public string Username{ get; set; }
+
+        /// <summary>
+        /// Optional. The password to use with basic authentication.
+        /// </summary>
+        public string Password{ get; set; }
+
+        /// <summary>
+        /// Optional; the name of the file to reqd the request from.
+        /// </summary>
+        public string ReadRequestFrom { get; set; }
+
+        /// <summary>
         /// Optional; the name of the file to write the response to.
         /// </summary>
         public string WriteResponseTo { get; set; }
@@ -66,6 +86,15 @@ namespace MSBuild.Community.Tasks.Net
             get
             {
                 return !string.IsNullOrEmpty(EnsureResponseContains);
+            }
+        }
+
+
+        private bool ReadRequestFromFile
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(ReadRequestFrom);
             }
         }
 
@@ -89,6 +118,33 @@ namespace MSBuild.Community.Tasks.Net
                 Log.LogError("Url \"{0}\" did not create an HttpRequest.", Url);
                 return false;
             }
+
+	    if (!string.IsNullOrEmpty(Method))
+	    {
+ 		request.Method = Method;
+	    }
+
+	    if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+	    {
+		request.Credentials = new NetworkCredential(Username, Password);
+	    }
+	
+	    if (ReadRequestFromFile) {
+		request.SendChunked = true;
+		using (FileStream source = File.Open(ReadRequestFrom, FileMode.Open))
+		{
+			using (Stream requestStream = request.GetRequestStream())
+			{
+				byte[] buffer = new byte[16 * 1024];
+				int bytesRead;
+				while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
+				{
+					requestStream.Write(buffer, 0, bytesRead);
+				}
+			}
+		}
+	    }
+
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
