@@ -42,7 +42,7 @@ namespace MSBuild.Community.Tasks
 		/// </summary>
 		public TemplateFile()
 		{
-			_regex = new Regex(@"(?<token>\$\{(?<identifier>\w*)\})", RegexOptions.Singleline | RegexOptions.Compiled 
+			_regex = new Regex(@"(?<token>\$\{(?<identifier>[^}]*)\})", RegexOptions.Singleline | RegexOptions.Compiled 
 				| RegexOptions.Multiline | RegexOptions.IgnoreCase);
 		}
 

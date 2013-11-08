@@ -16,10 +16,12 @@ namespace MSBuild.Community.Tasks.Tests
 			{Non-TemplateItem} = NonTemplateItem
 			${item2}
 			${CASEInsenSiTiveTest}
+            ${Template.Item.With.Dot}
 		";
 		private static string _templateReplaced =
-			_template.Replace("${TemplateItem}", "**Item1**").Replace("${item2}", "**Item2**").Replace("${CASEInsenSiTiveTest}",
-				"**Item3**");
+			_template.Replace("${TemplateItem}", "**Item1**").Replace("${item2}", "**Item2**")
+                .Replace("${CASEInsenSiTiveTest}", "**Item3**")
+                .Replace("${Template.Item.With.Dot}", "**Item4**");
 		private static string _templateFilename;
 		private string _replacedFilename;
 
@@ -72,6 +74,9 @@ namespace MSBuild.Community.Tasks.Tests
 			item = new TaskItem("caseInsensitiveTest");
 			SetMetaData(item, "**Item3**", includeMetaData);
 			result.Add(item);
+            item = new TaskItem("Template.Item.With.Dot");
+            SetMetaData(item, "**Item4**", includeMetaData);
+            result.Add(item);
 			return result.ToArray();
 		}
 
@@ -150,7 +155,8 @@ namespace MSBuild.Community.Tasks.Tests
 			Assert.AreEqual(Path.ChangeExtension(_templateFilename, ".out"), _replacedFilename);
 			string replaced = File.ReadAllText(tf.OutputFile.ItemSpec);
 			string shouldBeReplaced =
-				_template.Replace("${TemplateItem}", "").Replace("${item2}", "").Replace("${CASEInsenSiTiveTest}", "");
+				_template.Replace("${TemplateItem}", "").Replace("${item2}", "").Replace("${CASEInsenSiTiveTest}", "")
+                    .Replace("${Template.Item.With.Dot}", "");
 			Assert.AreEqual(shouldBeReplaced, replaced);
 		}
 
