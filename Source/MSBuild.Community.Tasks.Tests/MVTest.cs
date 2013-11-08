@@ -9,12 +9,12 @@ using Microsoft.Build.Utilities;
 namespace MSBuild.Community.Tasks.Tests
 {
     /// <summary>
-    /// Summary description for MoveTest
+    /// Summary description for MVTest
     /// </summary>
     [TestFixture]
-    public class MoveTest
+    public class MVTest
     {
-        public MoveTest()
+        public MVTest()
         {
             //
             // TODO: Add constructor logic here
@@ -29,12 +29,12 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
         [Test]
-        public void MoveExecute()
+        public void MVExecute()
         {
             string attribFile = Path.Combine(TaskUtility.TestDirectory, @"moveme.txt");
             File.WriteAllText(attribFile, "This is a test file");
 
-            Move task = new Move();
+            MV task = new MV();
             task.BuildEngine = new MockBuild();
             task.SourceFiles = TaskUtility.StringArrayToItemArray(attribFile);
             task.DestinationFolder = new TaskItem(Path.Combine(TaskUtility.TestDirectory, ".."));
@@ -42,7 +42,7 @@ namespace MSBuild.Community.Tasks.Tests
 
             File.WriteAllText(attribFile, "This is a test file");
 
-            task = new Move();
+            task = new MV();
             task.BuildEngine = new MockBuild();
             task.SourceFiles = TaskUtility.StringArrayToItemArray(attribFile);
             task.DestinationFiles = TaskUtility.StringArrayToItemArray("newme.txt");

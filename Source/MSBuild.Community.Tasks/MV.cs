@@ -46,16 +46,16 @@ namespace MSBuild.Community.Tasks
     /// <example>
     /// <para>Move a file to another folder</para>
     /// <code><![CDATA[
-    /// <Move SourceFiles="Test\MoveMe.txt"
+    /// <MV SourceFiles="Test\MoveMe.txt"
     ///     DestinationFolder="Test\Move" />
     /// ]]></code>
     /// <para>Rename a file</para>
     /// <code><![CDATA[
-    /// <Move SourceFiles="Test\Move\MoveMe.txt"
+    /// <MV SourceFiles="Test\Move\MoveMe.txt"
     ///     DestinationFiles="Test\Move\Renamed.txt" />
     /// ]]></code>
     /// </example>
-    public class Move : Task
+    public class MV : Task
     {
         #region Properties
         // Properties
@@ -113,9 +113,9 @@ namespace MSBuild.Community.Tasks
         {
             get { return this.sourceFiles; }
             set { this.sourceFiles = value; }
-        } 
+        }
         #endregion
-        
+
         /// <summary>
         /// When overridden in a derived class, executes the task.
         /// </summary>
@@ -133,26 +133,26 @@ namespace MSBuild.Community.Tasks
             }
             if ((this.destinationFiles == null) && (this.destinationFolder == null))
             {
-                Log.LogError(Resources.TaskNeedsDestination, 
-                    "Move", "DestinationFiles", "DestinationDirectory");
+                Log.LogError(Resources.TaskNeedsDestination,
+                    "MV", "DestinationFiles", "DestinationDirectory");
                 return false;
             }
             if ((this.destinationFiles != null) && (this.destinationFolder != null))
             {
-                Log.LogError(Resources.ExactlyOneTypeOfDestination, 
+                Log.LogError(Resources.ExactlyOneTypeOfDestination,
                     "DestinationFiles", "DestinationDirectory");
                 return false;
             }
             if ((this.destinationFiles != null) && (this.destinationFiles.Length != this.sourceFiles.Length))
             {
-                Log.LogError(Resources.TwoVectorsMustHaveSameLength, 
-                    this.destinationFiles.Length, 
-                    this.sourceFiles.Length, 
-                    "DestinationFiles", 
+                Log.LogError(Resources.TwoVectorsMustHaveSameLength,
+                    this.destinationFiles.Length,
+                    this.sourceFiles.Length,
+                    "DestinationFiles",
                     "SourceFiles");
                 return false;
             }
-            
+
             // create destination array
             if (this.destinationFiles == null)
             {
@@ -167,9 +167,9 @@ namespace MSBuild.Community.Tasks
                     catch (ArgumentException ex)
                     {
                         this.destinationFiles = new ITaskItem[0];
-                        Log.LogError(Resources.MoveError, 
-                            this.sourceFiles[x].ItemSpec, 
-                            this.destinationFolder.ItemSpec, 
+                        Log.LogError(Resources.MoveError,
+                            this.sourceFiles[x].ItemSpec,
+                            this.destinationFolder.ItemSpec,
                             ex.Message);
                         return false;
                     }
@@ -243,10 +243,10 @@ namespace MSBuild.Community.Tasks
             }
             if (Directory.Exists(sourceFile))
             {
-                Log.LogError(Resources.TaskSourceIsDirectory, sourceFile, "Move");
+                Log.LogError(Resources.TaskSourceIsDirectory, sourceFile, "MV");
                 return false;
             }
-            
+
             string directory = Path.GetDirectoryName(destinationFile);
             if (((directory != null) && (directory.Length > 0)) && !Directory.Exists(directory))
             {
@@ -257,10 +257,10 @@ namespace MSBuild.Community.Tasks
             Log.LogMessage(MessageImportance.Normal, Resources.MoveFileComment, sourceFile, destinationFile);
 
             Log.LogMessage(MessageImportance.Low, "Command:", new object[0]);
-            
+
             string[] textArray = new string[] { "move /y \"", sourceFile, "\" \"", destinationFile, "\"" };
             base.Log.LogCommandLine(MessageImportance.Low, string.Concat(textArray));
-            
+
             File.Move(sourceFile, destinationFile);
 
             return true;

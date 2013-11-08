@@ -89,7 +89,7 @@
     <Compile Include="IIS\AppPoolDeleteTest.cs" />
     <Compile Include="IIS\WebDirectoryCreateTest.cs" />
     <Compile Include="IIS\WebDirectoryDeleteTest.cs" />
-    <Compile Include="MoveTest.cs" />
+    <Compile Include="MVTest.cs" />
     <Compile Include="Regex\RegexCompilerTest.cs" />
     <Compile Include="Regex\RegexTest.cs" />
     <Compile Include="RoboCopyTest.cs" />

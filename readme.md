@@ -284,7 +284,7 @@ https://groups.google.com/d/forum/msbuildtasks
     </tr>
     <tr>
         <td>
-            Move
+            MV
         </td>
         <td>
             Moves files on the filesystem to a new location.
