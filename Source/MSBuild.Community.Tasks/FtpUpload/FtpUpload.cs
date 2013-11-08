@@ -75,6 +75,8 @@ namespace MSBuild.Community.Tasks {
 		public FtpUpload() {
 			_username = "anonymous";
 			_password = string.Empty;
+            _timeout = 7000;
+            _keepAlive = false;
 		}
 
 		/// <summary>
@@ -177,6 +179,29 @@ namespace MSBuild.Community.Tasks {
 			get { return _usePassive; }
 			set { _usePassive = value; }
 		}
+
+        private bool _keepAlive;
+
+        /// <summary>
+        /// Gets or sets a value that indicates whether to make a persistent connection to the Internet resource.
+        /// </summary>        
+        public bool KeepAlive
+        {
+            get { return _keepAlive; }
+            set { _keepAlive = value; }
+        }
+
+        private int _timeout;
+
+        /// <summary>
+        /// Gets or sets the time-out value in milliseconds
+        /// </summary>  
+        /// <value>The number of milliseconds to wait before the request times out. The default value is 7000 milliseconds (7 seconds).</value>
+        public int Timeout
+        {
+            get { return _timeout; }
+            set { _timeout = value; }
+        }
 
 		/// <summary>
 		/// When overridden in a derived class, executes the task.
@@ -380,8 +405,8 @@ namespace MSBuild.Community.Tasks {
 			rq.Method = method;
 			rq.UsePassive = _usePassive;
 			rq.UseBinary = true;
-			rq.Timeout = 7000;
-			rq.KeepAlive = false;
+			rq.Timeout = _timeout;
+			rq.KeepAlive = _keepAlive;
 			if (!string.IsNullOrEmpty(_username)) {
 				rq.Credentials = new NetworkCredential(_username, _password);
 			}
