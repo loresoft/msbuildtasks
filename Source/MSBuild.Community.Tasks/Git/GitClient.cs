@@ -73,11 +73,12 @@ namespace MSBuild.Community.Tasks.Git
             string toolPath =
                 ToolPathUtil.FindInRegistry(toolName) ??
                 ToolPathUtil.FindInPath(toolName) ??
-                ToolPathUtil.FindInProgramFiles(toolName, @"Git\bin");
+                ToolPathUtil.FindInProgramFiles(toolName, @"Git\bin") ??
+                ToolPathUtil.FindInLocalPath(toolName, LocalPath);
 
             if (toolPath == null)
             {
-                throw new Exception("Could not find git.exe.  Looked in PATH locations and various common folders inside Program Files.");
+                throw new Exception(string.Format("Could not find git.exe.  Looked in PATH locations and various common folders inside Program Files. LocalPath: {0}",LocalPath));
             }
 
             return toolPath;
