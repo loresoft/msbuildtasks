@@ -78,7 +78,7 @@ namespace MSBuild.Community.Tasks.Git
 
             if (toolPath == null)
             {
-                throw new Exception("Could not find git.exe. Looked in PATH locations and various common folders inside Program Files as well as \"LocalPath\.");
+                throw new Exception("Could not find git.exe. Looked in PATH locations and various common folders inside Program Files as well as LocalPath.");
             }
 
             return toolPath;
