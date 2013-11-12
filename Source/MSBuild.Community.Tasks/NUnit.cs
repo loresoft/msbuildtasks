@@ -1,6 +1,6 @@
-#region Copyright © 2005 Paul Welter. All rights reserved.
+#region Copyright ï¿½ 2005 Paul Welter. All rights reserved.
 /*
-Copyright © 2005 Paul Welter. All rights reserved.
+Copyright ï¿½ 2005 Paul Welter. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -60,8 +60,8 @@ namespace MSBuild.Community.Tasks
         /// The default relative path of the NUnit installation.
         /// The value is <c>@"NUnit 2.4\bin"</c>.
         /// </summary>
-        public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit 2.4\bin";
-        private const string InstallDirKey = @"HKEY_CURRENT_USER\Software\nunit.org\Nunit\2.4";
+        public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit 2.6.3\bin";
+        private const string InstallDirKey = @"HKEY_CURRENT_USER\Software\nunit.org\Nunit\2.6.3";
 
         #endregion Constants
 
