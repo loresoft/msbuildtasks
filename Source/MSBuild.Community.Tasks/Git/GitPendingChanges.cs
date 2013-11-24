@@ -38,7 +38,7 @@ namespace MSBuild.Community.Tasks.Git
         /// <param name="messageImportance">A value of <see cref="T:Microsoft.Build.Framework.MessageImportance"/> that indicates the importance level with which to log the message.</param>
         protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
         {
-            HasPendingChanges = singleLine.Trim().Length > 0;
+            HasPendingChanges = HasPendingChanges || singleLine.Trim().Length > 0;
         }
     }
 }
