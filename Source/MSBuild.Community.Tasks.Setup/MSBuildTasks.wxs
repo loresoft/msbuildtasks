@@ -156,7 +156,7 @@
 
     <Property Id="VS2013_SCHEMAS_MSBUILD_DIR">
       <RegistrySearch Id="VS2013SearchForCommonPath" Root="HKLM"
-                      Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="11.0" Type="raw">
+                      Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="12.0" Type="raw">
         <DirectorySearch Id="VS2013SearchForXmlPath" Path="Xml" Depth="1">
           <DirectorySearch Id="VS2013SearchForXmlSchemasPath" Path="Schemas" Depth="1">
             <DirectorySearch Id="VS2013SearchForXmlSchemasLangPath" Path="1033" Depth="1">
@@ -169,7 +169,7 @@
 
     <Property Id="VS2013_MSBUILD_SCHEMA">
       <RegistrySearch Id="VS2013SearchForCommonPath2" Root="HKLM"
-                      Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="11.0" Type="raw">
+                      Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="12.0" Type="raw">
         <DirectorySearch Id="VS2013SearchForXmlPath2" Path="Xml" Depth="1">
           <DirectorySearch Id="VS2013SearchForXmlSchemasPath2" Path="Schemas" Depth="1">
             <DirectorySearch Id="VS2013SearchForXmlSchemasLangPath2" Path="1033" Depth="1">
