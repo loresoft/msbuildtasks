@@ -30,6 +30,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
@@ -43,8 +45,7 @@ namespace MSBuild.Community.Tasks.Tfs
     /// A task for Team Foundation Server version control.
     /// </summary>
     public class TfsClient : ToolTask
-    {
-
+    {        
         /// <summary>
         /// Gets or sets the Team Foundation Server command.
         /// </summary>
@@ -191,6 +192,7 @@ namespace MSBuild.Community.Tasks.Tfs
         /// </summary>
         public string ShelveSetOwner { get; set; }
 
+        public StringBuilder Output { get; set; }
 
         /// <summary>
         /// Gets or sets the changeset.
@@ -202,11 +204,17 @@ namespace MSBuild.Community.Tasks.Tfs
         /// </summary>
         [Output]
         public string ServerPath { get; set; }
-        
+
+        private static readonly string[] candidatePaths =
+        {
+            @"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE",
+            @"C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE",
+            @"C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE"
+        };
 
         private string FindToolPath(string toolName)
         {
-            return string.Empty;
+            return candidatePaths.FirstOrDefault(Directory.Exists);
         }
 
         /// <summary>
@@ -267,7 +275,7 @@ namespace MSBuild.Community.Tasks.Tfs
 
                 builder.AppendSwitch(login);
             }
-            
+
             if (!string.IsNullOrEmpty(WorkspaceName))
             {
                 string workspace = "/workspace:" + WorkspaceName;
@@ -363,27 +371,43 @@ namespace MSBuild.Community.Tasks.Tfs
         /// <param name="messageImportance">A value of <see cref="T:Microsoft.Build.Framework.MessageImportance"/> that indicates the importance level with which to log the message.</param>
         protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
         {
-          bool isError = messageImportance == StandardErrorLoggingImportance;
+            bool isError = messageImportance == StandardErrorLoggingImportance;
 
-          if (isError)
-            base.LogEventsFromTextOutput(singleLine, messageImportance);
+            if (isError)
+                base.LogEventsFromTextOutput(singleLine, messageImportance);
 
-          Match m = Regex.Match(singleLine, @"(?<Name>[\w ]+)\s*\:(?<Value>[^\r\n]+)");
-          if (!m.Success)
-            return;
+            if (string.IsNullOrEmpty(singleLine))
+                return;
 
-          string name = m.Groups["Name"].Value.Trim();
-          string value = m.Groups["Value"].Value.Trim();
+            ParseOutput(singleLine);
+        }
 
-          switch (name)
-          {
-            case "Changeset":
-              Changeset = value;
-              break;
-            case "Server path":
-              ServerPath = value;
-              break;
-          }
+        public override bool Execute()
+        {
+            this.Output = new StringBuilder();
+            return base.Execute();
+        }
+
+
+        private void ParseOutput(string singleLine)
+        {
+            this.Output.AppendLine(singleLine);
+            Match m = Regex.Match(singleLine, @"(?<Name>[\w ]+)\s*\:(?<Value>[^\r\n]+)");
+            if (!m.Success)
+                return;
+
+            string name = m.Groups["Name"].Value.Trim();
+            string value = m.Groups["Value"].Value.Trim();
+
+            switch (name)
+            {
+                case "Changeset":
+                    Changeset = value;
+                    break;
+                case "Server path":
+                    ServerPath = value;
+                    break;
+            }
         }
 
         /// <summary>

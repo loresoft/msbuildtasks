@@ -106,6 +106,7 @@
     <Compile Include="Sound\SoundTest.cs" />
     <Compile Include="SourceServer\SrcToolTest.cs" />
     <Compile Include="SourceServer\SvnSourceIndexTest.cs" />
+    <Compile Include="SourceServer\TfsSourceIndexTest.cs" />
     <Compile Include="SqlServer\ExecuteDDLTest.cs" />
     <Compile Include="SqlServer\SqlPubWizTest.cs" />
     <Compile Include="Subversion\SvnCopyTest.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Subversion\SvnStatusTest.cs" />
     <Compile Include="SymbolServer\SymStoreTest.cs" />
     <Compile Include="TemplateFile\TemplateFileTest.cs" />
+    <Compile Include="Tfs\InfoCommandResponseTest.cs" />
     <Compile Include="Time\TimeTest.cs" />
     <Compile Include="User\UserTest.cs" />
     <Compile Include="WebDownloadTest.cs" />

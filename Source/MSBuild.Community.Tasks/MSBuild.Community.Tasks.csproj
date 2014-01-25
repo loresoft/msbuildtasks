@@ -166,11 +166,13 @@
     <Compile Include="SourceServer\SrcTool.cs" />
     <Compile Include="SourceServer\SvnSourceIndex.cs" />
     <Compile Include="SourceServer\SymbolFile.cs" />
+    <Compile Include="SourceServer\TfsSourceIndex.cs" />
     <Compile Include="SqlServer\SqlPubWiz.cs" />
     <Compile Include="Subversion\SvnCopy.cs" />
     <Compile Include="Subversion\Info.cs" />
     <Compile Include="Subversion\SvnStatus.cs" />
     <Compile Include="SymbolServer\SymStore.cs" />
+    <Compile Include="Tfs\InfoCommandResponse.cs" />
     <Compile Include="Tfs\TfsClient.cs" />
     <Compile Include="Services\Win32Registry.cs" />
     <Compile Include="User\User.cs" />
