@@ -33,8 +33,7 @@ namespace MSBuild.Community.Tasks.Tests.SourceServer
             var pdfFile = new TaskItem(Path.GetFullPath("MSBuild.Community.Tasks.pdb"));
 
             task.SymbolFiles = new ITaskItem[] { pdfFile };
-            task.SourceServerSdkPath = @"C:\Program Files\Debugging Tools for Windows (x64)\srcsrv";
-
+            
             var result = task.Execute();
 
             Assert.IsTrue(result);

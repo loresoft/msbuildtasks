@@ -54,7 +54,7 @@ namespace MSBuild.Community.Tasks.Tfs
                         Type = GetValue(lines[i + 5]),
                     };
 
-                    this.LocalInformation[localInformation.LocalPath] = localInformation;
+                    this.LocalInformation[localInformation.LocalPath.ToLower()] = localInformation;
                     i = i + 5;
                 }
                 else if (line.Contains("Server information:"))
@@ -72,7 +72,7 @@ namespace MSBuild.Community.Tasks.Tfs
                         Size  = GetValue(lines[i + 9]),
                     };
 
-                    this.ServerInformation[serverInformation.ServerPath] = serverInformation;
+                    this.ServerInformation[serverInformation.ServerPath.ToLower()] = serverInformation;
                     i = i + 9;
                 }
             }

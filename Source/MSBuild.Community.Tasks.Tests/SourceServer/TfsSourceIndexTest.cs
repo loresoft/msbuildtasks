@@ -6,6 +6,9 @@ using NUnit.Framework;
 
 namespace MSBuild.Community.Tasks.Tests.SourceServer
 {
+    /// <summary>
+    /// NOTE: This test requires that the pdb under test is compiled from sources that are in a TFS workspace.
+    /// </summary>
     [TestFixture]
     public class TfsSourceIndexTest
     {

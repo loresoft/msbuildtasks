@@ -29,6 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
 using System.IO;
+using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
@@ -49,6 +50,8 @@ namespace MSBuild.Community.Tasks.SourceServer
         /// <remarks />
         protected int Skipped = 0;
 
+        private string sourceServerSdkPath;
+
         /// <summary>
         /// Gets or sets the symbol files to have to source index added.
         /// </summary>
@@ -57,17 +60,31 @@ namespace MSBuild.Community.Tasks.SourceServer
         public ITaskItem[] SymbolFiles { get; set; }
 
         /// <summary>
+        /// Default install locations for the debugger tools if installed with the windows sdk (which I think is now the only option?).
+        /// </summary>
+        private static readonly string[] CandidateSdkPath =
+        {
+            @"C:\program Files (x86)\Windows Kits\8.1\Debuggers\x64\srcsrv",
+            @"C:\program Files (x86)\Windows Kits\8.0\Debuggers\x64\srcsrv"
+        };
+
+        /// <summary>
         /// Gets or sets the source server SDK path.
         /// </summary>
         /// <value>The source server SDK path.</value>
-        public string SourceServerSdkPath { get; set; }
+        public string SourceServerSdkPath
+        {
+            get
+            {
+                if (sourceServerSdkPath == null)
+                {
+                    sourceServerSdkPath = CandidateSdkPath.FirstOrDefault(Directory.Exists);
+                }
 
-        /// <summary>
-        /// Gets or sets the name of the source server.
-        /// </summary>
-        /// <value>The name of the source server.</value>
-        [Required]
-        public string SourceServerName { get; set; }
+                return sourceServerSdkPath;
+            }
+            set { sourceServerSdkPath = value; }
+        }
 
         /// <summary>
         /// Gets or sets the source command format. The SRCSRVCMD environment variable.
@@ -159,9 +176,12 @@ namespace MSBuild.Community.Tasks.SourceServer
             }
             finally
             {
-                File.Delete(indexFile);
+                if (!KeepTempFileForDebugging)
+                    File.Delete(indexFile);
             }
         }
+
+        public bool KeepTempFileForDebugging { get; set; }
 
         /// <summary>
         /// Creates an instance of <see cref="SymbolFile"/> from the symbol file task item and add the source file list to it.

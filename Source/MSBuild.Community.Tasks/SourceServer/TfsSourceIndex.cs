@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Odbc;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -10,8 +12,17 @@ using MSBuild.Community.Tasks.Tfs;
 namespace MSBuild.Community.Tasks.SourceServer
 {
     /// <summary>
-    /// This implementation is based on the pdb indexed by Team Foundation Build 2013
+    /// Task to index pdb files and entries to retrieve source files from Team Foundation Server source control.
     /// </summary>
+    /// <remarks>
+    /// This implementation is based on a pdb indexed by Team Foundation Build 2013 and has not been tested on other versions
+    /// of TFS.
+    /// </remarks>
+    /// <example>Index a PDB.
+    /// <code><![CDATA[
+    /// <TfsSourceIndex SymbolFiles="@(Symbols)" TeamProjectCollectionUri="http://my-tfsserver/tfs/DefaultCollection" />
+    /// ]]></code>
+    /// </example>
     public class TfsSourceIndex : SourceIndexBase
     {
         /// <summary>
@@ -26,9 +37,21 @@ namespace MSBuild.Community.Tasks.SourceServer
             var localInformation = GetLocalInformation(symbolFile.SourceFiles.Select(item => new TaskItem(item.File.FullName)).Cast<ITaskItem>());
             foreach (var item in symbolFile.SourceFiles)
             {
+                var key = item.File.FullName.ToLower();
+                if (!localInformation.ContainsKey(key))
+                {
+                    var allKeys = new StringBuilder();
+                    foreach (var entry in localInformation)
+                    {
+                        allKeys.Append(entry.Key + "|");
+                    }
+
+                    throw new KeyNotFoundException(string.Format("Could not find a local information entry for |{0}|.\n{1}.", key, allKeys));
+                }
+
                 item.Properties["FileName"] = item.File.Name;
-                item.Properties["Revision"] = localInformation[item.File.FullName].Changeset;
-                item.Properties["ItemPath"] = localInformation[item.File.FullName].ServerPath.TrimStart('$');
+                item.Properties["Revision"] = localInformation[key].Changeset;
+                item.Properties["ItemPath"] = localInformation[key].ServerPath.TrimStart('$');
                 item.IsResolved = true;
             }
 
