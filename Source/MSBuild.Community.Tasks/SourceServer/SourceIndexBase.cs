@@ -181,6 +181,12 @@ namespace MSBuild.Community.Tasks.SourceServer
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to keep temporary source index file created during index for debugging purposes.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> to keep the temporary file; otherwise, <c>false</c>.
+        /// </value>
         public bool KeepTempFileForDebugging { get; set; }
 
         /// <summary>

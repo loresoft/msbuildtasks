@@ -3,12 +3,19 @@ using System.Collections.Generic;
 
 namespace MSBuild.Community.Tasks.Tfs
 {
+    /// <summary>
+    /// Represents the response from a tf.exe info command
+    /// </summary>
     public class InfoCommandResponse
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="InfoCommandResponse"/>
+        /// </summary>
+        /// <param name="output">The raw output from tf.exe info [itemspces]</param>
         public InfoCommandResponse(string output)
         {
-            this.LocalInformation = new Dictionary<string, LocalInformation>();
-            this.ServerInformation = new Dictionary<string, ServerInformation>();
+            this.LocalInformation = new Dictionary<string, IItemInformation>();
+            this.ServerInformation = new Dictionary<string, IItemInformation>();
             this.Response = output;
             this.Parse();
         }
@@ -54,7 +61,7 @@ namespace MSBuild.Community.Tasks.Tfs
                         Type = GetValue(lines[i + 5]),
                     };
 
-                    this.LocalInformation[localInformation.LocalPath.ToLower()] = localInformation;
+                    this.LocalInformation[localInformation.ServerPath.ToLower()] = localInformation;
                     i = i + 5;
                 }
                 else if (line.Contains("Server information:"))
@@ -88,31 +95,171 @@ namespace MSBuild.Community.Tasks.Tfs
             return line.Substring(index + 1).Trim();
         }
 
-        public Dictionary<string, LocalInformation> LocalInformation { get; set; }
+        /// <summary>
+        /// Gets or sets the local information.
+        /// </summary>
+        /// <value>
+        /// The local information.
+        /// </value>
+        public Dictionary<string, IItemInformation> LocalInformation { get; set; }
 
-        public Dictionary<string, ServerInformation> ServerInformation { get; set; }
+        /// <summary>
+        /// Gets or sets the server information.
+        /// </summary>
+        /// <value>
+        /// The server information.
+        /// </value>
+        public Dictionary<string, IItemInformation> ServerInformation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the response, the raw output of the tf.exe info command.
+        /// </summary>
+        /// <value>
+        /// The response.
+        /// </value>
         public string Response { get; set; }
     }
 
-    public class ServerInformation
+    /// <summary>
+    /// Represents the server information section created by a tf.exe info command
+    /// </summary>
+    public class ServerInformation : IItemInformation
     {
+        /// <summary>
+        /// Gets or sets the server path.
+        /// </summary>
+        /// <value>
+        /// The server path.
+        /// </value>
         public string ServerPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the changeset.
+        /// </summary>
+        /// <value>
+        /// The changeset.
+        /// </value>
         public string Changeset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the deletion identifier.
+        /// </summary>
+        /// <value>
+        /// The deletion identifier.
+        /// </value>
         public string DeletionID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the lock.
+        /// </summary>
+        /// <value>
+        /// The lock.
+        /// </value>
         public string Lock { get; set; }
+
+        /// <summary>
+        /// Gets or sets the lock owner.
+        /// </summary>
+        /// <value>
+        /// The lock owner.
+        /// </value>
         public string LockOwner { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last modified.
+        /// </summary>
+        /// <value>
+        /// The last modified.
+        /// </value>
         public string LastModified { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>
+        /// The type.
+        /// </value>
         public string Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the file.
+        /// </summary>
+        /// <value>
+        /// The type of the file.
+        /// </value>
         public string FileType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the size.
+        /// </summary>
+        /// <value>
+        /// The size.
+        /// </value>
         public string Size { get; set; }
     }
 
-    public class LocalInformation
+    public interface IItemInformation
     {
+        /// <summary>
+        /// Gets or sets the server path.
+        /// </summary>
+        /// <value>
+        /// The server path.
+        /// </value>
+        string ServerPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the changeset.
+        /// </summary>
+        /// <value>
+        /// The changeset.
+        /// </value>
+        string Changeset { get; set; }
+    }
+
+    /// <summary>
+    /// Represents the local information section from a tf.exe info command
+    /// </summary>
+    public class LocalInformation : IItemInformation
+    {
+        /// <summary>
+        /// Gets or sets the local path.
+        /// </summary>
+        /// <value>
+        /// The local path.
+        /// </value>
         public string LocalPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the server path.
+        /// </summary>
+        /// <value>
+        /// The server path.
+        /// </value>
         public string ServerPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the changeset.
+        /// </summary>
+        /// <value>
+        /// The changeset.
+        /// </value>
         public string Changeset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the change.
+        /// </summary>
+        /// <value>
+        /// The change.
+        /// </value>
         public string Change { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>
+        /// The type.
+        /// </value>
         public string Type { get; set; }
     }
 }

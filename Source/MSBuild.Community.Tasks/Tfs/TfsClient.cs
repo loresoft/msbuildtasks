@@ -192,13 +192,33 @@ namespace MSBuild.Community.Tasks.Tfs
         /// </summary>
         public string ShelveSetOwner { get; set; }
 
-        public StringBuilder Output { get; set; }
+        /// <summary>
+        /// Gets the output resulting from executing this command.
+        /// </summary>
+        public StringBuilder Output { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the working directory used when executing this tool.
+        /// </summary>
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the changeset.
         /// </summary>
         [Output]
         public string Changeset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the changeset version passed in the version spec parameter
+        /// </summary>
+        /// <value>
+        /// The changeset version.
+        /// </value>
+        /// <example>
+        /// /v:C{ChangesetVersion}
+        /// </example>
+        public string ChangesetVersion { get; set; }
+
         /// <summary>
         /// Gets or sets the server path.
         /// </summary>
@@ -212,9 +232,22 @@ namespace MSBuild.Community.Tasks.Tfs
             @"C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE"
         };
 
+        private const int MaxCommandlineLength = 32000;        
+
         private string FindToolPath(string toolName)
         {
             return candidatePaths.FirstOrDefault(Directory.Exists);
+        }
+
+        /// <inheritdoc />
+        protected override string GetWorkingDirectory()
+        {
+            if (!string.IsNullOrEmpty(this.WorkingDirectory))
+            {
+                this.Log.LogMessage("Setting working directory to {0}.", this.WorkingDirectory);
+            }
+
+            return this.WorkingDirectory;
         }
 
         /// <summary>
@@ -243,6 +276,7 @@ namespace MSBuild.Community.Tasks.Tfs
             builder.AppendSwitchIfNotNull("/notes:", Notes);
             builder.AppendSwitchIfNotNull("/format:", Format);
             builder.AppendSwitchIfNotNull("/collection:", Collection);
+            builder.AppendSwitchIfNotNull("/v:C", ChangesetVersion);
 
             if (Recursive)
                 builder.AppendSwitch("/recursive");
@@ -354,14 +388,14 @@ namespace MSBuild.Community.Tasks.Tfs
         /// </summary>
         /// <returns>
         /// A string value containing the command line arguments to pass directly to the executable file.
-        /// </returns>
+        /// </returns>        
         protected override string GenerateCommandLineCommands()
         {
-            var commandLine = new CommandLineBuilder();
-            GenerateCommand(commandLine);
-            GenerateArguments(commandLine);
+                var commandLine = new CommandLineBuilder();
+                GenerateCommand(commandLine);
+                GenerateArguments(commandLine);
 
-            return commandLine.ToString();
+                return commandLine.ToString();                       
         }
 
         /// <summary>
@@ -382,10 +416,86 @@ namespace MSBuild.Community.Tasks.Tfs
             ParseOutput(singleLine);
         }
 
+        /// <inheritdoc />
         public override bool Execute()
         {
             this.Output = new StringBuilder();
+            if (BatchRequired.GetValueOrDefault())
+            {
+                return ExecuteBatchMode();
+            }
+
             return base.Execute();
+        }
+
+        private bool ExecuteBatchMode()
+        {
+            var originalFiles = (ITaskItem[]) this.Files.Clone();
+            var executeSuccess = true;
+
+            int index = 0;
+
+            while (executeSuccess && index < originalFiles.Length)
+            {
+                var batchFiles = new List<ITaskItem>();
+                
+                this.GetNextBatch(index, originalFiles, batchFiles);
+                index = index + batchFiles.Count;
+
+                this.Files = batchFiles.ToArray();
+                executeSuccess = base.Execute();                
+            }
+
+            return executeSuccess;
+        }
+
+        private void GetNextBatch(int indexOffSet, ITaskItem[] originalFiles, List<ITaskItem> batchFiles)
+        {
+            const int offSet = 1000; // for other switches            
+            int arrayLength = 0 + offSet;
+            var buildBatch = true;                
+            while (buildBatch)
+            {
+                if (indexOffSet >= originalFiles.Length)
+                {
+                    buildBatch = false;
+                    continue;
+                }
+
+                var fileLength = originalFiles[indexOffSet].ItemSpec.Length + 1; // + 1 for the space
+                if (fileLength + arrayLength > MaxCommandlineLength)
+                {
+                    buildBatch = false;
+                    continue;
+                }
+
+                batchFiles.Add(originalFiles[indexOffSet]);
+                indexOffSet = indexOffSet + 1;
+                arrayLength = arrayLength + fileLength;
+            }
+        }
+
+        private bool? batchRequired;
+        /// <summary>
+        /// Gets a value determining if this command must be processed in batch mode, due
+        /// to the length of the commandline arguments.
+        /// </summary>
+        public bool? BatchRequired
+        {
+            get
+            {
+                if (batchRequired == null)
+                {
+                    if (GenerateCommandLineCommands().Length > MaxCommandlineLength)
+                    {
+                        batchRequired = true;
+                    }
+
+                }
+
+                return batchRequired;
+            }
+            private set { batchRequired = value; }
         }
 
 
