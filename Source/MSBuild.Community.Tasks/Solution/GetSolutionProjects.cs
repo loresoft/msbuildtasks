@@ -60,7 +60,7 @@ namespace MSBuild.Community.Tasks
     /// </example>
     public class GetSolutionProjects : Task
     {
-        private const string ExtractProjectsFromSolutionRegex = @"=\s*""(?<ProjectName>.+?)""\s*,\s*""(?<ProjectFile>.+?)""\s*,\s*""(?<ProjectGUID>.+?)""";
+        private const string ExtractProjectsFromSolutionRegex = @"=\s*""(?<ProjectName>.+?)""\s*,\s*""(?<ProjectFile>.+proj?)""\s*,\s*""(?<ProjectGUID>.+?)""";
         private string solutionFile = "";
         private ITaskItem[] output = null;
 
