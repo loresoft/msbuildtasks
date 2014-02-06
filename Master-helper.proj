@@ -90,9 +90,9 @@
     <ILMerge InputAssemblies="Build\MSBuild.Temp.dll;Build\Ionic.Zip.Reduced.dll"
              Internalize="true"
              OutputFile="Build\MSBuild.Community.Tasks.dll"
-			 KeyFile="Source\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk"
-			 ToolPath="Source\packages\ilmerge.2.12.0803\"
-			 />
+             KeyFile="Source\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk"
+             ToolPath="Source\packages\ilmerge.2.12.0803\"
+             />
 
     <!-- Cleanup unneed files -->
     <CreateItem Include="Build\*.dll;Build\*.x*l" Exclude="Build\MSBuild.Community.Tasks.*" >
@@ -111,11 +111,12 @@
   </Target>
 
   <Target Name="Zip" DependsOnTargets="Documentation;Merge">
-    <CreateItem Include="**\*.*" Exclude="@(DefaultExclude)" >
+    <CreateItem Include="Build\*.*" Exclude="@(DefaultExclude)" >
       <Output TaskParameter="Include" ItemName="ZipFiles" />
     </CreateItem>
     
     <Zip Files="@(ZipFiles)"
+         WorkingDirectory="Build"
          ZipFileName="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).zip" />
   </Target>
 
