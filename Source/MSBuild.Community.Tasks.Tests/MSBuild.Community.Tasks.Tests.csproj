@@ -73,6 +73,7 @@
     <Compile Include="Git\GitDescribeTest.cs" />
     <Compile Include="Git\GitBranchTest.cs" />
     <Compile Include="Git\GitCommitsTest.cs" />
+    <Compile Include="Git\GitPendingChangesTest.cs" />
     <Compile Include="Git\GitVersionTest.cs" />
     <Compile Include="IIS\WebDirectoryScriptMapTest.cs" />
     <Compile Include="IIS\WebDirectorySettingTest.cs" />
