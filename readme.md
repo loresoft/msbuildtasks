@@ -4,10 +4,10 @@ The MSBuild Community Tasks Project is an open source project for MSBuild tasks.
 
 ##Download
 
-The latest nightly build of can be downloaded from the following location.
-http://code.google.com/p/msbuildtasks/downloads/list
+The latest build can be downloaded from the releases section.
+https://github.com/loresoft/msbuildtasks/releases
 
-The MSBuild Community Tasks  library is also available on nuget.org via package name `MSBuildTasks`.
+The MSBuild Community Tasks library is also available on nuget.org via package name `MSBuildTasks`.
 
 To install MSBuildTasks, run the following command in the Package Manager Console
 
@@ -15,6 +15,13 @@ To install MSBuildTasks, run the following command in the Package Manager Consol
     
 More information about NuGet package avaliable at
 https://nuget.org/packages/MSBuildTasks
+
+##Development Builds
+
+Development builds are available on the myget.org feed.  A development build is promoted to the main NuGet feed when it's determined to be stable. 
+
+In your Package Manager settings add the following package source for development builds:
+http://www.myget.org/F/loresoft/
 
 ##Join Project
 

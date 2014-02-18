@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>3.5</ProductVersion>
+    <ProductVersion>3.8</ProductVersion>
     <ProjectGuid>{6e293db7-b1e3-4cea-ab94-79a979f91af5}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>MSBuild.Community.Tasks</OutputName>
