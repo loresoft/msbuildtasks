@@ -19,15 +19,16 @@ namespace MSBuild.Community.Tasks.Tests.SourceServer
             task.BuildEngine = new MockBuild();
 
             //var pdfFile = new TaskItem(Path.GetFullPath("MSBuild.Community.Tasks.pdb"));
-            var pdfFile = new TaskItem(@"C:\TeamCity\BuildAgent1\work\81dfcc86a237ffdc\build-output\Market\MTSubsystem.Market.pdb");
+            //var pdfFile = new TaskItem(@"C:\Dev\Build\DTO\Utility\bin\Release\CityIndex.Genesis.DTO.Utility.pdb");
+            var pdfFile = new TaskItem(@"C:\Dev\Build\DTO\MarketInformation\bin\Debug\CityIndex.Genesis.DTO.MarketInformation.pdb");
 
             task.SymbolFiles = new ITaskItem[] { pdfFile };
-            task.TeamProjectRootDirectory = @"C:\TeamCity\BuildAgent1\work\81dfcc86a237ffdc";
-            task.TeamProjectName = "Genesis";
-            task.ChangesetVersion = "66803";
+            task.TeamProjectRootDirectory = @"C:\Dev\Build";
+            task.TeamProjectName = "Genesis/DevBranches/Build";
+            task.ChangesetVersion = "67550";
             task.TeamProjectCollectionUri = "https://tfs.cityindex.co.uk/tfs/defaultcollection";
 
-            task.WorkspaceDirectory = @"C:\TeamCity\BuildAgent1\work\81dfcc86a237ffdc\DevBranches\TeamCity";
+            task.WorkspaceDirectory = @"C:\Dev\Build";
             task.SourceServerSdkPath = @"C:\program Files (x86)\Windows Kits\8.1\Debuggers\x64\srcsrv";
 
             var result = task.Execute();
