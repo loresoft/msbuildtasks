@@ -29,6 +29,7 @@ namespace MSBuild.Community.Tasks.Git
         protected override void GenerateArguments(CommandLineBuilder builder)
         {
             builder.AppendSwitch("--porcelain");
+            base.GenerateArguments(builder);
         }
 
         /// <summary>
