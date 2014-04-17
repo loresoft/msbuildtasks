@@ -162,6 +162,18 @@ namespace MSBuild.Community.Tasks
         }
 
 
+        private string _textOutputFile;
+
+        /// <summary>
+        /// The file to redirect standard output to.
+        /// </summary>
+        public string TextOutputFile
+        {
+            get { return _textOutputFile; }
+            set { _textOutputFile = value; }
+        }
+
+
         private string _workingDirectory;
 
         /// <summary>
@@ -275,7 +287,7 @@ namespace MSBuild.Community.Tasks
             }
             if (_showLabels)
             {
-                builder.AppendSwitch("/labels");
+                builder.AppendSwitch(c+"labels");
             }
             builder.AppendFileNamesIfNotNull(_assemblies, " ");
 
@@ -292,6 +304,8 @@ namespace MSBuild.Community.Tasks
             builder.AppendSwitchIfNotNull(c+"xml=", _outputXmlFile);
 
             builder.AppendSwitchIfNotNull(c+"err=", _errorOutputFile);
+
+            builder.AppendSwitchIfNotNull(c+"out=", _textOutputFile);
 
             builder.AppendSwitchIfNotNull(c+"framework=",_framework);
 
