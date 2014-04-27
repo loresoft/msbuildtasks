@@ -18,7 +18,7 @@ namespace MSBuild.Community.Tasks
 	///		</Tokens>
 	/// </ItemGroup>
 	/// 
-	/// <TemplateFile TemplateFile="ATemplateFile.template" OutputFile="ReplacedFile.txt" Tokens="@(Tokens)" />
+    /// <TemplateFile Template="ATemplateFile.template" OutputFilename="ReplacedFile.txt" Tokens="@(Tokens)" />
 	/// ]]></code>
 	/// </example>
 	/// <remarks>Tokens in the template file are formatted using ${var} syntax and names are not 
