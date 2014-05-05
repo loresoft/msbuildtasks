@@ -15,7 +15,7 @@ namespace MSBuild.Community.Tasks.Tests
 	using Microsoft.Build.Utilities;
 
 	/// <summary>
-	/// NUnit tests for the MSBuild <see cref="Microsoft.Build.Framework.Task"/> 
+	/// NUnit tests for the MSBuild <see cref="Microsoft.Build.Framework.ITask"/> 
 	/// <see cref="ILMerge"/>.
 	/// </summary>
 	[TestFixture]
