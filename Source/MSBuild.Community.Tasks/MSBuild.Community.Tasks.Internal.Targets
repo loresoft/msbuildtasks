@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- $Id$ -->
+
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+    <MSBuildCommunityTasksLib>$([MSBUILD]::Unescape($(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll))</MSBuildCommunityTasksLib>
+  </PropertyGroup>
+
+  <Import Project="MSBuild.Community.Tasks.targets"/>
+  
+  <ItemGroup>
+    <FxCopRuleAssemblies Include="UsageRules.dll"/>
+    <FxCopRuleAssemblies Include="SecurityRules.dll"/>
+    <FxCopRuleAssemblies Include="PortabilityRules.dll"/>
+    <FxCopRuleAssemblies Include="PerformanceRules.dll"/>
+    <FxCopRuleAssemblies Include="MobilityRules.dll"/>
+    <FxCopRuleAssemblies Include="InteroperabilityRules.dll"/>
+    <FxCopRuleAssemblies Include="GlobalizationRules.dll"/>
+    <FxCopRuleAssemblies Include="DesignRules.dll"/>
+  </ItemGroup>
+</Project>

@@ -5,7 +5,7 @@
 		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
 	</PropertyGroup>
 
-	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Internal.targets" />
 
 	<Target Name="LoadSampleFile">
 		<ReadLinesFromFile File="Test_XmlQuery.xml">
