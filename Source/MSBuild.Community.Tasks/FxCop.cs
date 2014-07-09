@@ -314,6 +314,19 @@ namespace MSBuild.Community.Tasks
             set { _failOnError = value; }
         }
 
+        private bool _ignoreGeneratedCode;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether FxCop should ignore 
+        /// generated code. Defaults to <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if ignore generated code; otherwise, <c>false</c>.</value>
+        public bool IgnoreGeneratedCode
+        {
+            get { return _ignoreGeneratedCode; }
+            set { _ignoreGeneratedCode = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -489,6 +502,11 @@ namespace MSBuild.Community.Tasks
             if (Verbose)
             {
                 _programArguments.Append("/v ");
+            }
+
+            if (IgnoreGeneratedCode)
+            {
+                _programArguments.Append("/igc ");
             }
 
             return _programArguments.ToString();

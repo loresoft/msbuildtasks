@@ -64,6 +64,7 @@ namespace MSBuild.Community.Tasks.Tests
             task.TypeList = "TypeA,TypeB";
             task.Verbose = true;
             task.SaveResults = true;
+            task.IgnoreGeneratedCode = true;
 
             Assert.AreEqual("/aXsl /c /cXsl:\"console-transform.xsl\" /d:\"depDir1\" /d:\"depDir2\" " +
                                              "/f:\"ABC.dll\" /f:\"DEF.dll\" /i:\"import.xml\" /o:\"report.xml\" " +
@@ -71,7 +72,7 @@ namespace MSBuild.Community.Tasks.Tests
                                              "/r:\"c:\\fxcop\\Rules\\a-rules.dll\" /r:\"c:\\fxcop\\Rules\\b-rules.dll\" " +
                                              "/rid:Microsoft.Design#CA1012 /rid:-Microsoft.Design#CA2210 " +
                                              "/s /t:TypeA,TypeB " +
-                                             "/u /v ",
+                                             "/u /v /igc ",
                                              (string)typeof(FxCop).InvokeMember("GenerateCommandLineCommands", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod, null, task, null));
         }
     }
