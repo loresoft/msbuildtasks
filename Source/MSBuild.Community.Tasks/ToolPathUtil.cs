@@ -75,6 +75,9 @@ namespace MSBuild.Community.Tasks
 
         public static string FindInLocalPath(string toolName, string localPath)
         {
+            if (localPath == null)
+                return null;
+
             string path = new DirectoryInfo(localPath).FullName;
             if (SafeFileExists(localPath, toolName))
             {
