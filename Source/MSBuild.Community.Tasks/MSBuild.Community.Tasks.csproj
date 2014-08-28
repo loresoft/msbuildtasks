@@ -125,8 +125,10 @@
     <Compile Include="Merge.cs" />
     <Compile Include="Net\HttpRequest.cs" />
     <Compile Include="NuGet\NuGetBase.cs" />
+    <Compile Include="NuGet\NuGetInstall.cs" />
     <Compile Include="NuGet\NuGetPack.cs" />
     <Compile Include="NuGet\NuGetPush.cs" />
+    <Compile Include="NuGet\NuGetRestore.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="Regex\RegexCompiler.cs" />
     <Compile Include="Sandcastle\BuildAssembler.cs">
@@ -177,6 +179,7 @@
     <Compile Include="Tfs\TfsClient.cs" />
     <Compile Include="Services\Win32Registry.cs" />
     <Compile Include="User\User.cs" />
+    <Compile Include="WebUpload.cs" />
     <Compile Include="Xml\XmlMassUpdate.cs" />
     <Compile Include="IIS\WebDirectoryScriptMap.cs" />
     <Compile Include="IIS\WebDirectorySetting.cs" />
