@@ -8,7 +8,7 @@
 		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildExtensionsPath)\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
 	</PropertyGroup>
 
-	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Internal.targets" />
 
 	<PropertyGroup>
 		<ConnectionString>Server=localhost;Integrated Security=True</ConnectionString>

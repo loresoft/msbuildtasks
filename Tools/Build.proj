@@ -4,7 +4,7 @@
     <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\.build</MSBuildCommunityTasksPath>
   </PropertyGroup>
 
-  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.targets"/>
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Internal.targets"/>
 
   <!-- Version Number -->
   <PropertyGroup Condition=" '$(BUILD_NUMBER)' == '' ">

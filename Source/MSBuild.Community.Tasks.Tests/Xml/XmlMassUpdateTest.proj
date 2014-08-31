@@ -10,7 +10,7 @@
       <xsl:template match="/all" />
     </Substitutions>
   </PropertyGroup>
-  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Internal.targets" />
 
   <Target Name="DebuggerHook" Condition="'$(DEBUG)'!=''" >
     <Prompt  Text="Attach debugger and press Enter to continue." />

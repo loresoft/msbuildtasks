@@ -29,7 +29,7 @@
 		<NewTestFile2>VaultAddFile2.txt</NewTestFile2>
 	</PropertyGroup>
 
-	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Internal.targets" />
 
 	<Target Name="Checkout">
 		<RemoveDir Directories="$(WorkingFolder)" />

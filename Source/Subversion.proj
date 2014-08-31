@@ -13,7 +13,7 @@
 	<LocalTestRepositoryPath>file:///d:/svn/repo/Test/trunk</LocalTestRepositoryPath>
   </PropertyGroup>
 
-  <Import Project="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
+  <Import Project="$(MSBuildProjectDirectory)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Internal.targets" />
 
   <Target Name="Version">
     <SvnVersion LocalPath="$(MSBuildProjectDirectory)">
