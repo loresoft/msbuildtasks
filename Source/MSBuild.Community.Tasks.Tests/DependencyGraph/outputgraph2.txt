@@ -1,0 +1,3 @@
+﻿digraph {
+	"MSBuild.Community.Tasks" -> "Ionic.Zip.Reduced";
+}

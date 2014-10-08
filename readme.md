@@ -103,6 +103,10 @@ https://groups.google.com/d/forum/msbuildtasks
 		<td>Delete a directory tree. This task supports wild card directory selection.</td>
 	</tr>
 	<tr>
+		<td>DependencyGraph</td>
+		<td>Build a GraphViz-style graph based on the dependencies specified in project files (.csproj, .vbproj)</td>
+	</tr>
+	<tr>
 		<td>Divide</td>
 		<td>Divide numbers</td>
 	</tr>

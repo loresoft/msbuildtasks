@@ -1,0 +1,11 @@
+﻿digraph {
+	"MSBuild.Community.Tasks" -> "Ionic.Zip.Reduced";
+	"MSBuild.Community.Tasks" -> "Microsoft.Build.Framework";
+	"MSBuild.Community.Tasks" -> "Microsoft.Build.Utilities.v3.5";
+	"MSBuild.Community.Tasks" -> "System";
+	"MSBuild.Community.Tasks" -> "System.Data";
+	"MSBuild.Community.Tasks" -> "System.DirectoryServices";
+	"MSBuild.Community.Tasks" -> "System.Management";
+	"MSBuild.Community.Tasks" -> "System.ServiceProcess";
+	"MSBuild.Community.Tasks" -> "System.Xml";
+}

@@ -11,7 +11,7 @@
 [assembly: System.Reflection.AssemblyCompany("https://github.com/loresoft/msbuildtasks/")]
 [assembly: System.Reflection.AssemblyProduct("MSBuild.Community.Tasks")]
 [assembly: System.Reflection.AssemblyCopyright("Copyright © 2014 MSBuild Community Tasks Project")]
-[assembly: System.Reflection.AssemblyConfiguration("Commit ca3a380")]
+[assembly: System.Reflection.AssemblyConfiguration("Commit 59283f0")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.CLSCompliant(false)]
 [assembly: System.Reflection.AssemblyVersion("1.4.0.0")]
@@ -28,7 +28,7 @@ internal sealed partial class ThisAssembly {
     
     internal const string AssemblyCopyright = "Copyright © 2014 MSBuild Community Tasks Project";
     
-    internal const string AssemblyConfiguration = "Commit ca3a380";
+    internal const string AssemblyConfiguration = "Commit 59283f0";
     
     internal const string AssemblyVersion = "1.4.0.0";
     

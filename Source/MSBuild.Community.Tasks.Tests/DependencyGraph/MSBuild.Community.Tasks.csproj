@@ -71,6 +71,7 @@
     <Compile Include="Computer\Computer.cs" />
     <Compile Include="Beep\Beep.cs" />
     <Compile Include="DeleteTree.cs" />
+    <Compile Include="DependencyGraph\DependencyCache.cs" />
     <Compile Include="DependencyGraph\DependencyGraph.cs" />
     <Compile Include="DependencyGraph\ProjectFileParser.cs" />
     <Compile Include="DependencyGraph\ProjectReference.cs" />
