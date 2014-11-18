@@ -262,11 +262,11 @@ namespace MSBuild.Community.Tasks
 			{
                 if(useTrusted) 
                 {
-                    transform.Load(xsl.ItemSpec, XsltSettings.TrustedXslt, new XmlUrlResolver());
+                    transform.Load(xsl.ItemSpec, XsltSettings.TrustedXslt, null);
                 }
                 else
                 {   
-                    transform.Load(xsl.ItemSpec, XsltSettings.Default, null);
+                    transform.Load(xsl.ItemSpec, XsltSettings.Default, new XmlUrlResolver());
                 }
 
 				xmlWriter = XmlWriter.Create(this.output, transform.OutputSettings);
