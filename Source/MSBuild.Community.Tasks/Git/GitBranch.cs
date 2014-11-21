@@ -55,7 +55,7 @@ namespace MSBuild.Community.Tasks.Git
 		/// <returns>true if is branch line</returns>
 		public bool IsBranchStatusLine(string singleLine)
 		{
-			return singleLine.StartsWith("# On");
+			return singleLine.StartsWith("# On branch") || singleLine.StartsWith("On branch");
 		}
 
 		/// <summary>

@@ -126,5 +126,18 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.AreEqual("TestProject1", task.Output[0].GetMetadata("Filename"));
 
         }
+
+        [Test]
+        public void Solution_folders_are_not_returned_as_projects()
+        {
+            GetSolutionProjects task = new GetSolutionProjects();
+            task.BuildEngine = new MockBuild();
+            task.Solution = Path.Combine(TaskUtility.GetProjectRootDirectory(true), @"Source\MSBuild.Community.Tasks.Tests\Solution\TestSolution.sln");
+            Assert.IsTrue(task.Execute());
+            foreach (ITaskItem project in task.Output)
+            {
+                Assert.AreNotEqual("TestFolder1", project.GetMetadata("ProjectName"));
+            }
+        }
     }
 }

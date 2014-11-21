@@ -104,9 +104,9 @@
                               </test-suite>
                             </results>
                           </test-suite>
-                          <test-suite name="MoveTest" success="True" time="0.000" asserts="0">
+                          <test-suite name="MVTest" success="True" time="0.000" asserts="0">
                             <results>
-                              <test-case name="MSBuild.Community.Tasks.Tests.MoveTest.MoveExecute" executed="True" success="True" time="0.000" asserts="0" />
+                              <test-case name="MSBuild.Community.Tasks.Tests.MVTest.MVExecute" executed="True" success="True" time="0.000" asserts="0" />
                             </results>
                           </test-suite>
                           <test-suite name="ServiceQueryTest" success="True" time="0.094" asserts="0">

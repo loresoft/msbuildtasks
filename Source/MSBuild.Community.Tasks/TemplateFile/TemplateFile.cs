@@ -1,4 +1,3 @@
- using System;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +18,7 @@ namespace MSBuild.Community.Tasks
 	///		</Tokens>
 	/// </ItemGroup>
 	/// 
-	/// <TemplateFile TemplateFile="ATemplateFile.template" OutputFile="ReplacedFile.txt" Tokens="@(Tokens)" />
+    /// <TemplateFile Template="ATemplateFile.template" OutputFilename="ReplacedFile.txt" Tokens="@(Tokens)" />
 	/// ]]></code>
 	/// </example>
 	/// <remarks>Tokens in the template file are formatted using ${var} syntax and names are not 
@@ -43,7 +42,7 @@ namespace MSBuild.Community.Tasks
 		/// </summary>
 		public TemplateFile()
 		{
-			_regex = new Regex(@"(?<token>\$\{(?<identifier>\w*)\})", RegexOptions.Singleline | RegexOptions.Compiled 
+			_regex = new Regex(@"(?<token>\$\{(?<identifier>[^}]*)\})", RegexOptions.Singleline | RegexOptions.Compiled 
 				| RegexOptions.Multiline | RegexOptions.IgnoreCase);
 		}
 

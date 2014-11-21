@@ -136,7 +136,7 @@ namespace MSBuild.Community.Tasks.SourceSafe
                 string action = version.Action;
 
                 // We found our version so stop adding versions to our list
-                if (action.StartsWith("Labeled '" + _label + "'"))
+                if (action.StartsWith("Labeled '" + _label + "'", StringComparison.InvariantCultureIgnoreCase))
                 {
                     labeledVersion = version.VersionNumber;
                     addVersion = false;

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>3.5</ProductVersion>
+    <ProductVersion>3.8</ProductVersion>
     <ProjectGuid>{6e293db7-b1e3-4cea-ab94-79a979f91af5}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>MSBuild.Community.Tasks</OutputName>
@@ -80,19 +80,19 @@
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
-      <HintPath>C:\Program Files (x86)\Windows Installer XML v3.5\bin\WixUtilExtension.dll</HintPath>
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
       <Name>WixUtilExtension</Name>
     </WixExtension>
     <WixExtension Include="WixVSExtension">
-      <HintPath>C:\Program Files (x86)\Windows Installer XML v3.5\bin\WixVSExtension.dll</HintPath>
+      <HintPath>$(WixExtDir)\WixVSExtension.dll</HintPath>
       <Name>WixVSExtension</Name>
     </WixExtension>
     <WixExtension Include="WixUIExtension">
-      <HintPath>C:\Program Files (x86)\Windows Installer XML v3.5\bin\WixUIExtension.dll</HintPath>
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
     <WixExtension Include="WixNetFxExtension">
-      <HintPath>C:\Program Files (x86)\Windows Installer XML v3.5\bin\WixNetFxExtension.dll</HintPath>
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
       <Name>WixNetFxExtension</Name>
     </WixExtension>
   </ItemGroup>

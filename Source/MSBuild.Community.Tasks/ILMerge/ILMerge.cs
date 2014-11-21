@@ -135,6 +135,16 @@ namespace MSBuild.Community.Tasks
         public bool CopyAttributes { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to copy assembly attributes from all merged assemblies
+        /// into the unified assembly even if duplicate assembly attributes would result.
+        /// </summary>
+        /// <remarks>
+        /// <para>Applicable only when <see cref="CopyAttributes"/> is <c>true</c></para>
+        /// <para>Corresponds to command line option "/allowMultiple".</para>
+        /// </remarks>
+        public bool AllowDuplicateAttributes { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether 
         /// to preserve any .pdb files
         /// that are found for the input assemblies
@@ -329,7 +339,7 @@ namespace MSBuild.Community.Tasks
         protected override string GenerateFullPathToTool()
         {
             if (ToolPath != null) {
-                return ToolPath;
+                return Path.Combine(ToolPath, ToolName);
             }
             string toolPath = ToolPathUtil.FindInProgramFiles(this.ToolName, @"Microsoft\ILMerge") ??
                               ToolPathUtil.FindInPath(this.ToolName);
@@ -361,7 +371,13 @@ namespace MSBuild.Community.Tasks
                 builder.AppendSwitch("/closed");
 
             if (CopyAttributes)
+            {
                 builder.AppendSwitch("/copyattrs");
+                if (AllowDuplicateAttributes)
+                {
+                    builder.AppendSwitch("/allowMultiple");
+                }
+            }
 
             if (!DebugInfo)
                 builder.AppendSwitch("/ndebug");

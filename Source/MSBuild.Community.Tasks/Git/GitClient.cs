@@ -43,9 +43,13 @@ namespace MSBuild.Community.Tasks.Git
     public class GitClient : ToolTask
     {
         private string _initialToolPath;
-
+        private readonly List<ITaskItem> _consoleOut;
+        /// <summary>
+        /// Default constructor. Creates a new GitClient task.
+        /// </summary>
         public GitClient()
         {
+            _consoleOut = new List<ITaskItem>();
             _initialToolPath = ToolPath;
         }
 
@@ -59,22 +63,32 @@ namespace MSBuild.Community.Tasks.Git
         /// </summary>
         public string Arguments { get; set; }
 
-
         /// <summary>
         /// Gets or sets the local or working path for git command.
         /// </summary>
         public string LocalPath { get; set; }
-        
+
+        /// <summary>
+        /// Gets command console output messages.
+        /// </summary>
+        [Output]
+        public ITaskItem[] ConsoleOutput
+        {
+            get { return _consoleOut.ToArray(); }
+            set { }
+        }
+
         private string FindToolPath(string toolName)
         {
             string toolPath =
                 ToolPathUtil.FindInRegistry(toolName) ??
                 ToolPathUtil.FindInPath(toolName) ??
-                ToolPathUtil.FindInProgramFiles(toolName, @"Git\bin");
+                ToolPathUtil.FindInProgramFiles(toolName, @"Git\bin") ??
+                ToolPathUtil.FindInLocalPath(toolName, LocalPath);
 
             if (toolPath == null)
             {
-                throw new Exception("Could not find git.exe.  Looked in PATH locations and various common folders inside Program Files.");
+                throw new Exception("Could not find git.exe. Looked in PATH locations and various common folders inside Program Files as well as LocalPath.");
             }
 
             return toolPath;
@@ -166,7 +180,7 @@ namespace MSBuild.Community.Tasks.Git
         {
             get { return ToolPathUtil.MakeToolName("git"); }
         }
-        
+
         /// <summary>
         /// Indicates whether all task paratmeters are valid.
         /// </summary>
@@ -196,5 +210,19 @@ namespace MSBuild.Community.Tasks.Git
 
             return LocalPath;
         }
+
+        /// <summary>
+        /// Parses a single line of text to identify any errors or warnings in canonical format.
+        /// </summary>
+        /// <param name="singleLine">A single line of text for the method to parse.</param>
+        /// <param name="messageImportance">A value of <see cref="T:Microsoft.Build.Framework.MessageImportance"/> that indicates the importance level with which to log the message.</param>
+        protected override void LogEventsFromTextOutput(string singleLine, MessageImportance messageImportance)
+        {
+                base.LogEventsFromTextOutput(singleLine, messageImportance);
+
+            var messageItem = new TaskItem(singleLine);
+            _consoleOut.Add(messageItem);
+        }
+
     }
 }

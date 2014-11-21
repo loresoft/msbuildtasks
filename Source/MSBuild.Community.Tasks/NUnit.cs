@@ -1,6 +1,6 @@
-#region Copyright © 2005 Paul Welter. All rights reserved.
+#region Copyright ï¿½ 2005 Paul Welter. All rights reserved.
 /*
-Copyright © 2005 Paul Welter. All rights reserved.
+Copyright ï¿½ 2005 Paul Welter. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -60,8 +60,8 @@ namespace MSBuild.Community.Tasks
         /// The default relative path of the NUnit installation.
         /// The value is <c>@"NUnit 2.4\bin"</c>.
         /// </summary>
-        public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit 2.4\bin";
-        private const string InstallDirKey = @"HKEY_CURRENT_USER\Software\nunit.org\Nunit\2.4";
+        public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit 2.6.3\bin";
+        private const string InstallDirKey = @"HKEY_CURRENT_USER\Software\nunit.org\Nunit\2.6.3";
 
         #endregion Constants
 
@@ -162,6 +162,18 @@ namespace MSBuild.Community.Tasks
         }
 
 
+        private string _textOutputFile;
+
+        /// <summary>
+        /// The file to redirect standard output to.
+        /// </summary>
+        public string TextOutputFile
+        {
+            get { return _textOutputFile; }
+            set { _textOutputFile = value; }
+        }
+
+
         private string _workingDirectory;
 
         /// <summary>
@@ -238,6 +250,17 @@ namespace MSBuild.Community.Tasks
           set { _framework = value; }
         }
 
+        private bool _showLabels;
+
+        /// <summary>
+        /// Whether or not to show test labels in output
+        /// </summary>
+        public bool ShowLabels
+        {
+            get { return _showLabels; }
+            set { _showLabels = value; }
+        }
+
         #endregion
 
         #region Task Overrides
@@ -250,32 +273,41 @@ namespace MSBuild.Community.Tasks
         protected override string GenerateCommandLineCommands()
         {
             CommandLineBuilder builder = new CommandLineBuilder();
-            builder.AppendSwitch("/nologo");
+
+            char c = Environment.OSVersion.Platform == PlatformID.Unix ? '-' : '/';
+
+            builder.AppendSwitch(c+"nologo");
             if (DisableShadowCopy)
             {
-                builder.AppendSwitch("/noshadow");
+                builder.AppendSwitch(c+"noshadow");
             }
             if (_testInNewThread.HasValue && !_testInNewThread.Value)
             {
-                builder.AppendSwitch("/nothread");
+                builder.AppendSwitch(c+"nothread");
+            }
+            if (_showLabels)
+            {
+                builder.AppendSwitch(c+"labels");
             }
             builder.AppendFileNamesIfNotNull(_assemblies, " ");
 
-            builder.AppendSwitchIfNotNull("/config=", _projectConfiguration);
+            builder.AppendSwitchIfNotNull(c+"config=", _projectConfiguration);
 
-            builder.AppendSwitchIfNotNull("/fixture=", _fixture);
+            builder.AppendSwitchIfNotNull(c+"fixture=", _fixture);
 
-            builder.AppendSwitchIfNotNull("/include=", _includeCategory);
+            builder.AppendSwitchIfNotNull(c+"include=", _includeCategory);
 
-            builder.AppendSwitchIfNotNull("/exclude=", _excludeCategory);
+            builder.AppendSwitchIfNotNull(c+"exclude=", _excludeCategory);
 
-            builder.AppendSwitchIfNotNull("/transform=", _xsltTransformFile);
+            builder.AppendSwitchIfNotNull(c+"transform=", _xsltTransformFile);
 
-            builder.AppendSwitchIfNotNull("/xml=", _outputXmlFile);
+            builder.AppendSwitchIfNotNull(c+"xml=", _outputXmlFile);
 
-            builder.AppendSwitchIfNotNull("/err=", _errorOutputFile);
+            builder.AppendSwitchIfNotNull(c+"err=", _errorOutputFile);
 
-            builder.AppendSwitchIfNotNull("/framework=",_framework);
+            builder.AppendSwitchIfNotNull(c+"out=", _textOutputFile);
+
+            builder.AppendSwitchIfNotNull(c+"framework=",_framework);
 
             return builder.ToString();
         }
@@ -336,10 +368,8 @@ namespace MSBuild.Community.Tasks
         {
             get
             {
-                if (_force32Bit)
-                    return @"nunit-console-x86.exe";
-                else
-                    return @"nunit-console.exe";
+                string toolName = @"nunit-console" + (_force32Bit ? "-x86" : "");
+                return ToolPathUtil.MakeToolName(toolName);
             }
         }
 

@@ -37,7 +37,7 @@
             AssemblyVersion="1.0.0.0"
             AssemblyFileVersion="1.0.0.0"
             NeutralResourcesLanguage="en-US"/>
-    
+
     <AssemblyInfo CodeLanguage="CS"
             OutputFile="$(MSBuildProjectDirectory)\Test\GlobalInfo3.cs"
             GenerateClass="true"
@@ -242,17 +242,17 @@
 
   </Target>
 
-  <Target Name="Move">
+  <Target Name="MV">
     <MakeDir Directories="Test\Move" />
-    <WriteLinesToFile File="Test\MoveMe.txt"
+    <WriteLinesToFile File="Test\MVMe.txt"
       Lines="This File Will be moved." />
 
     <!-- Move File -->
-    <Move SourceFiles="Test\MoveMe.txt"
+    <MV SourceFiles="Test\MoveMe.txt"
       DestinationFolder="Test\Move" />
 
     <!-- Rename File -->
-    <Move SourceFiles="Test\Move\MoveMe.txt"
+    <MV SourceFiles="Test\Move\MoveMe.txt"
       DestinationFiles="Test\Move\Renamed.txt" />
 
   </Target>
@@ -342,7 +342,7 @@
   <Target Name="DeleteTree">
     <DeleteTree Directories="**\bin;**\obj" />
   </Target>
-  
+
   <Target Name="All"
           DependsOnTargets="AssemblyInfo;Mail;Zip;Unzip;Math;Version;NDoc;Registry;FTP;XML;NUnit;FileUpdate;Service;WebDownload">
 

@@ -5,10 +5,10 @@
   <?define MajorVersion = "1" ?>
   <?endif?>
   <?ifndef MinorVersion?>
-  <?define MinorVersion = "3" ?>
+  <?define MinorVersion = "4" ?>
   <?endif?>
   <?ifndef BindMinorVersion?>
-  <?define BindMinorVersion = "3" ?>
+  <?define BindMinorVersion = "4" ?>
   <?endif?>
   <?ifndef BuildVersion?>
   <?define BuildVersion = "0" ?>
@@ -49,10 +49,13 @@
 
   <?define PackageDescription = "MSBuild Community Tasks is an open source project for MSBuild tasks." ?>
   <?define PackageComments = "MSBuild Community Tasks $(var.VersionNumberUserVisible)$(var.SpaceParenDebug)" ?>
-  <?define PackageUrl = "https://github.com/loresoft/msbuildtasks/"?>  
+  <?define PackageUrl = "https://github.com/loresoft/msbuildtasks/"?>
   <?define PackageManufacturer = "MSBuild Community Tasks" ?>
 
   <!-- GUIDs -->
   <?define UpgradeGuid = "F289AA13-BBAF-4EA2-97C8-BAEC7E5B743E" ?>
+
+  <!-- XML -->
+  <?define VerifyPath = "//xs:schema/xs:include[\[]@schemaLocation='MSBuild\\MSBuild.Community.Tasks.xsd'[\]]" ?>
 
 </Include>
