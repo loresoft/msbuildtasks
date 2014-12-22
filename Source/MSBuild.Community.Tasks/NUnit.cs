@@ -261,6 +261,49 @@ namespace MSBuild.Community.Tasks
             set { _showLabels = value; }
         }
 
+        private string _process;
+
+        /// <summary>
+        /// The /process option controls how NUnit loads tests in processes. The following values are recognized.
+        /// Single - All the tests are run in the nunit-console process. This is the default.
+        /// Separate - A separate process is created to run the tests.
+        /// Multiple - A separate process is created for each test assembly, whether specified on the command line or listed in an NUnit project file.
+        /// Note: This option is not available using the .NET 1.1 build of nunit-console.
+        /// </summary>
+        public string Process
+        {
+            get { return _process; }
+            set { _process = value; }
+        }
+
+        private string _domain;
+
+        /// <summary>
+        /// The /domain option controls of the creation of AppDomains for running tests. The following values are recognized:
+        /// None - No domain is created - the tests are run in the primary domain. This normally requires copying the NUnit assemblies into the same directory as your tests.
+        /// Single - A test domain is created - this is how NUnit worked prior to version 2.4
+        /// Multiple - A separate test domain is created for each assembly
+        /// The default is to use multiple domains if multiple assemblies are listed on the command line. Otherwise a single domain is used.
+        /// </summary>
+        public string Domain
+        {
+            get { return _domain; }
+            set { _domain = value; }
+        }
+
+        private string _apartment;
+
+        /// <summary>
+        /// The /apartment option may be used to specify the ApartmentState (STA or MTA) of the test runner thread. Since the default is MTA, the option is only needed to force execution in the Single Threaded Apartment.
+        /// Note: If a given test must always run in a particular apartment, as is the case with many Gui tests, you should use an attribute on the test rather than specifying this option at the command line.
+        /// </summary>
+        public string Apartment
+        {
+            get { return _apartment; }
+            set { _apartment = value; }
+        }
+
+
         #endregion
 
         #region Task Overrides
@@ -308,6 +351,12 @@ namespace MSBuild.Community.Tasks
             builder.AppendSwitchIfNotNull(c+"out=", _textOutputFile);
 
             builder.AppendSwitchIfNotNull(c+"framework=",_framework);
+
+            builder.AppendSwitchIfNotNull(c+"process=",_process);
+
+            builder.AppendSwitchIfNotNull(c+"domain=",_domain);
+
+            builder.AppendSwitchIfNotNull(c+"apartment=",_apartment);
 
             return builder.ToString();
         }
