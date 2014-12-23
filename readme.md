@@ -1,8 +1,14 @@
-#MSBuild Community Tasks
+# MSBuild Community Tasks
 
 The MSBuild Community Tasks Project is an open source project for MSBuild tasks.
 
-##Download
+[![Build status](https://ci.appveyor.com/api/projects/status/16y9eh9swsqn5g8l?svg=true)](https://ci.appveyor.com/project/LoreSoft/msbuildtasks)
+
+![NuGet Version](https://img.shields.io/nuget/v/MSBuildTasks.svg?style=flat-square)
+
+![NuGet Version](https://img.shields.io/nuget/dt/MSBuildTasks.svg?style=flat-square)
+
+## Download
 
 The latest build can be downloaded from the releases section.
 https://github.com/loresoft/msbuildtasks/releases
@@ -16,21 +22,21 @@ To install MSBuildTasks, run the following command in the Package Manager Consol
 More information about NuGet package avaliable at
 https://nuget.org/packages/MSBuildTasks
 
-##Development Builds
+## Development Builds
 
 Development builds are available on the myget.org feed.  A development build is promoted to the main NuGet feed when it's determined to be stable. 
 
 In your Package Manager settings add the following package source for development builds:
 http://www.myget.org/F/loresoft/
 
-##Join Project
+## Join Project
 
 Please join the MSBuild Community Tasks Project and help contribute in building the tasks. 
 
 Google Group for MSBuild Community Tasks
 https://groups.google.com/d/forum/msbuildtasks
 
-##Current Community Tasks
+## Current Community Tasks
 
 <table id="tasksTable" border="0" cellpadding="3" cellspacing="0" width="90%">
 	<tr>
@@ -474,7 +480,7 @@ https://groups.google.com/d/forum/msbuildtasks
 </table>
 
     
-##Getting Started
+## Getting Started
 
 In order to use the tasks in this project, you need to import the MSBuild.Community.Tasks.Targets files. 
 
@@ -492,7 +498,7 @@ Alternatively if you want to get started with the nuget packages please add the 
 
 ## License
 
-Copyright (c) 2012, LoreSoft
+Copyright (c) 2015, LoreSoft
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

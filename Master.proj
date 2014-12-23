@@ -109,7 +109,7 @@
                 Includes="Microsoft.Build.Commontypes.xsd"/>
   </Target>
 
-  <Target Name="Zip" DependsOnTargets="Documentation;Test;Merge">
+  <Target Name="Zip" DependsOnTargets="Documentation;Merge">
     <ItemGroup>
       <ZipFiles Include="$(BuildFolder)\*.*" />
     </ItemGroup>
@@ -119,7 +119,7 @@
          ZipFileName="MSBuild.Community.Tasks.v$(PackageVersion).zip" />
   </Target>
 
-  <Target Name="Installer" DependsOnTargets="Compile;Documentation;Test;Merge" Condition="'$(OS)' == 'Windows_NT'">
+  <Target Name="Installer" DependsOnTargets="Compile;Documentation;Merge" Condition="'$(OS)' == 'Windows_NT'">
     <MSBuild Projects="$(SourceFolder)\MSBuild.Community.Tasks.Setup\MSBuildTasks.wixproj"
              Properties="Configuration=Release;Major=$(Major);Minor=$(Minor);Build=$(Patch);Revision=$(BuildNumber)" />
 
@@ -127,7 +127,7 @@
           DestinationFiles="MSBuild.Community.Tasks.v$(PackageVersion).msi" />
   </Target>
 
-  <Target Name="Pack" DependsOnTargets="Merge;Test">
+  <Target Name="Pack" DependsOnTargets="Merge">
     <NuGetPack ToolPath="$(SourceFolder)\.nuget"
                File="MSBuildTasks.nuspec"
                OutputDirectory="$(MSBuildProjectDirectory)"
