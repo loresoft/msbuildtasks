@@ -1,44 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="Build\MSBuild.Community.Tasks.Targets" />
-
+  
+  <PropertyGroup>
+    <BuildFolder>$(MSBuildProjectDirectory)\Build</BuildFolder>
+    <ToolFolder>$(MSBuildProjectDirectory)\Tools</ToolFolder>
+    <SourceFolder>$(MSBuildProjectDirectory)\Source</SourceFolder>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <Major>1</Major>
     <Minor>4</Minor>
     <Build>0</Build>
-    <Revision>0</Revision>
 
     <BindMinor>4</BindMinor>
     <BindBuild>0</BindBuild>
     <BindRevision>0</BindRevision>
+
+    <Revision Condition=" '$(APPVEYOR_BUILD_NUMBER)' != '' ">$(APPVEYOR_BUILD_NUMBER)</Revision>
+    <Revision Condition=" '$(BUILD_NUMBER)' != '' ">$(BUILD_NUMBER)</Revision>
+    <Revision Condition=" '$(Revision)' == '' ">0</Revision>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(BUILD_NUMBER)' != '' ">
-    <!-- TeamCity Build Number -->
-    <Revision>$(BUILD_NUMBER)</Revision>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <DefaultExclude Include="**\.git\**" />
-    <DefaultExclude Include="**\.git*" />
-    <DefaultExclude Include="**\bin\**" />
-    <DefaultExclude Include="**\Bootstrap\**" />
-    <DefaultExclude Include="**\obj\**" />
-    <DefaultExclude Include="**\Release\**" />
-    <DefaultExclude Include="**\Debug\**" />
-    <DefaultExclude Include="**\packages\**" />
-    <DefaultExclude Include="**\Test\**" />
-    <DefaultExclude Include="**\TestResults\**" />
-    <DefaultExclude Include="**\doc\**" />
-    <DefaultExclude Include="**\*.user" />
-    <DefaultExclude Include="**\*.suo" />
-    <DefaultExclude Include="**\*.patch" />
-    <DefaultExclude Include="**\*.resharper" />
-    <DefaultExclude Include="**\*.cache" />
-    <DefaultExclude Include="**\_ReSharper*\**" />
-    <DefaultExclude Include="*.teamcity*" />
-    <DefaultExclude Include="*.zip" />
-  </ItemGroup>
+  <Import Project="$(MSBuildProjectDirectory)\Bootstrap\MSBuild.Community.Tasks.Targets" />
 
   <Target Name="VerifyCalledFromMaster">
     <Error Text="Do not execute $(MSBuildProjectFile) directly. Build Master.proj instead."
@@ -47,6 +30,19 @@
 
   <Target Name="Initialize" DependsOnTargets="VerifyCalledFromMaster">
     <Message Text="Beginning Build." />
+  </Target>
+
+  <Target Name="Clean">
+    <ItemGroup>
+      <RemoveFiles Include="$(BuildFolder)\*.*"/>
+      <RemoveFiles Include="$(MSBuildProjectDirectory)\*.zip"/>
+      <RemoveFiles Include="$(MSBuildProjectDirectory)\*.msi"/>
+      <RemoveFiles Include="$(MSBuildProjectDirectory)\*.nupkg"/>
+      <RemoveFiles Include="$(SourceFolder)\**\bin\*.*"/>
+      <RemoveFiles Include="$(SourceFolder)\**\obj\**\*.*"/>
+    </ItemGroup>
+
+    <Delete Files="@(RemoveFiles)" />
   </Target>
 
   <Target Name="Version" DependsOnTargets="Initialize">
@@ -64,7 +60,7 @@
     </Time>
 
     <AssemblyInfo CodeLanguage="CS"
-                  OutputFile="Source\GlobalAssemblyInfo.cs"
+                  OutputFile="$(SourceFolder)\GlobalAssemblyInfo.cs"
                   GenerateClass="true"
                   AssemblyCompany="https://github.com/loresoft/msbuildtasks/"
                   AssemblyProduct="MSBuild.Community.Tasks"
@@ -77,25 +73,24 @@
                   AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)" />
   </Target>
 
-  <Target Name="Compile" DependsOnTargets="Version">
-    <MSBuild Projects="Source\MSBuild.Community.Tasks.sln"
+  <Target Name="Compile" DependsOnTargets="Version; Clean">
+    <MSBuild Projects="$(SourceFolder)\MSBuild.Community.Tasks.sln"
              Properties="Configuration=Release" />
   </Target>
 
   <Target Name="Merge" DependsOnTargets="Compile">
-    <Copy SourceFiles="Build\MSBuild.Community.Tasks.dll"
-          DestinationFiles="Build\MSBuild.Temp.dll" />
+    <Copy SourceFiles="$(BuildFolder)\MSBuild.Community.Tasks.dll"
+          DestinationFiles="$(BuildFolder)\MSBuild.Temp.dll" />
 
     <!-- Merge together files -->
-    <ILMerge InputAssemblies="Build\MSBuild.Temp.dll;Build\Ionic.Zip.Reduced.dll"
+    <ILMerge InputAssemblies="$(BuildFolder)\MSBuild.Temp.dll;$(BuildFolder)\Ionic.Zip.Reduced.dll"
              Internalize="true"
-             OutputFile="Build\MSBuild.Community.Tasks.dll"
-             KeyFile="Source\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk"
-             ToolPath="Source\packages\ilmerge.2.12.0803\"
-             />
+             OutputFile="$(BuildFolder)\MSBuild.Community.Tasks.dll"
+             KeyFile="$(SourceFolder)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk"
+             ToolPath="$(SourceFolder)\packages\ilmerge.2.14.1208\tools" />
 
     <!-- Cleanup unneed files -->
-    <CreateItem Include="Build\*.dll;Build\*.x*l" Exclude="Build\MSBuild.Community.Tasks.*" >
+    <CreateItem Include="$(BuildFolder)\*.dll;$(BuildFolder)\*.x*l" Exclude="$(BuildFolder)\MSBuild.Community.Tasks.*" >
       <Output TaskParameter="Include" ItemName="PurgeBuildFiles" />
     </CreateItem>
 
@@ -103,7 +98,7 @@
   </Target>
 
   <Target Name="Documentation" DependsOnTargets="Compile">
-    <TaskSchema Assemblies="Build\MSBuild.Community.Tasks.dll"
+    <TaskSchema Assemblies="$(BuildFolder)\MSBuild.Community.Tasks.dll"
                 OutputPath="Build"
                 CreateTaskList="false"
                 IgnoreMsBuildSchema="true"
@@ -111,30 +106,33 @@
   </Target>
 
   <Target Name="Zip" DependsOnTargets="Documentation;Merge">
-    <CreateItem Include="Build\*.*" Exclude="@(DefaultExclude)" >
+    <CreateItem Include="$(BuildFolder)\*.*">
       <Output TaskParameter="Include" ItemName="ZipFiles" />
     </CreateItem>
-    
+
     <Zip Files="@(ZipFiles)"
-         WorkingDirectory="Build"
+         WorkingDirectory="$(BuildFolder)"
          ZipFileName="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).zip" />
   </Target>
 
   <Target Name="Installer" DependsOnTargets="Compile;Documentation;Merge" Condition="'$(OS)' == 'Windows_NT'">
-    <MSBuild Projects="Source\MSBuild.Community.Tasks.Setup\MSBuildTasks.wixproj"
+    <MSBuild Projects="$(SourceFolder)\MSBuild.Community.Tasks.Setup\MSBuildTasks.wixproj"
              Properties="Configuration=Release;Major=$(Major);Minor=$(Minor);Build=$(Build);Revision=$(Revision)" />
 
-    <Copy SourceFiles="Source\MSBuild.Community.Tasks.Setup\bin\Release\MSBuild.Community.Tasks.msi"
+    <Copy SourceFiles="$(SourceFolder)\MSBuild.Community.Tasks.Setup\bin\Release\MSBuild.Community.Tasks.msi"
           DestinationFiles="MSBuild.Community.Tasks.v$(Major).$(Minor).$(Build).$(Revision).msi" />
   </Target>
 
-  <Target Name="Build" DependsOnTargets="Zip;Installer">
+  <Target Name="Pack" DependsOnTargets="Merge">
+    <NuGetPack ToolPath="$(SourceFolder)\.nuget"
+               File="MSBuildTasks.nuspec"
+               OutputDirectory="$(MSBuildProjectDirectory)"
+               Version="$(Major).$(Minor).$(Build).$(Revision)"
+               Symbols="true"  />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="Zip;Installer;Pack">
     <Message Text="Build Complete"/>
   </Target>
 
-  <Target Name="Nightly" DependsOnTargets="Build">
-
-    <Message Text="Build Committed Revision: $(Revision)" />
-
-  </Target>
 </Project>

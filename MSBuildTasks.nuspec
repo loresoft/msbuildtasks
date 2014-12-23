@@ -3,20 +3,26 @@
   <metadata>
     <id>MSBuildTasks</id>
     <version>1.4.0</version>
-    <authors>Paul Welter</authors>
-    <description>The MSBuild Community Tasks project is a collection of open source tasks for MSBuild.</description>
-    <language>en-US</language>
-    <projectUrl>https://github.com/loresoft/msbuildtasks/</projectUrl>
+    <authors>LoreSoft</authors>
+    <owners>LoreSoft</owners>
     <licenseUrl>http://opensource.org/licenses/bsd-license.php</licenseUrl>
-    <tags>MSBuild</tags>
+    <projectUrl>https://github.com/loresoft/msbuildtasks/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The MSBuild Community Tasks project is a collection of open source tasks for MSBuild.</description>
+    <copyright>Copyright (c) 2014, LoreSoft</copyright>
+    <language>en-US</language>
+    <tags>MSBuild build</tags>
   </metadata>
   <files>
-    <file src="Build\MSBuild.Community.Tasks.dll" target="tools\MSBuild.Community.Tasks.dll" />
-    <file src="Build\MSBuild.Community.Tasks.xml" target="tools\MSBuild.Community.Tasks.xml" />
-    <file src="Build\MSBuild.Community.Tasks.Targets" target="tools\MSBuild.Community.Tasks.Targets" />
-    <file src="readme.md" target="content\MSBuild.Community.Tasks.ReadMe.md" />
+    <file src="Build\MSBuild.Community.Tasks.*" target="tools" />
+    
     <file src="Tools\Install.Solution.ps1" target="tools\Install.ps1" />
     <file src="Tools\MSBuild.psm1" target="tools\MSBuild.psm1" />
     <file src="Tools\Build.proj" target="tools\Build.proj" />
+
+    <file src="readme.md" target="content\MSBuild.Community.Tasks.ReadMe.md" />
+
+    <file src="Source\MSBuild.Community.Tasks\**\*.cs" target="src" />
+    <file src="Source\GlobalAssemblyInfo.cs" target="src" />
   </files>
 </package>

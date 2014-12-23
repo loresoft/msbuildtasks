@@ -11,16 +11,6 @@
     </CreateProperty>
   </Target>
 
-  <Target Name="Nightly" DependsOnTargets="BoostrapCompile;SetCurrentTargetToNightly">
-    <CallTarget Targets="ContinueBuild" />
-  </Target>
-
-  <Target Name="SetCurrentTargetToNightly">
-    <CreateProperty Value="Nightly">
-      <Output TaskParameter="Value" PropertyName="CurrentTarget"/>
-    </CreateProperty>
-  </Target>
-
   <Target Name="Installer" DependsOnTargets="BoostrapCompile;SetCurrentTargetToInstaller">
     <CallTarget Targets="ContinueBuild" />
   </Target>

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "MSBuildTasks", "MSBuildTasks.wixproj", "{6E293DB7-B1E3-4CEA-AB94-79A979F91AF5}"
 EndProject
 Global
