@@ -8,27 +8,27 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Reflection.AssemblyCompany("https://github.com/loresoft/msbuildtasks/")]
 [assembly: System.Reflection.AssemblyProduct("MSBuild.Community.Tasks")]
+[assembly: System.Reflection.AssemblyCompany("https://github.com/loresoft/msbuildtasks/")]
 [assembly: System.Reflection.AssemblyCopyright("Copyright © 2014 MSBuild Community Tasks Project")]
-[assembly: System.Reflection.AssemblyConfiguration("Commit 1375350")]
-[assembly: System.Runtime.InteropServices.ComVisible(false)]
-[assembly: System.CLSCompliant(false)]
+[assembly: System.Reflection.AssemblyConfiguration("Release")]
 [assembly: System.Reflection.AssemblyVersion("1.4.0.0")]
 [assembly: System.Reflection.AssemblyFileVersion("1.4.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersion("1.4.0.0")]
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+[assembly: System.CLSCompliant(false)]
 
 
 
 internal sealed partial class ThisAssembly {
     
-    internal const string AssemblyCompany = "https://github.com/loresoft/msbuildtasks/";
-    
     internal const string AssemblyProduct = "MSBuild.Community.Tasks";
+    
+    internal const string AssemblyCompany = "https://github.com/loresoft/msbuildtasks/";
     
     internal const string AssemblyCopyright = "Copyright © 2014 MSBuild Community Tasks Project";
     
-    internal const string AssemblyConfiguration = "Commit 1375350";
+    internal const string AssemblyConfiguration = "Release";
     
     internal const string AssemblyVersion = "1.4.0.0";
     

@@ -17,6 +17,7 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
         [Test]
+        [Explicit]
         public void ExecuteInnerAndTrailingRecursive()
         {
             DeleteTree task = new DeleteTree();
@@ -28,6 +29,7 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
         [Test]
+        [Explicit]
         public void ExecuteInnerRecursive()
         {
             DeleteTree task = new DeleteTree();
@@ -39,6 +41,7 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
         [Test]
+        [Explicit]
         public void ExecuteItemWithTrailingSeparator()
         {
             DeleteTree task = new DeleteTree();
@@ -50,6 +53,7 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
         [Test]
+        [Explicit]
         public void ExecuteMultipleItems()
         {
             DeleteTree task = new DeleteTree();
@@ -66,6 +70,7 @@ namespace MSBuild.Community.Tasks.Tests
         }
 
         [Test]
+        [Explicit]
         public void ExecuteWildCard()
         {
             DeleteTree task = new DeleteTree();

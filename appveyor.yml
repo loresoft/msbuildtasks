@@ -1,0 +1,19 @@
+version: 1.4.0.{build}
+environment:
+  Major: 1
+  Minor: 4
+  Patch: 0
+configuration: Release
+before_build:
+- .\bootstrap.cmd
+build:
+  project: master.proj
+  verbosity: minimal
+test: off
+artifacts:
+- path: '*.nupkg'
+- path: '*.zip'
+- path: '*.msi'
+deploy:
+- provider: Environment
+  name: MyGet
