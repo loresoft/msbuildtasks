@@ -185,7 +185,7 @@ namespace MSBuild.Community.Tasks.IIS
 			catch (Exception ex)
 			{
 				Log.LogErrorFromException(ex);
-				Log.LogError("Failed {0} application pool \"{1}\" on \"{1}\".", GetActionInProgress(), ApplicationPoolName, ServerName);
+				Log.LogError("Failed {0} application pool \"{1}\" on \"{2}\".", GetActionInProgress(), ApplicationPoolName, ServerName);
 			}
 
 			return bSuccess;
