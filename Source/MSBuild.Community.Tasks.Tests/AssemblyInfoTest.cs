@@ -184,6 +184,32 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.That(content.Contains("assembly: System.Security.AllowPartiallyTrustedCallers()"));
         }
 
+        [Test(Description = "Create VersionInfo twice with OnlyIfChanged set and make sure it wasn't recreated the second time")]
+        public void AssemblyInfoNotRecreatedIfUnchanged()
+        {
+            AssemblyInfo task = new AssemblyInfo();
+            task.BuildEngine = new MockBuild();
+            task.CodeLanguage = "cs";
+            string outputFile = Path.Combine(testDirectory, "VersionInfoTwice.cs");
+            task.OutputFile = outputFile;
+            task.AssemblyVersion = "1.2.3.4";
+            task.AssemblyFileVersion = "1.2.3.4";
+            task.AssemblyInformationalVersion = "1.2.3.4";
+            task.GenerateClass = true;
+            task.OnlyIfChanged = true;
+
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+            Assert.IsTrue(File.Exists(outputFile), "File missing: " + outputFile);
+
+            var time = File.GetLastWriteTime(outputFile);
+
+            // Create again, with OnlyIfChanged set it should not be recreated
+            Assert.IsTrue(task.Execute(), "Second execute failed");
+
+            var secondTime = File.GetLastWriteTime(outputFile);
+            Assert.AreEqual(time, secondTime, "File was recreated although it shouldn't be");
+        }
+
         private AssemblyInfo CreateCSAssemblyInfo(string outputFile)
         {
             AssemblyInfo task = new AssemblyInfo();

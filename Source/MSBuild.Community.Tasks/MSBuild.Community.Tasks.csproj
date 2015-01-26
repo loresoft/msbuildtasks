@@ -172,6 +172,7 @@
     <Compile Include="SourceServer\SymbolFile.cs" />
     <Compile Include="SourceServer\TfsSourceIndex.cs" />
     <Compile Include="SqlServer\SqlPubWiz.cs" />
+    <Compile Include="StreamTools.cs" />
     <Compile Include="Subversion\SvnCopy.cs" />
     <Compile Include="Subversion\Info.cs" />
     <Compile Include="Subversion\SvnStatus.cs" />
