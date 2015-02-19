@@ -66,6 +66,9 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public FileUpdate()
         {
+            NotUpdatedItems = null;
+            ExitCode = true;
+
         }
 
         #region Properties
@@ -208,6 +211,24 @@ namespace MSBuild.Community.Tasks
             set { _warnOnNoUpdate = value; }
         }
 
+       
+
+        #endregion
+
+        #region Output Properties
+
+        /// <summary>
+        /// Returns list of items that were not updated
+        /// </summary>
+        [Output]
+        public ITaskItem[] NotUpdatedItems { get; set; }
+
+        /// <summary>
+        /// Returns true if all items were updated, else false
+        /// </summary>
+        [Output]
+        public bool ExitCode { get; set; }
+
         #endregion
 
         /// <summary>
@@ -219,52 +240,86 @@ namespace MSBuild.Community.Tasks
         public override bool Execute()
         {
             RegexOptions options = RegexOptions.None;
+            
             if (_ignoreCase)
             {
                 options |= RegexOptions.IgnoreCase;
             }
+            
             if (_multiline)
             {
                 options |= RegexOptions.Multiline;
             }
+            
             if (_singleline)
             {
                 options |= RegexOptions.Singleline;
             }
+            
             if (_replacementCount == 0)
             {
                 _replacementCount = -1;
             }
+
             if (_replacementTextEmpty)
             {
                 _replacementText = String.Empty;
             }
+
             Regex replaceRegex = new Regex(_regex, options);
 
             try
             {
+                var notUpdatedItems = new List<ITaskItem>();
+
                 foreach (ITaskItem item in _files)
                 {
                     string fileName = item.ItemSpec;
                     Log.LogMessage("Updating File \"{0}\".", fileName);
 
                     string buffer = "";
-                    if (_useDefaultEncoding) buffer = File.ReadAllText(fileName);
-                    else buffer = File.ReadAllText(fileName, _encoding);
+                    
+                    if (_useDefaultEncoding)
+                    {
+                        buffer = File.ReadAllText(fileName);
+                    }
+                    else
+                    {
+                        buffer = File.ReadAllText(fileName, _encoding);
+                    }
 
-                    if (_warnOnNoUpdate == true)
-                        if (replaceRegex.IsMatch(buffer) != true)
+                    if (!replaceRegex.IsMatch(buffer))
+                    {
+                        notUpdatedItems.Add(item);
+
+                        if (_warnOnNoUpdate)
+                        {
                             Log.LogWarning(String.Format("No updates were performed on file : {0}.", fileName));
+                        }
+                    }                   
 
-                    buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);
+                    buffer = replaceRegex.Replace(buffer, _replacementText, _replacementCount);      
 
-                    if (_useDefaultEncoding) File.WriteAllText(fileName, buffer);
-                    else File.WriteAllText(fileName, buffer, _encoding);
+                    if (_useDefaultEncoding)
+                    {
+                        File.WriteAllText(fileName, buffer);
+                    }
+                    else
+                    {
+                        File.WriteAllText(fileName, buffer, _encoding);
+                    }
+                }
+
+                if (notUpdatedItems.Count > 0)
+                {
+                    NotUpdatedItems = notUpdatedItems.ToArray();
+                    ExitCode = false;
                 }
             }
             catch (Exception ex)
             {
                 Log.LogErrorFromException(ex);
+                ExitCode = false;
                 return false;
             }
             return true;
