@@ -66,8 +66,8 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public FileUpdate()
         {
-            NotUpdatedItems = null;
-            ExitCode = true;
+            ItemsNotUpdated = null;
+            AllItemsUpdated = true;
 
         }
 
@@ -221,13 +221,13 @@ namespace MSBuild.Community.Tasks
         /// Returns list of items that were not updated
         /// </summary>
         [Output]
-        public ITaskItem[] NotUpdatedItems { get; set; }
+        public ITaskItem[] ItemsNotUpdated { get; set; }
 
         /// <summary>
         /// Returns true if all items were updated, else false
         /// </summary>
         [Output]
-        public bool ExitCode { get; set; }
+        public bool AllItemsUpdated { get; set; }
 
         #endregion
 
@@ -270,7 +270,7 @@ namespace MSBuild.Community.Tasks
 
             try
             {
-                var notUpdatedItems = new List<ITaskItem>();
+                var itemsNotUpdated = new List<ITaskItem>();
 
                 foreach (ITaskItem item in _files)
                 {
@@ -290,7 +290,7 @@ namespace MSBuild.Community.Tasks
 
                     if (!replaceRegex.IsMatch(buffer))
                     {
-                        notUpdatedItems.Add(item);
+                        itemsNotUpdated.Add(item);
 
                         if (_warnOnNoUpdate)
                         {
@@ -310,16 +310,16 @@ namespace MSBuild.Community.Tasks
                     }
                 }
 
-                if (notUpdatedItems.Count > 0)
+                if (itemsNotUpdated.Count > 0)
                 {
-                    NotUpdatedItems = notUpdatedItems.ToArray();
-                    ExitCode = false;
+                    ItemsNotUpdated = itemsNotUpdated.ToArray();
+                    AllItemsUpdated = false;
                 }
             }
             catch (Exception ex)
             {
                 Log.LogErrorFromException(ex);
-                ExitCode = false;
+                AllItemsUpdated = false;
                 return false;
             }
             return true;

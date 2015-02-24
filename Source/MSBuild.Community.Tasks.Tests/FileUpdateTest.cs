@@ -64,7 +64,7 @@ namespace MSBuild.Community.Tasks.Tests
 		}
 
         [Test]
-        public void TestExitStatusAndNotUpdatedItems()
+        public void TestItemsNotUpdated()
         {
             FileUpdate task = new FileUpdate();
             task.BuildEngine = new MockBuild();
@@ -82,8 +82,8 @@ namespace MSBuild.Community.Tasks.Tests
             task.Regex = @"TestExitStatusAndNotUpdatedItems";
             task.ReplacementText = DateTime.Now.ToString();
             Assert.IsTrue(task.Execute(), "Execute Failed!");
-            Assert.IsTrue(task.NotUpdatedItems.Length == 3);
-            Assert.IsFalse(task.ExitCode);
+            Assert.IsTrue(task.ItemsNotUpdated.Length == 3);
+            Assert.IsFalse(task.AllItemsUpdated);
         }       
     }
 }
