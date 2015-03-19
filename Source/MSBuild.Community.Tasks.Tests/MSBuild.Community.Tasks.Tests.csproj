@@ -71,6 +71,7 @@
     <Compile Include="FxCopTest.cs" />
     <Compile Include="GacUtilTest.cs" />
     <Compile Include="Git\GitClientTest.cs" />
+    <Compile Include="Git\GitCommitDate.cs" />
     <Compile Include="Git\GitDescribeTest.cs" />
     <Compile Include="Git\GitBranchTest.cs" />
     <Compile Include="Git\GitCommitsTest.cs" />
