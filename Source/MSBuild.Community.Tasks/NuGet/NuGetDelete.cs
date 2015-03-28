@@ -3,7 +3,11 @@ using Microsoft.Build.Utilities;
 
 namespace MSBuild.Community.Tasks.NuGet
 {
-    class NuGetDelete : NuGetBase
+    /// <summary>
+    /// Deletes a package with a specific version. It can be useful if the server has disallow 
+    /// to overwrite existing packages.
+    /// </summary>
+    public class NuGetDelete : NuGetBase
     {
         /// <summary>
         /// Specify the id of the package to delete.
