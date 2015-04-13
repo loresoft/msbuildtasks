@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -123,6 +123,8 @@
     <Compile Include="HtmlHelp\ChmCompiler.cs" />
     <Compile Include="HtmlHelp\HxCompiler.cs" />
     <Compile Include="InnoSetup.cs" />
+    <Compile Include="JavaScript\CssCompress.cs" />
+    <Compile Include="JavaScript\CssCompressor.cs" />
     <Compile Include="Merge.cs" />
     <Compile Include="Net\HttpRequest.cs" />
     <Compile Include="NuGet\NuGetBase.cs" />
