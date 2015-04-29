@@ -213,6 +213,10 @@ https://groups.google.com/d/forum/msbuildtasks
 		downloads and code that is harder to read.</td>
 	</tr>
 	<tr>
+		<td>CssCompress</td>
+		<td>Compresses CSS source by removing comments and unnecessary whitespace.</td>
+	</tr>
+	<tr>
 		<td>MRefBuilder</td>
 		<td>MRefBuilder task for Sandcastle.</td>
 	</tr>
