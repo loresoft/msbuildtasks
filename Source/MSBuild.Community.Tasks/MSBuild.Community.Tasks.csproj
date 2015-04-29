@@ -128,6 +128,7 @@
     <Compile Include="Merge.cs" />
     <Compile Include="Net\HttpRequest.cs" />
     <Compile Include="NuGet\NuGetBase.cs" />
+    <Compile Include="NuGet\NuGetDelete.cs" />
     <Compile Include="NuGet\NuGetInstall.cs" />
     <Compile Include="NuGet\NuGetPack.cs" />
     <Compile Include="NuGet\NuGetPush.cs" />
