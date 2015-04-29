@@ -96,6 +96,11 @@ namespace MSBuild.Community.Tasks.NuGet
         public string Properties { get; set; }
 
         /// <summary>
+        /// Specify if the command should not run package analysis after building the package.
+        /// </summary>
+        public bool NoPackageAnalysis { get; set; }
+
+        /// <summary>
         /// The full file path of the NuGet package created by the NuGetPack task
         /// </summary>
         [Output]
@@ -116,13 +121,17 @@ namespace MSBuild.Community.Tasks.NuGet
             builder.AppendSwitchIfNotNull("-BasePath ", BasePath);
             builder.AppendSwitchIfNotNull("-Version ", Version);
             builder.AppendSwitchIfNotNull("-Verbosity ", Verbosity);
-            
+
             // backward compatible with old Verbose property
             if (Verbosity == null && Verbose)
                 builder.AppendSwitch("-Verbosity detailed");
 
             if (Symbols)
                 builder.AppendSwitch("-Symbols");
+
+            if (NoPackageAnalysis)
+                builder.AppendSwitch("-NoPackageAnalysis ");
+
             builder.AppendSwitchIfNotNull("-Properties ", Properties);
 
             return builder.ToString();
