@@ -71,7 +71,6 @@ namespace MSBuild.Community.Tasks
         /// </summary>
         public NUnit()
         {
-
         }
 
         #endregion Constructor
@@ -319,7 +318,6 @@ namespace MSBuild.Community.Tasks
 
             char c = Environment.OSVersion.Platform == PlatformID.Unix ? '-' : '/';
 
-            builder.AppendSwitch(c+"nologo");
             if (DisableShadowCopy)
             {
                 builder.AppendSwitch(c+"noshadow");
