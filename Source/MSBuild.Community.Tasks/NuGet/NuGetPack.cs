@@ -67,11 +67,24 @@ namespace MSBuild.Community.Tasks.NuGet
         public string BasePath { get; set; }
 
         /// <summary>
+        /// Specifies one or more wildcard patterns to exclude when creating a package.
+        /// </summary>
+        /// <remarks>
+        /// Only available starting in version 1.3.
+        /// </remarks>
+        public string Exclude { get; set; }
+
+        /// <summary>
+        /// Prevent inclusion of empty directories when building the package
+        /// </summary>
+        public bool ExcludeEmptyDirectories { get; set; }
+
+        /// <summary>
         /// Shows verbose output for package building.
         /// </summary>
         /// <value><c>true</c> if verbose; otherwise, <c>false</c>.</value>
         /// <remarks>
-        /// Depricated in NuGet 2.0.  Use <see cref="Verbosity"/> instead.
+        /// Deprecated in NuGet 2.0.  Use <see cref="Verbosity"/> instead.
         /// </remarks>
         public bool Verbose { get; set; }
 
@@ -82,12 +95,25 @@ namespace MSBuild.Community.Tasks.NuGet
         public string Verbosity { get; set; }
 
         /// <summary>
+        /// Determines if the project should be built before building the package.
+        /// </summary>
+        /// <value><c>true</c> if project should build first; otherwise, <c>false</c>.</value>
+        public bool Build { get; set; }
+
+        /// <summary>
+        /// Determines if the output files of the project should be in the tool folder.
+        /// </summary>
+        /// <value><c>true</c> if output files should be in the tool folder; otherwise, <c>false</c>.</value>
+        public bool Tool { get; set; }
+
+        /// <summary>
         /// Determines if a package containing sources and symbols should be created. When specified with a nuspec, 
         /// creates a regular NuGet package file and the corresponding symbols package.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if symbols; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if symbols; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// Only available starting in version 1.4.
+        /// </remarks>
         public bool Symbols { get; set; }
 
         /// <summary>
@@ -96,9 +122,39 @@ namespace MSBuild.Community.Tasks.NuGet
         public string Properties { get; set; }
 
         /// <summary>
+        /// Prevent default exclusion of NuGet package files and files and folders starting with a dot e.g. .svn.
+        /// </summary>
+        /// <value><c>true</c> to prevent default exclusion; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// Only available starting in version 1.3.
+        /// </remarks>
+        public bool NoDefaultExcludes { get; set; }
+
+        /// <summary>
         /// Specify if the command should not run package analysis after building the package.
         /// </summary>
         public bool NoPackageAnalysis { get; set; }
+
+        /// <summary>
+        /// Include referenced projects either as dependencies or as part of the package. If a referenced project
+        /// has a corresponding nuspec file that has the same name as the project, then that referenced project is
+        /// added as a dependency. Otherwise, the referenced project is added as part of the package.
+        /// </summary>
+        /// <value><c>true</c> to include referenced projects; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// Only available starting in version 2.5.
+        /// </remarks>
+        public bool IncludeReferencedProjects { get; set; }
+
+        /// <summary>
+        /// Set the minClientVersion attribute for the created package. This value will override the value of the
+        /// existing minClientVersion attribute (if any) in the .nuspec file.
+        /// </summary>
+        /// <value>A version number; e.g. "2.5.0" or "2.8.0".</value>
+        /// <remarks>
+        /// Only available starting in version 2.5.
+        /// </remarks>
+        public string MinClientVersion { get; set; }
 
         /// <summary>
         /// The full file path of the NuGet package created by the NuGetPack task
@@ -121,6 +177,16 @@ namespace MSBuild.Community.Tasks.NuGet
             builder.AppendSwitchIfNotNull("-BasePath ", BasePath);
             builder.AppendSwitchIfNotNull("-Version ", Version);
             builder.AppendSwitchIfNotNull("-Verbosity ", Verbosity);
+            builder.AppendSwitchIfNotNull("-MinClientVersion", MinClientVersion);
+
+            if (ExcludeEmptyDirectories)
+                builder.AppendSwitch("-ExcludeEmptyDirectories");
+
+            if (Build)
+                builder.AppendSwitch("-Build");
+
+            if (Tool)
+                builder.AppendSwitch("-Tool");
 
             // backward compatible with old Verbose property
             if (Verbosity == null && Verbose)
@@ -129,9 +195,16 @@ namespace MSBuild.Community.Tasks.NuGet
             if (Symbols)
                 builder.AppendSwitch("-Symbols");
 
-            if (NoPackageAnalysis)
-                builder.AppendSwitch("-NoPackageAnalysis ");
+            if (NoDefaultExcludes)
+                builder.AppendSwitch("-NoDefaultExcludes");
 
+            if (NoPackageAnalysis)
+                builder.AppendSwitch("-NoPackageAnalysis");
+
+            if (IncludeReferencedProjects)
+                builder.AppendSwitch("-IncludeReferencedProjects");
+
+            builder.AppendSwitchIfNotNull("-Exclude", Exclude);
             builder.AppendSwitchIfNotNull("-Properties ", Properties);
 
             return builder.ToString();

@@ -10,7 +10,7 @@
 
 [assembly: System.Reflection.AssemblyProduct("MSBuild.Community.Tasks")]
 [assembly: System.Reflection.AssemblyCompany("https://github.com/loresoft/msbuildtasks/")]
-[assembly: System.Reflection.AssemblyCopyright("Copyright © 2014 MSBuild Community Tasks Project")]
+[assembly: System.Reflection.AssemblyCopyright("Copyright © 2015 MSBuild Community Tasks Project")]
 [assembly: System.Reflection.AssemblyConfiguration("Release")]
 [assembly: System.Reflection.AssemblyVersion("1.4.0.0")]
 [assembly: System.Reflection.AssemblyFileVersion("1.4.0.0")]
@@ -26,7 +26,7 @@ internal sealed partial class ThisAssembly {
     
     internal const string AssemblyCompany = "https://github.com/loresoft/msbuildtasks/";
     
-    internal const string AssemblyCopyright = "Copyright © 2014 MSBuild Community Tasks Project";
+    internal const string AssemblyCopyright = "Copyright © 2015 MSBuild Community Tasks Project";
     
     internal const string AssemblyConfiguration = "Release";
     
