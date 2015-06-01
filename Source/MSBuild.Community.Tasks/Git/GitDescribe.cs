@@ -100,7 +100,7 @@ namespace MSBuild.Community.Tasks.Git
             if (LightWeight)
                 builder.AppendSwitch("--tags");
             if (!String.IsNullOrEmpty(Match))
-                builder.AppendSwitch("--match '" + Match + "'");
+                builder.AppendSwitch("--match \"" + Match + "\"");
             base.GenerateArguments(builder);
         }
 
