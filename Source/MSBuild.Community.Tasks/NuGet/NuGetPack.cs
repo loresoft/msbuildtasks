@@ -101,6 +101,11 @@ namespace MSBuild.Community.Tasks.NuGet
         public bool NoPackageAnalysis { get; set; }
 
         /// <summary>
+        /// Specify if referenced projects should be included or not.
+        /// </summary>
+        public bool IncludeReferencedProjects { get; set; }
+
+        /// <summary>
         /// The full file path of the NuGet package created by the NuGetPack task
         /// </summary>
         [Output]
@@ -131,6 +136,9 @@ namespace MSBuild.Community.Tasks.NuGet
 
             if (NoPackageAnalysis)
                 builder.AppendSwitch("-NoPackageAnalysis ");
+
+            if (IncludeReferencedProjects)
+                builder.AppendSwitch("-IncludeReferencedProjects ");
 
             builder.AppendSwitchIfNotNull("-Properties ", Properties);
 
