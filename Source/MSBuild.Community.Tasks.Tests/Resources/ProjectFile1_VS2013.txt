@@ -59,7 +59,6 @@
     <Reference Include="System.Management" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
@@ -72,6 +71,7 @@
     <Compile Include="Computer\Computer.cs" />
     <Compile Include="Beep\Beep.cs" />
     <Compile Include="DeleteTree.cs" />
+    <Compile Include="DependencyGraph\DependencyCache.cs" />
     <Compile Include="DependencyGraph\DependencyGraph.cs" />
     <Compile Include="DependencyGraph\ProjectFileParser.cs" />
     <Compile Include="DependencyGraph\ProjectReference.cs" />
@@ -117,7 +117,6 @@
     </Compile>
     <Compile Include="Fusion\InstallReference.cs" />
     <Compile Include="Fusion\NativeMethods.cs" />
-    <Compile Include="Git\GitCommitDate.cs" />
     <Compile Include="Git\GitDescribe.cs" />
     <Compile Include="Git\GitBranch.cs" />
     <Compile Include="Git\GitClient.cs" />
@@ -127,17 +126,13 @@
     <Compile Include="HtmlHelp\ChmCompiler.cs" />
     <Compile Include="HtmlHelp\HxCompiler.cs" />
     <Compile Include="InnoSetup.cs" />
-    <Compile Include="JavaScript\CssCompress.cs" />
-    <Compile Include="JavaScript\CssCompressor.cs" />
     <Compile Include="Merge.cs" />
     <Compile Include="Net\HttpRequest.cs" />
     <Compile Include="NuGet\NuGetBase.cs" />
-    <Compile Include="NuGet\NuGetDelete.cs" />
     <Compile Include="NuGet\NuGetInstall.cs" />
     <Compile Include="NuGet\NuGetPack.cs" />
     <Compile Include="NuGet\NuGetPush.cs" />
     <Compile Include="NuGet\NuGetRestore.cs" />
-    <Compile Include="NuGet\NuGetUpdate.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="Regex\RegexCompiler.cs" />
     <Compile Include="Sandcastle\BuildAssembler.cs">
