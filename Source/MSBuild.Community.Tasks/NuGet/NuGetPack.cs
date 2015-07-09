@@ -157,11 +157,6 @@ namespace MSBuild.Community.Tasks.NuGet
         public string MinClientVersion { get; set; }
 
         /// <summary>
-        /// Specify if referenced projects should be included or not.
-        /// </summary>
-        public bool IncludeReferencedProjects { get; set; }
-
-        /// <summary>
         /// The full file path of the NuGet package created by the NuGetPack task
         /// </summary>
         [Output]
