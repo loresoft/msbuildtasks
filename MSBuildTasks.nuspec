@@ -9,7 +9,7 @@
     <projectUrl>https://github.com/loresoft/msbuildtasks/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>The MSBuild Community Tasks project is a collection of open source tasks for MSBuild.</description>
-    <copyright>Copyright (c) 2014, LoreSoft</copyright>
+    <copyright>Copyright (c) 2015, LoreSoft</copyright>
     <language>en-US</language>
     <tags>MSBuild build</tags>
   </metadata>
