@@ -46,7 +46,9 @@
       <Output TaskParameter="Year" PropertyName="Year" />
     </Time>
 
-    <Message Text="Version: $(AssemblyInformationalVersion)"/>
+    <Message Text="AssemblyVersion: $(AssemblyVersion)"/>
+    <Message Text="AssemblyFileVersion: $(AssemblyFileVersion)"/>
+    <Message Text="PackageVersion: $(PackageVersion)"/>
 
     <AssemblyInfo CodeLanguage="CS"
                   OutputFile="$(SourceFolder)\GlobalAssemblyInfo.cs"

@@ -9,7 +9,7 @@ before_build:
 - .\bootstrap.cmd
 build:
   project: master.proj
-  verbosity: minimal
+  verbosity: normal
 test: off
 artifacts:
 - path: '*.nupkg'
