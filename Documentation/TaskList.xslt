@@ -20,7 +20,10 @@
         <xsl:sort data-type="text" select="@name"/>
         <tr>
           <td>
-            <xsl:value-of select="@name"/>
+            <xsl:element name="a">
+              <xsl:attribute name="href">Documentation/TaskDocs.md#<xsl:value-of select="@name"/></xsl:attribute>
+              <xsl:value-of select="@name"/>
+            </xsl:element>
           </td>
           <td>
             <xsl:value-of select="xs:annotation/xs:documentation"/>
