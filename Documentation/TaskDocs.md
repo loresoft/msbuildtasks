@@ -4,10 +4,10 @@
     
     
         
-# <a id="InstallAspNet">InstallAspNet</a> (<a id="AspNet.InstallAspNet">AspNet.InstallAspNet</a>)
-## Description
+## <a id="InstallAspNet">InstallAspNet</a> (<a id="AspNet.InstallAspNet">AspNet.InstallAspNet</a>)
+### Description
 Installs and register script mappings for ASP.NET
-## Example
+### Example
 Install the latest version of ASP.NET on the server:
       
        <InstallAspNet /> 
@@ -26,10 +26,10 @@ Install the latest version of ASP.NET on the server:
         
         
         
-# <a id="AssemblyInfo">AssemblyInfo</a>
-## Description
+## <a id="AssemblyInfo">AssemblyInfo</a>
+### Description
 Generates an AssemblyInfo files
-## Example
+### Example
 Generates a common version file.
             
       <AssemblyInfo CodeLanguage="CS"  
@@ -103,10 +103,10 @@ Generates a complete version file for C++/CLI.
         
         
         
-# <a id="Attrib">Attrib</a>
-## Description
+## <a id="Attrib">Attrib</a>
+### Description
 Changes the attributes of files and/or directories
-## Example
+### Example
 Make file Readonly, Hidden and System.
             
       <Attrib Files="Test\version.txt" 
@@ -134,19 +134,19 @@ Make file Normal.
         
         
         
-# <a id="ByteDescriptions">ByteDescriptions</a>
-## Description
+## <a id="ByteDescriptions">ByteDescriptions</a>
+### Description
 Describes certain byte measurements as nice strings.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
 
         
-# <a id="Computer">Computer</a>
-## Description
+## <a id="Computer">Computer</a>
+### Description
 Provides information about the build computer.
-## Example
+### Example
 Get build computer information.
             
       <Computer>
@@ -168,10 +168,10 @@ Get build computer information.
         
         
         
-# <a id="Beep">Beep</a>
-## Description
+## <a id="Beep">Beep</a>
+### Description
 A task to play the sound of a beep through the console speaker.
-## Example
+### Example
 To play the sound of a beep at a frequency of 800 hertz and for a duration of 200 milliseconds, use
       
       <Beep />
@@ -183,10 +183,10 @@ To play the sound of a beep at a frequency of 800 hertz and for a duration of 20
         
         
         
-# <a id="DeleteTree">DeleteTree</a>
-## Description
+## <a id="DeleteTree">DeleteTree</a>
+### Description
 Delete a directory tree.  This task supports wild card directory selection.
-## Example
+### Example
 Delete all bin and obj directories.
             
       <DeleteTree Directories="**\bin;**\obj" />
@@ -203,12 +203,12 @@ Delete all bin and obj directories that start with MSBuild.Community.
         
         
         
-# <a id="DependencyGraph">DependencyGraph</a> (<a id="DependencyGraph.DependencyGraph">DependencyGraph.DependencyGraph</a>)
-## Description
+## <a id="DependencyGraph">DependencyGraph</a> (<a id="DependencyGraph.DependencyGraph">DependencyGraph.DependencyGraph</a>)
+### Description
 Reads a set of project files (.csproj, .vbproj) in InputFiles and generate a GraphViz style syntax.
             You can paste the result of the graphs in places like http://graphviz-dev.appspot.com/ to see your chart or
             run the file using the GraphViz tool http://www.graphviz.org/
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -218,10 +218,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="ProjectFileParser">ProjectFileParser</a> (<a id="DependencyGraph.ProjectFileParser">DependencyGraph.ProjectFileParser</a>)
-## Description
+## <a id="ProjectFileParser">ProjectFileParser</a> (<a id="DependencyGraph.ProjectFileParser">DependencyGraph.ProjectFileParser</a>)
+### Description
 Very simple parser that gets reference and assembly name information from project files
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -230,10 +230,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="ProjectReference">ProjectReference</a> (<a id="DependencyGraph.ProjectReference">DependencyGraph.ProjectReference</a>)
-## Description
+## <a id="ProjectReference">ProjectReference</a> (<a id="DependencyGraph.ProjectReference">DependencyGraph.ProjectReference</a>)
+### Description
 Represents a project reference inside a project file
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -243,10 +243,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="EmbedNativeResource">EmbedNativeResource</a>
-## Description
+## <a id="EmbedNativeResource">EmbedNativeResource</a>
+### Description
 A task for embedded native resource.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -257,10 +257,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="FtpUpload">FtpUpload</a>
-## Description
+## <a id="FtpUpload">FtpUpload</a>
+### Description
 Uploads a group of files using File Transfer Protocol (FTP).
-## Example
+### Example
 Upload a file.
             
       <FtpUpload 
@@ -280,10 +280,10 @@ Upload all the files in an ItemGroup:
 * * *
 
         
-# <a id="IFtpWebRequestCreator">IFtpWebRequestCreator</a>
-## Description
+## <a id="IFtpWebRequestCreator">IFtpWebRequestCreator</a>
+### Description
 Describes a factory for IFtpWebRequest.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -302,11 +302,11 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="IFtpWebRequest">IFtpWebRequest</a>
-## Description
+## <a id="IFtpWebRequest">IFtpWebRequest</a>
+### Description
 This class references an interface that looks like FtpWebRequest
             in order to support unit testing without an actual FTP Server.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -317,21 +317,21 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="RealFtpWebRequest">RealFtpWebRequest</a>
-## Description
+## <a id="RealFtpWebRequest">RealFtpWebRequest</a>
+### Description
 An adapter to make the real FtpWebRequest look like
             an IFtpWebRequest.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
 
         
         
-# <a id="FtpClientTaskBase">FtpClientTaskBase</a> (<a id="Ftp.FtpClientTaskBase">Ftp.FtpClientTaskBase</a>)
-## Description
+## <a id="FtpClientTaskBase">FtpClientTaskBase</a> (<a id="Ftp.FtpClientTaskBase">Ftp.FtpClientTaskBase</a>)
+### Description
 Ftp client base class.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -378,11 +378,11 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="FtpCreateRemoteDirectory">FtpCreateRemoteDirectory</a> (<a id="Ftp.FtpCreateRemoteDirectory">Ftp.FtpCreateRemoteDirectory</a>)
-## Description
+## <a id="FtpCreateRemoteDirectory">FtpCreateRemoteDirectory</a> (<a id="Ftp.FtpCreateRemoteDirectory">Ftp.FtpCreateRemoteDirectory</a>)
+### Description
 Creates a full remote directory on the remote server if not exists using the File Transfer Protocol (FTP).
             This can be one directory or a full path to create.
-## Example
+### Example
 Create remote directory:
             
       <FtpCreateRemoteDirectoty 
@@ -400,10 +400,10 @@ Create remote directory:
         
         
         
-# <a id="FtpDirectoryExists">FtpDirectoryExists</a> (<a id="Ftp.FtpDirectoryExists">Ftp.FtpDirectoryExists</a>)
-## Description
+## <a id="FtpDirectoryExists">FtpDirectoryExists</a> (<a id="Ftp.FtpDirectoryExists">Ftp.FtpDirectoryExists</a>)
+### Description
 Determ if a remote directory exists on a FTP server or not.
-## Example
+### Example
 Determ of Directory\1 exists:
             
       <Target Name="CheckIfDirectoryExists">
@@ -428,10 +428,10 @@ If the directory exists on the server you should see the following output in the
         
         
         
-# <a id="FtpException">FtpException</a> (<a id="Ftp.FtpException">Ftp.FtpException</a>)
-## Description
+## <a id="FtpException">FtpException</a> (<a id="Ftp.FtpException">Ftp.FtpException</a>)
+### Description
 Exception returned by FTP server.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -439,10 +439,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="FtpEntry">FtpEntry</a> (<a id="Ftp.FtpEntry">Ftp.FtpEntry</a>)
-## Description
+## <a id="FtpEntry">FtpEntry</a> (<a id="Ftp.FtpEntry">Ftp.FtpEntry</a>)
+### Description
 Represents an remote file or directory on a FTP server.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -455,10 +455,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="FtpReply">FtpReply</a> (<a id="Ftp.FtpReply">Ftp.FtpReply</a>)
-## Description
+## <a id="FtpReply">FtpReply</a> (<a id="Ftp.FtpReply">Ftp.FtpReply</a>)
+### Description
 Represenatation of a FTP reply message.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -469,10 +469,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="FtpUploadDirectoryContent">FtpUploadDirectoryContent</a> (<a id="Ftp.FtpUploadDirectoryContent">Ftp.FtpUploadDirectoryContent</a>)
-## Description
+## <a id="FtpUploadDirectoryContent">FtpUploadDirectoryContent</a> (<a id="Ftp.FtpUploadDirectoryContent">Ftp.FtpUploadDirectoryContent</a>)
+### Description
 Uploads a full directory content to a remote directory.
-## Example
+### Example
 Uploads directory content, including all subdirectories and subdirectory content:
             
       <Target Name="DeployWebsite">
@@ -517,10 +517,10 @@ To go a little step further. If the local directory looked like this:
         
         
         
-# <a id="UninstallStatus">UninstallStatus</a> (<a id="Fusion.UninstallStatus">Fusion.UninstallStatus</a>)
-## Description
+## <a id="UninstallStatus">UninstallStatus</a> (<a id="Fusion.UninstallStatus">Fusion.UninstallStatus</a>)
+### Description
 The status of an uninstall.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -533,10 +533,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="FusionWrapper">FusionWrapper</a> (<a id="Fusion.FusionWrapper">Fusion.FusionWrapper</a>)
-## Description
+## <a id="FusionWrapper">FusionWrapper</a> (<a id="Fusion.FusionWrapper">Fusion.FusionWrapper</a>)
+### Description
 A class wrapping fusion api calls
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -547,19 +547,19 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="GitCommitDate">GitCommitDate</a> (<a id="Git.GitCommitDate">Git.GitCommitDate</a>)
-## Description
+## <a id="GitCommitDate">GitCommitDate</a> (<a id="Git.GitCommitDate">Git.GitCommitDate</a>)
+### Description
 A task for git to get the current commit datetime.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
 
         
-# <a id="GitClient">GitClient</a> (<a id="Git.GitClient">Git.GitClient</a>)
-## Description
+## <a id="GitClient">GitClient</a> (<a id="Git.GitClient">Git.GitClient</a>)
+### Description
 A task for Git commands.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -584,10 +584,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="GitDescribe">GitDescribe</a> (<a id="Git.GitDescribe">Git.GitDescribe</a>)
-## Description
+## <a id="GitDescribe">GitDescribe</a> (<a id="Git.GitDescribe">Git.GitDescribe</a>)
+### Description
 A task for git to get the most current tag, commit count since tag, and commit hash.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -603,10 +603,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="GitBranch">GitBranch</a> (<a id="Git.GitBranch">Git.GitBranch</a>)
-## Description
+## <a id="GitBranch">GitBranch</a> (<a id="Git.GitBranch">Git.GitBranch</a>)
+### Description
 A task to get the name of the branch or tag of git repository
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -618,10 +618,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="GitCommits">GitCommits</a> (<a id="Git.GitCommits">Git.GitCommits</a>)
-## Description
+## <a id="GitCommits">GitCommits</a> (<a id="Git.GitCommits">Git.GitCommits</a>)
+### Description
 A task for git to retrieve the number of commits on a revision.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -632,10 +632,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="GitPendingChanges">GitPendingChanges</a> (<a id="Git.GitPendingChanges">Git.GitPendingChanges</a>)
-## Description
+## <a id="GitPendingChanges">GitPendingChanges</a> (<a id="Git.GitPendingChanges">Git.GitPendingChanges</a>)
+### Description
 A task for git to detect if there are pending changes
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -645,10 +645,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="GitVersion">GitVersion</a> (<a id="Git.GitVersion">Git.GitVersion</a>)
-## Description
+## <a id="GitVersion">GitVersion</a> (<a id="Git.GitVersion">Git.GitVersion</a>)
+### Description
 A task for git to get the current commit hash.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -661,10 +661,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="ChmCompiler">ChmCompiler</a> (<a id="HtmlHelp.ChmCompiler">HtmlHelp.ChmCompiler</a>)
-## Description
+## <a id="ChmCompiler">ChmCompiler</a> (<a id="HtmlHelp.ChmCompiler">HtmlHelp.ChmCompiler</a>)
+### Description
 Html Help 1x compiler task.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -677,10 +677,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="HxCompiler">HxCompiler</a> (<a id="HtmlHelp.HxCompiler">HtmlHelp.HxCompiler</a>)
-## Description
+## <a id="HxCompiler">HxCompiler</a> (<a id="HtmlHelp.HxCompiler">HtmlHelp.HxCompiler</a>)
+### Description
 A Html Help 2.0 compiler task.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -702,10 +702,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="InnoSetup">InnoSetup</a>
-## Description
+## <a id="InnoSetup">InnoSetup</a>
+### Description
 MSBuild task to create installer with InnoSetup
-## Example
+### Example
 Create installer
             
       <InnoSetup 
@@ -728,10 +728,10 @@ Create installer
         
         
         
-# <a id="CssCompress">CssCompress</a> (<a id="JavaScript.CssCompress">JavaScript.CssCompress</a>)
-## Description
+## <a id="CssCompress">CssCompress</a> (<a id="JavaScript.CssCompress">JavaScript.CssCompress</a>)
+### Description
 MSBuild task to minimize the size of a css file.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -742,19 +742,19 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="CssCompressor">CssCompressor</a> (<a id="JavaScript.CssCompressor">JavaScript.CssCompressor</a>)
-## Description
+## <a id="CssCompressor">CssCompressor</a> (<a id="JavaScript.CssCompressor">JavaScript.CssCompressor</a>)
+### Description
 Work in progress ...
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
 
         
-# <a id="MergeModes">MergeModes</a>
-## Description
+## <a id="MergeModes">MergeModes</a>
+### Description
 Defines the modes for merging files.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -763,10 +763,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="Merge">Merge</a>
-## Description
+## <a id="Merge">Merge</a>
+### Description
 Merge files into the destination file.
-## Example
+### Example
 Merge CSS files together for better browser performance.
             
       <Merge Mode="TextLine" 
@@ -781,10 +781,10 @@ Merge CSS files together for better browser performance.
         
         
         
-# <a id="HttpRequest">HttpRequest</a> (<a id="Net.HttpRequest">Net.HttpRequest</a>)
-## Description
+## <a id="HttpRequest">HttpRequest</a> (<a id="Net.HttpRequest">Net.HttpRequest</a>)
+### Description
 Makes an HTTP request, optionally validating the result and writing it to a file.
-## Example
+### Example
 Example of a update request ensuring "Database upgrade check completed successfully." was returned.
             
       <HttpRequest Url="http://mydomain.com/index.php?checkdb=1" 
@@ -805,10 +805,10 @@ Example of a update request ensuring "Database upgrade check completed successfu
         
         
         
-# <a id="NuGetBase">NuGetBase</a> (<a id="NuGet.NuGetBase">NuGet.NuGetBase</a>)
-## Description
+## <a id="NuGetBase">NuGetBase</a> (<a id="NuGet.NuGetBase">NuGet.NuGetBase</a>)
+### Description
 A base class for NuGet tasks.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -820,11 +820,11 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="NuGetDelete">NuGetDelete</a> (<a id="NuGet.NuGetDelete">NuGet.NuGetDelete</a>)
-## Description
+## <a id="NuGetDelete">NuGetDelete</a> (<a id="NuGet.NuGetDelete">NuGet.NuGetDelete</a>)
+### Description
 Deletes a package with a specific version. It can be useful if the server has disallow 
             to overwrite existing packages.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -837,10 +837,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="NuGetInstall">NuGetInstall</a> (<a id="NuGet.NuGetInstall">NuGet.NuGetInstall</a>)
-## Description
+## <a id="NuGetInstall">NuGetInstall</a> (<a id="NuGet.NuGetInstall">NuGet.NuGetInstall</a>)
+### Description
 Installs a package using the specified sources.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -857,10 +857,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="NuGetPack">NuGetPack</a> (<a id="NuGet.NuGetPack">NuGet.NuGetPack</a>)
-## Description
+## <a id="NuGetPack">NuGetPack</a> (<a id="NuGet.NuGetPack">NuGet.NuGetPack</a>)
+### Description
 Creates a NuGet package based on the specified nuspec or project file.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -886,10 +886,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="NuGetPush">NuGetPush</a> (<a id="NuGet.NuGetPush">NuGet.NuGetPush</a>)
-## Description
+## <a id="NuGetPush">NuGetPush</a> (<a id="NuGet.NuGetPush">NuGet.NuGetPush</a>)
+### Description
 Pushes a package to the server and optionally publishes it.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -900,10 +900,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="NuGetRestore">NuGetRestore</a> (<a id="NuGet.NuGetRestore">NuGet.NuGetRestore</a>)
-## Description
+## <a id="NuGetRestore">NuGetRestore</a> (<a id="NuGet.NuGetRestore">NuGet.NuGetRestore</a>)
+### Description
 Downloads and unzips (restores) any packages missing from the packages folder.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -918,10 +918,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="NuGetUpdate">NuGetUpdate</a> (<a id="NuGet.NuGetUpdate">NuGet.NuGetUpdate</a>)
-## Description
+## <a id="NuGetUpdate">NuGetUpdate</a> (<a id="NuGet.NuGetUpdate">NuGet.NuGetUpdate</a>)
+### Description
 Updates packages
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -940,10 +940,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="RegexCompiler">RegexCompiler</a>
-## Description
+## <a id="RegexCompiler">RegexCompiler</a>
+### Description
 Compiles regular expressions and saves them to disk in an assembly.
-## Example
+### Example
 Creates an assembly with the compiled regular expressions.
       
         
@@ -1003,19 +1003,19 @@ Creates an assembly with the compiled regular expressions.
         
         
         
-# <a id="BuildAssembler">BuildAssembler</a> (<a id="Sandcastle.BuildAssembler">Sandcastle.BuildAssembler</a>)
-## Description
+## <a id="BuildAssembler">BuildAssembler</a> (<a id="Sandcastle.BuildAssembler">Sandcastle.BuildAssembler</a>)
+### Description
 BuildAssembler task for Sandcastle.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
 
         
-# <a id="SandcastleToolBase">SandcastleToolBase</a> (<a id="Sandcastle.SandcastleToolBase">Sandcastle.SandcastleToolBase</a>)
-## Description
+## <a id="SandcastleToolBase">SandcastleToolBase</a> (<a id="Sandcastle.SandcastleToolBase">Sandcastle.SandcastleToolBase</a>)
+### Description
 A base class for Sandcastle Tools,
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1037,10 +1037,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="ChmBuilder">ChmBuilder</a> (<a id="Sandcastle.ChmBuilder">Sandcastle.ChmBuilder</a>)
-## Description
+## <a id="ChmBuilder">ChmBuilder</a> (<a id="Sandcastle.ChmBuilder">Sandcastle.ChmBuilder</a>)
+### Description
 ChmBuilder task for Sandcastle.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1054,10 +1054,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="DBCSFix">DBCSFix</a> (<a id="Sandcastle.DBCSFix">Sandcastle.DBCSFix</a>)
-## Description
+## <a id="DBCSFix">DBCSFix</a> (<a id="Sandcastle.DBCSFix">Sandcastle.DBCSFix</a>)
+### Description
 DBCSFix task for Sandcastle.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1067,10 +1067,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="MRefBuilder">MRefBuilder</a> (<a id="Sandcastle.MRefBuilder">Sandcastle.MRefBuilder</a>)
-## Description
+## <a id="MRefBuilder">MRefBuilder</a> (<a id="Sandcastle.MRefBuilder">Sandcastle.MRefBuilder</a>)
+### Description
 MRefBuilder task for Sandcastle.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1083,10 +1083,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="Sandcastle">Sandcastle</a> (<a id="Sandcastle.Sandcastle">Sandcastle.Sandcastle</a>)
-## Description
+## <a id="Sandcastle">Sandcastle</a> (<a id="Sandcastle.Sandcastle">Sandcastle.Sandcastle</a>)
+### Description
 The Sandcastle task.
-## Example
+### Example
 Create the Html Help for MSBuild Community Task project.
             
       <Sandcastle TopicStyle="vs2005"
@@ -1116,10 +1116,10 @@ Create the Html Help for MSBuild Community Task project.
         
         
         
-# <a id="SandcastleEnviroment">SandcastleEnviroment</a> (<a id="Sandcastle.SandcastleEnviroment">Sandcastle.SandcastleEnviroment</a>)
-## Description
+## <a id="SandcastleEnviroment">SandcastleEnviroment</a> (<a id="Sandcastle.SandcastleEnviroment">Sandcastle.SandcastleEnviroment</a>)
+### Description
 A class representing the sandcastle enviroment.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1131,10 +1131,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="XslTransform">XslTransform</a> (<a id="Sandcastle.XslTransform">Sandcastle.XslTransform</a>)
-## Description
+## <a id="XslTransform">XslTransform</a> (<a id="Sandcastle.XslTransform">Sandcastle.XslTransform</a>)
+### Description
 XslTransform task for Sandcastle.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1146,10 +1146,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="IFilesSystem">IFilesSystem</a> (<a id="Services.IFilesSystem">Services.IFilesSystem</a>)
-## Description
+## <a id="IFilesSystem">IFilesSystem</a> (<a id="Services.IFilesSystem">Services.IFilesSystem</a>)
+### Description
 The contract for a service that will provide access to the file system.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1158,10 +1158,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="FileSystem">FileSystem</a> (<a id="Services.FileSystem">Services.FileSystem</a>)
-## Description
+## <a id="FileSystem">FileSystem</a> (<a id="Services.FileSystem">Services.FileSystem</a>)
+### Description
 Provides access to the file system.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1170,10 +1170,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="GacUtilCommands">GacUtilCommands</a>
-## Description
+## <a id="GacUtilCommands">GacUtilCommands</a>
+### Description
 The list of the commands available to the GacUtil Task
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1181,10 +1181,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="GacUtil">GacUtil</a>
-## Description
+## <a id="GacUtil">GacUtil</a>
+### Description
 MSBuild task to install and uninstall assemblies into the GAC
-## Example
+### Example
 Install a dll into the GAC.
             
       <GacUtil 
@@ -1208,12 +1208,12 @@ Install a dll into the GAC.
         
         
         
-# <a id="JSCompress">JSCompress</a> (<a id="JavaScript.JSCompress">JavaScript.JSCompress</a>)
-## Description
+## <a id="JSCompress">JSCompress</a> (<a id="JavaScript.JSCompress">JavaScript.JSCompress</a>)
+### Description
 Compresses JavaScript source by removing comments and unnecessary 
             whitespace. It typically reduces the size of the script by half, 
             resulting in faster downloads and code that is harder to read.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1223,10 +1223,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="AddTnsName">AddTnsName</a> (<a id="Oracle.AddTnsName">Oracle.AddTnsName</a>)
-## Description
+## <a id="AddTnsName">AddTnsName</a> (<a id="Oracle.AddTnsName">Oracle.AddTnsName</a>)
+### Description
 Defines a database host within the Oracle TNSNAMES.ORA file.
-## Example
+### Example
 Add an entry to the system default TNSNAMES.ORA file and update any entry that already exists:
        <AddTnsName AllowUpdates="True" EntryName="northwind.world" EntryText="(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = northwinddb01)(PORT = 1521))) (CONNECT_DATA = (SERVICE_NAME = northwind.world)))"  /> 
             
@@ -1245,10 +1245,10 @@ Add an entry to the system default TNSNAMES.ORA file and update any entry that a
         
         
         
-# <a id="TnsEntry">TnsEntry</a> (<a id="Oracle.TnsEntry">Oracle.TnsEntry</a>)
-## Description
+## <a id="TnsEntry">TnsEntry</a> (<a id="Oracle.TnsEntry">Oracle.TnsEntry</a>)
+### Description
 Contains information about a TNS definition
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1257,10 +1257,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="TnsParser">TnsParser</a> (<a id="Oracle.TnsParser">Oracle.TnsParser</a>)
-## Description
+## <a id="TnsParser">TnsParser</a> (<a id="Oracle.TnsParser">Oracle.TnsParser</a>)
+### Description
 Locates host entries within a TNSNAMES.ORA file
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1268,10 +1268,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="RoboCopy">RoboCopy</a>
-## Description
+## <a id="RoboCopy">RoboCopy</a>
+### Description
 Task wrapping the Window Resource Kit Robocopy.exe command.
-## Example
+### Example
 Deploy website to web server.
             
       <RoboCopy 
@@ -1327,10 +1327,10 @@ Deploy website to web server.
         
         
         
-# <a id="Sound">Sound</a>
-## Description
+## <a id="Sound">Sound</a>
+### Description
 A task to play a sound from a .wav file path or URL.
-## Example
+### Example
 To play the windows XP startup sound, use
       
       <Sound SystemSoundFile="..\Media\Windows XP Startup.wav" />
@@ -1345,10 +1345,10 @@ To play the windows XP startup sound, use
         
         
         
-# <a id="FileBase">FileBase</a> (<a id="SourceServer.FileBase">SourceServer.FileBase</a>)
-## Description
+## <a id="FileBase">FileBase</a> (<a id="SourceServer.FileBase">SourceServer.FileBase</a>)
+### Description
 A base class that has a file.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1359,10 +1359,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="PdbStrCommands">PdbStrCommands</a> (<a id="SourceServer.PdbStrCommands">SourceServer.PdbStrCommands</a>)
-## Description
+## <a id="PdbStrCommands">PdbStrCommands</a> (<a id="SourceServer.PdbStrCommands">SourceServer.PdbStrCommands</a>)
+### Description
 Commands for the  tasks.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1370,10 +1370,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="PdbStr">PdbStr</a> (<a id="SourceServer.PdbStr">SourceServer.PdbStr</a>)
-## Description
+## <a id="PdbStr">PdbStr</a> (<a id="SourceServer.PdbStr">SourceServer.PdbStr</a>)
+### Description
 A task for the pdbstr from source server.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1386,10 +1386,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SourceFile">SourceFile</a> (<a id="SourceServer.SourceFile">SourceServer.SourceFile</a>)
-## Description
+## <a id="SourceFile">SourceFile</a> (<a id="SourceServer.SourceFile">SourceServer.SourceFile</a>)
+### Description
 A class representing a source file.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1400,10 +1400,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SourceIndexBase">SourceIndexBase</a> (<a id="SourceServer.SourceIndexBase">SourceServer.SourceIndexBase</a>)
-## Description
+## <a id="SourceIndexBase">SourceIndexBase</a> (<a id="SourceServer.SourceIndexBase">SourceServer.SourceIndexBase</a>)
+### Description
 A base class for source indexing a pdb symbol file.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1427,10 +1427,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SrcTool">SrcTool</a> (<a id="SourceServer.SrcTool">SourceServer.SrcTool</a>)
-## Description
+## <a id="SrcTool">SrcTool</a> (<a id="SourceServer.SrcTool">SourceServer.SrcTool</a>)
+### Description
 A task for the srctool from source server.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1452,10 +1452,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SvnSourceIndex">SvnSourceIndex</a> (<a id="SourceServer.SvnSourceIndex">SourceServer.SvnSourceIndex</a>)
-## Description
+## <a id="SvnSourceIndex">SvnSourceIndex</a> (<a id="SourceServer.SvnSourceIndex">SourceServer.SvnSourceIndex</a>)
+### Description
 A subversion source index task.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1465,10 +1465,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SymbolFile">SymbolFile</a> (<a id="SourceServer.SymbolFile">SourceServer.SymbolFile</a>)
-## Description
+## <a id="SymbolFile">SymbolFile</a> (<a id="SourceServer.SymbolFile">SourceServer.SymbolFile</a>)
+### Description
 A class representing a symbol file.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1479,10 +1479,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="TfsSourceIndex">TfsSourceIndex</a> (<a id="SourceServer.TfsSourceIndex">SourceServer.TfsSourceIndex</a>)
-## Description
+## <a id="TfsSourceIndex">TfsSourceIndex</a> (<a id="SourceServer.TfsSourceIndex">SourceServer.TfsSourceIndex</a>)
+### Description
 Task to index pdb files and entries to retrieve source files from Team Foundation Server source control.
-## Example
+### Example
 Index a PDB.
             
       <TfsSourceIndex SymbolFiles="@(Symbols)" TeamProjectCollectionUri="http://my-tfsserver/tfs/DefaultCollection" />
@@ -1498,10 +1498,10 @@ Index a PDB.
         
         
         
-# <a id="SqlPubCommands">SqlPubCommands</a> (<a id="SqlServer.SqlPubCommands">SqlServer.SqlPubCommands</a>)
-## Description
+## <a id="SqlPubCommands">SqlPubCommands</a> (<a id="SqlServer.SqlPubCommands">SqlServer.SqlPubCommands</a>)
+### Description
 The SqlPubWiz commands
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1509,12 +1509,12 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SqlPubWiz">SqlPubWiz</a> (<a id="SqlServer.SqlPubWiz">SqlServer.SqlPubWiz</a>)
-## Description
+## <a id="SqlPubWiz">SqlPubWiz</a> (<a id="SqlServer.SqlPubWiz">SqlServer.SqlPubWiz</a>)
+### Description
 The Database Publishing Wizard enables the deployment of
             SQL Server databases (both schema and data) into a shared
             hosting environment.
-## Example
+### Example
 Generate the database script for Northwind on localhost.
             
       <SqlPubWiz 
@@ -1551,10 +1551,10 @@ Generate the database script for Northwind on localhost.
         
         
         
-# <a id="SvnCopy">SvnCopy</a> (<a id="Subversion.SvnCopy">Subversion.SvnCopy</a>)
-## Description
+## <a id="SvnCopy">SvnCopy</a> (<a id="Subversion.SvnCopy">Subversion.SvnCopy</a>)
+### Description
 Copy a file or folder in Subversion
-## Example
+### Example
 Create a tag of the trunk with the current Cruise Control build number:
             
       <Target Name="TagTheBuild">
@@ -1567,10 +1567,10 @@ Create a tag of the trunk with the current Cruise Control build number:
 * * *
 
         
-# <a id="SvnClient">SvnClient</a> (<a id="Subversion.SvnClient">Subversion.SvnClient</a>)
-## Description
+## <a id="SvnClient">SvnClient</a> (<a id="Subversion.SvnClient">Subversion.SvnClient</a>)
+### Description
 Subversion client base class
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1614,10 +1614,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="Info">Info</a> (<a id="Subversion.Info">Subversion.Info</a>)
-## Description
+## <a id="Info">Info</a> (<a id="Subversion.Info">Subversion.Info</a>)
+### Description
 
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1625,49 +1625,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="Entry">Entry</a> (<a id="Subversion.Entry">Subversion.Entry</a>)
-## Description
+## <a id="Entry">Entry</a> (<a id="Subversion.Entry">Subversion.Entry</a>)
+### Description
 
-## No example given
-The developer of this task did not add an example in the summary documentation.
-
-* * *
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-# <a id="EntryCollection">EntryCollection</a> (<a id="Subversion.EntryCollection">Subversion.EntryCollection</a>)
-## Description
-
-## No example given
-The developer of this task did not add an example in the summary documentation.
-
-* * *
-
-        
-        
-        
-# <a id="Repository">Repository</a> (<a id="Subversion.Repository">Subversion.Repository</a>)
-## Description
-
-## No example given
-The developer of this task did not add an example in the summary documentation.
-
-* * *
-
-        
-        
-        
-# <a id="WorkingCopy">WorkingCopy</a> (<a id="Subversion.WorkingCopy">Subversion.WorkingCopy</a>)
-## Description
-
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1678,10 +1639,35 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="LastCommit">LastCommit</a> (<a id="Subversion.LastCommit">Subversion.LastCommit</a>)
-## Description
+        
+        
+        
+## <a id="EntryCollection">EntryCollection</a> (<a id="Subversion.EntryCollection">Subversion.EntryCollection</a>)
+### Description
 
-## No example given
+### No example given
+The developer of this task did not add an example in the summary documentation.
+
+* * *
+
+        
+        
+        
+## <a id="Repository">Repository</a> (<a id="Subversion.Repository">Subversion.Repository</a>)
+### Description
+
+### No example given
+The developer of this task did not add an example in the summary documentation.
+
+* * *
+
+        
+        
+        
+## <a id="WorkingCopy">WorkingCopy</a> (<a id="Subversion.WorkingCopy">Subversion.WorkingCopy</a>)
+### Description
+
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1691,10 +1677,24 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SvnStatus">SvnStatus</a> (<a id="Subversion.SvnStatus">Subversion.SvnStatus</a>)
-## Description
+        
+## <a id="LastCommit">LastCommit</a> (<a id="Subversion.LastCommit">Subversion.LastCommit</a>)
+### Description
+
+### No example given
+The developer of this task did not add an example in the summary documentation.
+
+* * *
+
+        
+        
+        
+        
+        
+## <a id="SvnStatus">SvnStatus</a> (<a id="Subversion.SvnStatus">Subversion.SvnStatus</a>)
+### Description
 Subversion status command.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1703,10 +1703,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SymStoreCommands">SymStoreCommands</a> (<a id="SymbolServer.SymStoreCommands">SymbolServer.SymStoreCommands</a>)
-## Description
+## <a id="SymStoreCommands">SymStoreCommands</a> (<a id="SymbolServer.SymStoreCommands">SymbolServer.SymStoreCommands</a>)
+### Description
 Commands for the SymStore tasks.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1715,10 +1715,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SymStore">SymStore</a> (<a id="SymbolServer.SymStore">SymbolServer.SymStore</a>)
-## Description
+## <a id="SymStore">SymStore</a> (<a id="SymbolServer.SymStore">SymbolServer.SymStore</a>)
+### Description
 Task that wraps the Symbol Server SymStore.exe application.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1750,10 +1750,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="InfoCommandResponse">InfoCommandResponse</a> (<a id="Tfs.InfoCommandResponse">Tfs.InfoCommandResponse</a>)
-## Description
+## <a id="InfoCommandResponse">InfoCommandResponse</a> (<a id="Tfs.InfoCommandResponse">Tfs.InfoCommandResponse</a>)
+### Description
 Represents the response from a tf.exe info command
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1764,10 +1764,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="ServerInformation">ServerInformation</a> (<a id="Tfs.ServerInformation">Tfs.ServerInformation</a>)
-## Description
+## <a id="ServerInformation">ServerInformation</a> (<a id="Tfs.ServerInformation">Tfs.ServerInformation</a>)
+### Description
 Represents the server information section created by a tf.exe info command
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1784,10 +1784,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="LocalInformation">LocalInformation</a> (<a id="Tfs.LocalInformation">Tfs.LocalInformation</a>)
-## Description
+## <a id="LocalInformation">LocalInformation</a> (<a id="Tfs.LocalInformation">Tfs.LocalInformation</a>)
+### Description
 Represents the local information section from a tf.exe info command
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1798,10 +1798,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="TfsClient">TfsClient</a> (<a id="Tfs.TfsClient">Tfs.TfsClient</a>)
-## Description
+## <a id="TfsClient">TfsClient</a> (<a id="Tfs.TfsClient">Tfs.TfsClient</a>)
+### Description
 A task for Team Foundation Server version control.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1852,10 +1852,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="IRegistry">IRegistry</a> (<a id="Services.IRegistry">Services.IRegistry</a>)
-## Description
+## <a id="IRegistry">IRegistry</a> (<a id="Services.IRegistry">Services.IRegistry</a>)
+### Description
 The contract for a service that will provide access to the registry.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1863,10 +1863,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="Win32Registry">Win32Registry</a> (<a id="Services.Win32Registry">Services.Win32Registry</a>)
-## Description
+## <a id="Win32Registry">Win32Registry</a> (<a id="Services.Win32Registry">Services.Win32Registry</a>)
+### Description
 Provides access to the Windows registry.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1874,10 +1874,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="User">User</a>
-## Description
+## <a id="User">User</a>
+### Description
 Provides information about the build user.
-## Example
+### Example
 Get build user information.
             
       <User>
@@ -1902,10 +1902,10 @@ Get build user information.
         
         
         
-# <a id="WebUpload">WebUpload</a>
-## Description
+## <a id="WebUpload">WebUpload</a>
+### Description
 Upload a local file to a remote URI.
-## Example
+### Example
 Upload the xml file.
             
       <WebUpload RemoteUri="http://intranet/upload" FileName="page.xml" />
@@ -1922,10 +1922,10 @@ Upload the xml file.
         
         
         
-# <a id="XmlMassUpdate">XmlMassUpdate</a> (<a id="Xml.XmlMassUpdate">Xml.XmlMassUpdate</a>)
-## Description
+## <a id="XmlMassUpdate">XmlMassUpdate</a> (<a id="Xml.XmlMassUpdate">Xml.XmlMassUpdate</a>)
+### Description
 Performs multiple updates on an XML file
-## Example
+### Example
 These examples will demonstrate how to make multiple updates to a XML file named web.config. It looks like:
         
       <?xml version="1.0" encoding="utf-8" ?>
@@ -1963,10 +1963,10 @@ These examples will demonstrate how to make multiple updates to a XML file named
         
         
         
-# <a id="WebDirectoryScriptMap">WebDirectoryScriptMap</a> (<a id="IIS.WebDirectoryScriptMap">IIS.WebDirectoryScriptMap</a>)
-## Description
+## <a id="WebDirectoryScriptMap">WebDirectoryScriptMap</a> (<a id="IIS.WebDirectoryScriptMap">IIS.WebDirectoryScriptMap</a>)
+### Description
 Sets an application mapping for a filename extension on an existing web directory.
-## Example
+### Example
 Map the .axd extension to the lastest version of ASP.NET:
             
       <WebDirectoryScriptMap VirtualDirectoryName="MyWeb" Extension=".axd" MapToAspNet="True" VerifyFileExists="False" />
@@ -1975,10 +1975,10 @@ Map the .axd extension to the lastest version of ASP.NET:
 * * *
 
         
-# <a id="WebBase">WebBase</a> (<a id="IIS.WebBase">IIS.WebBase</a>)
-## Description
+## <a id="WebBase">WebBase</a> (<a id="IIS.WebBase">IIS.WebBase</a>)
+### Description
 Base task for any IIS-related task.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -1999,10 +1999,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="IISVersion">IISVersion</a> (<a id="IIS.WebBase.IISVersion">IIS.WebBase.IISVersion</a>)
-## Description
+## <a id="IISVersion">IISVersion</a> (<a id="IIS.WebBase.IISVersion">IIS.WebBase.IISVersion</a>)
+### Description
 Defines the possible IIS versions supported by the task.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2015,10 +2015,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="ApplicationPoolAction">ApplicationPoolAction</a> (<a id="IIS.WebBase.ApplicationPoolAction">IIS.WebBase.ApplicationPoolAction</a>)
-## Description
+## <a id="ApplicationPoolAction">ApplicationPoolAction</a> (<a id="IIS.WebBase.ApplicationPoolAction">IIS.WebBase.ApplicationPoolAction</a>)
+### Description
 Defines the possible application pool actions to be performed.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2028,10 +2028,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="IIS7ApplicationPoolState">IIS7ApplicationPoolState</a> (<a id="IIS.WebBase.IIS7ApplicationPoolState">IIS.WebBase.IIS7ApplicationPoolState</a>)
-## Description
+## <a id="IIS7ApplicationPoolState">IIS7ApplicationPoolState</a> (<a id="IIS.WebBase.IIS7ApplicationPoolState">IIS.WebBase.IIS7ApplicationPoolState</a>)
+### Description
 Defines the current application pool state.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2050,10 +2050,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="WebDirectorySetting">WebDirectorySetting</a> (<a id="IIS.WebDirectorySetting">IIS.WebDirectorySetting</a>)
-## Description
+## <a id="WebDirectorySetting">WebDirectorySetting</a> (<a id="IIS.WebDirectorySetting">IIS.WebDirectorySetting</a>)
+### Description
 Reads and modifies a web directory configuration setting.
-## Example
+### Example
 Display the file system path of the MyWeb web directory:
             
       <WebDirectorySetting VirtualDirectoryName="MyWeb" SettingName="Path">
@@ -2069,10 +2069,10 @@ Display the file system path of the MyWeb web directory:
         
         
         
-# <a id="ILMerge">ILMerge</a>
-## Description
+## <a id="ILMerge">ILMerge</a>
+### Description
 A wrapper for the ILMerge tool.
-## Example
+### Example
 This example merges two assemblies A.dll and B.dll into one:
             
       <PropertyGroup>
@@ -2125,10 +2125,10 @@ This example merges two assemblies A.dll and B.dll into one:
         
         
         
-# <a id="InstallAssembly">InstallAssembly</a> (<a id="Install.InstallAssembly">Install.InstallAssembly</a>)
-## Description
+## <a id="InstallAssembly">InstallAssembly</a> (<a id="Install.InstallAssembly">Install.InstallAssembly</a>)
+### Description
 Installs assemblies.
-## Example
+### Example
 Install multiple assemblies by specifying the file names:
       
         
@@ -2147,10 +2147,10 @@ Install multiple assemblies by specifying the file names:
         
         
         
-# <a id="UninstallAssembly">UninstallAssembly</a> (<a id="Install.UninstallAssembly">Install.UninstallAssembly</a>)
-## Description
+## <a id="UninstallAssembly">UninstallAssembly</a> (<a id="Install.UninstallAssembly">Install.UninstallAssembly</a>)
+### Description
 Uninstalls assemblies.
-## Example
+### Example
 Uninstall multiple assemblies by specifying the file names:
             
       <UninstallAssembly AssemblyFiles="Engine.dll;Presenter.dll" />
@@ -2160,10 +2160,10 @@ Uninstall multiple assemblies by specifying the file names:
 
         
         
-# <a id="Modulo">Modulo</a> (<a id="Math.Modulo">Math.Modulo</a>)
-## Description
+## <a id="Modulo">Modulo</a> (<a id="Math.Modulo">Math.Modulo</a>)
+### Description
 Performs the modulo operation on numbers.
-## Example
+### Example
 Numbers evenly divide:
       
         
@@ -2177,10 +2177,10 @@ Above example will display:
 * * *
 
         
-# <a id="MathBase">MathBase</a> (<a id="Math.MathBase">Math.MathBase</a>)
-## Description
+## <a id="MathBase">MathBase</a> (<a id="Math.MathBase">Math.MathBase</a>)
+### Description
 Math task base class
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2192,10 +2192,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="Prompt">Prompt</a>
-## Description
+## <a id="Prompt">Prompt</a>
+### Description
 Displays a message on the console and waits for user input.
-## Example
+### Example
 Pause the build if the interactive property is set:
             
       <!-- Pause when invoked with the interactive property: msbuild myproject.proj /property:interactive=true -->
@@ -2209,11 +2209,11 @@ Pause the build if the interactive property is set:
         
         
         
-# <a id="RegexBase">RegexBase</a>
-## Description
+## <a id="RegexBase">RegexBase</a>
+### Description
 Base class for Regex tasks
             Handles public properties for Input, Expression, Options and Output
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2224,11 +2224,11 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="RegexMatch">RegexMatch</a>
-## Description
+## <a id="RegexMatch">RegexMatch</a>
+### Description
 Task to filter an Input list with a Regex expression.
             Output list contains items from Input list that matched given expression
-## Example
+### Example
 Matches from TestGroup those names ending in a, b or c
             
       <ItemGroup>
@@ -2253,12 +2253,12 @@ Matches from TestGroup those names ending in a, b or c
 
         
         
-# <a id="RegexReplace">RegexReplace</a>
-## Description
+## <a id="RegexReplace">RegexReplace</a>
+### Description
 Task to replace portions of strings within the Input list
             Output list contains all the elements of the Input list after
             performing the Regex Replace.
-## Example
+### Example
 1st example replaces first occurance of "foo." with empty string
             2nd example replaces occurance of "foo." after character 6 with "oop." string
             
@@ -2293,10 +2293,10 @@ Task to replace portions of strings within the Input list
         
         
         
-# <a id="TaskListAssemblyFormatType">TaskListAssemblyFormatType</a> (<a id="Schema.TaskListAssemblyFormatType">Schema.TaskListAssemblyFormatType</a>)
-## Description
+## <a id="TaskListAssemblyFormatType">TaskListAssemblyFormatType</a> (<a id="Schema.TaskListAssemblyFormatType">Schema.TaskListAssemblyFormatType</a>)
+### Description
 Different ways to specify the assembly in a UsingTask element.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2306,10 +2306,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="TaskSchema">TaskSchema</a> (<a id="Schema.TaskSchema">Schema.TaskSchema</a>)
-## Description
+## <a id="TaskSchema">TaskSchema</a> (<a id="Schema.TaskSchema">Schema.TaskSchema</a>)
+### Description
 A Task that generates a XSD schema of the tasks in an assembly.
-## Example
+### Example
 Creates schema for MSBuild Community Task project
             
       <TaskSchema Assemblies="Build\MSBuild.Community.Tasks.dll" 
@@ -2332,10 +2332,10 @@ Creates schema for MSBuild Community Task project
         
         
         
-# <a id="GetSolutionProjects">GetSolutionProjects</a>
-## Description
+## <a id="GetSolutionProjects">GetSolutionProjects</a>
+### Description
 Retrieves the list of Projects contained within a Visual Studio Solution (.sln) file
-## Example
+### Example
 Returns project name, GUID, and path information from test solution
             
       <Target Name="Test">
@@ -2360,10 +2360,10 @@ Returns project name, GUID, and path information from test solution
         
         
         
-# <a id="ExecuteDDL">ExecuteDDL</a> (<a id="SqlServer.ExecuteDDL">SqlServer.ExecuteDDL</a>)
-## Description
+## <a id="ExecuteDDL">ExecuteDDL</a> (<a id="SqlServer.ExecuteDDL">SqlServer.ExecuteDDL</a>)
+### Description
 MSBuild task to execute DDL and SQL statements.
-## Example
+### Example
 
              
        <PropertyGroup>
@@ -2384,11 +2384,11 @@ MSBuild task to execute DDL and SQL statements.
         
         
         
-# <a id="NodeKind">NodeKind</a> (<a id="Subversion.NodeKind">Subversion.NodeKind</a>)
-## Description
+## <a id="NodeKind">NodeKind</a> (<a id="Subversion.NodeKind">Subversion.NodeKind</a>)
+### Description
 The kind of Subversion node. The names match the text output
             by "svn info".
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2397,10 +2397,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="Schedule">Schedule</a> (<a id="Subversion.Schedule">Subversion.Schedule</a>)
-## Description
+## <a id="Schedule">Schedule</a> (<a id="Subversion.Schedule">Subversion.Schedule</a>)
+### Description
 The Subversion schedule type.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2408,10 +2408,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SvnInfo">SvnInfo</a> (<a id="Subversion.SvnInfo">Subversion.SvnInfo</a>)
-## Description
+## <a id="SvnInfo">SvnInfo</a> (<a id="Subversion.SvnInfo">Subversion.SvnInfo</a>)
+### Description
 Run the "svn info" command and parse the output
-## Example
+### Example
 This example will determine the Subversion repository root for
             a working directory and print it out.
             
@@ -2436,10 +2436,10 @@ This example will determine the Subversion repository root for
         
         
         
-# <a id="TemplateFile">TemplateFile</a>
-## Description
+## <a id="TemplateFile">TemplateFile</a>
+### Description
 MSBuild task that replaces tokens in a template file and writes out a new file.
-## Example
+### Example
 
             
       <ItemGroup>
@@ -2461,10 +2461,10 @@ MSBuild task that replaces tokens in a template file and writes out a new file.
         
         
         
-# <a id="Time">Time</a>
-## Description
+## <a id="Time">Time</a>
+### Description
 Gets the current date and time.
-## Example
+### Example
 Using the Time task to get the Month, Day,
             Year, Hour, Minute, and Second:
             
@@ -2506,10 +2506,10 @@ Set property "BuildDate" to the current date and time:
         
         
         
-# <a id="XmlNodeTaskItem">XmlNodeTaskItem</a> (<a id="Xml.XmlNodeTaskItem">Xml.XmlNodeTaskItem</a>)
-## Description
+## <a id="XmlNodeTaskItem">XmlNodeTaskItem</a> (<a id="Xml.XmlNodeTaskItem">Xml.XmlNodeTaskItem</a>)
+### Description
 Represents a single XmlNode selected using an XML task.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2526,10 +2526,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="XmlQuery">XmlQuery</a> (<a id="Xml.XmlQuery">Xml.XmlQuery</a>)
-## Description
+## <a id="XmlQuery">XmlQuery</a> (<a id="Xml.XmlQuery">Xml.XmlQuery</a>)
+### Description
 Reads a value or values from lines of XML
-## Example
+### Example
 Read an attribute value by selecting it with an XPath expression:
       
         
@@ -2557,10 +2557,10 @@ Read an attribute value by selecting it with an XPath expression:
         
         
         
-# <a id="XmlTaskHelper">XmlTaskHelper</a> (<a id="Xml.XmlTaskHelper">Xml.XmlTaskHelper</a>)
-## Description
+## <a id="XmlTaskHelper">XmlTaskHelper</a> (<a id="Xml.XmlTaskHelper">Xml.XmlTaskHelper</a>)
+### Description
 Provides methods used by all of the XML tasks
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2568,10 +2568,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="Xslt">Xslt</a>
-## Description
+## <a id="Xslt">Xslt</a>
+### Description
 A task to merge and transform a set of xml files.
-## Example
+### Example
 This example for generating a report
       from a set of NUnit xml results:
       
@@ -2621,10 +2621,10 @@ This examples shows all available task attributes:
         
         
         
-# <a id="FileUpdate">FileUpdate</a>
-## Description
+## <a id="FileUpdate">FileUpdate</a>
+### Description
 Replace text in file(s) using a Regular Expression.
-## Example
+### Example
 Search for a version number and update the revision.
             
       <FileUpdate Files="version.txt"
@@ -2650,11 +2650,11 @@ Search for a version number and update the revision.
         
         
         
-# <a id="FxCop">FxCop</a>
-## Description
+## <a id="FxCop">FxCop</a>
+### Description
 Uses FxCop to analyse managed code assemblies and reports on
             their design best-practice compliance.
-## Example
+### Example
 Shows how to analyse an assembly and use an XSLT stylesheet 
             to present the report as an HTML file. If the static anlysis fails,
             the build does not stop - this is controlled with the FailOnError
@@ -2702,10 +2702,10 @@ Shows how to analyse an assembly and use an XSLT stylesheet
         
         
         
-# <a id="ServiceActions">ServiceActions</a>
-## Description
+## <a id="ServiceActions">ServiceActions</a>
+### Description
 Defines the actions that can be performed on a service.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2716,10 +2716,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="ServiceController">ServiceController</a>
-## Description
+## <a id="ServiceController">ServiceController</a>
+### Description
 Task that can control a Windows service.
-## Example
+### Example
 Restart Web Server
             
       <ServiceController ServiceName="w3svc" Action="Restart" />
@@ -2728,11 +2728,11 @@ Restart Web Server
 * * *
 
         
-# <a id="ServiceQuery">ServiceQuery</a>
-## Description
+## <a id="ServiceQuery">ServiceQuery</a>
+### Description
 Task that can determine the status of a specified service
             on a target server.
-## Example
+### Example
 Check status of SQL Server
             
       <ServiceQuery ServiceName="MSSQLServer">
@@ -2760,13 +2760,13 @@ Check status of SQL Server
         
         
         
-# <a id="AppPoolCreate">AppPoolCreate</a> (<a id="IIS.AppPoolCreate">IIS.AppPoolCreate</a>)
-## Description
+## <a id="AppPoolCreate">AppPoolCreate</a> (<a id="IIS.AppPoolCreate">IIS.AppPoolCreate</a>)
+### Description
 Creates a new application pool on a local or remote machine with IIS installed.  The default is 
             to create the new application pool on the local machine.  If connecting to a remote machine, you can
             specify the  and  for the task
             to run under.
-## Example
+### Example
 Create a new application pool on the local machine.
             
       <AppPoolCreate AppPoolName="MyAppPool" />
@@ -2812,13 +2812,13 @@ Create a new application pool on the local machine.
         
         
         
-# <a id="WebDirectoryCreate">WebDirectoryCreate</a> (<a id="IIS.WebDirectoryCreate">IIS.WebDirectoryCreate</a>)
-## Description
+## <a id="WebDirectoryCreate">WebDirectoryCreate</a> (<a id="IIS.WebDirectoryCreate">IIS.WebDirectoryCreate</a>)
+### Description
 Creates a new web directory on a local or remote machine with IIS installed.  The default is 
             to create the new web directory on the local machine.  The physical path is required to already exist
             on the target machine.  If connecting to a remote machine, you can specify the 
             and  for the task to run under.
-## Example
+### Example
 Create a new web directory on the local machine.
             
       <WebDirectoryCreate VirtualDirectoryName="MyVirDir"
@@ -2887,13 +2887,13 @@ Create a new web directory on the local machine.
         
         
         
-# <a id="AppPoolDelete">AppPoolDelete</a> (<a id="IIS.AppPoolDelete">IIS.AppPoolDelete</a>)
-## Description
+## <a id="AppPoolDelete">AppPoolDelete</a> (<a id="IIS.AppPoolDelete">IIS.AppPoolDelete</a>)
+### Description
 Deletes an existing application pool on a local or remote machine with IIS installed.  The default is 
             to delete an existing application pool on the local machine.  If connecting to a remote machine, you can
             specify the  and  for the task
             to run under.
-## Example
+### Example
 Delete an existing application pool on the local machine.
             
       <AppPoolDelete AppPoolName="MyAppPool" />
@@ -2904,13 +2904,13 @@ Delete an existing application pool on the local machine.
         
         
         
-# <a id="WebDirectoryDelete">WebDirectoryDelete</a> (<a id="IIS.WebDirectoryDelete">IIS.WebDirectoryDelete</a>)
-## Description
+## <a id="WebDirectoryDelete">WebDirectoryDelete</a> (<a id="IIS.WebDirectoryDelete">IIS.WebDirectoryDelete</a>)
+### Description
 Deletes a web directory on a local or remote machine with IIS installed.  The default is 
             to delete the web directory on the local machine.  If connecting to a remote machine, you
             can specify the  and  for the
             task to run under.
-## Example
+### Example
 Deletes a web directory on the local machine.
             
       <WebDirectoryDelete VirtualDirectoryName="MyVirDir" />
@@ -2921,10 +2921,10 @@ Deletes a web directory on the local machine.
         
         
         
-# <a id="AppPoolControllerActions">AppPoolControllerActions</a> (<a id="IIS.AppPoolControllerActions">IIS.AppPoolControllerActions</a>)
-## Description
+## <a id="AppPoolControllerActions">AppPoolControllerActions</a> (<a id="IIS.AppPoolControllerActions">IIS.AppPoolControllerActions</a>)
+### Description
 Actions the  can do.
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -2934,13 +2934,13 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="AppPoolController">AppPoolController</a> (<a id="IIS.AppPoolController">IIS.AppPoolController</a>)
-## Description
+## <a id="AppPoolController">AppPoolController</a> (<a id="IIS.AppPoolController">IIS.AppPoolController</a>)
+### Description
 Allows control for an application pool on a local or remote machine with IIS installed.  The default is 
             to control the application pool on the local machine.  If connecting to a remote machine, you can
             specify the  and  for the task
             to run under.
-## Example
+### Example
 Restart an application pool on the local machine.
             
       <AppPoolController AppPoolName="MyAppPool" Action="Restart" />
@@ -2952,10 +2952,10 @@ Restart an application pool on the local machine.
         
         
         
-# <a id="Mail">Mail</a>
-## Description
+## <a id="Mail">Mail</a>
+### Description
 Sends an email message
-## Example
+### Example
 Example of sending an email.
             
       <Target Name="Mail">
@@ -2985,10 +2985,10 @@ Example of sending an email.
         
         
         
-# <a id="Add">Add</a> (<a id="Math.Add">Math.Add</a>)
-## Description
+## <a id="Add">Add</a> (<a id="Math.Add">Math.Add</a>)
+### Description
 Add numbers
-## Example
+### Example
 Adding numbers:
             
       <Math.Add Numbers="4;3">
@@ -3001,10 +3001,10 @@ Adding numbers:
 
         
         
-# <a id="Divide">Divide</a> (<a id="Math.Divide">Math.Divide</a>)
-## Description
+## <a id="Divide">Divide</a> (<a id="Math.Divide">Math.Divide</a>)
+### Description
 Divide numbers
-## Example
+### Example
 
       
         
@@ -3020,10 +3020,10 @@ Above example will display:
         
         
         
-# <a id="Multiple">Multiple</a> (<a id="Math.Multiple">Math.Multiple</a>)
-## Description
+## <a id="Multiple">Multiple</a> (<a id="Math.Multiple">Math.Multiple</a>)
+### Description
 Multiple numbers
-## Example
+### Example
 
             
       <Math.Multiple Numbers="10;3">
@@ -3036,10 +3036,10 @@ Multiple numbers
 
         
         
-# <a id="Subtract">Subtract</a> (<a id="Math.Subtract">Math.Subtract</a>)
-## Description
+## <a id="Subtract">Subtract</a> (<a id="Math.Subtract">Math.Subtract</a>)
+### Description
 Subtract numbers
-## Example
+### Example
 
             
       <Math.Subtract Numbers="10;3">
@@ -3052,10 +3052,10 @@ Subtract numbers
 
         
         
-# <a id="MV">MV</a>
-## Description
+## <a id="MV">MV</a>
+### Description
 Moves files on the filesystem to a new location.
-## Example
+### Example
 Move a file to another folder
             
       <MV SourceFiles="Test\MoveMe.txt"
@@ -3074,10 +3074,10 @@ Rename a file
         
         
         
-# <a id="NDoc">NDoc</a>
-## Description
+## <a id="NDoc">NDoc</a>
+### Description
 Runs the NDoc application.
-## Example
+### Example
 Generated html help file.
             
       <NDoc Documenter="MSDN" 
@@ -3098,10 +3098,10 @@ Generated html help file.
         
         
         
-# <a id="NUnit">NUnit</a>
-## Description
+## <a id="NUnit">NUnit</a>
+### Description
 Run NUnit 2.4 on a group of assemblies.
-## Example
+### Example
 Run NUnit tests.
             
       <ItemGroup>
@@ -3141,10 +3141,10 @@ Run NUnit tests.
         
         
         
-# <a id="Resources">Resources</a> (<a id="Properties.Resources">Properties.Resources</a>)
-## Description
+## <a id="Resources">Resources</a> (<a id="Properties.Resources">Properties.Resources</a>)
+### Description
 一个强类型的资源类，用于查找本地化的字符串等。
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -3263,10 +3263,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="RegistryRead">RegistryRead</a>
-## Description
+## <a id="RegistryRead">RegistryRead</a>
+### Description
 Reads a value from the Registry
-## Example
+### Example
 Read .NET Framework install root from Registry.
             
       <RegistryRead 
@@ -3286,10 +3286,10 @@ Read .NET Framework install root from Registry.
         
         
         
-# <a id="RegistryWrite">RegistryWrite</a>
-## Description
+## <a id="RegistryWrite">RegistryWrite</a>
+### Description
 Writes a value to the Registry
-## Example
+### Example
 Write a value to Registry
             
       <RegistryWrite 
@@ -3306,10 +3306,10 @@ Write a value to Registry
         
         
         
-# <a id="Script">Script</a>
-## Description
+## <a id="Script">Script</a>
+### Description
 Executes code contained within the task.
-## Example
+### Example
 Simple script that writes to the console
       
         
@@ -3338,10 +3338,10 @@ Simple script that writes to the console
         
         
         
-# <a id="Sleep">Sleep</a>
-## Description
+## <a id="Sleep">Sleep</a>
+### Description
 A task for sleeping for a specified period of time.
-## Example
+### Example
 Causes the build to sleep for 300 milliseconds.
             
       <Sleep Milliseconds="300" />
@@ -3355,10 +3355,10 @@ Causes the build to sleep for 300 milliseconds.
         
         
         
-# <a id="SqlExecute">SqlExecute</a>
-## Description
+## <a id="SqlExecute">SqlExecute</a>
+### Description
 Executes a SQL command.
-## Example
+### Example
 Example of returning a count of items in a table.  Uses the default SelectMode of NonQuery.
             
       <SqlExecute ConnectionString="server=MyServer;Database=MyDatabase;Trusted_Connection=yes;"
@@ -3382,10 +3382,10 @@ Example of returning the items of a table in an xml format.
         
         
         
-# <a id="SvnCheckout">SvnCheckout</a> (<a id="Subversion.SvnCheckout">Subversion.SvnCheckout</a>)
-## Description
+## <a id="SvnCheckout">SvnCheckout</a> (<a id="Subversion.SvnCheckout">Subversion.SvnCheckout</a>)
+### Description
 Checkout a local working copy of a Subversion repository.
-## Example
+### Example
 Checkout a working copy
             
       <Target Name="Checkout">
@@ -3403,10 +3403,10 @@ Checkout a working copy
         
         
         
-# <a id="SvnCommit">SvnCommit</a> (<a id="Subversion.SvnCommit">Subversion.SvnCommit</a>)
-## Description
+## <a id="SvnCommit">SvnCommit</a> (<a id="Subversion.SvnCommit">Subversion.SvnCommit</a>)
+### Description
 Subversion Commit command
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -3414,10 +3414,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="SvnExport">SvnExport</a> (<a id="Subversion.SvnExport">Subversion.SvnExport</a>)
-## Description
+## <a id="SvnExport">SvnExport</a> (<a id="Subversion.SvnExport">Subversion.SvnExport</a>)
+### Description
 Export a folder from a Subversion repository
-## Example
+### Example
 Export from repository
             
       <Target Name="Export">
@@ -3436,10 +3436,10 @@ Export from repository
         
         
         
-# <a id="SvnVersion">SvnVersion</a> (<a id="Subversion.SvnVersion">Subversion.SvnVersion</a>)
-## Description
+## <a id="SvnVersion">SvnVersion</a> (<a id="Subversion.SvnVersion">Subversion.SvnVersion</a>)
+### Description
 Summarize the local revision(s) of a working copy.
-## Example
+### Example
 The following example gets the revision of the current folder.
             
       <Target Name="Version">
@@ -3469,10 +3469,10 @@ The following example gets the revision of the current folder.
         
         
         
-# <a id="SvnUpdate">SvnUpdate</a> (<a id="Subversion.SvnUpdate">Subversion.SvnUpdate</a>)
-## Description
+## <a id="SvnUpdate">SvnUpdate</a> (<a id="Subversion.SvnUpdate">Subversion.SvnUpdate</a>)
+### Description
 Subversion Update command
-## No example given
+### No example given
 The developer of this task did not add an example in the summary documentation.
 
 * * *
@@ -3480,10 +3480,10 @@ The developer of this task did not add an example in the summary documentation.
         
         
         
-# <a id="Unzip">Unzip</a>
-## Description
+## <a id="Unzip">Unzip</a>
+### Description
 Unzip a file to a target directory.
-## Example
+### Example
 Unzip file tasks
             
       <Unzip ZipFileName="MSBuild.Community.Tasks.zip" 
@@ -3500,10 +3500,10 @@ Unzip file tasks
         
         
         
-# <a id="Version">Version</a>
-## Description
+## <a id="Version">Version</a>
+### Description
 Generates version information based on various algorithms
-## Example
+### Example
 Get version information from file and increment revision.
             
       <Version VersionFile="number.txt" BuildType="Automatic" RevisionType="Increment">
@@ -3530,10 +3530,10 @@ Get version information from file and increment revision.
         
         
         
-# <a id="WebDownload">WebDownload</a>
-## Description
+## <a id="WebDownload">WebDownload</a>
+### Description
 Downloads a resource with the specified URI to a local file.
-## Example
+### Example
 Download the Microsoft.com home page.
             
       <WebDownload FileUri="http://www.microsoft.com/default.aspx" 
@@ -3551,10 +3551,10 @@ Download the Microsoft.com home page.
         
         
         
-# <a id="XmlRead">XmlRead</a>
-## Description
+## <a id="XmlRead">XmlRead</a>
+### Description
 Reads a value from a XML document using a XPath.
-## Example
+### Example
 Read all targest from a build project.
             
       <XmlRead Prefix="n"
@@ -3576,10 +3576,10 @@ Read all targest from a build project.
         
         
         
-# <a id="XmlUpdate">XmlUpdate</a>
-## Description
+## <a id="XmlUpdate">XmlUpdate</a>
+### Description
 Updates a XML document using a XPath.
-## Example
+### Example
 Update a XML element.
             
       <XmlUpdate Prefix="n"
@@ -3600,10 +3600,10 @@ Update a XML element.
         
         
         
-# <a id="Zip">Zip</a>
-## Description
+## <a id="Zip">Zip</a>
+### Description
 Create a zip file with the files specified.
-## Example
+### Example
 Create a zip file
             
       <ItemGroup>

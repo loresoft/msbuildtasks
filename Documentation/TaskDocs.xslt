@@ -36,19 +36,16 @@
   <xsl:output method="text"/>
   
   <xsl:template match="/doc/members/member"><xsl:if test="self::node()[starts-with(@name,'T:')]">
-# &lt;a id=&quot;<xsl:value-of select="user:lastWordInName(string(@name))"/>&quot;&gt;<xsl:value-of select="user:lastWordInName(string(@name))"/>&lt;/a&gt;<xsl:if test="not(user:lastWordInName(string(@name)) = user:replace(string(@name), 'T:MSBuild.Community.Tasks.', ''))"> (&lt;a id=&quot;<xsl:value-of select="user:replace(string(@name), 'T:MSBuild.Community.Tasks.', '')"/>&quot;&gt;<xsl:value-of select="user:replace(string(@name), 'T:MSBuild.Community.Tasks.', '')"/>&lt;/a&gt;)</xsl:if>
-## Description
-<xsl:value-of select="user:trim(string(summary))"/>
-<xsl:if test="example">
-## Example
+## &lt;a id=&quot;<xsl:value-of select="user:lastWordInName(string(@name))"/>&quot;&gt;<xsl:value-of select="user:lastWordInName(string(@name))"/>&lt;/a&gt;<xsl:if test="not(user:lastWordInName(string(@name)) = user:replace(string(@name), 'T:MSBuild.Community.Tasks.', ''))"> (&lt;a id=&quot;<xsl:value-of select="user:replace(string(@name), 'T:MSBuild.Community.Tasks.', '')"/>&quot;&gt;<xsl:value-of select="user:replace(string(@name), 'T:MSBuild.Community.Tasks.', '')"/>&lt;/a&gt;)</xsl:if>
+### Description
+<xsl:value-of select="user:trim(string(summary))"/><xsl:if test="example">
+### Example
 <xsl:value-of select="user:prepExample(user:replace(user:replace(string(example), '&lt;code>&lt;![CDATA[', ''), ']]>&lt;/code>', ''))"/>
-</xsl:if>
-<xsl:if test="not(example)">
-## No example given
+</xsl:if><xsl:if test="not(example)">
+### No example given
 The developer of this task did not add an example in the summary documentation.
 </xsl:if>
 * * *
-</xsl:if>
-  </xsl:template>
+</xsl:if></xsl:template>
 
 </xsl:stylesheet>
