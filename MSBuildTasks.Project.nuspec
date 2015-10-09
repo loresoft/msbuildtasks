@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>MSBuildTasks.Project</id>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
     <authors>Paul Welter</authors>
     <description>The MSBuild Community Tasks project is a collection of open source tasks for MSBuild.</description>
     <language>en-US</language>

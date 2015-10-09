@@ -80,6 +80,15 @@ namespace MSBuild.Community.Tasks.Git
         /// </summary>
         public bool SoftErrorMode { get; set; }
 
+        /// <summary>
+        /// When true, will use unannotated tags
+        /// </summary>
+        public bool LightWeight { get; set; }
+
+        /// <summary>
+        /// Matches the specified pattern
+        /// </summary>
+        public string Match { get; set; }
 
         /// <summary>
         /// Make sure we specify abbrev=40 to get full CommitHash
@@ -88,6 +97,10 @@ namespace MSBuild.Community.Tasks.Git
         protected override void GenerateArguments(CommandLineBuilder builder)
         {
             builder.AppendSwitch("--long --abbrev=40");
+            if (LightWeight)
+                builder.AppendSwitch("--tags");
+            if (!String.IsNullOrEmpty(Match))
+                builder.AppendSwitch("--match \"" + Match + "\"");
             base.GenerateArguments(builder);
         }
 
