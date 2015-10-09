@@ -25,6 +25,11 @@ namespace MSBuild.Community.Tasks.Xml
             set { contentFile = value; }
         }
 
+        /// <summary>
+        /// Don't show Log.LogMessage outputs.
+        /// </summary>
+        public bool Quiet { get; set; }
+
         private ITaskItem substitutionsFile;
 
         /// <summary>
@@ -352,11 +357,11 @@ namespace MSBuild.Community.Tasks.Xml
             XmlAttribute targetAttribute = modifiedNode.Attributes[attributeName];
             if (targetAttribute == null)
             {
-                Log.LogMessage(MessageImportance.Low, "Creating attribute '{0}' on '{1}'", attributeName, getFullPathOfNode(modifiedNode));
+                LogMessageAccordingToQuietParameter(MessageImportance.Low, "Creating attribute '{0}' on '{1}'", attributeName, getFullPathOfNode(modifiedNode));
                 targetAttribute = modifiedNode.Attributes.Append(mergedDocument.CreateAttribute(attributeName));
             }
             targetAttribute.Value = attributeValue;
-            Log.LogMessage("Setting attribute '{0}' to '{1}' on '{2}'", targetAttribute.Name, targetAttribute.Value, getFullPathOfNode(modifiedNode));
+            LogMessageAccordingToQuietParameter(null, "Setting attribute '{0}' to '{1}' on '{2}'", targetAttribute.Name, targetAttribute.Value, getFullPathOfNode(modifiedNode));
         }
 
         private string getFullPathOfNode(XmlNode node)
@@ -397,7 +402,7 @@ namespace MSBuild.Community.Tasks.Xml
                     throw new MultipleRootNodesException();
                 }
                 targetNode = destinationParentNode.AppendChild(mergedDocument.CreateNode(XmlNodeType.Element, nodeToModify.Name, nodeToModify.NamespaceURI));
-                Log.LogMessage(MessageImportance.Low, "Created node '{0}'", getFullPathOfNode(targetNode));
+                LogMessageAccordingToQuietParameter(MessageImportance.Low, "Created node '{0}'", getFullPathOfNode(targetNode));
                 if (keyAttribute != null)
                 {
                     XmlAttribute keyAttributeOnNewNode = targetNode.Attributes.Append(mergedDocument.CreateAttribute(keyAttribute.LocalName));
@@ -408,7 +413,7 @@ namespace MSBuild.Community.Tasks.Xml
             {
                 if (remove)
                 {
-                    Log.LogMessage(MessageImportance.Normal, "Removing node '{0}'", getFullPathOfNode(targetNode));
+                    LogMessageAccordingToQuietParameter(MessageImportance.Normal, "Removing node '{0}'", getFullPathOfNode(targetNode));
                     destinationParentNode.RemoveChild(targetNode);
                 }
             }
@@ -427,7 +432,7 @@ namespace MSBuild.Community.Tasks.Xml
             }
             else
             {
-                Log.LogMessage(MessageImportance.Low, "Using keyed attribute '{0}={1}' to locate node '{2}'", keyAttribute.LocalName, keyAttribute.Value, getFullPathOfNode(parentNode) + "/" + qname);
+                LogMessageAccordingToQuietParameter(MessageImportance.Low, "Using keyed attribute '{0}={1}' to locate node '{2}'", keyAttribute.LocalName, keyAttribute.Value, getFullPathOfNode(parentNode) + "/" + qname);
                 xpath = String.Format("{0}[@{1}='{2}']", qname, keyAttribute.LocalName, keyAttribute.Value);
             }
             XmlNode foundNode = parentNode.SelectSingleNode(xpath, namespaceManager);
@@ -460,5 +465,20 @@ namespace MSBuild.Community.Tasks.Xml
         }
 
         private class MultipleRootNodesException : Exception { }
+        
+        private void LogMessageAccordingToQuietParameter(MessageImportance? importance, string message, params object[] messageArgs)
+        {
+            if (!Quiet)
+            {
+                if (importance.HasValue)
+                {
+                    Log.LogMessage(importance.Value, message, messageArgs);
+                }
+                else
+                {
+                    Log.LogMessage(message, messageArgs);    
+                }
+            }
+        }
     }
 }
