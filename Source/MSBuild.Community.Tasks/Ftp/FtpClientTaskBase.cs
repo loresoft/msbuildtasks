@@ -403,7 +403,7 @@ namespace MSBuild.Community.Tasks.Ftp
             FtpReply reply = SendCommandAndReadResponse( "CDUP" );
 
             // If no 'okay' reply received, throw exception.
-            if(reply.ResultCode != 250)
+            if(reply.ResultCode != 250 && reply.ResultCode != 200)
             {
                 throw new FtpException( reply.Message );
             }
