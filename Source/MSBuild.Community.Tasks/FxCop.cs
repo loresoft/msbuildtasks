@@ -189,6 +189,14 @@ namespace MSBuild.Community.Tasks
             set { _rules = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the rule set.
+        /// </summary>
+        /// <value>
+        /// The rule set.
+        /// </value>
+        public string RuleSet { get; set; }
+
         private string _analysisReportFileName;
 
         /// <summary>
@@ -482,6 +490,11 @@ namespace MSBuild.Community.Tasks
                 {
                     _programArguments.AppendFormat("/rid:{0} ", item.ItemSpec);
                 }
+            }
+
+            if (!string.IsNullOrEmpty(RuleSet))
+            {
+                _programArguments.AppendFormat("/ruleset:{0} ", RuleSet);
             }
 
             if (IncludeSummaryReport)
