@@ -91,12 +91,21 @@ namespace MSBuild.Community.Tasks.Git
         public string Match { get; set; }
 
         /// <summary>
+        /// When true, Git describe will always return at least hash
+        /// </summary>
+        public bool Always { get; set; }
+
+        /// <summary>
         /// Make sure we specify abbrev=40 to get full CommitHash
         /// </summary>
         /// <param name="builder"></param>
         protected override void GenerateArguments(CommandLineBuilder builder)
         {
             builder.AppendSwitch("--long --abbrev=40");
+
+            if (Always)
+                builder.AppendSwitch("--always");
+
             if (LightWeight)
                 builder.AppendSwitch("--tags");
             if (!String.IsNullOrEmpty(Match))
@@ -124,8 +133,17 @@ namespace MSBuild.Community.Tasks.Git
                 // TODO: get rid of these "soft" errors once unit tests are in place
                 try
                 {
-                    // We do +1 to skip the git-describe 'g' delimiter
-                    CommitHash = line.Substring(hashPosition + 1);
+                    if (hashPosition == -1) { 
+
+                        // In case there are no tags, git describe output will contain only hash
+                        // (without 'g' delimiter)
+                        CommitHash = line.Substring(0);
+                    }
+                    else
+                    {
+                        // We do +1 to skip the git-describe 'g' delimiter
+                        CommitHash = line.Substring(hashPosition + 1);
+                    }
                 }
                 catch
                 {
@@ -133,6 +151,16 @@ namespace MSBuild.Community.Tasks.Git
 
                     CommitCount = -1;
                     Tag = "Failure Parsing Git Describe: " + line;
+                    return;
+                }
+
+                if (hashPosition == -1)
+                {
+                    // hashPosition is -1, meaning there is no dash in git describe output
+                    // Set Tag to blank and CommitCount to 0 and then return
+                    Tag = "";
+                    CommitCount = 0;
+
                     return;
                 }
 
