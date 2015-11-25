@@ -184,6 +184,132 @@ namespace MSBuild.Community.Tasks
         [DefaultValue(false)]
         public bool Quiet { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the output is self extracting. Defaults to <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> to output a self extracting archive; otherwise, <c>false</c>.</value>
+        [DefaultValue(false)]
+        public bool SelfExtracting { get; set; }
+
+        /// <summary>
+        /// Gets or sets the copyright.
+        /// </summary>
+        /// <value>
+        /// The copyright.
+        /// </value>
+        public string Copyright { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default extract directory.
+        /// </summary>
+        /// <value>
+        /// The default extract directory.
+        /// </value>
+        public string DefaultExtractDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>
+        /// The description.
+        /// </value>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the file version.
+        /// </summary>
+        /// <value>
+        /// The file version.
+        /// </value>
+        public string FileVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether console self extractor or windows forms.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if console self extractor; otherwise, <c>false for windows forms extractor</c>.
+        /// </value>
+        [DefaultValue(false)]
+        public bool ConsoleSelfExtractor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the icon file.
+        /// </summary>
+        /// <value>
+        /// The icon file.
+        /// </value>
+        public string IconFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the post extract command line.
+        /// </summary>
+        /// <value>
+        /// The post extract command line.
+        /// </value>
+        public string PostExtractCommandLine { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the product.
+        /// </summary>
+        /// <value>
+        /// The name of the product.
+        /// </value>
+        public string ProductName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product version.
+        /// </summary>
+        /// <value>
+        /// The product version.
+        /// </value>
+        public string ProductVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether quiet extraction for console self extracting archives.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if quiet extraction for console self extracting archives; otherwise, <c>false</c>.
+        /// </value>
+        [DefaultValue(false)]
+        public bool QuietExtraction { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether remove unpacked files after execute.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if remove unpacked files after execute; otherwise, <c>false</c>.
+        /// </value>
+        [DefaultValue(false)]
+        public bool RemoveUnpackedFilesAfterExecute { get; set; }
+
+        /// <summary>
+        /// Gets or sets the self extracting archive window title.
+        /// </summary>
+        /// <value>
+        /// The self extracting archive window title.
+        /// </value>
+        public string SelfExtractingArchiveWindowTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional compiler switches.
+        /// </summary>
+        /// <value>
+        /// The additional compiler switches.
+        /// </value>
+        public string AdditionalCompilerSwitches { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extract existing file action.
+        /// 0 = Throw
+        /// 1 = OverwriteSilently
+        /// 2 = DoNotOverwrite
+        /// </summary>
+        /// <value>
+        /// The extract existing file action.
+        /// </value>
+        [DefaultValue(0)]
+        public int ExtractExistingFileAction { get; set; }
+
         #endregion Input Parameters
 
         #region Task Overrides
@@ -284,7 +410,39 @@ namespace MSBuild.Community.Tasks
                             Log.LogMessage(Resources.ZipAdded, entry.FileName);
                     }
 
-                    zip.Save(ZipFileName);
+                    if (SelfExtracting)
+                    {
+                        var options = new SelfExtractorSaveOptions
+                        {
+                            AdditionalCompilerSwitches = AdditionalCompilerSwitches,
+                            Copyright = Copyright,
+                            DefaultExtractDirectory = DefaultExtractDirectory,
+                            Description = Description,
+                            ExtractExistingFile = (ExtractExistingFileAction) ExtractExistingFileAction,
+                            Flavor = ConsoleSelfExtractor
+                                    ? SelfExtractorFlavor.ConsoleApplication
+                                    : SelfExtractorFlavor.WinFormsApplication,
+                            IconFile = IconFile,
+                            PostExtractCommandLine = PostExtractCommandLine,
+                            ProductName = ProductName,
+                            ProductVersion = ProductVersion,
+                            Quiet = QuietExtraction,
+                            RemoveUnpackedFilesAfterExecute = RemoveUnpackedFilesAfterExecute,
+                            SfxExeWindowTitle = SelfExtractingArchiveWindowTitle
+                        };
+
+                        if (!string.IsNullOrWhiteSpace(FileVersion))
+                        {
+                            options.FileVersion = new System.Version(FileVersion);
+                        }
+
+                        zip.SaveSelfExtractor(ZipFileName, options);
+                    }
+                    else
+                    {
+                        zip.Save(ZipFileName);
+                    }
+
                     Log.LogMessage(Resources.ZipSuccessfully, ZipFileName);
                 }
             }
