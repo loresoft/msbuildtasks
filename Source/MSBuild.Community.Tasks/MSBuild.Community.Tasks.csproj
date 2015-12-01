@@ -76,7 +76,7 @@
     <Compile Include="DeleteTree.cs" />
     <Compile Include="DependencyGraph\DependencyGraph.cs" />
     <Compile Include="DependencyGraph\ProjectFileParser.cs" />
-    <Compile Include="DependencyGraph\ProjectReference.cs" />
+    <Compile Include="DependencyGraph\Reference.cs" />
     <Compile Include="EmbedNativeResource.cs" />
     <Compile Include="FtpUpload\FtpUpload.cs" />
     <Compile Include="FtpUpload\IFtpWebRequest.cs" />
