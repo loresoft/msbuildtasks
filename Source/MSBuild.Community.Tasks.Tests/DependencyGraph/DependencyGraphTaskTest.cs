@@ -82,7 +82,7 @@ namespace MSBuild.Community.Tasks.Tests.DependencyGraph
             MSBuild.Community.Tasks.DependencyGraph.DependencyGraph task = new Tasks.DependencyGraph.DependencyGraph();
             task.BuildEngine = buildEngineStub;
             task.InputFiles = new ITaskItem[] { taskItemStub };
-            task.Filters = new ITaskItem[] { filterItemStub1, filterItemStub2 };
+            task.ExcludeReferences = new ITaskItem[] { filterItemStub1, filterItemStub2 };
             task.OutputFile = "output.txt";
             task.Execute();
 
