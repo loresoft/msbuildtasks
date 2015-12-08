@@ -146,6 +146,8 @@
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Git.GitCommits" />
   <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Git.GitCommitDate" />
 
+  <UsingTask AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.InnoSetup" />
+
   <ItemGroup>
     <FxCopRuleAssemblies Include="UsageRules.dll"/>
     <FxCopRuleAssemblies Include="SecurityRules.dll"/>
