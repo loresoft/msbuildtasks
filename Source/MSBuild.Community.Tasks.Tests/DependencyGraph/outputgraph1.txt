@@ -1,11 +1,15 @@
 ﻿digraph {
-	"MSBuild.Community.Tasks" -> "Ionic.Zip.Reduced";
-	"MSBuild.Community.Tasks" -> "Microsoft.Build.Framework";
-	"MSBuild.Community.Tasks" -> "Microsoft.Build.Utilities.v3.5";
-	"MSBuild.Community.Tasks" -> "System";
-	"MSBuild.Community.Tasks" -> "System.Data";
-	"MSBuild.Community.Tasks" -> "System.DirectoryServices";
-	"MSBuild.Community.Tasks" -> "System.Management";
-	"MSBuild.Community.Tasks" -> "System.ServiceProcess";
-	"MSBuild.Community.Tasks" -> "System.Xml";
+	subgraph ProjectReferences {
+		node [shape=box];
+		"{F88A60A8-564C-4E70-92DC-E92DBB897641}" [label="MSBuild.Community.Tasks"];
+	}
+	"{F88A60A8-564C-4E70-92DC-E92DBB897641}" -> "Ionic.Zip.Reduced";
+	"{F88A60A8-564C-4E70-92DC-E92DBB897641}" -> "Microsoft.Build.Framework";
+	"{F88A60A8-564C-4E70-92DC-E92DBB897641}" -> "Microsoft.Build.Utilities.v3.5";
+	"{F88A60A8-564C-4E70-92DC-E92DBB897641}" -> "System";
+	"{F88A60A8-564C-4E70-92DC-E92DBB897641}" -> "System.Data";
+	"{F88A60A8-564C-4E70-92DC-E92DBB897641}" -> "System.DirectoryServices";
+	"{F88A60A8-564C-4E70-92DC-E92DBB897641}" -> "System.Management";
+	"{F88A60A8-564C-4E70-92DC-E92DBB897641}" -> "System.ServiceProcess";
+	"{F88A60A8-564C-4E70-92DC-E92DBB897641}" -> "System.Xml";
 }
