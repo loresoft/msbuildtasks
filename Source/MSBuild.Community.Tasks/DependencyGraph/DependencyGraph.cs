@@ -1,11 +1,10 @@
-﻿using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
 namespace MSBuild.Community.Tasks.DependencyGraph
 {
@@ -16,33 +15,32 @@ namespace MSBuild.Community.Tasks.DependencyGraph
     /// </summary>
     /// <example>
     /// <code><![CDATA[
-    /// 	<ItemGroup>
-	///         <Dependency Include="Trader.csproj" />
-	///     </ItemGroup>
+    ///     <ItemGroup>
+    ///         <Dependency Include="Project01.csproj" />
+    ///     </ItemGroup>
     ///
-	///     <Target Name="Default">
-    ///		    <DependencyGraph InputFiles="@(Dependency)" IsIncludeProjectDependecies="true" ExcludeProjectReferences="API;UI" />	<!-- API and UI project references will be excluded -->
+    ///     <Target Name="Default">
+    ///         <DependencyGraph InputFiles="@(Dependency)" IsIncludeProjectDependecies="true" ExcludeReferences="^System" />
     ///     </Target>
-    ///
+    /// 
+    ///     Result:
+    ///     digraph {
+    ///         subgraph ProjectReferences {
+    ///             node [shape=box];
+    ///             "{4993C164-5F2A-4831-A5B1-E5E579C76B28}" [label="Project01"];
+    ///             "{1B5D5300-8070-48DB-8A81-B39764231954}" [label="Project03"];
+    ///             "{E7D8035C-3CEA-4D9C-87FD-0F5C0DB5F592}" [label="Project02"];
+    ///             "{7DBCDEE7-D048-432E-BEEB-928E362E3063}" [label="Project03"];
+    ///         }
+    ///         "{4993C164-5F2A-4831-A5B1-E5E579C76B28}" -> "Microsoft.CSharp";
+    ///         "{1B5D5300-8070-48DB-8A81-B39764231954}" -> "Microsoft.CSharp";
+    ///         "{E7D8035C-3CEA-4D9C-87FD-0F5C0DB5F592}" -> "Microsoft.CSharp";
+    ///         "{7DBCDEE7-D048-432E-BEEB-928E362E3063}" -> "Microsoft.CSharp";
+    ///         "{4993C164-5F2A-4831-A5B1-E5E579C76B28}" -> "{1B5D5300-8070-48DB-8A81-B39764231954}";
+    ///         "{4993C164-5F2A-4831-A5B1-E5E579C76B28}" -> "{E7D8035C-3CEA-4D9C-87FD-0F5C0DB5F592}";
+    ///         "{E7D8035C-3CEA-4D9C-87FD-0F5C0DB5F592}" -> "{7DBCDEE7-D048-432E-BEEB-928E362E3063}";
+    ///	}    
     /// ]]></code></example>
-    /// <para>Result:</para>
-    /// <para><![CDATA[  digraph {
-    ///    "Trader" -> "System";
-    ///    "Trader" -> "System.configuration";
-    ///    "Trader" -> "System.Data";
-    ///    "Trader" -> "System.Deployment";
-    ///    "Trader" -> "System.Design";
-    ///    "Trader" -> "System.Drawing";
-    ///    "Trader" -> "System.Drawing.Design";
-    ///    "Trader" -> "System.EnterpriseServices";
-    ///    "Trader" -> "System.Web";
-    ///    "Trader" -> "System.Web.Services";
-    ///    "Trader" -> "System.Windows.Forms";
-    ///    "Trader" -> "System.Xml";
-    ///    "Trader" -> "Project References";
-    ///            "Project References" -> "CommLib";
-    ///            "Project References" -> "DdeApi";</para>
-    ///  ]]></para>
     /// <para>
     ///     Other attributes:
     /// <list type="table">
@@ -54,13 +52,32 @@ namespace MSBuild.Community.Tasks.DependencyGraph
     ///     <term>ExcludeReferences</term>
     ///     <description>filter referenced assemblies</description>
     /// </item>
+    /// <item>
+    ///     <term>ExcludeProjectReferences</term>
+    ///     <description>filter referenced projects</description>
+    /// </item>
     /// </list>
     /// </para>
     public class DependencyGraph : Task
     {
+        private struct ReferenceBundle
+        {
+            public readonly ProjectReference Reference;
+
+            public readonly ProjectReference Parent;
+
+            public ReferenceBundle(ProjectReference parent, ProjectReference reference)
+            {
+                Parent = parent;
+                Reference = reference;
+            }
+        }
+
         private static readonly Regex[] EmptyRegexBuffer = new Regex[0];
 
-        private readonly Dictionary<string, List<BaseReference>> _dependencies = new Dictionary<string, List<BaseReference>>();
+        private readonly Dictionary<string, ProjectReference> _storage = new Dictionary<string, ProjectReference>();
+        private readonly Dictionary<ProjectReference, List<BaseReference>> _dependencies = new Dictionary<ProjectReference, List<BaseReference>>();
+
         private Regex[] _excludeRegex;
         private Regex[] _excludeReferencesRegex;
         private Regex[] _excludeProjectReferencesRegex;
@@ -69,35 +86,35 @@ namespace MSBuild.Community.Tasks.DependencyGraph
         [Required]
         public ITaskItem[] InputFiles { get; set; }
 
+        /// <summary>FileName to output results</summary>        
+        public string OutputFile { get; set; }
+
         /// <summary>A set of regular expression to filter the input files</summary>
         public ITaskItem[] Exclude { get; set; }
+
+        /// <summary>A set of regular expression to filter the referenced assemblies</summary>
+        public ITaskItem[] ExcludeReferences { get; set; }
+
+        /// <summary>A set of regular expression to filter the referenced projects</summary>
+        public ITaskItem[] ExcludeProjectReferences { get; set; }
+
+        /// <summary>includes project dependencies to output</summary>
+        public bool IsIncludeProjectDependecies { get; set; }
 
         private Regex[] ExcludeRegex
         {
             get { return MakeFilterRegex(ref _excludeRegex, Exclude); }
         }
 
-        /// <summary>A set of regular expression to filter the referenced assemblies</summary>
-        public ITaskItem[] ExcludeReferences { get; set; }
-
         private Regex[] ExcludeReferencesRegex
         {
             get { return MakeFilterRegex(ref _excludeReferencesRegex, ExcludeReferences); }
         }
 
-        /// <summary>A set of regular expression to filter the referenced projects</summary>
-        public ITaskItem[] ExcludeProjectReferences { get; set; }
-
         private Regex[] ExcludeProjectReferencesRegex
         {
             get { return MakeFilterRegex(ref _excludeProjectReferencesRegex, ExcludeProjectReferences); }
         }
-
-        /// <summary>includes project dependencies to output</summary>
-        public bool IsIncludeProjectDependecies { get; set; }
-
-        /// <summary>FileName to output results</summary>        
-        public string OutputFile { get; set; }
 
         public override bool Execute()
         {
@@ -107,55 +124,95 @@ namespace MSBuild.Community.Tasks.DependencyGraph
                 return false;
             }
 
-            foreach (ITaskItem file in InputFiles)
-                ProcessProject(file.GetMetadata("FullPath"));
+            try
+            {
+                var inputProjects = InputFiles
+                    .Select(file => file.GetMetadata("FullPath"))
+                    .Select(name => new ProjectReference(name, string.Empty, string.Empty))
+                    .Select(reference => new ReferenceBundle(null, reference));
+                var processStack = new Stack<ReferenceBundle>(inputProjects);
 
-            Stream s = GenerateGraphVizOutput();
-            LogToConsole(s);
-            LogToFile(s);
+                while (processStack.Count > 0)
+                {
+                    var bundle = processStack.Pop();
+                    Process(bundle.Parent, bundle.Reference, processStack);
+                }
 
+                Stream s = GenerateGraphVizOutput();
+                LogToConsole(s);
+                LogToFile(s);
+            }
+            catch (Exception e)
+            {
+                Log.LogError("Exception: {0} at {1}", e, e.StackTrace);
+                return false;
+            }
+            
             return true;
         }
 
-        private void ProcessProject(string fullFileName)
+        private void Process(ProjectReference parent, ProjectReference projectReference, Stack<ReferenceBundle> processStack)
         {
-            Log.LogMessage("Parsing " + fullFileName);
-            FileStream fs = new FileStream(fullFileName, FileMode.Open, FileAccess.Read);
-            using (fs)
+            ProjectReference existProject;
+            if (_storage.TryGetValue(projectReference.Include, out existProject))
             {
-                ProjectFileParser parser = new ProjectFileParser(fs);
-                var assemblyName = parser.GetAssemblyName();
+                AddParentDependency(parent, existProject);
+                return;
+            }
+            
+            _storage.Add(projectReference.Include, projectReference);
 
-                if (!IsApplicable(ExcludeRegex, assemblyName))
-                    return;
+            var parser = CreateParser(projectReference.Include);
+            projectReference.Update(parser);
 
-                AddApplicableReference(assemblyName, ExcludeReferencesRegex, parser.GetAssemblyReferences());
-                if (IsIncludeProjectDependecies)
-                    AddApplicableReference(assemblyName, ExcludeProjectReferencesRegex, parser.GetProjectReferences());
+            AddParentDependency(parent, projectReference);
+
+            var applicableReferences = parser
+                .GetAssemblyReferences()
+                .Where(reference => IsApplicable(ExcludeReferencesRegex, reference.DisplayName));
+            foreach (var reference in applicableReferences)
+                AddDependency(projectReference, reference);
+
+            foreach (var reference in parser.GetProjectReferences())
+            {
+                reference.UpdateInclude(projectReference.Include);
+                processStack.Push(new ReferenceBundle(projectReference, reference));
             }
         }
 
-        private void AddApplicableReference(string projectName, Regex[] filters, IEnumerable<BaseReference> references)
+        private void AddParentDependency(ProjectReference parent, ProjectReference projectReference)
         {
-            foreach (BaseReference reference in references.Where(reference => IsApplicable(filters, reference.DisplayName)))
-                AddDependency(projectName, reference);
+            string assemblyName = projectReference.DisplayName;
+            var excludeFilters = parent == null ? ExcludeRegex : ExcludeProjectReferencesRegex;
+            if (!IsApplicable(excludeFilters, assemblyName))
+                return;
+
+            MakeDependencyList(projectReference);
+            if (parent != null)
+                AddDependency(parent, projectReference);
         }
 
-        public static void Test()
+        private void AddDependency(ProjectReference projectReference, BaseReference baseReference)
         {
-            var rex = new Regex("System");
-            Console.WriteLine(rex.IsMatch("Ionic.Zip.Reduced.dll"));
+            var list = MakeDependencyList(projectReference);
+            list.Add(baseReference);
         }
 
-        private void AddDependency(string projectName, BaseReference baseReference)
+        private List<BaseReference> MakeDependencyList(ProjectReference projectReference)
         {
             List<BaseReference> list;
-            if (!_dependencies.TryGetValue(projectName, out list))
+            if (!_dependencies.TryGetValue(projectReference, out list))
             {
                 list = new List<BaseReference>();
-                _dependencies.Add(projectName, list);
+                _dependencies.Add(projectReference, list);
             }
-            list.Add(baseReference);
+            return list;
+        }
+
+        private ProjectFileParser CreateParser(string fileName)
+        {
+            using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                return new ProjectFileParser(stream);
         }
 
         private Stream GenerateGraphVizOutput()
@@ -165,19 +222,19 @@ namespace MSBuild.Community.Tasks.DependencyGraph
 
             sw.WriteLine("digraph {");
 
-            foreach (KeyValuePair<string, List<BaseReference>> p in _dependencies)
-            {
-                foreach (var dep in p.Value.OfType<AssemblyReference>())
-                    sw.WriteLine("\t\"{0}\" -> \"{1}\";", p.Key, dep);
+            sw.WriteLine("\tsubgraph ProjectReferences {");
+            sw.WriteLine("\t\tnode [shape=box];");
+            foreach (var project in _dependencies.Keys)
+                sw.WriteLine("\t\t\"{0}\" [label=\"{1}\"];", project.ProjectGuid,  project.DisplayName);
+            sw.WriteLine("\t}");
 
-                if (IsIncludeProjectDependecies && p.Value.Any())
-                {
-                    const string references = "Project References";
-                    sw.WriteLine("\t\"{0}\" -> \"{1}\";", p.Key, references);
-                    foreach (var dep in p.Value.OfType<ProjectReference>())
-                        sw.WriteLine("\t\t\"{0}\" -> \"{1}\";", references, dep);
-                }
-            }
+            foreach (var project in _dependencies)
+                foreach (var dep in project.Value.OfType<AssemblyReference>())
+                    sw.WriteLine("\t\"{0}\" -> \"{1}\";", project.Key.ProjectGuid, dep);
+
+            foreach (var project in _dependencies)
+                foreach (var dep in project.Value.OfType<ProjectReference>())
+                        sw.WriteLine("\t\"{0}\" -> \"{1}\";", project.Key.ProjectGuid, dep.ProjectGuid);
 
             sw.WriteLine("}");
             sw.Flush();
@@ -216,8 +273,8 @@ namespace MSBuild.Community.Tasks.DependencyGraph
 
         private static Regex[] MakeFilterRegex(ref Regex[] buffer, IEnumerable<ITaskItem> items)
         {
-            return 
-                buffer 
+            return
+                buffer
                 ?? (buffer = items == null
                     ? EmptyRegexBuffer
                     : items.Select(filter => new Regex(filter.ItemSpec)).ToArray());
@@ -225,7 +282,7 @@ namespace MSBuild.Community.Tasks.DependencyGraph
 
         private static bool IsApplicable(Regex[] filters, string name)
         {
-            return filters.Length == 0 || filters.All(filter => !filter.IsMatch(name));
+            return filters.Length == 0 || !filters.Any(filter => filter.IsMatch(name));
         }
     }
 }

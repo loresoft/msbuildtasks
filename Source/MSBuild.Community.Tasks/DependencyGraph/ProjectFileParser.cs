@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace MSBuild.Community.Tasks.DependencyGraph
@@ -40,11 +39,25 @@ namespace MSBuild.Community.Tasks.DependencyGraph
         /// <returns></returns>
         public string GetAssemblyName()
         {
+            return GetProperty("AssemblyName");
+        }
+
+        /// <summary>
+        /// Returns the ProjectGuid for the project file
+        /// </summary>
+        /// <returns></returns>
+        public string GetGuid()
+        {
+            return GetProperty("ProjectGuid");
+        }
+
+        private string GetProperty(string name)
+        {
             var firstOrDefault = DocumentElement.ChildNodes
                 .Cast<XmlNode>()
                 .Where(n => n.Name == "PropertyGroup")
                 .SelectMany(n => n.ChildNodes.Cast<XmlNode>())
-                .FirstOrDefault(n => n.Name == "AssemblyName");
+                .FirstOrDefault(n => n.Name == name);
 
             return firstOrDefault != null ? firstOrDefault.InnerText : string.Empty;
         }
