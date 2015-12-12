@@ -241,7 +241,6 @@
     <Compile Include="Sync\Log.cs" />
     <Compile Include="Sync\Paths.cs" />
     <Compile Include="Sync\PipeStream.cs" />
-    <Compile Include="Sync\Program.cs" />
     <Compile Include="Sync\ResourceQueue.cs" />
     <Compile Include="Sync\SyncJob.cs" />
     <Compile Include="Sync\SyncTask.cs" />

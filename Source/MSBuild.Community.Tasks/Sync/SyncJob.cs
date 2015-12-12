@@ -5,9 +5,12 @@ using System.Text;
 
 namespace johnshope.Sync {
 
+	public enum CopyMode { Update, Clone, Add }
+
 	public class SyncJob {
 
 		static readonly TimeSpan dt = TimeSpan.FromMinutes(1); // minimal file time resolution
+
 
 		public CopyMode Mode { get; set; }
 		public string LogFile { get; set; }
