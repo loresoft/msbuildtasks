@@ -8,7 +8,7 @@ using Microsoft.Build.Framework;
 using johnshope.Sync;
 
 
-namespace MSPControlTasks.Sync {
+namespace MSBuild.Community.Tasks {
 
 	public class FileSync: Microsoft.Build.Utilities.Task {
 
@@ -41,6 +41,7 @@ namespace MSPControlTasks.Sync {
 			job.Mode = (CopyMode)Enum.Parse(typeof(CopyMode), Mode);
 			job.Quiet = Quiet;
 			job.Verbose = Verbose;
+			job.Log = new TaskLog(this);
 
 
 			for (int i = 0; i < Sources.Length; i++) {

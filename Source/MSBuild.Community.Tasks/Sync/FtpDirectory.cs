@@ -8,7 +8,7 @@ namespace johnshope.Sync {
 
 	public class FtpDirectory : FileOrDirectory, IDirectory {
 
-		public SyncJob Job { get; set; }
+//		public SyncJob Job { get; set; }
 		public Log Log { get { return Job.Log; } }
 
 		Uri url;

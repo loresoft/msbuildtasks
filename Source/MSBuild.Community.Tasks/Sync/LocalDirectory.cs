@@ -9,7 +9,7 @@ namespace johnshope.Sync {
 
 	class LocalDirectory: FileOrDirectory, IDirectory {
 
-		public SyncJob Job { get; set; }
+//		public SyncJob Job { get; set; }
 		public Log Log { get { return Job.Log; } }
 
 		public Uri Url { get; set; }
