@@ -21,7 +21,7 @@ namespace MSBuild.Community.Tasks
   /// </example>
   public class Checksum : Task
   {
-    enum SupportedAlgorithms
+    enum SupportedAlgorithm
     {
       md5, 
       sha1
@@ -30,7 +30,7 @@ namespace MSBuild.Community.Tasks
     
     #region Fields
 
-    private string algorithm = SupportedAlgorithms.md5.ToString();
+    private string algorithm = SupportedAlgorithm.md5.ToString();
 
     #endregion
 
@@ -45,20 +45,7 @@ namespace MSBuild.Community.Tasks
     /// <summary>
     /// Algorithm to be used. Defaults to MD5. 
     /// </summary>
-    public string Algorithm
-    {
-      get { return algorithm; }
-      set
-      {
-        SupportedAlgorithms alg;
-        if( !Enum.TryParse( value, true, out alg ) )
-        {
-          Log.LogError( "Unsupported algorithm type: {0}", value );
-        }
-
-        algorithm = value;
-      }
-    }
+    public string Algorithm { get; set; }
     #endregion
 
     #region Task Overrides
@@ -66,12 +53,18 @@ namespace MSBuild.Community.Tasks
     public override bool Execute()
     {
       //No files provided
-      if ( null == Files || Files.Length == 0 )
+      if ( null == Files ||this.Files.Length == 0 )
       {
         Log.LogError( Properties.Resources.ParameterRequired, "Checksum", "Files" );
         return false;
       }
 
+      SupportedAlgorithm alg;
+      if( !Enum.TryParse( this.Algorithm, true, out alg ) )
+      {
+        Log.LogError( "Unsupported algorithm type: {0}", this.Algorithm );
+        return false;
+      }
 
       try
       {
