@@ -69,6 +69,7 @@
     <Compile Include="AssemblyInfoTest.cs" />
     <Compile Include="AttribTest.cs" />
     <Compile Include="Beep\BeepTest.cs" />
+    <Compile Include="Checksum\ChecksumTest.cs" />
     <Compile Include="Computer\ComputerTest.cs" />
     <Compile Include="DeleteTreeTest.cs" />
     <Compile Include="DependencyGraph\DependencyGraphTaskTest.cs" />
@@ -180,7 +181,9 @@
     <None Include="ILMerge\ILMergeTest.proj" />
     <None Include="Install\InstallTest.proj" />
     <None Include="JavaScript\JavaScriptTest.proj" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Regex\RegexTest.proj">
       <SubType>Designer</SubType>
     </None>
