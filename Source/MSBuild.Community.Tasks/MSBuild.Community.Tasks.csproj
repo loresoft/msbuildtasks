@@ -71,7 +71,6 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attrib.cs" />
     <Compile Include="ByteDescriptions.cs" />
-    <Compile Include="Checksum\Checksum.cs" />
     <Compile Include="Computer\Computer.cs" />
     <Compile Include="Beep\Beep.cs" />
     <Compile Include="DeleteTree.cs" />
@@ -141,6 +140,7 @@
     <Compile Include="NuGet\NuGetPush.cs" />
     <Compile Include="NuGet\NuGetRestore.cs" />
     <Compile Include="NuGet\NuGetUpdate.cs" />
+    <Compile Include="NUnit3.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="Regex\RegexCompiler.cs" />
     <Compile Include="Sandcastle\BuildAssembler.cs">
