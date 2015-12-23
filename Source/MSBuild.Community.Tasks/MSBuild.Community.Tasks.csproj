@@ -71,6 +71,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Attrib.cs" />
     <Compile Include="ByteDescriptions.cs" />
+	<Compile Include="Checksum\Checksum.cs" />
     <Compile Include="Computer\Computer.cs" />
     <Compile Include="Beep\Beep.cs" />
     <Compile Include="DeleteTree.cs" />
