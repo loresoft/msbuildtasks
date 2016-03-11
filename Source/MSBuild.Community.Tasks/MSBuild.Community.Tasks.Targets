@@ -4,7 +4,8 @@
 
   <PropertyGroup>
     <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildThisFileDirectory)</MSBuildCommunityTasksPath>
-    <MSBuildCommunityTasksLib>$([MSBUILD]::Unescape($(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll))</MSBuildCommunityTasksLib>
+    <MSBuildCommunityTasksLib Condition="'$(OS)' == 'Windows_NT'">$([MSBUILD]::Unescape($(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll))</MSBuildCommunityTasksLib>
+    <MSBuildCommunityTasksLib Condition="'$(OS)' != 'Windows_NT'">$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll)</MSBuildCommunityTasksLib>
     <MSBuildCommunityTasksLib Condition="!Exists('$(MSBuildCommunityTasksLib)')">MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
   </PropertyGroup>
 
