@@ -88,7 +88,7 @@
           DestinationFiles="$(BuildFolder)\MSBuild.Temp.dll" />
 
     <!-- Merge together files -->
-    <ILMerge InputAssemblies="$(BuildFolder)\MSBuild.Temp.dll;$(BuildFolder)\Ionic.Zip.Reduced.dll"
+    <ILMerge InputAssemblies="$(BuildFolder)\MSBuild.Temp.dll;$(BuildFolder)\Ionic.Zip.Reduced.dll;$(BuildFolder)\FSharp.Compiler.CodeDom.dll"
              Internalize="true"
              OutputFile="$(BuildFolder)\MSBuild.Community.Tasks.dll"
              KeyFile="$(SourceFolder)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk"
