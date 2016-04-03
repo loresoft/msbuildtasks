@@ -69,7 +69,7 @@
     <Compile Include="AssemblyInfoTest.cs" />
     <Compile Include="AttribTest.cs" />
     <Compile Include="Beep\BeepTest.cs" />
-    <Compile Include="Checksum\ChecksumTest.cs" />
+	<Compile Include="Checksum\ChecksumTest.cs" />
     <Compile Include="Computer\ComputerTest.cs" />
     <Compile Include="DeleteTreeTest.cs" />
     <Compile Include="DependencyGraph\DependencyGraphTaskTest.cs" />
