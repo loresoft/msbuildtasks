@@ -440,6 +440,12 @@ namespace MSBuild.Community.Tasks
             nunitPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             nunitPath = Path.Combine(nunitPath, DEFAULT_NUNIT_DIRECTORY);
 
+            if (Directory.Exists(nunitPath) == false)
+            {
+                nunitPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+                nunitPath = Path.Combine(nunitPath, DEFAULT_NUNIT_DIRECTORY);    
+            }
+
             try
             {
                 string value = Registry.GetValue(InstallDirKey, "InstallDir", nunitPath) as string;
