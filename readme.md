@@ -6,9 +6,10 @@ The MSBuild Community Tasks Project is an open source project for MSBuild tasks.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/16y9eh9swsqn5g8l?svg=true)](https://ci.appveyor.com/project/LoreSoft/msbuildtasks)
 
-![NuGet Version](https://img.shields.io/nuget/v/MSBuildTasks.svg?style=flat-square)
+[![Build Status](https://travis-ci.org/loresoft/msbuildtasks.svg?branch=master)](https://travis-ci.org/loresoft/msbuildtasks)
 
-![NuGet Version](https://img.shields.io/nuget/dt/MSBuildTasks.svg?style=flat-square)
+[![NuGet Version](https://img.shields.io/nuget/v/MSBuildTasks.svg)](https://nuget.org/packages/MSBuildTasks)
+
 
 ## Download
 
@@ -318,7 +319,7 @@ Alternatively if you want to get started with the nuget packages please add the 
 
 ## License
 
-Copyright (c) 2015, LoreSoft
+Copyright (c) 2016, LoreSoft
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
