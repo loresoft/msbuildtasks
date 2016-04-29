@@ -130,8 +130,7 @@
   </Target>
 
   <Target Name="Pack" DependsOnTargets="Merge">
-    <NuGetPack ToolPath="$(SourceFolder)\.nuget"
-               File="MSBuildTasks.nuspec"
+    <NuGetPack File="MSBuildTasks.nuspec"
                OutputDirectory="$(MSBuildProjectDirectory)"
                Version="$(PackageVersion)"
                Symbols="true"  />

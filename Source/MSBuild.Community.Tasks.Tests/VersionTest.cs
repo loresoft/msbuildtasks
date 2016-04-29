@@ -17,15 +17,15 @@ namespace MSBuild.Community.Tasks.Tests
         private Version task;
         private string versionFile;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetup()
         {
             testDirectory = TaskUtility.makeTestDirectory(new MockBuild());
             versionFile = Path.Combine(testDirectory, @"version.txt");
         }
 
-        [TestFixtureTearDown]
-        public void TestFixtureTearDown()
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
         {
             if (File.Exists(versionFile)) { File.Delete(versionFile); }
         }

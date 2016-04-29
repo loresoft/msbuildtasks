@@ -46,7 +46,7 @@ System.Diagnostics.Debug.WriteLine(x);
             Assert.IsTrue(task.Execute(), "Task should have succeeded.");
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void ThrowActualExceptionInsteadOfTargetInvocationException()
         {
             Script task = new Script();
@@ -54,7 +54,7 @@ System.Diagnostics.Debug.WriteLine(x);
             task.Code = @"public static void ScriptMain(){
 throw new InvalidOperationException(""This is the actual exception."");
 }";
-            Assert.IsTrue(task.Execute(), "Task should have succeeded.");
+            Assert.Throws<InvalidOperationException>(() =>task.Execute(), "Task should have succeeded.");
         }
 
         [Test]
