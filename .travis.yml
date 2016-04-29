@@ -1,0 +1,10 @@
+language: csharp
+solution: ./Source/MSBuild.Community.Tasks.sln
+
+install:
+  - nuget restore ./Source/MSBuild.Community.Tasks.sln
+  - nuget install MSBuildTasks -OutputDirectory ./Tools/ -ExcludeVersion -NonInteractive
+  - nuget install ILRepack.MSBuild.Task -OutputDirectory ./Tools/ -ExcludeVersion -NonInteractive
+
+script:
+  - xbuild ./Master.proj
