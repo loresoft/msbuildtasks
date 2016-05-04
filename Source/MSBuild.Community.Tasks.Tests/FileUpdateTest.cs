@@ -14,7 +14,7 @@ namespace MSBuild.Community.Tasks.Tests
         private string testDirectory;
         string[] files;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
 		public void FixtureInit()
 		{
             MockBuild buildEngine = new MockBuild();
@@ -33,7 +33,7 @@ namespace MSBuild.Community.Tasks.Tests
 				"In case you didn't understand, today's date is: @DATE@!");
 		}
 
-        //[TestFixtureTearDown]
+        //[OneTimeTearDown]
         //public void FixtureDispose()
         //{
         //    // Clean up test files

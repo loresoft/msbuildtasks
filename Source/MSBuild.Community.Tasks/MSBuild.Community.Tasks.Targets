@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- $Id$ -->
 
   <PropertyGroup>
-    <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(MSBuildThisFileDirectory)</MSBuildCommunityTasksPath>
+    <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == '' and '$(MSBuildThisFile)' == 'MSBuild.Community.Tasks.Targets'">$(MSBuildThisFileDirectory)</MSBuildCommunityTasksPath>
+    <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == '' and '$(MSBuildThisFile)' == 'MSBuildTasks.targets'">$(MSBuildThisFileDirectory)\..\tools</MSBuildCommunityTasksPath>
     <MSBuildCommunityTasksLib Condition="'$(OS)' == 'Windows_NT'">$([MSBUILD]::Unescape($(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll))</MSBuildCommunityTasksLib>
     <MSBuildCommunityTasksLib Condition="'$(OS)' != 'Windows_NT'">$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll)</MSBuildCommunityTasksLib>
     <MSBuildCommunityTasksLib Condition="!Exists('$(MSBuildCommunityTasksLib)')">MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>

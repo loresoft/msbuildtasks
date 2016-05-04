@@ -15,7 +15,7 @@ namespace MSBuild.Community.Tasks.Tests.Subversion
     {
         private string testDirectory;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureInit()
         {
             MockBuild buildEngine = new MockBuild();
