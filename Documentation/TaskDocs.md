@@ -3194,6 +3194,7 @@ Run NUnit3 tests.
          <Output TaskParameter="Include" ItemName="TestAssemblies"/>
       </CreateItem>
       <Target Name="NUnit3">
+      <!-- Run NUnit passing in the list of assemblies built above -->		
       <NUnit3 Assemblies="@(TestAssemblies)" 
 	          Process="Multiple" 
 			  TestTimeout="2000" 
