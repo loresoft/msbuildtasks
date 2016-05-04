@@ -1,5 +1,5 @@
 language: csharp
-solution: ./Source/MSBuild.Community.Tasks.sln
+solution: Source/MSBuild.Community.Tasks.sln
 
 install:
   - nuget restore ./Source/MSBuild.Community.Tasks.sln
