@@ -71,7 +71,7 @@ namespace MSBuild.Community.Tasks
         /// The default relative path of the NUnit installation.
         /// The value is <c>@"NUnit.org\nunit-console"</c>.
         /// </summary>
-        public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit.org";
+        public const string DEFAULT_NUNIT_DIRECTORY = @"NUnit.org\nunit-console";
         private const string InstallDirKey = @"HKEY_CURRENT_USER\Software\NUnit.org";
 
         #endregion Constants
