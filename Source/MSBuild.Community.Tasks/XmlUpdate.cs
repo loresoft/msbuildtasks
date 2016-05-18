@@ -154,18 +154,23 @@ namespace MSBuild.Community.Tasks
             try
             {
                 Log.LogMessage(Properties.Resources.XmlUpdateDocument, _xmlFileName);
-                                
+
                 XDocument xdoc = XDocument.Load(_xmlFileName);
                 XmlNamespaceManager manager = new XmlNamespaceManager(new NameTable());
 
-                if (!string.IsNullOrEmpty(_prefix) && !string.IsNullOrEmpty(_namespace))
+                if (!string.IsNullOrEmpty(_namespace))
                 {
+                    //by default, if _prefix is not specified, set it to "", this way,
+                    //manager.AddNamespace will add the _namespace as the default namespace
+                    if (_prefix == null)
+                        _prefix = String.Empty;
+
                     manager.AddNamespace(_prefix, _namespace);
                 }
 
-                
+
                 var items = xdoc.XPathEvaluate(_xpath, manager) as IEnumerable<object>;
-                
+
                 Log.LogMessage(Properties.Resources.XmlUpdateNodes, items.Count());
 
                 foreach (var item in items.ToArray())
