@@ -11,7 +11,7 @@
     <RootNamespace>MSBuild.Community.Tasks.Tests</RootNamespace>
     <AssemblyName>MSBuild.Community.Tasks.Tests</AssemblyName>
     <WarningLevel>4</WarningLevel>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
