@@ -292,11 +292,10 @@ namespace MSBuild.Community.Tasks
             }
             finally
             {
-                if(message == null)
-                    message.Dispose();
+	            message?.Dispose();
             }
-            
-            return true;
+
+	        return true;
         }
     }
 }
