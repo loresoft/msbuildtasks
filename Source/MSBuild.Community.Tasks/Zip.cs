@@ -254,7 +254,7 @@ namespace MSBuild.Community.Tasks
                         if (Flatten)
                             directoryPathInArchive = string.Empty;
                         else if (!string.IsNullOrEmpty(WorkingDirectory))
-                            directoryPathInArchive = GetPath(name, WorkingDirectory);
+                            directoryPathInArchive = GetPath(name, Path.GetFullPath(WorkingDirectory));
                         else
                             directoryPathInArchive = null;
 
