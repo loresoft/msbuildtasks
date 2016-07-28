@@ -6,8 +6,6 @@ The MSBuild Community Tasks Project is an open source project for MSBuild tasks.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/16y9eh9swsqn5g8l?svg=true)](https://ci.appveyor.com/project/LoreSoft/msbuildtasks)
 
-[![Build Status](https://travis-ci.org/loresoft/msbuildtasks.svg?branch=master)](https://travis-ci.org/loresoft/msbuildtasks)
-
 [![NuGet Version](https://img.shields.io/nuget/v/MSBuildTasks.svg)](https://nuget.org/packages/MSBuildTasks)
 
 
