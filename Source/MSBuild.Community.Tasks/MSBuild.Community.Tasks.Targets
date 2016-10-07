@@ -5,7 +5,7 @@
     <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == '' and '$(MSBuildThisFile)' == 'MSBuild.Community.Tasks.Targets'">$(MSBuildThisFileDirectory)</MSBuildCommunityTasksPath>
     <MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == '' and '$(MSBuildThisFile)' == 'MSBuildTasks.targets'">$(MSBuildThisFileDirectory)\..\tools</MSBuildCommunityTasksPath>
     <MSBuildCommunityTasksLib Condition="'$(OS)' == 'Windows_NT'">$([MSBUILD]::Unescape($(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll))</MSBuildCommunityTasksLib>
-    <MSBuildCommunityTasksLib Condition="'$(OS)' != 'Windows_NT'">$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll)</MSBuildCommunityTasksLib>
+    <MSBuildCommunityTasksLib Condition="'$(OS)' != 'Windows_NT'">$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
     <MSBuildCommunityTasksLib Condition="!Exists('$(MSBuildCommunityTasksLib)')">MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
   </PropertyGroup>
 
