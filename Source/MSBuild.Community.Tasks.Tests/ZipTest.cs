@@ -18,8 +18,9 @@ namespace MSBuild.Community.Tasks.Tests
         public const string ZIP_FILE_NAME = @"MSBuild.Community.Tasks.zip";
         public const string ZIP_WITH_FOLDERS_FILE_NAME = @"MSBuild.Community.Tasks.WithFolders.zip";
         public const string ZIP_WITH_RELATIVE_FILE_NAME = @"MSBuild.Community.Tasks.WithReltive.zip";
+	    public const string ZIP_128KB_FILE_NAME = @"MSBuild.Community.Tasks.128KB.zip";
 
-        [Test(Description = "Zip files into a zip archive")]
+		[Test(Description = "Zip files into a zip archive")]
         public void ZipExecute()
         {
             var task = new Zip();
@@ -128,5 +129,36 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.IsTrue(ZipFile.Read(task.ZipFileName).ContainsEntry("readme.md"), "The zip doesnt contains the readme.md file");            
             Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");            
         }
-    }
+
+		[Test(Description = "Zip 128kb with parallel compression")]
+		public void ZipWithParallelCompression() {
+			var task = new Zip();
+			task.BuildEngine = new MockBuild();
+
+			string testDir = TaskUtility.TestDirectory;
+			string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
+			string workingDir = Path.Combine(prjRootPath, @"Source\MSBuild.Community.Tasks.Tests");
+
+			string testFilePath = Path.Combine(testDir, "zip-128kb-test.dat");
+			const int numberOfBytes = 128*(2 ^ 10);
+			byte[] testFileBytes = new byte[numberOfBytes];
+			using(FileStream filestream = File.Create(testFilePath))
+			{
+				filestream.Write(testFileBytes, 0, numberOfBytes);
+			}
+
+			TaskItem fileTaskItem = new TaskItem(testFilePath);
+
+			task.Files = new[] {fileTaskItem};
+			task.WorkingDirectory = workingDir;
+			task.ParallelCompression = true;
+			task.ZipFileName = Path.Combine(testDir, ZIP_128KB_FILE_NAME);
+
+			if(File.Exists(task.ZipFileName))
+				File.Delete(task.ZipFileName);
+
+			Assert.IsTrue(task.Execute(), "Execute Failed");
+			Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");
+		}
+	}
 }
