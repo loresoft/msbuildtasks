@@ -21,7 +21,7 @@ namespace MSBuild.Community.Tasks.Tests
         public const string ZIP_WITH_RELATIVE_FILE_NAME = @"MSBuild.Community.Tasks.WithReltive.zip";
 	    public const string ZIP_128KB_FILE_NAME = @"MSBuild.Community.Tasks.128KB.zip";
 
-		[Test(Description = "Zip files into a zip archive")]
+        [Test(Description = "Zip files into a zip archive")]
         public void ZipExecute()
         {
             var task = new Zip();
