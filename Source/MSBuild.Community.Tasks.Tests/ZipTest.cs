@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -130,35 +131,48 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");            
         }
 
-		[Test(Description = "Zip 128kb with parallel compression")]
-		public void ZipWithParallelCompression() {
-			var task = new Zip();
-			task.BuildEngine = new MockBuild();
+        [Test(Description = "Zip 9 * 128kb with parallel compression")]
+        public void ZipWithParallelCompression()
+        {
+            var task = new Zip();
+            task.BuildEngine = new MockBuild();
 
-			string testDir = TaskUtility.TestDirectory;
-			string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
-			string workingDir = Path.Combine(prjRootPath, @"Source\MSBuild.Community.Tasks.Tests");
+            string testDir = TaskUtility.TestDirectory;
+            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
+            string workingDir = Path.Combine(prjRootPath, @"Source\MSBuild.Community.Tasks.Tests");
 
-			string testFilePath = Path.Combine(testDir, "zip-128kb-test.dat");
-			const int numberOfBytes = 128*(2 ^ 10);
-			byte[] testFileBytes = new byte[numberOfBytes];
-			using(FileStream filestream = File.Create(testFilePath))
-			{
-				filestream.Write(testFileBytes, 0, numberOfBytes);
-			}
+            string testFile = Path.Combine(testDir, "zip-128kb-test-1.dat");
+            const int numberOfBytes = 1024*128*9;
+            CreateTestFile(numberOfBytes, testFile);
 
-			TaskItem fileTaskItem = new TaskItem(testFilePath);
+            task.Files = new[] {new TaskItem(testFile)};
+            task.WorkingDirectory = workingDir;
+            task.ParallelCompression = true;
+            task.ZipFileName = Path.Combine(testDir, ZIP_128KB_FILE_NAME);
 
-			task.Files = new[] {fileTaskItem};
-			task.WorkingDirectory = workingDir;
-			task.ParallelCompression = true;
-			task.ZipFileName = Path.Combine(testDir, ZIP_128KB_FILE_NAME);
+            if (File.Exists(task.ZipFileName)) File.Delete(task.ZipFileName);
 
-			if(File.Exists(task.ZipFileName))
-				File.Delete(task.ZipFileName);
+            // First zip up the file
+            bool result = task.Execute();
+            Assert.IsTrue(result, "Execute Failed");
+            Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");
 
-			Assert.IsTrue(task.Execute(), "Execute Failed");
-			Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");
-		}
-	}
+            // Then try to unzip the file
+            Unzip unzipTask = new Unzip();
+            unzipTask.BuildEngine = new MockBuild();
+            unzipTask.ZipFileName = task.ZipFileName;
+            unzipTask.TargetDirectory = Path.Combine(testDir);
+            Assert.IsTrue(unzipTask.Execute());
+        }
+
+        public void CreateTestFile(int fileSize, string filePath)
+        {
+            byte[] testFileBytes = new byte[fileSize];
+            new Random().NextBytes(testFileBytes);
+            using (FileStream filestream = File.Create(filePath))
+            {
+                filestream.Write(testFileBytes, 0, fileSize);
+            }
+        }
+    }
 }
