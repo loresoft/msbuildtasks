@@ -138,30 +138,29 @@ namespace MSBuild.Community.Tasks.Tests
             task.BuildEngine = new MockBuild();
 
             string testDir = TaskUtility.TestDirectory;
-            string prjRootPath = TaskUtility.GetProjectRootDirectory(true);
-            string workingDir = Path.Combine(prjRootPath, @"Source\MSBuild.Community.Tasks.Tests");
 
             string testFile = Path.Combine(testDir, "zip-128kb-test-1.dat");
             const int numberOfBytes = 1024*128*9;
+            if (File.Exists(testFile)) File.Delete(testFile);
             CreateTestFile(numberOfBytes, testFile);
 
             task.Files = new[] {new TaskItem(testFile)};
-            task.WorkingDirectory = workingDir;
+            task.WorkingDirectory = testDir;
             task.ParallelCompression = true;
             task.ZipFileName = Path.Combine(testDir, ZIP_128KB_FILE_NAME);
 
             if (File.Exists(task.ZipFileName)) File.Delete(task.ZipFileName);
 
             // First zip up the file
-            bool result = task.Execute();
-            Assert.IsTrue(result, "Execute Failed");
+            Assert.IsTrue(task.Execute(), "Execute Failed");
             Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");
 
-            // Then try to unzip the file
+            // Then delete the original, and try to unzip the file
+            File.Delete(testFile);
             Unzip unzipTask = new Unzip();
             unzipTask.BuildEngine = new MockBuild();
             unzipTask.ZipFileName = task.ZipFileName;
-            unzipTask.TargetDirectory = Path.Combine(testDir);
+            unzipTask.TargetDirectory = testDir;
             Assert.IsTrue(unzipTask.Execute());
         }
 
