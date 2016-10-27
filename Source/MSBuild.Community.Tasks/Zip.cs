@@ -247,7 +247,7 @@ namespace MSBuild.Community.Tasks
 
                     foreach (ITaskItem fileItem in Files)
                     {
-                        string name = fileItem.ItemSpec;
+                        string name = Path.GetFullPath(fileItem.ItemSpec);
                         string directoryPathInArchive;
 
                         // clean up name

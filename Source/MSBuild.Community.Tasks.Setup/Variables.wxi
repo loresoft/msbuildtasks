@@ -5,10 +5,10 @@
   <?define MajorVersion = "1" ?>
   <?endif?>
   <?ifndef MinorVersion?>
-  <?define MinorVersion = "4" ?>
+  <?define MinorVersion = "5" ?>
   <?endif?>
   <?ifndef BindMinorVersion?>
-  <?define BindMinorVersion = "4" ?>
+  <?define BindMinorVersion = "5" ?>
   <?endif?>
   <?ifndef BuildVersion?>
   <?define BuildVersion = "0" ?>

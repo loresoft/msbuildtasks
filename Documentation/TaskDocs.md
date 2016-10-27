@@ -3184,6 +3184,47 @@ Run NUnit tests.
         
         
         
+## <a id="NUnit3">NUnit3</a>
+### Description
+Run NUnit 3.x on a group of assemblies.
+### Example
+Run NUnit3 tests.
+            
+      <CreateItem Include="*\bin\Debug\*.*.UnitTests.dll">
+         <Output TaskParameter="Include" ItemName="TestAssemblies"/>
+      </CreateItem>
+      <Target Name="NUnit3">
+      <!-- Run NUnit passing in the list of assemblies built above -->		
+      <NUnit3 Assemblies="@(TestAssemblies)" 
+	          Process="Multiple" 
+			  TestTimeout="2000" 
+	          Framework="v4.0" 
+			  Force32Bit="true" 
+			  Workers="10" 
+			  EnableShadowCopy="true" 
+			  OutputXmlFile="myTestOutput.xml"
+			  WorkingDirectory="./"
+			  ShowLabels="All"
+			  NoHeader="true"
+			  NoColor="true"
+			  Verbose="true"/>
+      </Target>
+            
+            
+* * *
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
