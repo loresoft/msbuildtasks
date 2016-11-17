@@ -182,6 +182,7 @@
     <Compile Include="Subversion\SvnStatus.cs" />
     <Compile Include="SymbolServer\SymStore.cs" />
     <Compile Include="Tfs\InfoCommandResponse.cs" />
+    <Compile Include="Tfs\TeamExplorerEverywhereClient.cs" />
     <Compile Include="Tfs\TfsClient.cs" />
     <Compile Include="Services\Win32Registry.cs" />
     <Compile Include="User\User.cs" />
