@@ -15,8 +15,3 @@ artifacts:
 - path: '*.nupkg'
 - path: '*.zip'
 - path: '*.msi'
-deploy:
-- provider: Environment
-  name: MyGet
-  on:
-    branch: master
