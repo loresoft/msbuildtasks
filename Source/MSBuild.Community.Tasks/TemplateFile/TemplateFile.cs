@@ -18,7 +18,7 @@ namespace MSBuild.Community.Tasks
 	///		</Tokens>
 	/// </ItemGroup>
 	/// 
-    /// <TemplateFile Template="ATemplateFile.template" OutputFilename="ReplacedFile.txt" Tokens="@(Tokens)" />
+	/// <TemplateFile Template="ATemplateFile.template" OutputFilename="ReplacedFile.txt" Tokens="@(Tokens)" />
 	/// ]]></code>
 	/// </example>
 	/// <remarks>Tokens in the template file are formatted using ${var} syntax and names are not 
@@ -36,13 +36,13 @@ namespace MSBuild.Community.Tasks
 		private Dictionary<string, string> _tokenPairs;
 		private ITaskItem[] _tokens;
 		private static readonly string DefaultExt = ".out";
-		
+
 		/// <summary>
 		/// Default constructor. Creates a new TemplateFile task.
 		/// </summary>
 		public TemplateFile()
 		{
-			_regex = new Regex(@"(?<token>\$\{(?<identifier>[^}]*)\})", RegexOptions.Singleline | RegexOptions.Compiled 
+			_regex = new Regex(@"(?<token>\$\{(?<identifier>[^}]*)\})", RegexOptions.Singleline | RegexOptions.Compiled
 				| RegexOptions.Multiline | RegexOptions.IgnoreCase);
 		}
 
@@ -85,7 +85,7 @@ namespace MSBuild.Community.Tasks
 			get { return _tokens; }
 			set { _tokens = value; }
 		}
-		
+
 		/// <summary>
 		/// Executes the task.
 		/// </summary>
@@ -96,17 +96,20 @@ namespace MSBuild.Community.Tasks
 			if (File.Exists(_templateFile.ItemSpec))
 			{
 				ParseTokens();
+				string text2;
 				using (StreamReader reader = new StreamReader(_templateFile.ItemSpec))
 				{
-					string text2 = _regex.Replace(reader.ReadToEnd(), new MatchEvaluator(MatchEval));
-					using (StreamWriter w = new StreamWriter(GetOutputFilename()))
-					{
-						w.Write(text2);
-						w.Flush();
-						Log.LogMessage("Template replaced and written to '{0}'", _outputFilename);
-						result = true;
-					}
+					text2 = _regex.Replace(reader.ReadToEnd(), new MatchEvaluator(MatchEval));
 				}
+
+				using (StreamWriter w = new StreamWriter(GetOutputFilename()))
+				{
+					w.Write(text2);
+					w.Flush();
+					Log.LogMessage("Template replaced and written to '{0}'", _outputFilename);
+					result = true;
+				}
+
 			}
 			else
 			{
@@ -121,7 +124,7 @@ namespace MSBuild.Community.Tasks
 			{
 				_outputFilename = Path.ChangeExtension(_templateFile.ItemSpec, DefaultExt);
 			}
-			_outputFilename = Path.IsPathRooted(_outputFilename) ? _outputFilename : 
+			_outputFilename = Path.IsPathRooted(_outputFilename) ? _outputFilename :
 				Path.Combine(Path.GetDirectoryName(_templateFile.ItemSpec), _outputFilename);
 			_outputFile = new TaskItem(_outputFilename);
 			return _outputFilename;

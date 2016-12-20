@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace MSBuild.Community.Tasks.DependencyGraph
@@ -12,7 +11,12 @@ namespace MSBuild.Community.Tasks.DependencyGraph
     /// </summary>
     public class ProjectFileParser
     {
-        private XmlDocument xml;
+        private XmlDocument _xml;
+
+        private XmlElement DocumentElement
+        {
+            get { return _xml.DocumentElement ?? _xml.CreateElement("root"); }
+        }
 
         /// <summary>
         /// Creates new parser, based on project file specified by stream
@@ -25,8 +29,8 @@ namespace MSBuild.Community.Tasks.DependencyGraph
 
         private void ParseXml(Stream stream)
         {
-            this.xml = new XmlDocument();
-            this.xml.Load(stream);            
+            _xml = new XmlDocument();
+            _xml.Load(stream);            
         }
 
         /// <summary>
@@ -35,49 +39,87 @@ namespace MSBuild.Community.Tasks.DependencyGraph
         /// <returns></returns>
         public string GetAssemblyName()
         {
-            return xml.DocumentElement.ChildNodes
+            return GetProperty("AssemblyName");
+        }
+
+        /// <summary>
+        /// Returns the ProjectGuid for the project file
+        /// </summary>
+        /// <returns></returns>
+        public string GetGuid()
+        {
+            return GetProperty("ProjectGuid");
+        }
+
+        private string GetProperty(string name)
+        {
+            var firstOrDefault = DocumentElement.ChildNodes
                 .Cast<XmlNode>()
                 .Where(n => n.Name == "PropertyGroup")
                 .SelectMany(n => n.ChildNodes.Cast<XmlNode>())
-                .Where(n => n.Name == "AssemblyName")
-                .FirstOrDefault().InnerText;            
+                .FirstOrDefault(n => n.Name == name);
+
+            return firstOrDefault != null ? firstOrDefault.InnerText : string.Empty;
         }
 
-        public IEnumerable<ProjectReference> GetReferences()
+        /// <summary>
+        /// Return referenced assemblies
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<AssemblyReference> GetAssemblyReferences()
         {
-            List<ProjectReference> result = new List<ProjectReference>();
+            return GetReference("Reference", NodeToAssemblyReference);
+        }
 
-            xml.DocumentElement.ChildNodes
+        /// <summary>
+        /// Return referenced projects
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ProjectReference> GetProjectReferences()
+        {
+            return GetReference("ProjectReference", NodeToProjectReference);
+        }
+
+        private IEnumerable<T> GetReference<T>(string referenceName, Func<XmlNode, T> converter)
+        {
+            return DocumentElement.ChildNodes
                 .Cast<XmlNode>()
                 .Where(n => n.Name == "ItemGroup")
                 .SelectMany(n => n.ChildNodes.Cast<XmlNode>())
-                .Where(n => n.Name == "Reference")
-                .ToList()
-                .ForEach(n => {
-                    result.Add(NodeToReference(n));
-                });
-
-            return result;              
+                .Where(n => n.Name == referenceName)
+                .Select(converter)
+                .Where(reference => reference != null)
+                .ToList();
         }
 
-        private ProjectReference NodeToReference(XmlNode node)
+        private AssemblyReference NodeToAssemblyReference(XmlNode node)
         {
-            string hintPath = String.Empty;
-            if (node.ChildNodes.Count > 0) { 
-                var hintPathNode = node.ChildNodes
-                    .Cast<XmlNode>()
-                    .Where(n => n.Name == "HintPath")
-                    .FirstOrDefault();
-                if (hintPathNode != null)
-                    hintPath = hintPathNode.InnerText;
-            }                    
+            var include = SafeAttributeValue(node, "Include");
+            var hintPath = SafeNodeValue(node, "HintPath");
 
-            return new ProjectReference(
-                node.Attributes["Include"].InnerText,
-                hintPath
-                );
+            return new AssemblyReference(include, hintPath);
         }
 
+        private ProjectReference NodeToProjectReference(XmlNode node)
+        {
+            var include = SafeAttributeValue(node, "Include");
+            var project = SafeNodeValue(node, "Project");
+            var name = SafeNodeValue(node, "Name");
+
+            return new ProjectReference(include, project, name);
+        }
+
+        private string SafeAttributeValue(XmlNode parentNode, string attrName)
+        {
+            var attribute = parentNode.Attributes != null ? parentNode.Attributes[attrName] : null;
+            return attribute != null ? attribute.InnerText : string.Empty;
+        }
+
+        private string SafeNodeValue(XmlNode parentNode, string nodeName)
+        {
+            var node = parentNode.ChildNodes.Cast<XmlNode>().FirstOrDefault(n => n.Name == nodeName);
+            return node != null ? node.InnerText : string.Empty;
+        }
 
         /// <summary>
         /// Given an assembly name in the form "Ionic.Zip.Reduced, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL"
@@ -85,7 +127,7 @@ namespace MSBuild.Community.Tasks.DependencyGraph
         /// </summary>
         /// <param name="fullAssemblyName"></param>
         /// <returns></returns>
-        public string GetAssemblyNameFromFullName(string fullAssemblyName)
+        public static string GetAssemblyNameFromFullName(string fullAssemblyName)
         {
             return fullAssemblyName.Split(',')[0].Trim();
         }

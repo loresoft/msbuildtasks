@@ -78,13 +78,6 @@ namespace MSBuild.Community.Tasks.Tfs
         /// </value>
         public bool Overwrite { get; set; }
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is override.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if override; otherwise, <c>false</c>.
-        /// </value>
-        public bool Override { get; set; }
-        /// <summary>
         /// Gets or sets a value indicating whether this <see cref="TfsClient"/> is force.
         /// </summary>
         /// <value>
@@ -166,6 +159,10 @@ namespace MSBuild.Community.Tasks.Tfs
         /// Gets or sets the collection.
         /// </summary>
         public string Collection { get; set; }
+        /// <summary>
+        /// Gets or sets a the override reason.
+        /// </summary>
+        public string Override { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the user.
@@ -227,6 +224,7 @@ namespace MSBuild.Community.Tasks.Tfs
 
         private static readonly string[] candidatePaths =
         {
+            @"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE",
             @"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE",
             @"C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE",
             @"C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE"
@@ -277,13 +275,12 @@ namespace MSBuild.Community.Tasks.Tfs
             builder.AppendSwitchIfNotNull("/format:", Format);
             builder.AppendSwitchIfNotNull("/collection:", Collection);
             builder.AppendSwitchIfNotNull("/v:C", ChangesetVersion);
+            builder.AppendSwitchIfNotNull("/override:", Override);
 
             if (Recursive)
                 builder.AppendSwitch("/recursive");
             if (All)
                 builder.AppendSwitch("/all");
-            if (Override)
-                builder.AppendSwitch("/override");
             if (Overwrite)
                 builder.AppendSwitch("/overwrite");
             if (Force)

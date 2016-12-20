@@ -9,7 +9,7 @@ namespace MSBuild.Community.Tasks.Tests
     [TestFixture]
     public class AttribTest
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureInit()
         {
             MockBuild buildEngine = new MockBuild();

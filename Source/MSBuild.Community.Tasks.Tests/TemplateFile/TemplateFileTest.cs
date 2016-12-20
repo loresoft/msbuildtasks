@@ -20,17 +20,17 @@ namespace MSBuild.Community.Tasks.Tests
 		";
 		private static string _templateReplaced =
 			_template.Replace("${TemplateItem}", "**Item1**").Replace("${item2}", "**Item2**")
-                .Replace("${CASEInsenSiTiveTest}", "**Item3**")
-                .Replace("${Template.Item.With.Dot}", "**Item4**");
+				.Replace("${CASEInsenSiTiveTest}", "**Item3**")
+				.Replace("${Template.Item.With.Dot}", "**Item4**");
 		private static string _templateFilename;
 		private string _replacedFilename;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void FixtureInit()
 		{
 			MockBuild buildEngine = new MockBuild();
 			TaskUtility.makeTestDirectory(buildEngine);
-			_templateFilename = Path.Combine(TaskUtility.TestDirectory, typeof (TemplateFileTest).Name + ".txt");
+			_templateFilename = Path.Combine(TaskUtility.TestDirectory, typeof(TemplateFileTest).Name + ".txt");
 		}
 
 		[SetUp]
@@ -74,9 +74,9 @@ namespace MSBuild.Community.Tasks.Tests
 			item = new TaskItem("caseInsensitiveTest");
 			SetMetaData(item, "**Item3**", includeMetaData);
 			result.Add(item);
-            item = new TaskItem("Template.Item.With.Dot");
-            SetMetaData(item, "**Item4**", includeMetaData);
-            result.Add(item);
+			item = new TaskItem("Template.Item.With.Dot");
+			SetMetaData(item, "**Item4**", includeMetaData);
+			result.Add(item);
 			return result.ToArray();
 		}
 
@@ -156,7 +156,7 @@ namespace MSBuild.Community.Tasks.Tests
 			string replaced = File.ReadAllText(tf.OutputFile.ItemSpec);
 			string shouldBeReplaced =
 				_template.Replace("${TemplateItem}", "").Replace("${item2}", "").Replace("${CASEInsenSiTiveTest}", "")
-                    .Replace("${Template.Item.With.Dot}", "");
+					.Replace("${Template.Item.With.Dot}", "");
 			Assert.AreEqual(shouldBeReplaced, replaced);
 		}
 
@@ -190,8 +190,27 @@ namespace MSBuild.Community.Tasks.Tests
 			_replacedFilename = tf.OutputFile.ItemSpec;
 			Assert.AreEqual(Path.ChangeExtension(_templateFilename, ".out"), _replacedFilename);
 			string replaced = File.ReadAllText(tf.OutputFile.ItemSpec);
-			string shouldBeReplaced = _template.Replace("${TemplateItem}", "**Item1**").Replace("${CASEInsenSiTiveTest}", "**Item3**");
+			string shouldBeReplaced = _template.Replace("${TemplateItem}", "**Item1**")
+				.Replace("${CASEInsenSiTiveTest}", "**Item3**");
 			Assert.AreEqual(shouldBeReplaced, replaced);
+		}
+
+		[Test]
+		public void TemplateFileReplace()
+		{
+			MockBuild build = new MockBuild();
+			TemplateFile tf = new TemplateFile();
+			tf.BuildEngine = build;
+			tf.Template = new TaskItem(_templateFilename);
+			tf.OutputFilename = _templateFilename;
+			tf.Tokens = GetTaskItems();
+			Assert.IsTrue(tf.Execute());
+			Assert.IsNotNull(tf.OutputFile);
+			Assert.IsTrue(File.Exists(tf.OutputFile.ItemSpec));
+			_replacedFilename = tf.OutputFile.ItemSpec;
+			Assert.AreEqual(_templateFilename, _replacedFilename);
+			string replaced = File.ReadAllText(tf.OutputFile.ItemSpec);
+			Assert.AreEqual(_templateReplaced, replaced);
 		}
 	}
 }

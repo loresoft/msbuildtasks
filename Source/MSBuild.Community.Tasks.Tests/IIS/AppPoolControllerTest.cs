@@ -13,7 +13,7 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 		private string mAppPoolName = "TestAppPool";
 		private string mServer = "localhost";
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TestFixtureInitilize()
 		{
 			Console.WriteLine("Setting up test objects...");
@@ -32,7 +32,7 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 			Console.WriteLine("TestFixture SetUp is complete.");
         }
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void TestFixtureDispose()
 		{
 			Console.WriteLine("Cleaning up...");

@@ -42,55 +42,132 @@ namespace MSBuild.Community.Tasks.Tests.DependencyGraph
     [TestFixture]
     public class DependencyGraphTaskTest
     {
+
+        private class Test
+        {
+            private const string RootDir = @"Source\MSBuild.Community.Tasks.Tests\DependencyGraph\";
+
+            private readonly ITaskItem[] _taskItems;
+            private readonly ITaskItem[] _excludeRefereces;
+            private readonly  string _outputFile;
+            private IBuildEngine _buildEngineStub;
+
+            public Test(string include, string[] excludeReferences)
+            {
+                var taskItem = MockRepository.GenerateStub<ITaskItem>();
+                taskItem.ItemSpec = Path.Combine(TaskUtility.GetProjectRootDirectory(true), RootDir + include);
+                taskItem.Stub(ti => ti.GetMetadata("FullPath")).Return(taskItem.ItemSpec);
+                _taskItems = new[] { taskItem };
+
+                _excludeRefereces = (excludeReferences ?? new string[0])
+                    .Select(filter =>
+                    {
+                        var item = MockRepository.GenerateStub<ITaskItem>();
+                        item.ItemSpec = filter;
+                        return item;
+                    })
+                    .ToArray();
+
+                _outputFile = Path.GetTempFileName();
+
+                _buildEngineStub = MockRepository.GenerateStub<IBuildEngine>();
+            }
+
+            public bool Execute()
+            {
+                Tasks.DependencyGraph.DependencyGraph task = new Tasks.DependencyGraph.DependencyGraph();
+                task.BuildEngine = _buildEngineStub;
+                task.InputFiles = _taskItems;
+                task.ExcludeReferences = _excludeRefereces;
+                task.OutputFile = _outputFile;
+
+                return task.Execute();
+            }
+
+            public void CheckOutput(string ethalon, bool deleteOutput)
+            {
+                string expectedOutput = GetFileContent(Path.Combine(TaskUtility.GetProjectRootDirectory(true), RootDir + ethalon));
+                string taskOutput = GetFileContent(_outputFile);
+
+                if (deleteOutput)
+                    DeleteOutput();
+                
+                Assert.That(taskOutput, Is.Not.Null.And.Not.Empty);
+                Assert.AreEqual(expectedOutput, taskOutput);
+            }
+
+            public bool DeleteOutput()
+            {
+                if (!File.Exists(_outputFile)) return false;
+
+                File.Delete(_outputFile);
+                return true;
+            }
+
+            private string GetFileContent(string fileName)
+            {
+                StreamReader rd = new StreamReader(new FileStream(fileName, FileMode.Open, FileAccess.Read));
+                using (rd)
+                {
+                    return rd.ReadToEnd();
+                }
+            }
+        }
+
         [Test]
         public void SingleFileRunTest()
         {
-            var taskItemStub = MockRepository.GenerateStub<ITaskItem>();
-            taskItemStub.ItemSpec = Path.Combine(TaskUtility.GetProjectRootDirectory(true), @"Source\MSBuild.Community.Tasks.Tests\DependencyGraph\MSBuild.Community.Tasks.csproj");
-            taskItemStub.Stub(ti => ti.GetMetadata("FullPath")).Return(taskItemStub.ItemSpec);
-
-            var buildEngineStub = MockRepository.GenerateStub<IBuildEngine>();
-
-            MSBuild.Community.Tasks.DependencyGraph.DependencyGraph task = new Tasks.DependencyGraph.DependencyGraph();
-            task.BuildEngine = buildEngineStub;
-            task.InputFiles = new ITaskItem[] { taskItemStub };                        
-            task.OutputFile = "output.txt";
-            task.Execute();
-
-            string expectedOutput = GetFileContent(Path.Combine(TaskUtility.GetProjectRootDirectory(true), @"Source\MSBuild.Community.Tasks.Tests\DependencyGraph\outputgraph1.txt"));
-            string taskOutput = GetFileContent(task.OutputFile);
-
-            Assert.IsNotNullOrEmpty(taskOutput);
-            Assert.AreEqual(expectedOutput, taskOutput);                       
+            var test = new Test("MSBuild.Community.Tasks.csproj", null);
+            test.Execute();
+            test.CheckOutput("outputgraph1.txt", true);
         }
 
         [Test]
         public void SingleFileRunWithFilterTest()
         {
-            var taskItemStub = MockRepository.GenerateStub<ITaskItem>();
-            taskItemStub.ItemSpec = Path.Combine(TaskUtility.GetProjectRootDirectory(true), @"Source\MSBuild.Community.Tasks.Tests\DependencyGraph\MSBuild.Community.Tasks.csproj");
-            taskItemStub.Stub(ti => ti.GetMetadata("FullPath")).Return(taskItemStub.ItemSpec);
+            var test = new Test("MSBuild.Community.Tasks.csproj", new[] { @"System", @"Microsoft\." });
+            test.Execute();
+            test.CheckOutput("outputgraph2.txt", true);
+        }
 
-            var filterItemStub1 = MockRepository.GenerateStub<ITaskItem>();
-            filterItemStub1.ItemSpec = @"System";
+        [Test]
+        public void Test01_ProjectReferenceDoesNotExist()
+        {
+            var test = new Test(@"Test01_ProjectReferenceDoesNotExist\Project01\Project01.csproj", null);
 
-            var filterItemStub2 = MockRepository.GenerateStub<ITaskItem>();
-            filterItemStub2.ItemSpec = @"Microsoft\.";
+            Exception exception = null;
+            bool result = true;
+            try
+            {
+                test.DeleteOutput();
+                result = test.Execute();
+            }
+            catch(Exception ex)
+            {
+                exception = ex;
+            }
 
-            var buildEngineStub = MockRepository.GenerateStub<IBuildEngine>();
+            Assert.That(!result, "Any error should lead to negative result");
+            Assert.That(exception == null, "Exception {0} was not expected", exception);
 
-            MSBuild.Community.Tasks.DependencyGraph.DependencyGraph task = new Tasks.DependencyGraph.DependencyGraph();
-            task.BuildEngine = buildEngineStub;
-            task.InputFiles = new ITaskItem[] { taskItemStub };
-            task.Filters = new ITaskItem[] { filterItemStub1, filterItemStub2 };
-            task.OutputFile = "output.txt";
-            task.Execute();
+            var fileExist = test.DeleteOutput();
+            Assert.That(!fileExist, "In case of error there should not be file generated");
+        }
 
-            string expectedOutput = GetFileContent(Path.Combine(TaskUtility.GetProjectRootDirectory(true), @"Source\MSBuild.Community.Tasks.Tests\DependencyGraph\outputgraph2.txt"));
-            string taskOutput = GetFileContent(task.OutputFile);
+        [Test]
+        public void Test02_DifferentPathSameProject()
+        {
+            var test = new Test(@"Test02_DifferentRefPathSameProject\Project01\Project01.csproj", null);
+            test.Execute();
+            test.CheckOutput(@"Test02_DifferentRefPathSameProject\outputfile.txt", true);
+        }
 
-            Assert.IsNotNullOrEmpty(taskOutput);
-            Assert.AreEqual(expectedOutput, taskOutput);
+        [Test]
+        public void Test03_EmptyDependicies()
+        {
+            var test = new Test(@"Test03_EmptyDependencies\Project01\Project01.csproj", new[] { @"System", @"Microsoft\." });
+            test.Execute();
+            test.CheckOutput(@"Test03_EmptyDependencies\outputfile.txt", true);
         }
 
         [Test]
@@ -101,15 +178,6 @@ namespace MSBuild.Community.Tasks.Tests.DependencyGraph
             MSBuild.Community.Tasks.DependencyGraph.DependencyGraph task = new Tasks.DependencyGraph.DependencyGraph();
             task.BuildEngine = buildEngineStub;
             task.Execute();
-        }
-
-        private string GetFileContent(string fileName)
-        {
-            StreamReader rd = new StreamReader(new FileStream(fileName, FileMode.Open, FileAccess.Read));
-            using (rd)
-            {
-                return rd.ReadToEnd();
-            }            
         }
     }
 }

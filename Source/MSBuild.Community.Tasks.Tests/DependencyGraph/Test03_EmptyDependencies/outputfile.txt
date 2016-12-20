@@ -1,0 +1,6 @@
+digraph {
+	subgraph ProjectReferences {
+		node [shape=box];
+		"{777FA5B6-991D-4157-9170-56B95CE4559C}" [label="Project01"];
+	}
+}

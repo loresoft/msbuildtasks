@@ -47,12 +47,12 @@ namespace MSBuild.Community.Tasks.Tests
 
 		#endregion Fields
 
-		#region TestFixtureSetUp
+		#region OneTimeSetUp
 
 		/// <summary>
 		/// Initializes the test fixture.
 		/// </summary>
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void FixtureInit()
 		{
 			MockBuild buildEngine = new MockBuild();
@@ -79,7 +79,7 @@ namespace MSBuild.Community.Tasks.Tests
 			this.inputAssemblies = TaskUtility.StringArrayToItemArray(this.assemblyA, this.assemblyB);
 		}
 
-		#endregion TestFixtureSetUp
+		#endregion OneTimeSetUp
 
         ILMerge task;
 

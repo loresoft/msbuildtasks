@@ -72,9 +72,9 @@ namespace MSBuild.Community.Tasks.Tests.DependencyGraph
             using (Stream s = GetStreamForFile("MSBuild.Community.Tasks.csproj"))
             {
                 ProjectFileParser p = new ProjectFileParser(s);
-                Assert.AreEqual("Ionic.Zip.Reduced, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL", p.GetReferences().ToList()[0].Include);
-                Assert.AreEqual(@"..\packages\DotNetZip.Reduced.1.9.1.8\lib\net20\Ionic.Zip.Reduced.dll", p.GetReferences().ToList()[0].HintPath);
-                Assert.AreEqual("Microsoft.Build.Framework", p.GetReferences().ToList()[1].Include);
+                Assert.AreEqual("Ionic.Zip.Reduced, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL", p.GetAssemblyReferences().ToList()[0].Include);
+                Assert.AreEqual(@"..\packages\DotNetZip.Reduced.1.9.1.8\lib\net20\Ionic.Zip.Reduced.dll", p.GetAssemblyReferences().ToList()[0].HintPath);
+                Assert.AreEqual("Microsoft.Build.Framework", p.GetAssemblyReferences().ToList()[1].Include);
             }
         }
 
@@ -84,8 +84,8 @@ namespace MSBuild.Community.Tasks.Tests.DependencyGraph
             using (Stream s = GetStreamForFile("DBInfo.CodeGen.csproj"))
             {
                 ProjectFileParser p = new ProjectFileParser(s);
-                Assert.AreEqual("System", p.GetReferences().ToList()[0].Include);
-                Assert.AreEqual("System.Core", p.GetReferences().ToList()[1].Include);                
+                Assert.AreEqual("System", p.GetAssemblyReferences().ToList()[0].Include);
+                Assert.AreEqual("System.Core", p.GetAssemblyReferences().ToList()[1].Include);                
             }
         }
 
@@ -94,8 +94,7 @@ namespace MSBuild.Community.Tasks.Tests.DependencyGraph
         {
             using (Stream s = GetStreamForFile("MSBuild.Community.Tasks.csproj"))
             {
-                ProjectFileParser p = new ProjectFileParser(s);
-                Assert.AreEqual("Ionic.Zip.Reduced", p.GetAssemblyNameFromFullName("Ionic.Zip.Reduced, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL"));
+                Assert.AreEqual("Ionic.Zip.Reduced", ProjectFileParser.GetAssemblyNameFromFullName("Ionic.Zip.Reduced, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL"));
             }
         }
 

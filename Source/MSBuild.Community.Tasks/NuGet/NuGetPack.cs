@@ -62,6 +62,11 @@ namespace MSBuild.Community.Tasks.NuGet
         public string Version { get; set; }
 
         /// <summary>
+        /// Appends a pre-release suffix to the internally generated version number.
+        /// </summary>
+        public string Suffix { get; set; }
+
+        /// <summary>
         /// The base path of the files defined in the nuspec file.
         /// </summary>
         public string BasePath { get; set; }
@@ -174,8 +179,9 @@ namespace MSBuild.Community.Tasks.NuGet
             builder.AppendSwitch("pack");
             builder.AppendFileNameIfNotNull(File);
             builder.AppendSwitchIfNotNull("-OutputDirectory ", OutputDirectory);
-            builder.AppendSwitchIfNotNull("-BasePath ", BasePath);
+            builder.AppendSwitchIfNotNull("-BasePath ", BasePath);            
             builder.AppendSwitchIfNotNull("-Version ", Version);
+            builder.AppendSwitchIfNotNull("-Suffix ", Suffix);
             builder.AppendSwitchIfNotNull("-Verbosity ", Verbosity);
             builder.AppendSwitchIfNotNull("-MinClientVersion", MinClientVersion);
 

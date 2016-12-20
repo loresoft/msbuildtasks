@@ -14,6 +14,5 @@ Test
 *.nupkg
 *.msi
 *.chm
-/Tools/ilmerge/
-/Tools/MSBuildTasks/
-/Tools/NUnit.Runners/
+/Tools
+/build.txt

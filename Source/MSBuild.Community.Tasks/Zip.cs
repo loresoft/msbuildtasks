@@ -247,14 +247,14 @@ namespace MSBuild.Community.Tasks
 
                     foreach (ITaskItem fileItem in Files)
                     {
-                        string name = fileItem.ItemSpec;
+                        string name = Path.GetFullPath(fileItem.ItemSpec);
                         string directoryPathInArchive;
 
                         // clean up name
                         if (Flatten)
                             directoryPathInArchive = string.Empty;
                         else if (!string.IsNullOrEmpty(WorkingDirectory))
-                            directoryPathInArchive = GetPath(name, WorkingDirectory);
+                            directoryPathInArchive = GetPath(name, Path.GetFullPath(WorkingDirectory));
                         else
                             directoryPathInArchive = null;
 
