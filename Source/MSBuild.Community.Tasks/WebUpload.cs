@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Net;
+using System.Resources;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 
@@ -57,6 +58,8 @@ namespace MSBuild.Community.Tasks
     /// </example>
     public class WebUpload : Task
     {
+        private string method;
+
         #region Properties
 
         /// <summary>
@@ -77,7 +80,18 @@ namespace MSBuild.Community.Tasks
         /// Gets or sets the HTTP method to use when uploading data to the speficied URI.
         /// </summary>
         /// <value>The HTTP method to use. If not specified, it defaults to POST.</value>
-        public string Method { get; set; } = "POST";
+        public string Method {
+            get
+            {
+                if (string.IsNullOrEmpty(method))
+                {
+                    method = "POST";
+                }
+
+                return method;
+            }
+            set { method = value; } 
+        }
 
         /// <summary>
         /// When true, the current user's credentials are used to authenticate against the remote web server
