@@ -162,6 +162,14 @@ namespace MSBuild.Community.Tasks.NuGet
         public string MinClientVersion { get; set; }
 
         /// <summary>
+        /// (v3.5) Forces NuGet to run using an invariant, English-based culture.
+        /// </summary>
+        /// <remarks>
+        /// Only available starting in version 3.5.
+        /// </remarks>
+        public bool ForceEnglishOutput { get; set; }
+
+        /// <summary>
         /// The full file path of the NuGet package created by the NuGetPack task
         /// </summary>
         [Output]
@@ -209,6 +217,9 @@ namespace MSBuild.Community.Tasks.NuGet
 
             if (IncludeReferencedProjects)
                 builder.AppendSwitch("-IncludeReferencedProjects");
+
+            if (ForceEnglishOutput)
+                builder.AppendSwitch("-ForceEnglishOutput");
 
             builder.AppendSwitchIfNotNull("-Exclude", Exclude);
             builder.AppendSwitchIfNotNull("-Properties ", Properties);
