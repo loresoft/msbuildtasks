@@ -219,7 +219,7 @@ namespace MSBuild.Community.Tasks
 			CompilerResults results = provider.CompileAssemblyFromDom(options, compileUnit);
 
 			Assembly compiled = null;
-			if (results.Errors.Count > 0)
+			if (results.Errors.HasErrors)
 			{
 				string errors = "There were compiler errors:" + Environment.NewLine;
 				foreach (CompilerError err in results.Errors)
