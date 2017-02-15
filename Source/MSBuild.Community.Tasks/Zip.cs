@@ -79,6 +79,7 @@ namespace MSBuild.Community.Tasks
             ParallelCompression = true;
             CodecBufferSize = 0;
             BufferSize = 0;
+            Overwrite = true;
         }
 
         #endregion Constructor
@@ -190,6 +191,17 @@ namespace MSBuild.Community.Tasks
         public int BufferSize { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Zip"/> should be overwritten or appended.
+        /// </summary>
+        /// <value><c>true</c> if it should be overwritten; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// The default value is true, which means it will overwrite this <see cref="Zip"/> if the file already exists.
+        /// If you want to add content to an existing this <see cref="Zip"/> file, set this to false.
+        /// </remarks>
+        [DefaultValue(true)]
+        public bool Overwrite { get; set; }
+
+        /// <summary>
         /// 'Add' statement won't be logged with MinimalLogging enabled.
         /// The default value for MinimalLogging is false.
         /// </summary>
@@ -236,7 +248,9 @@ namespace MSBuild.Community.Tasks
                 if (!Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
 
-                using (var zip = new ZipFile())
+                bool shouldLoad = !Overwrite && File.Exists(ZipFileName);
+
+                using (var zip = shouldLoad ? ZipFile.Read(ZipFileName) : new ZipFile())
                 {
                     if (!ParallelCompression)
                     {
