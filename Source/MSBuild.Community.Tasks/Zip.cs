@@ -324,7 +324,7 @@ namespace MSBuild.Community.Tasks
 
                         ZipEntry entry;
 
-                        if (zip.ContainsEntry(name))
+                        if (zip.ContainsEntry(Path.Combine(directoryPathInArchive, name)))
                         {
                             entry = zip.UpdateFile(name, directoryPathInArchive);
                         }
