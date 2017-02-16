@@ -164,6 +164,83 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.IsTrue(unzipTask.Execute());
         }
 
+
+        [Test(Description = "Zip file update instead of overwrite")]
+        public void ZipFileUpdate()
+        {
+            var task = new Zip();
+            task.BuildEngine = new MockBuild();
+
+            string testDir = TaskUtility.TestDirectory;
+            const string fileName = "zip-128kb-test-1.dat";
+            string testFile = Path.Combine(testDir, fileName);
+            const int numberOfBytes = 1024 * 128 * 9;
+            if (File.Exists(testFile))
+                File.Delete(testFile);
+            CreateTestFile(numberOfBytes, testFile);
+
+            task.Files = new[] { new TaskItem(testFile) };
+            task.WorkingDirectory = testDir;
+            task.ZipFileName = Path.Combine(testDir, ZIP_FILE_NAME);
+            task.Overwrite = false;
+
+            if (File.Exists(task.ZipFileName))
+                File.Delete(task.ZipFileName);
+
+            // First zip up the file
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+            Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");
+
+            // Then delete the original, and try to unzip the file
+            File.Delete(testFile);
+            Unzip unzipTask = new Unzip();
+            unzipTask.BuildEngine = new MockBuild();
+            unzipTask.ZipFileName = task.ZipFileName;
+            unzipTask.TargetDirectory = testDir;
+            Assert.IsTrue(unzipTask.Execute());
+
+            long length = new FileInfo(Path.Combine(testDir, fileName)).Length;
+            Assert.AreEqual(numberOfBytes, length, "File length does not match");
+
+            if (File.Exists(testFile))
+                File.Delete(testFile);
+            CreateTestFile(numberOfBytes * 2, testFile);
+
+            // Update the zip file
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+            Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");
+
+            // Then delete the original, and try to unzip the file
+            File.Delete(testFile);
+            unzipTask = new Unzip();
+            unzipTask.BuildEngine = new MockBuild();
+            unzipTask.ZipFileName = task.ZipFileName;
+            unzipTask.TargetDirectory = testDir;
+            Assert.IsTrue(unzipTask.Execute());
+
+            length = new FileInfo(Path.Combine(testDir, fileName)).Length;
+            Assert.AreEqual(numberOfBytes * 2, length, "File length does not match");
+
+            if (File.Exists(testFile))
+                File.Delete(testFile);
+            CreateTestFile(numberOfBytes, testFile);
+
+            // Update the zip file again
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+            Assert.IsTrue(File.Exists(task.ZipFileName), "Zip file not found");
+
+            // Then delete the original, and try to unzip the file
+            File.Delete(testFile);
+            unzipTask = new Unzip();
+            unzipTask.BuildEngine = new MockBuild();
+            unzipTask.ZipFileName = task.ZipFileName;
+            unzipTask.TargetDirectory = testDir;
+            Assert.IsTrue(unzipTask.Execute());
+
+            length = new FileInfo(Path.Combine(testDir, fileName)).Length;
+            Assert.AreEqual(numberOfBytes, length, "File length does not match");
+        }
+
         public void CreateTestFile(int fileSize, string filePath)
         {
             byte[] testFileBytes = new byte[fileSize];
