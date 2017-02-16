@@ -456,4 +456,7 @@
   <data name="MergingFile" xml:space="preserve">
     <value>Merging file '{0}' into '{1}'</value>
   </data>
+  <data name="ZipUpdated" xml:space="preserve">
+    <value> updated "{0}".</value>
+  </data>
 </root>
