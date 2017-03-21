@@ -785,7 +785,40 @@ Create installer
         
         
         
-## <a id="CssCompress">CssCompress</a> (<a id="JavaScript.CssCompress">JavaScript.CssCompress</a>)
+## <a id="ContentFilter">ContentFilter</a>
+### Description
+Filters an Item list with a regular expression applied to the file's content.
+            Output list contains items from Input list that matched given expression
+### Example
+Matches from WebServices those files using Web Service Extension, i.e. containing the text Microsoft.Web.Services.
+            
+      <ItemGroup>
+       <WebServices Include="Service1.asmx.cs" />
+       <WebServices Include="Server.asmx.cs" />
+       <WebServices Include="Webservice2.asmx" />
+      </ItemGroup>
+      <Target Name="Filter">
+       <!-- Outputs only items that contain Micorosft.Web.Services -->
+       <ContentFilter Input="@(WebServices)" Expression="Microsoft\.Web\.Services">
+      <Output ItemName ="WSEWebServices" TaskParameter="Output" />
+       </ContentFilter>
+       <Message Text="&#xA;Web Services using WSE:&#xA;@(WSEWebServices, '&#xA;')" />
+      </Target>
+            
+
+* * *
+
+        
+        
+        
+        
+        
+ 
+ 
+ 
+ 
+ 
+ ## <a id="CssCompress">CssCompress</a> (<a id="JavaScript.CssCompress">JavaScript.CssCompress</a>)
 ### Description
 MSBuild task to minimize the size of a css file.
 ### No example given
@@ -2707,7 +2740,65 @@ Search for a version number and update the revision.
         
         
         
-## <a id="FxCop">FxCop</a>
+## <a id="FileSync">FileSync</a>
+### Description
+Snycs files or folders in the filesystem or via FTP.
+FTP urls are of the form protocol://username:password@server:port/path?ftp-options
+Protocol can be either ftp or ftps
+Ftp-options are delimited by a & and are of the form parameter or parameter=value
+Available ftp-options are:
+- passive: for passive ftp mode
+- active: for active ftp mode
+- connections: for the number of concurrent connections
+- zip: for compression if the server supports it
+- raw: for no compression
+- old: to use the most compatible ftp command set for old ftp servers")
+- time: for the server's time offset to utc time. If you omit time, sync
+   will autodetect the time offset (The MDTM command must be supported by the server for this).
+- crc: for auto CRC32 data transfer checksum check.
+- md5: for auto MD5 data transfer checksum check.
+- sha: for auto SHA1 data transfer checksum check.
+- The connections option reqires an int value that limits the maximum concurent connections.
+- The default options are passive&connections=10
+
+The Mode parameter can be set to either Update, Clone or Add.
+- In Update mode sync will keep newer files in the destination.
+- In Clone mode, sync will cerate an exact copy of the source.
+- In Add mode sync will add all files that are not present or outdated in the destination, but not delete any
+   outdated files or overwrite newer files.
+	
+The Exclude parameter specifies an exclude pattern for files to exclude. 
+The LogFile parameter specifies a logfile FileSync writes to.
+The Verbose and Silen parameters enable Verbose / Silent mode.
+
+### Example
+Sync the folder C:\Folder with the folder location on FTP server ftp.test.org using user and password as credentials,
+and using 10 parallel connections.
+            
+      <FileSync Sources="C:\Folder" Destinations="ftp://user:password@ftp.test.org/location?connections=10&zip&sha"
+              Mode="Clone" Silent="true" LogFile="sync.log.txt" />
+            
+            
+* * *					
+	
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+   ## <a id="FxCop">FxCop</a>
 ### Description
 Uses FxCop to analyse managed code assemblies and reports on
             their design best-practice compliance.
