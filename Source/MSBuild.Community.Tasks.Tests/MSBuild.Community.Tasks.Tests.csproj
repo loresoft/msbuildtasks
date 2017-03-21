@@ -85,6 +85,7 @@
     <Compile Include="Install\UninstallAssemblyTest.cs" />
     <Compile Include="JavaScript\JSCompressTest.cs" />
     <Compile Include="Math\ModuloTest.cs" />
+    <Compile Include="MergeTest.cs" />
     <Compile Include="Oracle\AddTnsNameTest.cs" />
     <Compile Include="Oracle\TnsParserTest.cs" />
     <Compile Include="FileUpdateTest.cs" />
