@@ -117,7 +117,7 @@ https://groups.google.com/d/forum/msbuildtasks
   </tr>
   <tr>
     <td><a href="Documentation/TaskDocs.md#Multiple">Multiple</a></td>
-    <td>Multiple numbers</td>
+    <td>Multiply numbers</td>
   </tr>
   <tr>
     <td><a href="Documentation/TaskDocs.md#MV">MV</a></td>
