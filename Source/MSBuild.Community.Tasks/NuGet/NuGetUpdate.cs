@@ -63,6 +63,14 @@ namespace MSBuild.Community.Tasks.NuGet
         /// Display this amount of details in the output: normal, quiet, detailed.
         /// </summary>
         public string Verbosity { get; set; }
+        
+        /// <summary>
+        /// (v3.5) Forces NuGet to run using an invariant, English-based culture.
+        /// </summary>
+        /// <remarks>
+        /// Only available starting in version 3.5.
+        /// </remarks>
+        public bool ForceEnglishOutput { get; set; }
 
         /// <summary>
         /// Returns a string value containing the command line arguments to pass directly to the executable file.
@@ -90,6 +98,8 @@ namespace MSBuild.Community.Tasks.NuGet
                 builder.AppendSwitch("-Safe");
             if (Self)
                 builder.AppendSwitch("-Self");
+            if (ForceEnglishOutput)
+                builder.AppendSwitch("-ForceEnglishOutput");
 
             builder.AppendSwitch("-NonInteractive");
 
