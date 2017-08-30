@@ -9,20 +9,14 @@
     <projectUrl>https://github.com/loresoft/msbuildtasks/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>The MSBuild Community Tasks project is a collection of open source tasks for MSBuild.</description>
-    <copyright>Copyright (c) 2015, LoreSoft</copyright>
+    <copyright>Copyright (c) 2016, LoreSoft</copyright>
     <language>en-US</language>
-    <tags>MSBuild build</tags>
+    <tags>MSBuild build tasks</tags>
     <developmentDependency>true</developmentDependency>
   </metadata>
   <files>
     <file src="Build\MSBuild.Community.Tasks.*" target="tools" />
-    
-    <file src="Tools\Install.Solution.ps1" target="tools\Install.ps1" />
-    <file src="Tools\MSBuild.psm1" target="tools\MSBuild.psm1" />
-    <file src="Tools\Build.proj" target="tools\Build.proj" />
-
-    <file src="readme.md" target="content\MSBuild.Community.Tasks.ReadMe.md" />
-
+    <file src="Build\MSBuild.Community.Tasks.Targets" target="build\MSBuildTasks.targets" />
     <file src="Source\MSBuild.Community.Tasks\**\*.cs" target="src" />
     <file src="Source\GlobalAssemblyInfo.cs" target="src" />
   </files>

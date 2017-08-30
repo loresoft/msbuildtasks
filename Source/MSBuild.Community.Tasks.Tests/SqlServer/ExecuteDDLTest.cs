@@ -23,7 +23,7 @@ namespace MSBuild.Community.Tasks.Tests.SqlServer
 			return new TaskItem(name);
 		}
 		
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void FixtureSetup()
 		{
 			MockBuild buildEngine = new MockBuild();
@@ -44,7 +44,7 @@ namespace MSBuild.Community.Tasks.Tests.SqlServer
             }
 		}
 		
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void FixtureTeardown()
 		{
 			if (!String.IsNullOrEmpty(_dbFilename) && File.Exists(_dbFilename))

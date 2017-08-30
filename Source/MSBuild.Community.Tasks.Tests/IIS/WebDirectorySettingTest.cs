@@ -14,7 +14,7 @@ namespace MSBuild.Community.Tasks.Tests.IIS
 
         #region Environment Setup
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void CreateTestWebDirectory()
         {
             if (!TaskUtility.IsMinimumIISVersionInstalled("localhost", 5, 0))
@@ -33,7 +33,7 @@ namespace MSBuild.Community.Tasks.Tests.IIS
             }
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void RemoveTestWebDirectory()
         {
             WebDirectoryDelete task = new WebDirectoryDelete();

@@ -1,6 +1,6 @@
-#region Copyright © 2006 Andy Johns. All rights reserved.
+#region Copyright Â© 2006 Andy Johns. All rights reserved.
 /*
-Copyright © 2006 Andy Johns. All rights reserved.
+Copyright Â© 2006 Andy Johns. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -57,6 +57,8 @@ namespace MSBuild.Community.Tasks
     ///     <Message Text="%(ProjectFiles.ProjectGUID)" />
     ///     <Message Text="Full paths to project files:" />
     ///     <Message Text="%(ProjectFiles.FullPath)" />
+    ///     <Message Text="Project Type GUIDs:" />
+    ///     <Message Text="%(ProjectFiles.ProjectTypeGUID)" />
     ///   </Target>
     /// ]]></code>
     /// </example>
@@ -132,6 +134,7 @@ namespace MSBuild.Community.Tasks
                 project.SetMetadata("ProjectPath", projectFile);
                 project.SetMetadata("ProjectName", projectName);
                 project.SetMetadata("ProjectGUID", projectGUID);
+                project.SetMetadata("ProjectTypeGUID", projectGUID);
 				taskItems.Add(project);
             }
 

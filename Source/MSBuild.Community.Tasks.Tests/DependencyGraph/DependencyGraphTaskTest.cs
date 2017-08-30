@@ -92,7 +92,7 @@ namespace MSBuild.Community.Tasks.Tests.DependencyGraph
                 if (deleteOutput)
                     DeleteOutput();
                 
-                Assert.IsNotNullOrEmpty(taskOutput);
+                Assert.That(taskOutput, Is.Not.Null.And.Not.Empty);
                 Assert.AreEqual(expectedOutput, taskOutput);
             }
 

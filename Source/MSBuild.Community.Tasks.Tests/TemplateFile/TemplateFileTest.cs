@@ -25,7 +25,7 @@ namespace MSBuild.Community.Tasks.Tests
 		private static string _templateFilename;
 		private string _replacedFilename;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void FixtureInit()
 		{
 			MockBuild buildEngine = new MockBuild();
