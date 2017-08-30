@@ -60,18 +60,24 @@ namespace MSBuild.Community.Tasks
         #region Properties
 
         /// <summary>
-        /// Gets or sets the name of the local file that is to receive the data.
+        /// Gets or sets the name of the local file to upload to the specified URI.
         /// </summary>
         /// <value>The name of the file.</value>
         [Required]
         public string FileName { get; set; }
 
         /// <summary>
-        /// Gets or sets the URI from which to upload data to.
+        /// Gets or sets the URI to which to upload data to.
         /// </summary>
         /// <value>The remote URI.</value>
         [Required]
         public string RemoteUri { get; set; }
+
+        /// <summary>
+        /// Gets or sets the HTTP method to use when uploading data to the speficied URI.
+        /// </summary>
+        /// <value>The HTTP method to use. If not specified, it defaults to POST.</value>
+        public string Method { get; set; } = "POST";
 
         /// <summary>
         /// When true, the current user's credentials are used to authenticate against the remote web server
@@ -98,7 +104,6 @@ namespace MSBuild.Community.Tasks
 
         #endregion
 
-
         /// <summary>
         /// When overridden in a derived class, executes the task.
         /// </summary>
@@ -107,14 +112,14 @@ namespace MSBuild.Community.Tasks
         /// </returns>
         public override bool Execute()
         {
-            Log.LogMessage("Uploading File \"{0}\" from \"{1}\".", FileName, RemoteUri);
+            Log.LogMessage("Uploading File \"{0}\" to \"{1}\" using method \"{2}\".", FileName, RemoteUri, Method);
 
             try
             {
                 using (WebClient client = new WebClient())
                 {
                     client.Credentials = GetConfiguredCredentials();
-                    byte[] buffer = client.UploadFile(RemoteUri, FileName);
+                    byte[] buffer = client.UploadFile(RemoteUri, Method, FileName);
                 }
             }
             catch (Exception ex)
@@ -123,7 +128,7 @@ namespace MSBuild.Community.Tasks
                 return false;
             }
 
-            Log.LogMessage("Successfully Upload File \"{0}\" from \"{1}\"", FileName, RemoteUri);
+            Log.LogMessage("Successfully Upload File \"{0}\" to \"{1}\"", FileName, RemoteUri);
             return true;
         }
 

@@ -1,6 +1,6 @@
-#region Copyright © 2011 Paul Welter. All rights reserved.
+#region Copyright Â© 2011 Paul Welter. All rights reserved.
 /*
-Copyright © 2005 Paul Welter. All rights reserved.
+Copyright Â© 2005 Paul Welter. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -60,6 +60,11 @@ namespace MSBuild.Community.Tasks.NuGet
         /// Overrides the version number from the nuspec file.
         /// </summary>
         public string Version { get; set; }
+
+        /// <summary>
+        /// Appends a pre-release suffix to the internally generated version number.
+        /// </summary>
+        public string Suffix { get; set; }
 
         /// <summary>
         /// The base path of the files defined in the nuspec file.
@@ -157,6 +162,14 @@ namespace MSBuild.Community.Tasks.NuGet
         public string MinClientVersion { get; set; }
 
         /// <summary>
+        /// (v3.5) Forces NuGet to run using an invariant, English-based culture.
+        /// </summary>
+        /// <remarks>
+        /// Only available starting in version 3.5.
+        /// </remarks>
+        public bool ForceEnglishOutput { get; set; }
+
+        /// <summary>
         /// The full file path of the NuGet package created by the NuGetPack task
         /// </summary>
         [Output]
@@ -174,8 +187,9 @@ namespace MSBuild.Community.Tasks.NuGet
             builder.AppendSwitch("pack");
             builder.AppendFileNameIfNotNull(File);
             builder.AppendSwitchIfNotNull("-OutputDirectory ", OutputDirectory);
-            builder.AppendSwitchIfNotNull("-BasePath ", BasePath);
+            builder.AppendSwitchIfNotNull("-BasePath ", BasePath);            
             builder.AppendSwitchIfNotNull("-Version ", Version);
+            builder.AppendSwitchIfNotNull("-Suffix ", Suffix);
             builder.AppendSwitchIfNotNull("-Verbosity ", Verbosity);
             builder.AppendSwitchIfNotNull("-MinClientVersion", MinClientVersion);
 
@@ -204,7 +218,10 @@ namespace MSBuild.Community.Tasks.NuGet
             if (IncludeReferencedProjects)
                 builder.AppendSwitch("-IncludeReferencedProjects");
 
-            builder.AppendSwitchIfNotNull("-Exclude", Exclude);
+            if (ForceEnglishOutput)
+                builder.AppendSwitch("-ForceEnglishOutput");
+
+            builder.AppendSwitchIfNotNull("-Exclude ", Exclude);
             builder.AppendSwitchIfNotNull("-Properties ", Properties);
 
             return builder.ToString();

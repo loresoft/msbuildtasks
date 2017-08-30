@@ -615,10 +615,8 @@ namespace MSBuild.Community.Tasks
                                                      "/2003/05/29/57120.aspx for more info)"
                                                    : "Check fusion log: " + fileLoadEx.FusionLog;
                         Log.LogError("The C++/CLI code provider could not be loaded. " +
-                                     fileLoadEx.Message ?? "" +
-                                     (fileLoadEx.InnerException == null 
-                                                    ? "" 
-                                                    : fileLoadEx.InnerException.Message ?? "") +
+                                     fileLoadEx.Message +
+                                     (fileLoadEx.InnerException?.Message ?? "") +
                                      fusionMessage);
                         provider = null;
                     }

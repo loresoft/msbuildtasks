@@ -77,6 +77,8 @@ namespace MSBuild.Community.Tasks
         {
             ZipLevel = 6;
             ParallelCompression = true;
+            CodecBufferSize = 0;
+            BufferSize = 0;
         }
 
         #endregion Constructor
@@ -167,6 +169,27 @@ namespace MSBuild.Community.Tasks
         public bool ParallelCompression { get; set; }
 
         /// <summary>
+        /// Gets or sets Size of the work buffer to use for the ZLIB codec
+        /// during compression.
+        /// </summary>
+        /// <value>Decimal value of the size of the buffer.</value>
+        /// <remarks>
+        /// Not set if value is 0
+        /// </remarks>
+        [DefaultValue(0)]
+        public int CodecBufferSize { get; set; }
+
+        /// <summary>
+        /// Gets or sets Size of the IO buffer used while saving.
+        /// </summary>
+        /// <value>Decimal value of the size of the buffer.</value>
+        /// <remarks>
+        /// Not set if value is 0
+        /// </remarks>
+        [DefaultValue(0)]
+        public int BufferSize { get; set; }
+
+        /// <summary>
         /// 'Add' statement won't be logged with MinimalLogging enabled.
         /// The default value for MinimalLogging is false.
         /// </summary>
@@ -245,6 +268,12 @@ namespace MSBuild.Community.Tasks
                     if (!string.IsNullOrEmpty(Comment))
                         zip.Comment = Comment;
 
+                    if (CodecBufferSize>0)
+                        zip.CodecBufferSize = CodecBufferSize;
+
+                    if (BufferSize>0)
+                        zip.BufferSize = BufferSize;
+
                     foreach (ITaskItem fileItem in Files)
                     {
                         string name = Path.GetFullPath(fileItem.ItemSpec);
@@ -254,7 +283,7 @@ namespace MSBuild.Community.Tasks
                         if (Flatten)
                             directoryPathInArchive = string.Empty;
                         else if (!string.IsNullOrEmpty(WorkingDirectory))
-                            directoryPathInArchive = GetPath(name, WorkingDirectory);
+                            directoryPathInArchive = GetPath(name, Path.GetFullPath(WorkingDirectory));
                         else
                             directoryPathInArchive = null;
 

@@ -91,7 +91,7 @@
     <!-- Merge together files -->
     <ItemGroup>
       <InputAssemblies Include="$(BuildFolder)\MSBuild.Temp.dll" />
-      <InputAssemblies Include="$(BuildFolder)\Ionic.Zip.Reduced.dll" />
+      <InputAssemblies Include="$(BuildFolder)\DotNetZip.dll" />
       <InputAssemblies Include="$(BuildFolder)\FSharp.Compiler.CodeDom.dll" />
     </ItemGroup>
     
