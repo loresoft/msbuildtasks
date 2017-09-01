@@ -275,7 +275,7 @@ namespace MSBuild.Community.Tasks
 			}
 			catch (XsltException ex)
 			{
-				Log.LogErrorFromException(ex);
+				Log.LogErrorFromException(ex, false, true, new Uri(ex.SourceUri).LocalPath + '(' + ex.LineNumber + ',' + ex.LinePosition + ')');
 				return false;
 			}
 			catch (FileNotFoundException ex)
@@ -290,7 +290,7 @@ namespace MSBuild.Community.Tasks
 			}
 			catch (XmlException ex)
 			{
-				Log.LogErrorFromException(ex);
+				Log.LogErrorFromException(ex, false, true, new Uri(ex.SourceUri).LocalPath + '(' + ex.LineNumber + ',' + ex.LinePosition + ')');
 				return false;
 			}
 			finally
