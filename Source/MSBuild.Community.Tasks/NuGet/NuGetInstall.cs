@@ -72,6 +72,11 @@ namespace MSBuild.Community.Tasks.NuGet
         public bool ForceEnglishOutput { get; set; }
 
         /// <summary>
+        /// Specifies the types of files to save after package installation: one of nuspec, nupkg, or nuspec;nupkg.
+        /// </summary>
+        public string PackageSaveMode { get; set; }
+
+        /// <summary>
         /// Returns a string value containing the command line arguments to pass directly to the executable file.
         /// </summary>
         /// <returns>
@@ -88,6 +93,7 @@ namespace MSBuild.Community.Tasks.NuGet
             builder.AppendSwitchIfNotNull("-SolutionDirectory ", SolutionDirectory);
             builder.AppendSwitchIfNotNull("-Verbosity ", Verbosity);
             builder.AppendSwitchIfNotNull("-ConfigFile ", ConfigFile);
+            builder.AppendSwitchIfNotNull("-PackageSaveMode ", PackageSaveMode);
 
             if (ExcludeVersion)
                 builder.AppendSwitch("-ExcludeVersion");
