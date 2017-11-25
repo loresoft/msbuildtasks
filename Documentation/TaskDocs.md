@@ -2505,7 +2505,7 @@ MSBuild task that replaces tokens in a template file and writes out a new file.
             	</Tokens>
       </ItemGroup>
             
-      <TemplateFile Template="ATemplateFile.template" OutputFilename="ReplacedFile.txt" Tokens="@(Tokens)" />
+      <TemplateFile Template="ATemplateFile.template" TemplateEncoding="Windows-1251" OutputFilename="ReplacedFile.txt" OutputEncoding="UTF-16" Tokens="@(Tokens)" />
             
             
 * * *

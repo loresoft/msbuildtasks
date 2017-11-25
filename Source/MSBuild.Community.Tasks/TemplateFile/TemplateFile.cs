@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -18,7 +19,7 @@ namespace MSBuild.Community.Tasks
 	///		</Tokens>
 	/// </ItemGroup>
 	/// 
-	/// <TemplateFile Template="ATemplateFile.template" OutputFilename="ReplacedFile.txt" Tokens="@(Tokens)" />
+	/// <TemplateFile Template="ATemplateFile.template" [TemplateEncoding="ENCODING"] OutputFilename="ReplacedFile.txt" [OutputEncoding="ENCODING"] Tokens="@(Tokens)" />
 	/// ]]></code>
 	/// </example>
 	/// <remarks>Tokens in the template file are formatted using ${var} syntax and names are not 
@@ -30,6 +31,8 @@ namespace MSBuild.Community.Tasks
 		/// </summary>
 		public static readonly string MetadataValueTag = "ReplacementValue";
 		private ITaskItem _outputFile;
+		private string _templateEncoding = "UTF-8";
+		private string _outputEncoding = null;
 		private string _outputFilename;
 		private Regex _regex;
 		private ITaskItem _templateFile;
@@ -67,6 +70,26 @@ namespace MSBuild.Community.Tasks
 		}
 
 		/// <summary>
+		/// The template file encoding.
+		/// Default is UTF-8.
+		/// </summary>
+		public string TemplateEncoding
+		{
+			get { return _templateEncoding; }
+			set { _templateEncoding = value; }
+		}
+
+		/// <summary>
+		/// The output file encoding.
+		/// Default is a template file encoding.
+		/// </summary>
+		public string OutputEncoding
+		{
+			get { return string.IsNullOrEmpty(_outputEncoding) ? TemplateEncoding : _outputEncoding; }
+			set { _outputEncoding = value; }
+		}
+
+		/// <summary>
 		/// The template file used.  Tokens with values of ${Name} are replaced by name.
 		/// </summary>
 		[Required]
@@ -97,12 +120,12 @@ namespace MSBuild.Community.Tasks
 			{
 				ParseTokens();
 				string text2;
-				using (StreamReader reader = new StreamReader(_templateFile.ItemSpec))
+				using (StreamReader reader = new StreamReader(_templateFile.ItemSpec, GetTemplateEncoding()))
 				{
 					text2 = _regex.Replace(reader.ReadToEnd(), new MatchEvaluator(MatchEval));
 				}
 
-				using (StreamWriter w = new StreamWriter(GetOutputFilename()))
+				using (StreamWriter w = new StreamWriter(GetOutputFilename(), false, GetOutputEncoding()))
 				{
 					w.Write(text2);
 					w.Flush();
@@ -116,6 +139,16 @@ namespace MSBuild.Community.Tasks
 				Log.LogError("Template File '{0}' cannot be found", _templateFile.ItemSpec);
 			}
 			return result;
+		}
+
+		private Encoding GetTemplateEncoding()
+		{
+			return Encoding.GetEncoding(TemplateEncoding);
+		}
+
+		private Encoding GetOutputEncoding()
+		{
+			return Encoding.GetEncoding(OutputEncoding);
 		}
 
 		private string GetOutputFilename()
