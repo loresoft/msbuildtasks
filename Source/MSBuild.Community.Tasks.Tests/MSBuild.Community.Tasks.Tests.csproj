@@ -13,8 +13,9 @@
     <WarningLevel>4</WarningLevel>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -151,13 +152,6 @@
     <Compile Include="ZipTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.csproj">
-      <Project>{F88A60A8-564C-4E70-92DC-E92DBB897641}</Project>
-      <Name>MSBuild.Community.Tasks</Name>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="DependencyGraph\DBInfo.CodeGen.csproj" />
     <Content Include="DependencyGraph\MSBuild.Community.Tasks.csproj" />
     <Content Include="DependencyGraph\outputgraph1.txt">
@@ -211,6 +205,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.csproj">
+      <Project>{f88a60a8-564c-4e70-92dc-e92dbb897641}</Project>
+      <Name>MSBuild.Community.Tasks</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
