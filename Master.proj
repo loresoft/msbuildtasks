@@ -92,10 +92,18 @@
     <ItemGroup>
       <InputAssemblies Include="$(BuildFolder)\MSBuild.Temp.dll" />
       <InputAssemblies Include="$(BuildFolder)\DotNetZip.dll" />
+	  <InputAssemblies Include="$(BuildFolder)\FSharp.Core.dll" />
+      <InputAssemblies Include="$(BuildFolder)\FSharp.Compiler.CodeDom.dll" />
     </ItemGroup>
-    
+	
+    <ItemGroup>
+      <LibraryPath Include="$(BuildFolder)" />
+    </ItemGroup>
+		
+    <!--  -->
     <ILRepack Internalize="true"
               InputAssemblies="@(InputAssemblies)"
+			  LibraryPath="@(LibraryPath)"
               TargetKind="Dll"
               KeyFile="$(SourceFolder)\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk"
               OutputFile="$(BuildFolder)\MSBuild.Community.Tasks.dll" />

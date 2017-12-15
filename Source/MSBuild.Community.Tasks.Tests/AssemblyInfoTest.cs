@@ -42,6 +42,23 @@ namespace MSBuild.Community.Tasks.Tests
 
         }
 
+        [Test(Description = "Create VersionInfo in F#")]
+        public void AssemblyInfoFS() {
+            AssemblyInfo task = new AssemblyInfo();
+            task.BuildEngine = new MockBuild();
+            task.CodeLanguage = "fs";
+            string outputFile = Path.Combine(testDirectory, "VersionInfo.fs");
+            task.OutputFile = outputFile;
+            task.AssemblyVersion = "1.2.3.4";
+            task.AssemblyFileVersion = "1.2.3.4";
+            task.AssemblyInformationalVersion = "1.2.3.4";
+            task.GenerateClass = true;
+            
+            Assert.IsTrue(task.Execute(), "Execute Failed");
+
+            Assert.IsTrue(File.Exists(outputFile), "File missing: " + outputFile);
+        }
+
         [Test(Description = "Create VersionInfo in VB")]
         public void AssemblyInfoVB() {
             AssemblyInfo task = new AssemblyInfo();
