@@ -212,6 +212,10 @@ https://groups.google.com/d/forum/msbuildtasks
     <td>A Task that generates a XSD schema of the tasks in an assembly.</td>
   </tr>
   <tr>
+    <td><a href="Documentation/TaskDocs.md#TemplateFile">TemplateFile</a></td>
+    <td>A task that replaces tokens in a template file and writes out a new file.</td>
+  </tr>
+  <tr>
     <td><a href="Documentation/TaskDocs.md#Time">Time</a></td>
     <td>Gets the current date and time.</td>
   </tr>
