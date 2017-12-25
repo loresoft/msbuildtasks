@@ -117,7 +117,9 @@
     </Compile>
     <Compile Include="Fusion\InstallReference.cs" />
     <Compile Include="Fusion\NativeMethods.cs" />
+    <Compile Include="Git\GitTag.cs" />
     <Compile Include="Git\GitCommitDate.cs" />
+    <Compile Include="Git\GitCommit.cs" />
     <Compile Include="Git\GitDescribe.cs" />
     <Compile Include="Git\GitBranch.cs" />
     <Compile Include="Git\GitClient.cs" />
