@@ -135,6 +135,7 @@
     <Compile Include="NuGet\NuGetDelete.cs" />
     <Compile Include="NuGet\NuGetInstall.cs" />
     <Compile Include="NuGet\NuGetPack.cs" />
+    <Compile Include="NuGet\NuGetAdd.cs" />
     <Compile Include="NuGet\NuGetPush.cs" />
     <Compile Include="NuGet\NuGetRestore.cs" />
     <Compile Include="NuGet\NuGetUpdate.cs" />
