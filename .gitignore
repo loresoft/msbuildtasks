@@ -14,5 +14,6 @@ Test
 *.nupkg
 *.msi
 *.chm
+.vs
 /Tools
 /build.txt

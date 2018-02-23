@@ -36,202 +36,235 @@ using Microsoft.Build.Framework;
 using System.Data.SqlClient;
 using System.IO;
 
-
-
 namespace MSBuild.Community.Tasks
 {
-    /// <summary>
-    /// Executes a SQL command.
-    /// </summary>
-    /// <remarks>
-    /// Execute a SQL command against a database.  Target attributes to set:
-    /// ConnectionString (required), Command (required, the SQL to execute),
-    /// SelectMode (NonQuery, Scalar, or ScalarXml, default is NonQuery),
-    /// OutputFile (required when SelectMode is Scalar or ScalarXml).
-    /// 
-    /// Note: ScalarXml was created because of the 2033 byte limit on the sql return. 
-    /// See http://aspnetresources.com/blog/executescalar_truncates_xml.aspx for details.
-    /// </remarks>
-    /// <example>
-    /// Example of returning a count of items in a table.  Uses the default SelectMode of NonQuery.
-    /// <code><![CDATA[
-    ///     <SqlExecute ConnectionString="server=MyServer;Database=MyDatabase;Trusted_Connection=yes;"
-    ///         Command="create database MyDatabase" />
-    /// ]]></code>
-    /// 
-    /// Example of returning the items of a table in an xml format.
-    /// <code><![CDATA[
-    ///     <SqlExecute ConnectionString="server=MyServer;Database=MyDatabase;Trusted_Connection=yes;"
-    ///			Command="select * from SomeTable for xml auto"
-    ///			SelectMode="ScalarXml"
-    ///			OutputFile="SomeTable.xml" />
-    /// ]]></code>
-    /// </example>
-    public class SqlExecute : Task
-    {
+	/// <summary>
+	/// Executes a SQL command.
+	/// </summary>
+	/// <remarks>
+	/// Execute a SQL command against a database.  Target attributes to set:
+	/// ConnectionString (required), Command (required, the SQL to execute),
+	/// SelectMode (NonQuery, Scalar, or ScalarXml, default is NonQuery),
+	/// OutputFile (required when SelectMode is Scalar or ScalarXml).
+	/// 
+	/// Note: ScalarXml was created because of the 2033 byte limit on the sql return. 
+	/// See http://aspnetresources.com/blog/executescalar_truncates_xml.aspx for details.
+	/// </remarks>
+	/// <example>
+	/// Example of returning a count of items in a table.  Uses the default SelectMode of NonQuery.
+	/// <code><![CDATA[
+	///     <SqlExecute ConnectionString="server=MyServer;Database=MyDatabase;Trusted_Connection=yes;"
+	///         Command="create database MyDatabase" />
+	/// ]]></code>
+	/// 
+	/// Example of returning the items of a table in an xml format.
+	/// <code><![CDATA[
+	///     <SqlExecute ConnectionString="server=MyServer;Database=MyDatabase;Trusted_Connection=yes;"
+	///			Command="select * from SomeTable for xml auto"
+	///			SelectMode="ScalarXml"
+	///			OutputFile="SomeTable.xml" />
+	/// ]]></code>
+	/// </example>
+	public class SqlExecute : Task
+	{
+		private const string NONQUERY = "NonQuery";
+		private const string SCALAR = "Scalar";
+		private const string SCALARXML = "ScalarXml";
 
-        private const string NONQUERY = "NonQuery";
-        private const string SCALAR = "Scalar";
-        private const string SCALARXML = "ScalarXml";
+		#region Methods
 
-        /// <summary>
-        /// When overridden in a derived class, executes the task.
-        /// </summary>
-        /// <returns>
-        /// true if the task successfully executed; otherwise, false.
-        /// </returns>
-        public override bool Execute()
-        {
-            SqlConnection con = null;
-            SqlCommand cmd = null;
-            _result = -1;
+		#region Public
 
-            try
-            {
-                con = new SqlConnection(ConnectionString);
-                cmd = new SqlCommand(Command, con);
-                cmd.CommandTimeout = CommandTimeout;
-                con.Open();
+		/// <summary>
+		/// When overridden in a derived class, executes the task.
+		/// </summary>
+		/// <returns>
+		/// true if the task successfully executed; otherwise, false.
+		/// </returns>
+		public override bool Execute()
+		{
+			SqlConnection con = null;
+			SqlCommand cmd = null;
+			_result = -1;
 
-                switch (SelectMode)
-                {
-                    case SCALAR:
-                        if (!IsOutputFileSpecified(SCALAR))
-                        {
-                            return false;
-                        }
-                        object scalar = cmd.ExecuteScalar();
-                        Log.LogMessage("Successfully executed SQL command.");
-                        File.WriteAllText(this.OutputFile, scalar.ToString());
-                        break;
-                    case SCALARXML:
-                        if (!IsOutputFileSpecified(SCALARXML))
-                        {
-                            return false;
-                        }
+			try
+			{
+				con = new SqlConnection(ConnectionString);
+				cmd = new SqlCommand(Command, con);
+				cmd.CommandTimeout = CommandTimeout;
+				con.Open();
 
-                        System.Xml.XmlReader rdr = cmd.ExecuteXmlReader();
-                        using (TextWriter tw = new StreamWriter(OutputFile))
-                        {
-                            while (rdr.Read())
-                            {
-                                tw.Write(rdr.ReadOuterXml());
-                            }
-                            tw.Close();
-                        }
-                        break;
-                    case NONQUERY:
-                        _result = cmd.ExecuteNonQuery();
-                        Log.LogMessage("Successfully executed SQL command with result = : " + _result.ToString());
-                        break;
-                    default:
-                        Log.LogError("Unrecognized SelectMode: " + SelectMode);
-                        return false;
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Log.LogError("Error executing SQL command: {0}\n{1}", Command, ex.Message);
-                return false;
-            }
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-        }
+				switch (SelectMode)
+				{
+					case SCALAR:
+					object scalar = cmd.ExecuteScalar();
 
-        #region private decls
-        private string _conStr;
-        private string _cmd;
-        private string _mode;
-        private int _result;
-        private string _output;
-        private int _commandTimeout;
-        #endregion
+					ResultBuilder = new StringBuilder(scalar.ToString());
+					WriteOutputToFileIfSpecified();
 
-        /// <summary>
-        /// The connection string
-        /// </summary>
-        [Required]
-        public string ConnectionString
-        {
-            get { return _conStr; }
-            set { _conStr = value; }
-        }
+					Log.LogMessage("Successfully executed SQL command.");
+					break;
 
-        /// <summary>
-        /// The command to execute
-        /// </summary>
-        [Required]
-        public string Command
-        {
-            get { return _cmd; }
-            set { _cmd = value; }
-        }
+					case SCALARXML:
+					System.Xml.XmlReader rdr = cmd.ExecuteXmlReader();
 
-        /// <summary>
-        /// Command Timeout
-        /// </summary>
-        /// <remarks>Defaults to 30 seconds. Set to 0 for an infinite timeout period.</remarks>
-        [DefaultValue(30)]
-        public int CommandTimeout
-        {
-            get { return _commandTimeout; }
-            set { _commandTimeout = value; }
-        }
+					ResultBuilder = new StringBuilder();
 
-        /// <summary>
-        /// The SQL Selection Mode.  Set to NonQuery, Scalar, or ScalarXml.  Default is NonQuery.
-        /// </summary>
-        public string SelectMode
-        {
-            get
-            {
-                if (_mode == null)
-                {
-                    return NONQUERY;
-                }
-                else
-                {
-                    return _mode;
-                }
-            }
-            set { _mode = value; }
-        }
+					using (TextWriter outputWriter = new StringWriter(ResultBuilder))
+					{
+						while (rdr.Read())
+						{
+							outputWriter.Write(rdr.ReadOuterXml());
+						}
+						outputWriter.Close();
 
-        /// <summary>
-        /// The file name to write to
-        /// </summary>
-        public string OutputFile
-        {
-            get { return _output; }
-            set { _output = value; }
-        }
+					}
 
-        /// <summary>
-        /// Determines if an output file was specified.
-        /// </summary>
-        private bool IsOutputFileSpecified(string selectionMode)
-        {
-            if (this.OutputFile == null || this.OutputFile == string.Empty)
-            {
-                Log.LogError("When using SelectMode=\"{0}\" you must specify an OutputFile.", selectionMode);
-                return false;
-            }
+					WriteOutputToFileIfSpecified();
 
-            return true;
-        }
+					break;
+					case NONQUERY:
+					_result = cmd.ExecuteNonQuery();
+					Log.LogMessage("Successfully executed SQL command with result = : " + _result.ToString());
+					break;
+					default:
+					Log.LogError("Unrecognized SelectMode: " + SelectMode);
+					return false;
+				}
+				return true;
+			}
+			catch (Exception ex)
+			{
+				Log.LogError("Error executing SQL command: {0}\n{1}", Command, ex.Message);
+				return false;
+			}
+			finally
+			{
+				if (con != null)
+					con.Close();
+			}
+		}
 
+		#endregion
 
-        /// <summary>
-        /// Output the return count/value
-        /// </summary>
-        [Output]
-        public int Result
-        {
-            get { return _result; }
-        }
-    }
+		#region Private
+
+		private bool IsOutputFileSpecified()
+		{
+			return !string.IsNullOrWhiteSpace(OutputFile);
+		}
+
+		private void WriteOutputToFileIfSpecified()
+		{
+			if (IsOutputFileSpecified())
+			{
+				File.WriteAllText(this.OutputFile, ResultBuilder.ToString());
+			}
+		}
+
+		#endregion
+		#endregion
+
+		#region Properties
+
+		#region Public parameters
+
+		/// <summary>
+		/// The connection string
+		/// </summary>
+		[Required]
+		public string ConnectionString
+		{
+			get { return _conStr; }
+			set { _conStr = value; }
+		}
+
+		/// <summary>
+		/// The command to execute
+		/// </summary>
+		[Required]
+		public string Command
+		{
+			get { return _cmd; }
+			set { _cmd = value; }
+		}
+
+		/// <summary>
+		/// Command Timeout
+		/// </summary>
+		/// <remarks>Defaults to 30 seconds. Set to 0 for an infinite timeout period.</remarks>
+		[DefaultValue(30)]
+		public int CommandTimeout
+		{
+			get { return _commandTimeout; }
+			set { _commandTimeout = value; }
+		}
+
+		/// <summary>
+		/// The SQL Selection Mode.  Set to NonQuery, Scalar, or ScalarXml.  Default is NonQuery.
+		/// </summary>
+		public string SelectMode
+		{
+			get
+			{
+				if (_mode == null)
+				{
+					return NONQUERY;
+				}
+				else
+				{
+					return _mode;
+				}
+			}
+			set { _mode = value; }
+		}
+
+		/// <summary>
+		/// The file name to write to
+		/// </summary>
+		public string OutputFile
+		{
+			get { return _output; }
+			set { _output = value; }
+		}
+
+		/// <summary>
+		/// Output the scalar/ xmlscalar result output if no output file specified
+		/// </summary>
+		[Output]
+		public string ResultValue
+		{
+			get
+			{
+				return ResultBuilder.ToString();
+			}
+		}
+
+		/// <summary>
+		/// Output the return count/value
+		/// </summary>
+		[Output]
+		public int Result
+		{
+			get { return _result; }
+		}
+
+		#endregion
+
+		#region Private
+		private StringBuilder ResultBuilder { get; set; }
+
+		#endregion
+
+		#endregion
+
+		#region private decls
+		private string _conStr;
+		private string _cmd;
+		private string _mode;
+		private int _result;
+		private string _output;
+		private int _commandTimeout;
+		#endregion
+	}
 }
