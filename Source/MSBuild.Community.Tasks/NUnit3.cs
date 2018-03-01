@@ -369,68 +369,66 @@ namespace MSBuild.Community.Tasks
         {
             CommandLineBuilder builder = new CommandLineBuilder();
 
-            string c = Environment.OSVersion.Platform == PlatformID.Unix ? "-" : "--";
-
             if (EnableShadowCopy)
             {
-                builder.AppendSwitch(c+"shadowcopy");
+                builder.AppendSwitch("--shadowcopy");
             }
             if (_testInNewThread.HasValue && !_testInNewThread.Value)
             {
-                builder.AppendSwitch(c+"nothread");
+                builder.AppendSwitch("--nothread");
             }
             if(Force32Bit)
             {
-                builder.AppendSwitch(c+"x86");
+                builder.AppendSwitch("--x86");
             }
             if (NoHeader)
             {
-                builder.AppendSwitch(c+"noheader");
+                builder.AppendSwitch("--noheader");
             }
             if (NoColor)
             {
-                builder.AppendSwitch(c+"nocolor");
+                builder.AppendSwitch("--nocolor");
             }
             if (Verbose)
             {
-                builder.AppendSwitch(c+"verbose");
+                builder.AppendSwitch("--trace=Verbose");
             }
             builder.AppendFileNamesIfNotNull(_assemblies, " ");
 
-            builder.AppendSwitchIfNotNull(c+"config=", _projectConfiguration);
+            builder.AppendSwitchIfNotNull("--config=", _projectConfiguration);
 
-            builder.AppendSwitchIfNotNull(c+"err=", _errorOutputFile);
+            builder.AppendSwitchIfNotNull("--err=", _errorOutputFile);
 
-            builder.AppendSwitchIfNotNull(c+"out=", _textOutputFile);
+            builder.AppendSwitchIfNotNull("--out=", _textOutputFile);
 
-            builder.AppendSwitchIfNotNull(c+"framework=",_framework);
+            builder.AppendSwitchIfNotNull("--framework=",_framework);
 
-            builder.AppendSwitchIfNotNull(c+"process=",_process);
+            builder.AppendSwitchIfNotNull("--process=",_process);
 
-            builder.AppendSwitchIfNotNull(c+"domain=",_domain);
+            builder.AppendSwitchIfNotNull("--domain=",_domain);
 
-            builder.AppendSwitchIfNotNull(c+"apartment=",_apartment);
+            builder.AppendSwitchIfNotNull("--apartment=",_apartment);
             
-            builder.AppendSwitchIfNotNull(c+"where=", _where);
+            builder.AppendSwitchIfNotNull("--where=", _where);
 
-            builder.AppendSwitchIfNotNull(c+"timeout=", _timeout);
+            builder.AppendSwitchIfNotNull("--timeout=", _timeout);
 
-            builder.AppendSwitchIfNotNull(c+"workers=", _workers);
+            builder.AppendSwitchIfNotNull("--workers=", _workers);
 
-            builder.AppendSwitchIfNotNull(c+"result=", _outputXmlFile);
+            builder.AppendSwitchIfNotNull("--result=", _outputXmlFile);
 
-            builder.AppendSwitchIfNotNull(c+"work=", _workingDirectory);
+            builder.AppendSwitchIfNotNull("--work=", _workingDirectory);
 
-            builder.AppendSwitchIfNotNull(c+"labels=", _showLabels);
+            builder.AppendSwitchIfNotNull("--labels=", _showLabels);
 
-            builder.AppendSwitchIfNotNull(c+"trace=", _trace);
+            builder.AppendSwitchIfNotNull("--trace=", _trace);
            
             return builder.ToString();
         }
 
         private void CheckToolPath()
         {
-            string nunitPath = ToolPath == null ? String.Empty : ToolPath.Trim();
+            string nunitPath = ToolPath?.Trim() ?? String.Empty;
             if (!String.IsNullOrEmpty(nunitPath))
             {
                 ToolPath = nunitPath;
