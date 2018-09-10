@@ -234,8 +234,11 @@ namespace MSBuild.Community.Tasks.Tfs
 
         private string FindToolPath(string toolName)
         {
-            return candidatePaths.FirstOrDefault(Directory.Exists)
-                || Directory.GetDirectories(@"C:\Program Files (x86)\Microsoft Visual Studio", "Team Explorer", SearchOption.AllDirectories).FirstOrDefault();
+            string candidate = candidatePaths.FirstOrDefault(Directory.Exists)
+            
+            return string.IsNullOrEmpty(candidate)
+                ? Directory.GetDirectories(@"C:\Program Files (x86)\Microsoft Visual Studio", "Team Explorer", SearchOption.AllDirectories).FirstOrDefault()
+                : candidate;
         }
 
         /// <inheritdoc />
