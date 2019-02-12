@@ -16,3 +16,4 @@ Test
 *.chm
 /Tools
 /build.txt
+.vs

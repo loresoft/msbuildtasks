@@ -1,8 +1,11 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using NUnit.Framework;
+using Task = System.Threading.Tasks.Task;
 
 namespace MSBuild.Community.Tasks.Tests
 {
@@ -14,7 +17,7 @@ namespace MSBuild.Community.Tasks.Tests
         {
             var root = Path.GetFullPath(@"..\..\..\");
 
-            var directories = Directory.GetDirectories(root, "*", SearchOption.AllDirectories);
+            var _ = Directory.GetDirectories(root, "*", SearchOption.AllDirectories);
         }
 
         [Test]
@@ -151,5 +154,77 @@ namespace MSBuild.Community.Tasks.Tests
             path = DeleteTree.MatchDirectories(@"..\..\..\MSBuild.*.Tests\**\obj\**");
             Assert.Greater(path.Count, 0);
         }
+
+        [Test]
+        [Explicit]
+        public void DeleteWithRetriesDirectoryWhichAppearsWithDelay_ShouldSucceed()
+        {
+            //Arrange
+            const string fullTargetDirectoryPath = @"C:\Temp\xn_TestDirectoryWhichDoesntInitiallyExist";
+
+            var task = new DeleteTree
+            {
+                BuildEngine = new MockBuild(),
+                
+                Retries = 10,
+                RetryDelayMilliseconds = 300,
+
+                Directories = new ITaskItem[]
+                {
+                    new TaskItem(fullTargetDirectoryPath)
+                }
+            };
+            
+            //Act
+            new Task(() =>
+            {
+                Thread.Sleep(2000);
+
+                Directory.CreateDirectory(fullTargetDirectoryPath);
+            }).Start();
+            var result = task.Execute();
+
+            //Assert
+            Assert.IsTrue(result);
+            Assert.AreEqual(1, task.DeletedDirectories.Length);
+            Assert.AreEqual(fullTargetDirectoryPath, task.DeletedDirectories.FirstOrDefault().ItemSpec);
+        }
+
+        [Test]
+        [Explicit]
+        public void DeleteWithRetriesDirectoryWhichDoesntAppearsAtAll_ShouldFailWithException()
+        {
+            //Arrange
+            const string fullTargetDirectoryPath = @"C:\Temp\xn_TestDirectoryWhichDoesntInitiallyExist";
+
+            var task = new DeleteTree
+            {
+                BuildEngine = new MockBuild(),
+                
+                Retries = 10,
+                RetryDelayMilliseconds = 300,
+
+                Directories = new ITaskItem[]
+                {
+                    new TaskItem(fullTargetDirectoryPath)
+                }
+            };
+
+            var exception = (Exception) null;
+            
+            //Act
+            try
+            {
+                task.Execute();
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+            
+            //Assert
+            Assert.IsInstanceOf<DirectoryNotFoundException>(exception);
+        }
     }
 }
+
