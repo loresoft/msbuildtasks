@@ -115,7 +115,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not delete &quot;{0}&quot;. Exceeded retry count of {1}. Failed. {2}.
+        ///   Looks up a localized string similar to Couldn&apos;t delete &quot;{0}&quot;. Exceeded retry count of {1}. Failed. {2}.
         /// </summary>
         internal static string DeleteTreeExceededRetries {
             get {
@@ -151,7 +151,7 @@ namespace MSBuild.Community.Tasks.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could delete &quot;{0}&quot;. Beginning retry {1} in {2}ms. {3}.
+        ///   Looks up a localized string similar to Couldn&apos;t delete &quot;{0}&quot;. Beginning retry {1} in {2}ms. {3}.
         /// </summary>
         internal static string DeleteTreeRetrying {
             get {

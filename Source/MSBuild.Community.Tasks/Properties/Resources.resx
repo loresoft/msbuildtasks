@@ -457,7 +457,7 @@
     <value>Merging file '{0}' into '{1}'</value>
   </data>
   <data name="DeleteTreeExceededRetries" xml:space="preserve">
-    <value>Could not delete "{0}". Exceeded retry count of {1}. Failed. {2}</value>
+    <value>Couldn't delete "{0}". Exceeded retry count of {1}. Failed. {2}</value>
   </data>
   <data name="DeleteTreeInvalidDirectoriesPaths" xml:space="preserve">
     <value>One or more of the directory-paths specified is null or full of whitespaces.</value>
@@ -469,6 +469,6 @@
     <value>{0} is an invalid retry delay. Value must not be negative.</value>
   </data>
   <data name="DeleteTreeRetrying" xml:space="preserve">
-    <value>Could delete "{0}". Beginning retry {1} in {2}ms. {3}</value>
+    <value>Couldn't delete "{0}". Beginning retry {1} in {2}ms. {3}</value>
   </data>
 </root>
