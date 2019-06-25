@@ -77,6 +77,7 @@ namespace MSBuild.Community.Tasks {
 			_password = string.Empty;
             _timeout = 7000;
             _keepAlive = false;
+			_enableSsl = false;
 		}
 
 		/// <summary>
@@ -202,6 +203,16 @@ namespace MSBuild.Community.Tasks {
             get { return _timeout; }
             set { _timeout = value; }
         }
+
+		private bool _enableSsl;
+
+		/// <summary>
+		/// Gets or sets a value that indicates whether to enable Secure Sockets Layer.
+		/// </summary>        
+		public bool EnableSsl {
+			get { return _enableSsl; }
+			set { _enableSsl = value; }
+		}
 
 		/// <summary>
 		/// When overridden in a derived class, executes the task.
@@ -407,6 +418,7 @@ namespace MSBuild.Community.Tasks {
 			rq.UseBinary = true;
 			rq.Timeout = _timeout;
 			rq.KeepAlive = _keepAlive;
+			rq.EnableSsl = _enableSsl;
 			if (!string.IsNullOrEmpty(_username)) {
 				rq.Credentials = new NetworkCredential(_username, _password);
 			}
