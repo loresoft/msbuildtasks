@@ -8,6 +8,9 @@ The MSBuild Community Tasks Project is an open source project for MSBuild tasks.
 
 [![NuGet Version](https://img.shields.io/nuget/v/MSBuildTasks.svg)](https://nuget.org/packages/MSBuildTasks)
 
+## Maintainer Wanted
+
+Looking for a new maintainer for this project.  Please let @pwelter34 know if you are interesting in becoming a maintainer for this project.
 
 ## Download
 
