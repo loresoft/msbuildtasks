@@ -274,6 +274,10 @@
     <Content Include="NUnitReport.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="MSBuild.Community.Tasks.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -288,4 +292,7 @@
     <Folder Include="Vault\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>C:\windows\system32\xcopy.exe /E /F /Y /I $(TargetDir). C:\Build</PostBuildEvent>
+  </PropertyGroup>
 </Project>
