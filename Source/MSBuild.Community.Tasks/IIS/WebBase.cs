@@ -79,8 +79,12 @@ namespace MSBuild.Community.Tasks.IIS
 			/// <summary>
 			/// IIS version 8.5
 			/// </summary>
-			EightFive
-		}
+			EightFive,
+            /// <summary>
+            /// IIS version 10.0
+            /// </summary>
+            Ten
+        }
 
 		/// <summary>
 		/// Defines the possible application pool actions to be performed.
@@ -317,50 +321,60 @@ namespace MSBuild.Community.Tasks.IIS
 
 			IISVersion iisVersion = IISVersion.Six;
 
-			if (osVersion.Major < 5)
-			{
-				// Windows NT: IIS 4
-				iisVersion = IISVersion.Four;
-			}
-			else if( osVersion.Major == 5)
-			{
-				switch (osVersion.Minor)
-				{
-					case 0:
-					case 1:
-						// Windows 2000 or Windows XP: IIS 5
-						iisVersion = IISVersion.Five;
-						break;
-					case 2:
-						// Windows Server 2003: IIS 6
-						iisVersion = IISVersion.Six;
-						break;
-				}
-			}
-			else if (osVersion.Major == 6)
-			{
-				switch (osVersion.Minor)
-				{
-					case 0:
-						// Windows Vista and Windows Server 2008
-						iisVersion = IISVersion.Seven;
-						break;
-					case 1:
-						// Windows 7 and Windows 2008 R2
-						iisVersion = IISVersion.SevenFive;
-						break;
-					case 2:
-						// Windows 8 and Windows Server 2012
-						iisVersion = IISVersion.Eight;
-						break;
-					case 3:
-						// Windows 8.1 and Windows Server 2012 R2
-						iisVersion = IISVersion.EightFive;
-						break;
-				}
-			}
+            if (osVersion.Major < 5)
+            {
+                // Windows NT: IIS 4
+                iisVersion = IISVersion.Four;
+            }
+            else if (osVersion.Major == 5)
+            {
+                switch (osVersion.Minor)
+                {
+                    case 0:
+                    case 1:
+                        // Windows 2000 or Windows XP: IIS 5
+                        iisVersion = IISVersion.Five;
+                        break;
+                    case 2:
+                        // Windows Server 2003: IIS 6
+                        iisVersion = IISVersion.Six;
+                        break;
+                }
+            }
+            else if (osVersion.Major == 6)
+            {
+                switch (osVersion.Minor)
+                {
+                    case 0:
+                        // Windows Vista and Windows Server 2008
+                        iisVersion = IISVersion.Seven;
+                        break;
+                    case 1:
+                        // Windows 7 and Windows 2008 R2
+                        iisVersion = IISVersion.SevenFive;
+                        break;
+                    case 2:
+                        // Windows 8 and Windows Server 2012
+                        iisVersion = IISVersion.Eight;
+                        break;
+                    case 3:
+                        // Windows 8.1 and Windows Server 2012 R2
+                        iisVersion = IISVersion.EightFive;
+                        break;
+                }
+            }
+            else if (osVersion.Major == 10)
+            {
+                switch (osVersion.Minor)
+                {
+                    case 0:
+                        // Windows 10.0, Windows Server 2016 and Windows Server 2019
+                        iisVersion = IISVersion.Ten;
+                        break;
+                }
+            }
 
-			return iisVersion;
+            return iisVersion;
 		}
 
 		/// <summary>
