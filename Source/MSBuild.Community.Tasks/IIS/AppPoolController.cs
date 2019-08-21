@@ -1,6 +1,6 @@
-#region Copyright © 2005 Paul Welter. All rights reserved.
+#region Copyright Â© 2005 Paul Welter. All rights reserved.
 /*
-Copyright © 2005 Paul Welter. All rights reserved.
+Copyright Â© 2005 Paul Welter. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -35,6 +35,8 @@ using System.Text;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 using System.Management;
+using Microsoft.Web.Administration;
+using System.Linq;
 
 namespace MSBuild.Community.Tasks.IIS
 {
@@ -141,35 +143,42 @@ namespace MSBuild.Community.Tasks.IIS
 			string path;
 			try
 			{
-				switch (mIISVersion)
+                Log.LogMessage(MessageImportance.Normal, "IIS Version {0} on \"{1}\"", mIISVersion, ServerName);
+
+                switch (mIISVersion)
 				{
 					case IISVersion.Six:
 						{
 							VerifyIISRoot();
 							scopePath = @"\\" + ServerName + "\\root\\MicrosoftIISv2";
 							path = @"IIsApplicationPool='W3SVC/AppPools/" + ApplicationPoolName + "'";
-							break;
+                            ExecuteAppPoolAction(scopePath, path);
+                            break;
 						}
 					case IISVersion.SevenFive:
 						{
 							scopePath = @"\\" + ServerName + "\\root\\webadministration";
 							path = "ApplicationPool.Name='" + ApplicationPoolName + "'";
-							break;
+                            ExecuteAppPoolAction(scopePath, path);
+                            break;
 						}
+                    case IISVersion.Eight:
+                    case IISVersion.EightFive:
+                    case IISVersion.Ten:
+                        ExecuteAppPoolAction();
+                        break;
 					default:
-						Log.LogError("Application Pools are only available in IIS 6 and 7.5.");
+						Log.LogError("Application Pools are not available in IIS Version", mIISVersion);
 						return bSuccess;
 				}
 
-				ExecuteAppPoolAction(scopePath, path);
-
 				bSuccess = true;
-				Log.LogMessage(MessageImportance.Normal, "{0} \"{1}\" on \"{2}\"", GetActionFinish(), ApplicationPoolName, ServerName);
 			}
 			catch (Exception ex)
 			{
 				Log.LogErrorFromException(ex);
-				Log.LogError("Failed {0} application pool \"{1}\" on \"{2}\".", GetActionInProgress(), ApplicationPoolName, ServerName);
+                Log.LogError(ex.StackTrace);
+                Log.LogError("Failed {0} application pool \"{1}\" on \"{2}\".", GetActionInProgress(), ApplicationPoolName, ServerName);
 			}
 
 			return bSuccess;
@@ -222,7 +231,50 @@ namespace MSBuild.Community.Tasks.IIS
 				this.Log.LogMessage(MessageImportance.Normal, "Recycling \"{0}\" on \"{1}\"...", this.ApplicationPoolName, this.ServerName);
 				managementObject.InvokeMethod("Recycle", new object[0]);
 			}
-		}
+
+            Log.LogMessage(MessageImportance.Normal, "{0} \"{1}\" on \"{2}\"", GetActionFinish(), ApplicationPoolName, ServerName);
+        }
+
+        private void ExecuteAppPoolAction()
+        {
+            ServerManager server = ServerManager.OpenRemote(ServerName);
+            ApplicationPool pool;
+
+            pool = server.ApplicationPools.Where(obj => obj.Name == ApplicationPoolName).FirstOrDefault();
+            if (server != null && (pool = server.ApplicationPools.Where(obj => obj.Name == ApplicationPoolName).FirstOrDefault()) != null)
+            {
+                if (Action == "Stop" || Action == "Restart")
+                {
+                    if (pool.State == ObjectState.Stopped || pool.State == ObjectState.Stopping)
+                        Log.LogMessage(MessageImportance.Normal, "Already stopped or stopping \"{0}\" on \"{1}\".", ApplicationPoolName, ServerName);
+                    else
+                    {
+                        Log.LogMessage(MessageImportance.Normal, "Stopping \"{0}\" on \"{1}\"...", ApplicationPoolName, ServerName);
+                        pool.Stop();
+                        Log.LogMessage(MessageImportance.Normal, "{0} \"{1}\" on \"{2}\"", pool.State, ApplicationPoolName, ServerName);
+                    }
+
+                }
+
+                if (Action == "Start" || Action == "Restart")
+                {
+                    if (pool.State == ObjectState.Started || pool.State == ObjectState.Starting)
+                        Log.LogMessage(MessageImportance.Normal, "Already started or starting \"{0}\" on \"{1}\".", ApplicationPoolName, ServerName);
+                    else
+                    {
+                        Log.LogMessage(MessageImportance.Normal, "Starting \"{0}\" on \"{1}\"...", ApplicationPoolName, ServerName);
+                        pool.Start();
+                        Log.LogMessage(MessageImportance.Normal, "{0} \"{1}\" on \"{2}\"", pool.State, ApplicationPoolName, ServerName);
+                    }
+                }
+
+                if (Action == "Recycle")
+                {
+                    Log.LogMessage(MessageImportance.Normal, "Recycling \"{0}\" on \"{1}\"...", ApplicationPoolName, ServerName);
+                    pool.Recycle();
+                }
+            }
+        }
 
 		private IIS7ApplicationPoolState GetAppPoolState(ManagementObject managementObject)
 		{
