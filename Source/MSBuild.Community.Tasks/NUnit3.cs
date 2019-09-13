@@ -335,6 +335,18 @@ namespace MSBuild.Community.Tasks
             set { _trace = value; }
         }
 
+        private string _encoding;
+
+        /// <summary>
+        /// The --encoding option may be used to specify the console codepage, such as utf-8, ascii etc.
+        /// </summary>
+        /// <remarks></remarks>
+        public string Encoding
+        {
+            get { return _encoding; }
+            set { _encoding = value; }
+        }
+
         private bool _noHeader;
 
         /// <summary>
@@ -441,6 +453,8 @@ namespace MSBuild.Community.Tasks
 
             builder.AppendSwitchIfNotNull(c+"trace=", _trace);
            
+            builder.AppendSwitchIfNotNull(c+"encoding=", _encoding);
+
             return builder.ToString();
         }
 
