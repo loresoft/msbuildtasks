@@ -444,6 +444,11 @@ namespace MSBuild.Community.Tasks
         public string UltimateResourceFallbackLocation { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the file should be generated only if different from any already existing file
+        /// </summary>
+        public bool OnlyIfChanged { get; set; }
+
+        /// <summary>
         /// Makes it possible to make certain assemblies able to use constructs marked as internal.
         /// Example might be setting this value to "UnitTests" assembly. The typical use case might 
         /// be constructors in classes which shouldn't be available to other assemblies, but the unit
@@ -498,12 +503,41 @@ namespace MSBuild.Community.Tasks
 
             Encoding utf8WithSignature = new UTF8Encoding(true);
 
-            using (StreamWriter writer = new StreamWriter(_outputFile, false, utf8WithSignature))
+            if (OnlyIfChanged && File.Exists(_outputFile))
             {
-                GenerateFile(writer);
-                writer.Flush();
-                writer.Close();
-                Log.LogMessage("Created AssemblyInfo file \"{0}\".", _outputFile);
+                // The file already exists. If we generate an identical file, don't overwrite the existing one
+                using (var memoryStream = new MemoryStream())
+                {
+                    using (StreamWriter writer = new StreamWriter(memoryStream, utf8WithSignature))
+                    {
+                        GenerateFile(writer);
+                        writer.Flush();
+
+                        using (var existingFile = File.OpenRead(_outputFile))
+                        {
+                            memoryStream.Seek(0, SeekOrigin.Begin);
+
+                            if (StreamTools.StreamEquals(existingFile, memoryStream))
+                            {
+                                Log.LogMessage("Identical AssemblyInfo file \"{0}\" already exists.", _outputFile);
+                                return true;
+                            }
+                        }
+
+                        File.WriteAllBytes(_outputFile, memoryStream.ToArray());
+                        Log.LogMessage("Created updated AssemblyInfo file \"{0}\".", _outputFile);
+                    }
+                }
+            }
+            else 
+            { 
+                using (StreamWriter writer = new StreamWriter(_outputFile, false, utf8WithSignature))
+                {
+                    GenerateFile(writer);
+                    writer.Flush();
+                    writer.Close();
+                    Log.LogMessage("Created AssemblyInfo file \"{0}\".", _outputFile);
+                }
             }
 
             return true;
