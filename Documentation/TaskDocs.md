@@ -2310,6 +2310,36 @@ Matches from TestGroup those names ending in a, b or c
 
         
         
+## <a id="RegexMatchGroups">RegexMatchGroups</a>
+### Description
+Task to filter an Input list and to match groups with a Regex expression.
+            Output list contains matched group  values together with corresponding group names and original values from Input list that matched given expression
+### Example
+Matches TestGroup items containing at lease two numeric groups connected by a dot and returns the first two groups with values
+            
+	 <ItemGroup>
+	    <TestGroup Include="foo.my.foo.foo.test.o" />
+	    <TestGroup Include="foo.my.faa.foo.test.a" />
+	    <TestGroup Include="foo.my.fbb.foo.test.b" />
+	    <TestGroup Include="foo.my.fcc.foo.test.c" />
+	    <TestGroup Include="foo.my.fdd.foo.test.d" />
+	    <TestGroup Include="foo.my.fee.foo.test.e" />
+	    <TestGroup Include="foo.my.fff.foo.test.f" />
+	    <TestGroup Include="1.2" />
+	    <TestGroup Include="1.2.3" />
+	 </ItemGroup>
+	 <Target Name="Test">
+	    <!-- Outputs only items that consist of at least twho numbers conected by a dot (1.2|1.2.3) as groups (1 from 1.2, 2 from 1.2, 1 from 1.2.3, 2 from 1.2.3)-->
+	    <RegexMatch Input="@(TestGroup)" Expression="(?<FirstGroup>\d+)\.(?<SecondGroup>\d+)">
+	       <Output ItemName ="MatchReturn" TaskParameter="Output" />
+	    </RegexMatch>
+	    <Message Text="&#xA;Output Match:&#xA;@(MatchReturn->' matched value: %(Identity), original value: %(OriginalItem), matched group name: %(GroupName)', '&#xA;')" />
+	 </Target>
+            
+            
+* * *
+
+        
 ## <a id="RegexReplace">RegexReplace</a>
 ### Description
 Task to replace portions of strings within the Input list

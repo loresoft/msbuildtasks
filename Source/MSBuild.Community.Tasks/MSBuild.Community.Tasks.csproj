@@ -142,6 +142,7 @@
     <Compile Include="NUnit3.cs" />
     <Compile Include="PathUtil.cs" />
     <Compile Include="Regex\RegexCompiler.cs" />
+    <Compile Include="Regex\RegexMatchGroups.cs" />
     <Compile Include="Sandcastle\BuildAssembler.cs">
       <SubType>Code</SubType>
     </Compile>
