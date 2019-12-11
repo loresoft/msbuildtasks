@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AttribDirectory" xml:space="preserve">
     <value>Attrib directory '{0}'. {1}</value>
@@ -455,5 +455,20 @@
   </data>
   <data name="MergingFile" xml:space="preserve">
     <value>Merging file '{0}' into '{1}'</value>
+  </data>
+  <data name="DeleteTreeExceededRetries" xml:space="preserve">
+    <value>Couldn't delete "{0}". Exceeded retry count of {1}. Failed. {2}</value>
+  </data>
+  <data name="DeleteTreeInvalidDirectoriesPaths" xml:space="preserve">
+    <value>One or more of the directory-paths specified is null or full of whitespaces.</value>
+  </data>
+  <data name="DeleteTreeInvalidRetryCount" xml:space="preserve">
+    <value>{0} is an invalid retry count. Value must not be negative.</value>
+  </data>
+  <data name="DeleteTreeInvalidRetryDelay" xml:space="preserve">
+    <value>{0} is an invalid retry delay. Value must not be negative.</value>
+  </data>
+  <data name="DeleteTreeRetrying" xml:space="preserve">
+    <value>Couldn't delete "{0}". Beginning retry {1} in {2}ms. {3}</value>
   </data>
 </root>

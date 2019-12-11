@@ -1,7 +1,11 @@
+using System;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using NUnit.Framework;
+using Task = System.Threading.Tasks.Task;
 
 namespace MSBuild.Community.Tasks.Tests
 {
@@ -11,19 +15,25 @@ namespace MSBuild.Community.Tasks.Tests
         [Test]
         public void GetDirectories()
         {
-            string root = Path.GetFullPath(@"..\..\..\");
+            var root = Path.GetFullPath(@"..\..\..\");
 
-            string[] directories = Directory.GetDirectories(root, "*", SearchOption.AllDirectories);
+            var _ = Directory.GetDirectories(root, "*", SearchOption.AllDirectories);
         }
 
         [Test]
         [Explicit]
         public void ExecuteInnerAndTrailingRecursive()
         {
-            DeleteTree task = new DeleteTree();
-            task.BuildEngine = new MockBuild();
-            task.Directories = new ITaskItem[] { new TaskItem(@"..\..\..\**\obj\**")};
-            bool result = task.Execute();
+            var task = new DeleteTree
+            {
+                BuildEngine = new MockBuild(),
+                Directories = new ITaskItem[]
+                {
+                    new TaskItem(@"..\..\..\**\obj\**")
+                }
+            };
+
+            var result = task.Execute();
 
             Assert.IsTrue(result);
         }
@@ -32,10 +42,16 @@ namespace MSBuild.Community.Tasks.Tests
         [Explicit]
         public void ExecuteInnerRecursive()
         {
-            DeleteTree task = new DeleteTree();
-            task.BuildEngine = new MockBuild();
-            task.Directories = new ITaskItem[] { new TaskItem(@"..\..\..\**\obj") };
-            bool result = task.Execute();
+            var task = new DeleteTree
+            {
+                BuildEngine = new MockBuild(),
+                Directories = new ITaskItem[]
+                {
+                    new TaskItem(@"..\..\..\**\obj")
+                }
+            };
+
+            var result = task.Execute();
 
             Assert.IsTrue(result);
         }
@@ -44,10 +60,16 @@ namespace MSBuild.Community.Tasks.Tests
         [Explicit]
         public void ExecuteItemWithTrailingSeparator()
         {
-            DeleteTree task = new DeleteTree();
-            task.BuildEngine = new MockBuild();
-            task.Directories = new ITaskItem[] { new TaskItem(@"..\..\..\**\obj\") };
-            bool result = task.Execute();
+            var task = new DeleteTree
+            {
+                BuildEngine = new MockBuild(),
+                Directories = new ITaskItem[]
+                {
+                    new TaskItem(@"..\..\..\**\obj\")
+                }
+            };
+
+            var result = task.Execute();
 
             Assert.IsTrue(result);
         }
@@ -56,15 +78,17 @@ namespace MSBuild.Community.Tasks.Tests
         [Explicit]
         public void ExecuteMultipleItems()
         {
-            DeleteTree task = new DeleteTree();
-            task.BuildEngine = new MockBuild();
-            task.Directories = new ITaskItem[]
-                                   {
-                                       new TaskItem(@"..\..\..\**\obj"), 
-                                       new TaskItem(@"..\..\..\**\bin")
-                                   };
+            var task = new DeleteTree
+            {
+                BuildEngine = new MockBuild(),
+                Directories = new ITaskItem[]
+                {
+                    new TaskItem(@"..\..\..\**\obj"),
+                    new TaskItem(@"..\..\..\**\bin")
+                }
+            };
 
-            bool result = task.Execute();
+            var result = task.Execute();
 
             Assert.IsTrue(result);
         }
@@ -73,15 +97,17 @@ namespace MSBuild.Community.Tasks.Tests
         [Explicit]
         public void ExecuteWildCard()
         {
-            DeleteTree task = new DeleteTree();
-            task.BuildEngine = new MockBuild();
-            task.Directories = new ITaskItem[]
-                                   {
-                                       new TaskItem(@"..\..\..\MSBuild.Community.*\**\obj"), 
-                                       new TaskItem(@"..\..\..\**\b?n")
-                                   };
+            var task = new DeleteTree
+            {
+                BuildEngine = new MockBuild(),
+                Directories = new ITaskItem[]
+                {
+                    new TaskItem(@"..\..\..\MSBuild.Community.*\**\obj"),
+                    new TaskItem(@"..\..\..\**\b?n")
+                }
+            };
 
-            bool result = task.Execute();
+            var result = task.Execute();
 
             Assert.IsTrue(result);
         }
@@ -90,6 +116,7 @@ namespace MSBuild.Community.Tasks.Tests
         public void MatchDirectoriesNoWildCards()
         {
             var path = DeleteTree.MatchDirectories(@"..\..\..");
+
             Assert.AreEqual(1, path.Count);
         }
 
@@ -97,6 +124,7 @@ namespace MSBuild.Community.Tasks.Tests
         public void MatchDirectoriesInnerRelative()
         {
             var path = DeleteTree.MatchDirectories(@"..\..\..\**\obj");
+
             Assert.Greater(path.Count, 0);
         }
 
@@ -104,6 +132,7 @@ namespace MSBuild.Community.Tasks.Tests
         public void MatchDirectoriesInnerAndOuterRelative()
         {
             var path = DeleteTree.MatchDirectories(@"..\..\..\**\obj\**");
+
             Assert.Greater(path.Count, 0);
         }
 
@@ -112,6 +141,7 @@ namespace MSBuild.Community.Tasks.Tests
         public void MatchDirectoriesRelative()
         {
             var path = DeleteTree.MatchDirectories(@"..\..\..\**");
+
             Assert.Greater(path.Count, 0);
         }
 
@@ -125,6 +155,76 @@ namespace MSBuild.Community.Tasks.Tests
             Assert.Greater(path.Count, 0);
         }
 
-        
+        [Test]
+        [Explicit]
+        public void DeleteWithRetriesDirectoryWhichAppearsWithDelay_ShouldSucceed()
+        {
+            //Arrange
+            const string fullTargetDirectoryPath = @"C:\Temp\xn_TestDirectoryWhichDoesntInitiallyExist";
+
+            var task = new DeleteTree
+            {
+                BuildEngine = new MockBuild(),
+                
+                Retries = 10,
+                RetryDelayMilliseconds = 300,
+
+                Directories = new ITaskItem[]
+                {
+                    new TaskItem(fullTargetDirectoryPath)
+                }
+            };
+            
+            //Act
+            new Task(() =>
+            {
+                Thread.Sleep(2000);
+
+                Directory.CreateDirectory(fullTargetDirectoryPath);
+            }).Start();
+            var result = task.Execute();
+
+            //Assert
+            Assert.IsTrue(result);
+            Assert.AreEqual(1, task.DeletedDirectories.Length);
+            Assert.AreEqual(fullTargetDirectoryPath, task.DeletedDirectories.FirstOrDefault().ItemSpec);
+        }
+
+        [Test]
+        [Explicit]
+        public void DeleteWithRetriesDirectoryWhichDoesntAppearsAtAll_ShouldFailWithException()
+        {
+            //Arrange
+            const string fullTargetDirectoryPath = @"C:\Temp\xn_TestDirectoryWhichDoesntInitiallyExist";
+
+            var task = new DeleteTree
+            {
+                BuildEngine = new MockBuild(),
+                
+                Retries = 10,
+                RetryDelayMilliseconds = 300,
+
+                Directories = new ITaskItem[]
+                {
+                    new TaskItem(fullTargetDirectoryPath)
+                }
+            };
+
+            var exception = (Exception) null;
+            
+            //Act
+            try
+            {
+                task.Execute();
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+            
+            //Assert
+            Assert.IsInstanceOf<DirectoryNotFoundException>(exception);
+        }
     }
 }
+

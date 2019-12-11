@@ -48,6 +48,7 @@ namespace MSBuild.Community.Tasks
     /// <Target Name="NUnit3">
     ///     <NUnit3 Assemblies="@(TestAssembly)" 
 	///             Process="Multiple" 
+    ///             Agents="1" 
 	///		        TestTimeout="1000" 
 	///             Framework="v4.0" 
 	///		        Force32Bit="true" 
@@ -239,6 +240,19 @@ namespace MSBuild.Community.Tasks
             set { _process = value; }
         }
 
+        private string _agents;
+
+        /// <summary>
+        /// The --agents  option controls the number of agents that may be allowed to run simultaneously assuming you are not running inprocess. 
+        /// If not specified, all agent processes run tests at the same time, whatever the number of assemblies. 
+        /// This setting is used to control running your assemblies in parallel.
+        /// </summary>
+        public string Agents
+        {
+            get { return _agents; }
+            set { _agents = value; }
+        }
+
         private string _domain;
 
         /// <summary>
@@ -405,6 +419,8 @@ namespace MSBuild.Community.Tasks
 
             builder.AppendSwitchIfNotNull("--process=",_process);
 
+            builder.AppendSwitchIfNotNull("--agents=", _agents);
+            
             builder.AppendSwitchIfNotNull("--domain=",_domain);
 
             builder.AppendSwitchIfNotNull("--apartment=",_apartment);
