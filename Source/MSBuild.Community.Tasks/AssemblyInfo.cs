@@ -105,7 +105,7 @@ namespace MSBuild.Community.Tasks
         private const string FSharp_cl = "FS";
 
         private const string CppCodeProviderAssembly = "CppCodeProvider, "+
-                                                       "Version=8.0.0.0, " +
+                                                       "Version=10.0.0.0, " +
                                                        "Culture=neutral, " +
                                                        "PublicKeyToken=b03f5f7f11d50a3a, " +
                                                        "processorArchitecture=MSIL";
