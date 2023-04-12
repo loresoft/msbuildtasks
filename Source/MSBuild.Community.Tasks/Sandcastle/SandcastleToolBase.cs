@@ -34,7 +34,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Microsoft.Win32;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 
 
 
@@ -51,7 +51,7 @@ namespace MSBuild.Community.Tasks.Sandcastle
         /// </summary>
         public SandcastleToolBase()
         {
-            EnviromentVariables = new StringDictionary();
+            EnviromentVariables = new Dictionary<string, string>();
             SandcastleEnviroment = new SandcastleEnviroment();
 
             EnviromentVariables["DXROOT"] = SandcastleEnviroment.SandcastleRoot;
@@ -67,7 +67,7 @@ namespace MSBuild.Community.Tasks.Sandcastle
         /// Gets or sets the enviroment variables.
         /// </summary>
         /// <value>The enviroment variables.</value>
-        internal StringDictionary EnviromentVariables { get; set; }
+        internal Dictionary<string, string> EnviromentVariables { get; set; }
 
         /// <summary>
         /// Gets or sets the sandcastle install root directory.
@@ -165,7 +165,7 @@ namespace MSBuild.Community.Tasks.Sandcastle
         /// </summary>
         /// <value></value>
         /// <returns>The override value of the PATH environment variable.</returns>
-        protected override StringDictionary EnvironmentOverride
+        protected override Dictionary<string, string> EnvironmentOverride
         {
             get
             {
