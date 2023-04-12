@@ -1,3 +1,9 @@
 param()
 
-git status --ignored | Select-String "\t" | ForEach-Object { $NewPath = $($_ -replace "\t", ""); Remove-Item -Recurse -Force $PWD\$NewPath }
+$ProjDir = $PSScriptRoot;
+
+git status --ignored | Select-String -Pattern "\t" -AllMatches | Where-Object { $_ -notmatch "modified:" } | ForEach-Object {
+  $NewPath = $($_ -replace "\t", "");
+  Write-Host "Removing $($ProjDir)\$($NewPath)"
+  Remove-Item -Recurse -Force "$($ProjDir)\$($NewPath)"
+}
