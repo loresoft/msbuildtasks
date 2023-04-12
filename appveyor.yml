@@ -20,3 +20,7 @@ deploy:
   name: MyGet
   on:
     branch: master
+branches:
+  only:
+  - /.+_fix/
+  - master
