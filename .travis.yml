@@ -5,6 +5,8 @@ install:
   - nuget restore ./Source/MSBuild.Community.Tasks.sln
   - nuget install MSBuildTasks -OutputDirectory ./Tools/ -ExcludeVersion -NonInteractive
   - nuget install ILRepack.MSBuild.Task -OutputDirectory ./Tools/ -ExcludeVersion -NonInteractive
+  - nuget install Microsoft.Build.Framework -Version 17.5.0 -Framework net2.0 -OutputDirectory ./Tools/ -ExcludeVersion -NonInteractive
+  - nuget install Microsoft.Build.Utilities.Core -Version 17.5.0 -Framework net2.0 -OutputDirectory ./Tools/ -ExcludeVersion -NonInteractive
 
 script:
   - xbuild ./Master.proj
