@@ -1,6 +1,6 @@
-#region Copyright © 2005 Paul Welter. All rights reserved.
+#region Copyright ï¿½ 2005 Paul Welter. All rights reserved.
 /*
-Copyright © 2005 Paul Welter. All rights reserved.
+Copyright ï¿½ 2005 Paul Welter. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -498,13 +498,24 @@ namespace MSBuild.Community.Tasks
 
             Encoding utf8WithSignature = new UTF8Encoding(true);
 
-            using (StreamWriter writer = new StreamWriter(_outputFile, false, utf8WithSignature))
+				StringBuilder textbuilder = new StringBuilder();
+				
+
+            using (StringWriter writer = new StringWriter(textbuilder))
             {
                 GenerateFile(writer);
                 writer.Flush();
                 writer.Close();
-                Log.LogMessage("Created AssemblyInfo file \"{0}\".", _outputFile);
             }
+
+				// check if assembly info has changed and we need to write the output file.
+				var text = textbuilder.ToString();
+				string file = null;
+				if (File.Exists(_outputFile)) file = File.ReadAllText(_outputFile);
+				if (file != text) {
+					File.WriteAllText(_outputFile, text, utf8WithSignature);
+					Log.LogMessage("Created AssemblyInfo file \"{0}\".", _outputFile);
+				}
 
             return true;
         }

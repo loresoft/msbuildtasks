@@ -1,165 +1,35 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5AC1D006-CA56-4BE1-8250-DBEABBEA0725}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>MSBuild.Community.Tasks.Tests</RootNamespace>
-    <AssemblyName>MSBuild.Community.Tasks.Tests</AssemblyName>
-    <WarningLevel>4</WarningLevel>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net48</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OutputPath>.\bin\$(Configuration)\</OutputPath>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>.\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>false</DebugSymbols>
-    <Optimize>true</Optimize>
-    <OutputPath>.\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
-    </Reference>
-    <Reference Include="FSharp.Compiler.CodeDom, Version=1.0.0.1, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\FSharp.Compiler.CodeDom.1.0.0.1\lib\net40\FSharp.Compiler.CodeDom.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
+    <PackageReference Include="FSharp.Compiler.CodeDom" Version="1.0.0.1" />
+    <PackageReference Include="NUnit" Version="3.2.1" />
+    <PackageReference Include="RhinoMocks" Version="3.6.1" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.2.1\lib\net40\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AspNet\InstallAspNetTest.cs" />
-    <Compile Include="AssemblyInfoTest.cs" />
-    <Compile Include="AttribTest.cs" />
-    <Compile Include="Beep\BeepTest.cs" />
-    <Compile Include="Checksum\ChecksumTest.cs" />
-    <Compile Include="Computer\ComputerTest.cs" />
-    <Compile Include="DeleteTreeTest.cs" />
-    <Compile Include="DependencyGraph\DependencyGraphTaskTest.cs" />
-    <Compile Include="DependencyGraph\ProjectFileParserTest.cs" />
-    <Compile Include="Fusion\FusionWrapperTest.cs" />
-    <Compile Include="FxCopTest.cs" />
-    <Compile Include="GacUtilTest.cs" />
-    <Compile Include="Git\GitClientTest.cs" />
-    <Compile Include="Git\GitCommitDate.cs" />
-    <Compile Include="Git\GitDescribeTest.cs" />
-    <Compile Include="Git\GitBranchTest.cs" />
-    <Compile Include="Git\GitCommitsTest.cs" />
-    <Compile Include="Git\GitPendingChangesTest.cs" />
-    <Compile Include="Git\GitVersionTest.cs" />
-    <Compile Include="IIS\WebDirectoryScriptMapTest.cs" />
-    <Compile Include="IIS\WebDirectorySettingTest.cs" />
-    <Compile Include="ILMerge\ILMergeTest.cs" />
-    <Compile Include="Install\InstallAssemblyTest.cs" />
-    <Compile Include="Install\UninstallAssemblyTest.cs" />
-    <Compile Include="JavaScript\JSCompressTest.cs" />
-    <Compile Include="Math\ModuloTest.cs" />
-    <Compile Include="MergeTest.cs" />
-    <Compile Include="Oracle\AddTnsNameTest.cs" />
-    <Compile Include="Oracle\TnsParserTest.cs" />
-    <Compile Include="FileUpdateTest.cs" />
-    <Compile Include="IIS\AppPoolControllerTest.cs" />
-    <Compile Include="IIS\AppPoolCreateTest.cs" />
-    <Compile Include="IIS\AppPoolDeleteTest.cs" />
-    <Compile Include="IIS\WebDirectoryCreateTest.cs" />
-    <Compile Include="IIS\WebDirectoryDeleteTest.cs" />
-    <Compile Include="MVTest.cs" />
-    <Compile Include="Regex\RegexCompilerTest.cs" />
-    <Compile Include="Regex\RegexTest.cs" />
-    <Compile Include="RoboCopyTest.cs" />
-    <Compile Include="Sandcastle\MRefBuilderTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sandcastle\XslTransformTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ScriptTest.cs" />
-    <Compile Include="ServiceQueryTest.cs" />
-    <Compile Include="ServiceControllerTest.cs" />
-    <Compile Include="Solution\GetSolutionProjectsTest.cs" />
-    <Compile Include="Sound\SoundTest.cs" />
-    <Compile Include="SourceServer\SrcToolTest.cs" />
-    <Compile Include="SourceServer\SvnSourceIndexTest.cs" />
-    <Compile Include="SourceServer\TfsSourceIndexTest.cs" />
-    <Compile Include="SqlServer\ExecuteDDLTest.cs" />
-    <Compile Include="SqlServer\SqlPubWizTest.cs" />
-    <Compile Include="Subversion\SvnCopyTest.cs" />
-    <Compile Include="Subversion\SvnInfoTest.cs" />
-    <Compile Include="Subversion\SvnStatusTest.cs" />
-    <Compile Include="SymbolServer\SymStoreTest.cs" />
-    <Compile Include="TemplateFile\TemplateFileTest.cs" />
-    <Compile Include="Tfs\InfoCommandResponseTest.cs" />
-    <Compile Include="Time\TimeTest.cs" />
-    <Compile Include="User\UserTest.cs" />
-    <Compile Include="WebDownloadTest.cs" />
-    <Compile Include="XmlUpdateTest.cs" />
-    <Compile Include="FtpUpload\FtpUploadTest.cs" />
-    <Compile Include="MailTest.cs" />
-    <Compile Include="Math\AddTest.cs" />
-    <Compile Include="Math\DivideTest.cs" />
-    <Compile Include="Math\MultipleTest.cs" />
-    <Compile Include="Math\SubtractTest.cs" />
-    <Compile Include="MockBuild.cs" />
-    <Compile Include="NDocTest.cs" />
-    <Compile Include="NUnitTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegistryReadTest.cs" />
-    <Compile Include="RegistryWriteTest.cs" />
-    <Compile Include="Subversion\SvnCheckoutTest.cs" />
-    <Compile Include="Subversion\SvnClientTest.cs" />
-    <Compile Include="Subversion\SvnCommitTest.cs" />
-    <Compile Include="Subversion\SvnExportTest.cs" />
-    <Compile Include="Subversion\SvnUpdateTest.cs" />
-    <Compile Include="Subversion\SvnVersionTest.cs" />
-    <Compile Include="TaskUtility.cs" />
-    <Compile Include="UnzipTest.cs" />
-    <Compile Include="VersionTest.cs" />
-    <Compile Include="XmlReadTest.cs" />
-    <Compile Include="Xml\XmlQueryTests.cs" />
-    <Compile Include="Xslt\XsltTest.cs" />
-    <Compile Include="ZipTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.csproj">
-      <Project>{F88A60A8-564C-4E70-92DC-E92DBB897641}</Project>
-      <Name>MSBuild.Community.Tasks</Name>
-      <Private>True</Private>
-    </ProjectReference>
+    <ProjectReference Include="..\MSBuild.Community.Tasks\MSBuild.Community.Tasks.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DependencyGraph\DBInfo.CodeGen.csproj" />
@@ -180,9 +50,6 @@
     <None Include="ILMerge\ILMergeTest.proj" />
     <None Include="Install\InstallTest.proj" />
     <None Include="JavaScript\JavaScriptTest.proj" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Regex\RegexTest.proj">
       <SubType>Designer</SubType>
     </None>
@@ -211,10 +78,31 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Vault\" />
+    <Compile Remove="JavaScript\CssCompressTest.cs" />
+    <Compile Remove="Mks\MksAddTest.cs" />
+    <Compile Remove="Mks\MksCheckinTest.cs" />
+    <Compile Remove="Mks\MksCheckpointTest.cs" />
+    <Compile Remove="Mks\MksCreateSandboxTest.cs" />
+    <Compile Remove="Mks\MksDropSandboxTest.cs" />
+    <Compile Remove="Mks\MksDropTest.cs" />
+    <Compile Remove="Mks\MksLockTest.cs" />
+    <Compile Remove="Mks\MksResyncTest.cs" />
+    <Compile Remove="Mks\MksUnlockTest.cs" />
+    <Compile Remove="Vault\VaultTest.cs" />
+    <Compile Remove="Xml\XmlMassUpdateTests.cs" />
+    <Compile Remove="Xml\XPathAsserter.cs" />
+    <Compile Remove="ILMerge\A\ClassA1.cs" />
+    <Compile Remove="ILMerge\A\ClassA2.cs" />
+    <Compile Remove="ILMerge\A\ClassAB.cs" />
+    <Compile Remove="ILMerge\B\ClassAB.cs" />
+    <Compile Remove="ILMerge\B\ClassB1.cs" />
+    <Compile Remove="ILMerge\B\ClassB2.cs" />
+    <Compile Remove="ILMerge\B\ClassB3.cs" />
+    <Compile Remove="ILMerge\A\Properties\AssemblyInfo.cs" />
+    <Compile Remove="ILMerge\B\Properties\AssemblyInfo.cs" />
+    <Compile Remove="ILMerge\A\obj\Debug\.NETFramework,Version=v4.0.AssemblyAttributes.cs" />
+    <Compile Remove="ILMerge\A\obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Remove="ILMerge\B\obj\Debug\.NETFramework,Version=v4.0.AssemblyAttributes.cs" />
+    <Compile Remove="ILMerge\B\obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
