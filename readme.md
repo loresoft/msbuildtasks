@@ -1,3 +1,7 @@
+> # Archived Repository 🚨
+> **This project is no longer maintained and has been archived. No further issues, PRs, or updates will be made.**
+---
+
 #MSBuild Community Tasks
 
 The MSBuild Community Tasks Project is an open source project for MSBuild tasks.
